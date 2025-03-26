@@ -15,6 +15,7 @@ export default function Index({
   adjustmentsService,
   calculateReleaseDatesService,
   remandAndSentencingService,
+  prisonService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) =>
@@ -26,8 +27,13 @@ export default function Index({
   get('/:prisonerNumber/court-cases', new CourtCasesRoutes().GET)
   get(
     '/:prisonerNumber/overview',
-    new OverviewRoutes(prisonerService, adjustmentsService, calculateReleaseDatesService, remandAndSentencingService)
-      .GET,
+    new OverviewRoutes(
+      prisonerService,
+      adjustmentsService,
+      calculateReleaseDatesService,
+      remandAndSentencingService,
+      prisonService,
+    ).GET,
   )
   get('/:prisonerNumber/release-dates', new ReleaseDatesRoutes().GET)
 
