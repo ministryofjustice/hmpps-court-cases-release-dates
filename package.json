@@ -32,7 +32,8 @@
     "generate-adjustments-api-types": "openapi-typescript https://adjustments-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/adjustmentsApi/index.d.ts",
     "generate-calculate-release-dates-api-types": "openapi-typescript https://calculate-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/calculateReleaseDatesApi/index.d.ts",
     "generate-court-cases-release-dates-api-types": "openapi-typescript https://court-cases-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > server/@types/courtCasesReleaseDatesApi/index.d.ts",
-    "generate-remand-and-sentencing-api-types": "openapi-typescript https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/remandAndSentencingApi/index.d.ts"
+    "generate-remand-and-sentencing-api-types": "openapi-typescript https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/remandAndSentencingApi/index.d.ts",
+    "generate-prison-register-api-types": "openapi-typescript https://prison-register-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonRegisterApi/index.d.ts"
   },
   "engines": {
     "node": "^20",
@@ -101,6 +102,7 @@
     "@microsoft/applicationinsights-clickanalytics-js": "^3.3.5",
     "@microsoft/applicationinsights-web": "^3.3.5",
     "@ministryofjustice/frontend": "^4.0.1",
+    "@types/lodash": "^4.17.16",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^3.5.0",
     "body-parser": "^1.20.3",

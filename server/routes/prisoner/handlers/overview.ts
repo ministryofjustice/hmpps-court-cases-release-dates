@@ -5,6 +5,7 @@ import config from '../../../config'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
+import PrisonService from '../../../services/prisonService'
 
 export default class OverviewRoutes {
   constructor(
@@ -12,6 +13,7 @@ export default class OverviewRoutes {
     private readonly adjustmentsService: AdjustmentsService,
     private readonly calculateReleaseDatesService: CalculateReleaseDatesService,
     private readonly remandAndSentencingService: RemandAndSentencingService,
+    private readonly prisonService: PrisonService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -47,6 +49,10 @@ export default class OverviewRoutes {
       const latestRecall = hasRasAccess
         ? await this.remandAndSentencingService.getMostRecentRecall(prisoner.prisonerNumber, token)
         : null
+
+      if (latestRecall) {
+        latestRecall.location = await this.prisonService.getPrisonName(latestRecall.location, username)
+      }
 
       return res.render('pages/prisoner/overview', {
         prisoner,
