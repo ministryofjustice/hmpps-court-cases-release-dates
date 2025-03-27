@@ -125,6 +125,7 @@
     "hmpps-court-cases-release-dates-design": "^4.3.0",
     "http-errors": "^2.0.0",
     "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
     "nocache": "^4.0.0",
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
