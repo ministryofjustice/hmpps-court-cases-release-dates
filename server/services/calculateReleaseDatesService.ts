@@ -2,7 +2,7 @@ import {
   LatestCalculationCardConfig,
   LatestCalculationCardDate,
   LatestCalculationCardDateHint,
-} from 'hmpps-court-cases-release-dates-design/hmpps/@types'
+} from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
 import { LatestCalculation } from '../@types/calculateReleaseDatesApi/types'
 import CalculateReleaseDatesApiClient from '../data/calculateReleaseDatesApiClient'
 import logger from '../../logger'
