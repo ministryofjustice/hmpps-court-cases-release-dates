@@ -1,4 +1,4 @@
-import { LatestCalculationCardConfig } from 'hmpps-court-cases-release-dates-design/hmpps/@types'
+import { LatestCalculationCardConfig } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
 import nock from 'nock'
 import { LatestCalculation } from '../@types/calculateReleaseDatesApi/types'
 import CalculateReleaseDatesService from './calculateReleaseDatesService'
