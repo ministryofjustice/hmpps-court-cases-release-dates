@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import PrisonerService from '../../../services/prisonerService'
 import AdjustmentsService from '../../../services/adjustmentsService'
-import config from '../../../config'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
@@ -24,52 +23,49 @@ export default class OverviewRoutes {
     const isPrisonerBeingTransferred = prisoner.prisonId === 'TRN'
     const showAdjustments = !(hasInactiveBookingAccess && (isPrisonerOutside || isPrisonerBeingTransferred))
 
-    if (res.locals.user.hasAdjustmentsAccess === true) {
-      const startOfSentenceEnvelope = await this.prisonerService.getStartOfSentenceEnvelope(bookingId, token)
-      const [nextCourtEvent, hasActiveSentences, serviceDefinitions] = await Promise.all([
-        this.prisonerService.getNextCourtEvent(bookingId, token),
-        this.prisonerService.hasActiveSentences(bookingId, token),
-        this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token),
-      ])
+    const startOfSentenceEnvelope = await this.prisonerService.getStartOfSentenceEnvelope(bookingId, token)
+    const [nextCourtEvent, hasActiveSentences, serviceDefinitions] = await Promise.all([
+      this.prisonerService.getNextCourtEvent(bookingId, token),
+      this.prisonerService.hasActiveSentences(bookingId, token),
+      this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token),
+    ])
 
-      const aggregatedAdjustments = showAdjustments
-        ? await this.getAggregatedAdjustments(prisoner, startOfSentenceEnvelope, username)
-        : null
+    const aggregatedAdjustments = showAdjustments
+      ? await this.getAggregatedAdjustments(prisoner, startOfSentenceEnvelope, username)
+      : null
 
-      const latestCalculationConfig = hasActiveSentences
-        ? await this.calculateReleaseDatesService.getLatestCalculationForPrisoner(prisoner.prisonerNumber, token)
-        : null
+    const latestCalculationConfig = hasActiveSentences
+      ? await this.calculateReleaseDatesService.getLatestCalculationForPrisoner(prisoner.prisonerNumber, token)
+      : null
 
-      const isIndeterminateAndHasNoCalculatedDates =
-        hasActiveSentences && !latestCalculationConfig?.dates?.length
-          ? await this.calculateReleaseDatesService.hasIndeterminateSentences(bookingId, token)
-          : false
+    const isIndeterminateAndHasNoCalculatedDates =
+      hasActiveSentences && !latestCalculationConfig?.dates?.length
+        ? await this.calculateReleaseDatesService.hasIndeterminateSentences(bookingId, token)
+        : false
 
-      const anyThingsToDo = Object.values(serviceDefinitions.services).some(it => it.thingsToDo.count > 0)
-      const latestRecall = hasRasAccess
-        ? await this.remandAndSentencingService.getMostRecentRecall(prisoner.prisonerNumber, token)
-        : null
+    const anyThingsToDo = Object.values(serviceDefinitions.services).some(it => it.thingsToDo.count > 0)
+    const latestRecall = hasRasAccess
+      ? await this.remandAndSentencingService.getMostRecentRecall(prisoner.prisonerNumber, token)
+      : null
 
-      if (latestRecall) {
-        latestRecall.location = await this.prisonService.getPrisonName(latestRecall.location, username)
-      }
-
-      return res.render('pages/prisoner/overview', {
-        prisoner,
-        nextCourtEvent,
-        aggregatedAdjustments,
-        latestCalculationConfig,
-        isIndeterminateAndHasNoCalculatedDates,
-        hasActiveSentences,
-        showAdjustments,
-        hasReadOnlyNomisConfigAccess,
-        serviceDefinitions,
-        showRecalls: hasRasAccess,
-        latestRecall,
-        anyThingsToDo,
-      })
+    if (latestRecall) {
+      latestRecall.location = await this.prisonService.getPrisonName(latestRecall.location, username)
     }
-    return res.redirect(`${config.applications.calculateReleaseDates.url}?prisonId=${prisoner.prisonerNumber}`)
+
+    return res.render('pages/prisoner/overview', {
+      prisoner,
+      nextCourtEvent,
+      aggregatedAdjustments,
+      latestCalculationConfig,
+      isIndeterminateAndHasNoCalculatedDates,
+      hasActiveSentences,
+      showAdjustments,
+      hasReadOnlyNomisConfigAccess,
+      serviceDefinitions,
+      showRecalls: hasRasAccess,
+      latestRecall,
+      anyThingsToDo,
+    })
   }
 
   private async getAggregatedAdjustments(prisoner: Prisoner, startOfSentenceEnvelope: Date, username: string) {

@@ -7,7 +7,6 @@ import PrisonerService from './prisonerService'
 export interface UserDetails extends User {
   displayName: string
   roles: string[]
-  hasAdjustmentsAccess: boolean
   hasRasAccess: boolean
   hasInactiveBookingAccess: boolean
   hasReadOnlyNomisConfigAccess: boolean
@@ -32,7 +31,6 @@ export default class UserService {
       ...user,
       roles,
       displayName: convertToTitleCase(user.name),
-      hasAdjustmentsAccess: this.hasAdjustmentsAccess(roles),
       hasRasAccess: this.hasRasAccess(roles),
       hasInactiveBookingAccess: this.hasInactiveBookingAccess(roles),
       hasReadOnlyNomisConfigAccess: this.hasReadOnlyNomisConfigAccess(roles),
@@ -45,10 +43,6 @@ export default class UserService {
   getUserRoles(token: string): string[] {
     const { authorities: roles = [] } = jwtDecode(token) as { authorities?: string[] }
     return roles.map(role => role.substring(role.indexOf('_') + 1))
-  }
-
-  hasAdjustmentsAccess(roles: string[]): boolean {
-    return roles.includes('ADJUSTMENTS_MAINTAINER')
   }
 
   hasRasAccess(roles: string[]): boolean {

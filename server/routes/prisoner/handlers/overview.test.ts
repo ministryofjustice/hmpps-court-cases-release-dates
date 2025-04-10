@@ -9,7 +9,6 @@ import PrisonerSearchService from '../../../services/prisonerSearchService'
 import { CourtEventDetails } from '../../../@types/prisonApi/types'
 import AdjustmentsService from '../../../services/adjustmentsService'
 import { Adjustment } from '../../../@types/adjustmentsApi/types'
-import config from '../../../config'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
 import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesApi/types'
 
@@ -383,30 +382,6 @@ describe('Route Handlers - Overview', () => {
           expect(res.text).toContain('<h2 class="govuk-heading-l">Adjustments</h2>')
           expect(res.text).toContain('There are no active adjustments for Jane Doe')
         })
-    })
-  })
-
-  describe('Authorisation tests', () => {
-    it('must redirect when user does not have access to adjustments', () => {
-      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
-        prisonerNumber: 'A12345B',
-        imprisonmentStatusDescription: 'Life imprisonment',
-        prisonId: 'MDI',
-      } as Prisoner)
-      app = appWithAllRoutes({
-        services: {
-          prisonerService,
-          prisonerSearchService,
-          adjustmentsService,
-        },
-        userSupplier: () => {
-          return { ...user, hasAdjustmentsAccess: false }
-        },
-      })
-      return request(app)
-        .get('/prisoner/A12345B/overview')
-        .expect(302)
-        .expect('Location', `${config.applications.calculateReleaseDates.url}?prisonId=A12345B`)
     })
   })
 
