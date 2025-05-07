@@ -8,6 +8,7 @@ import {
   personStatus,
   firstNameSpaceLastName,
   hmppsFormatDate,
+  createSupportLink,
 } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/utils/utils'
 import dayjs from 'dayjs'
 import { initialiseName } from './utils'
@@ -68,6 +69,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       express: app,
     },
   )
+
+  njkEnv.addGlobal('createSupportLink', createSupportLink)
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('personProfileName', personProfileName)
