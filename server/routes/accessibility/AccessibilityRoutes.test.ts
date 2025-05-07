@@ -1,6 +1,5 @@
 import { Express } from 'express'
 import request from 'supertest'
-import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../testutils/appSetup'
 
 let app: Express
