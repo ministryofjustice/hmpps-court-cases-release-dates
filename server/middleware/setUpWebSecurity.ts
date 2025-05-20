@@ -18,7 +18,9 @@ export default function setUpWebSecurity(): Router {
   const styleSrc = ["'self'", (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`]
   const fontSrc = ["'self'"]
   const imgSrc = ["'self'", 'data:']
-  const formAction = [`'self' ${config.apis.hmppsAuth.externalUrl} ${config.applications.digitalPrisonServices.url}`]
+  const formAction = [
+    `'self' ${config.apis.hmppsAuth.externalUrl} ${config.applications.digitalPrisonServices.url} https://www.smartsurvey.co.uk/`,
+  ]
   const connectSrc = ["'self' https://northeurope-0.in.applicationinsights.azure.com"]
 
   if (config.apis.frontendComponents.enabled) {

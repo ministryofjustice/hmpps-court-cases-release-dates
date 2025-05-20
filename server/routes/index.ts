@@ -3,6 +3,8 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import prisonerRoutes from './prisoner'
 import configRoutes from './config'
+import feedbackRoutes from './feedback'
+import accessibilityRoutes from './accessibility'
 import config from '../config'
 
 export default function routes(services: Services): Router {
@@ -13,6 +15,8 @@ export default function routes(services: Services): Router {
 
   router.use('/prisoner', prisonerRoutes(services))
   router.use('/config', configRoutes(services))
+  router.use('/feedback', feedbackRoutes())
+  router.use('/accessibility', accessibilityRoutes())
 
   return router
 }

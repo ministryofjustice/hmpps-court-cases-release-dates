@@ -8,7 +8,8 @@ import {
   personStatus,
   firstNameSpaceLastName,
   hmppsFormatDate,
-} from 'hmpps-court-cases-release-dates-design/hmpps/utils/utils'
+  createSupportLink,
+} from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/utils/utils'
 import dayjs from 'dayjs'
 import { initialiseName } from './utils'
 import { ApplicationInfo } from '../applicationInfo'
@@ -60,14 +61,16 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       'node_modules/govuk-frontend/dist/components/',
       'node_modules/@ministryofjustice/frontend/',
       'node_modules/@ministryofjustice/frontend/moj/components/',
-      'node_modules/hmpps-court-cases-release-dates-design/',
-      'node_modules/hmpps-court-cases-release-dates-design/hmpps/components/',
+      'node_modules/@ministryofjustice/hmpps-court-cases-release-dates-design/',
+      'node_modules/@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/components/',
     ],
     {
       autoescape: true,
       express: app,
     },
   )
+
+  njkEnv.addGlobal('createSupportLink', createSupportLink)
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('personProfileName', personProfileName)

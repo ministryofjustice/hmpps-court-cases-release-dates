@@ -1,0 +1,50 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = applicationName + " - Feedback" %}
+{% set pageId = "feedback" %}
+{% block content %}
+
+  <br>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+              Providing feedback on our services
+            </h1>
+      <p class="govuk-body">Whether you're reporting an issue or sharing your opinions, your feedback will help us build
+        better, smarter services for you and your colleagues.</p>
+      <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {{ govukRadios({
+          name: "feedback",
+          fieldset: {
+            legend: {
+              text: "Which part of the service would you like to leave feedback on?"
+            }
+          },
+          errorMessage: errorMessage,
+          items: [
+            {
+              text: "Calculating release dates",
+              value: "crds"
+            },
+            {
+              text: "Making an adjustment",
+              value: "adjustments"
+            }
+          ]
+        }) }}
+        <p class="govuk-body">If you need to report an error, email <a
+              href="mailto:OMU.SpecialistSupportTeam@justice.gov.uk">OMU.SpecialistSupportTeam@justice.gov.uk</a> and a
+          member of the team will get back to you as soon as possible.</p>
+        {{ govukButton({
+          text: "Continue",
+          type: submit,
+          preventDoubleClick: true
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
