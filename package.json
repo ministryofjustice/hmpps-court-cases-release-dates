@@ -115,7 +115,7 @@
     "compression": "^1.7.5",
     "connect-flash": "^0.1.1",
     "connect-redis": "^7.1.1",
-    "csurf": "^1.11.0",
+    "csrf-sync": "^4.2.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "express": "^4.21.2",
@@ -184,7 +184,7 @@
     "prettier-plugin-jinja-template": "^2.0.0",
     "sass": "^1.84.0",
     "supertest": "^7.0.0",
-    "ts-jest": "^29.2.5",
+    "ts-jest": "^29.3.4",
     "typescript": "^5.7.3"
   }
 }
