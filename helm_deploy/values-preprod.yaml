@@ -38,6 +38,7 @@ generic-service:
     penetration-test-ip-2: 167.71.136.237/32
     groups:
       - internal
+      - prisons
       - circleci
 
 generic-prometheus-alerts:
