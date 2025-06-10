@@ -5,15 +5,60 @@
 
 export interface paths {
   '/queue-admin/retry-dlq/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     put: operations['retryDlq']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/queue-admin/retry-all-dlqs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     put: operations['retryAllDlqs']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/queue-admin/purge-queue/{queueName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
     put: operations['purgeQueue']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/legacy/adjustments/{adjustmentId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get an adjustments
      * @description Get details of an adjustment in the NOMIS system format.
@@ -24,13 +69,24 @@ export interface paths {
      * @description Synchronise an update from NOMIS into adjustments API.
      */
     put: operations['update']
+    post?: never
     /**
      * Delete an adjustments
      * @description Synchronise a deletion from NOMIS into adjustments API.
      */
     delete: operations['delete']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/adjustments/{adjustmentId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get an adjustments
      * @description Get details of an adjustment
@@ -41,94 +97,258 @@ export interface paths {
      * @description Update an adjustment.
      */
     put: operations['update_1']
+    post?: never
     /**
      * Delete an adjustments
      * @description Delete an adjustment.
      */
     delete: operations['delete_1']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/legacy/adjustments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Create an adjustments
      * @description Synchronise a creation from NOMIS into adjustments API.
      */
     post: operations['create']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/legacy/adjustments/migration': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Create an adjustment from the migration job
      * @description Synchronise a creation from NOMIS into adjustments API. This endpoint is used for initial migration of data from NOMIS without raising any events.
      */
     post: operations['migration']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/adjustments': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /**
      * Get current adjustments by person
      * @description Get current adjustments for a given person.
      */
     get: operations['findByPerson']
+    put?: never
     /**
      * Create adjustments
      * @description Create adjustment.
      */
     post: operations['create_1']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/adjustments/{adjustmentId}/effective-days': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Update the effective calculable days for and adjustment
      * @description Update an adjustment's effective days.
      */
     post: operations['updateEffectiveDays']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/adjustments/validate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Validate an adjustments
      * @description Validate an adjustment.
      */
     post: operations['validate']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/adjustments/restore': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /**
      * Restore a deleted adjustment
      * @description Restore a deleted adjustment
      */
     post: operations['restore']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/adjustments/person/{person}/manual-unused-deductions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Update the unused deduction days for a person
+     * @description Update the unused deduction days for a person
+     */
+    post: operations['setUnusedDaysManually']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/adjustments/additional-days/{person}/reject-prospective-ada': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
     /** Reject prospective ADA. */
     post: operations['rejectProspectiveAda']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/things-to-do/prisoner/{prisonerId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve things-to-do for a prisoner
+     * @description Provides a list of things-to-do for a specified prisoner based on their ID.
+     */
+    get: operations['getThingsToDo']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/queue-admin/get-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     get: operations['getDlqMessages']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
-  '/adjustments/{person}/intercept': {
-    /** Determine if there needs to be an adjustment-interception for this person */
-    get: operations['determineAdaIntercept']
-  }
-  '/adjustments/additional-days/{person}/intercept': {
-    /** Determine if there needs to be an adjustment-interception for this person */
-    get: operations['determineAdaIntercept_1']
+  '/adjustments/person/{person}/unused-deductions-result': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get the unused deductions result
+     * @description Get the unused deductions result
+     */
+    get: operations['getUnusedDeductionsResult']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
   '/adjustments/additional-days/{person}/adjudication-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     /** Get all details of adjudications and associated adjustments */
     get: operations['getAdaAdjudicationDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
   }
 }
-
 export type webhooks = Record<string, never>
-
 export interface components {
   schemas: {
-    DlqMessage: {
-      body: {
-        [key: string]: Record<string, never>
-      }
-      messageId: string
-    }
     RetryDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
-      messages: components['schemas']['DlqMessage'][]
     }
     PurgeQueueResult: {
       /** Format: int32 */
@@ -152,7 +372,7 @@ export interface components {
        * @description The NOMIS adjustment type
        * @enum {string}
        */
-      adjustmentType: 'ADA' | 'RADA' | 'UAL' | 'LAL' | 'SREM' | 'RSR' | 'RST' | 'RX' | 'S240A' | 'UR'
+      adjustmentType: 'ADA' | 'RADA' | 'UAL' | 'LAL' | 'SREM' | 'RSR' | 'RST' | 'RX' | 'S240A' | 'UR' | 'TCA' | 'TSA'
       /**
        * Format: date
        * @description The NOMIS date of adjustment
@@ -172,10 +392,15 @@ export interface components {
       comment?: string
       /** @description The NOMIS active or inactive flag */
       active: boolean
-      /** @description Has the prisoner been released from the NOMIS booking */
+      /**
+       * @deprecated
+       * @description Has the prisoner been released from the NOMIS booking
+       */
       bookingReleased: boolean
       /** @description The ID of the agency the prisoner is located */
       agencyId?: string
+      /** @description Is the adjustment part of the current term. (Most recent booking NOMIS) */
+      currentTerm: boolean
     }
     /** @description The details of an additional days awarded (ADA) adjustment */
     AdditionalDaysAwardedDto: {
@@ -210,6 +435,8 @@ export interface components {
         | 'RESTORATION_OF_ADDITIONAL_DAYS_AWARDED'
         | 'SPECIAL_REMISSION'
         | 'UNUSED_DEDUCTIONS'
+        | 'CUSTODY_ABROAD'
+        | 'APPEAL_APPLICANT'
       /**
        * Format: date
        * @description The end date of the adjustment
@@ -225,59 +452,97 @@ export interface components {
        * @description The number of days of the adjustment
        */
       days?: number
+      /** @description The details of a remand adjustment */
       remand?: components['schemas']['RemandDto']
+      /** @description The details of an additional days awarded adjustments (ADA) */
       additionalDaysAwarded?: components['schemas']['AdditionalDaysAwardedDto']
+      /** @description Additional details of a UAL adjustment */
       unlawfullyAtLarge?: components['schemas']['UnlawfullyAtLargeDto']
+      /** @description Additional info for a LAL adjustment */
+      lawfullyAtLarge?: components['schemas']['LawfullyAtLargeDto']
+      /** @description Additional info for a Special Remission adjustment */
+      specialRemission?: components['schemas']['SpecialRemissionDto']
+      /** @description The details of a tagged-bail adjustment */
       taggedBail?: components['schemas']['TaggedBailDto']
+      /** @description The details of a time spent in custody abroad adjustment */
+      timeSpentInCustodyAbroad?: components['schemas']['TimeSpentInCustodyAbroadDto']
+      /** @description The details of a time spent as an appeal applicant adjustment */
+      timeSpentAsAnAppealApplicant?: components['schemas']['TimeSpentAsAnAppealApplicantDto']
       /**
        * Format: int32
        * @description The NOMIS sentence sequence of the adjustment
        */
       sentenceSequence?: number
+      /**
+       * Format: uuid
+       * @description The ID of a recall that may be associated to the adjustment
+       */
+      recallId?: string
       /** @description Human readable text for type of adjustment */
-      adjustmentTypeText?: string
+      readonly adjustmentTypeText?: string
       /**
        * @description Indicates whether the adjustment was an addition or deduction
        * @enum {string}
        */
-      adjustmentArithmeticType?: 'ADDITION' | 'DEDUCTION' | 'NONE'
+      readonly adjustmentArithmeticType?: 'ADDITION' | 'DEDUCTION' | 'NONE'
       /**
        * @description The name name of the prison where the prisoner was located at the time the adjustment was created
        * @example Leeds
        */
-      prisonName?: string
+      readonly prisonName?: string
       /**
        * @description The prison where the prisoner was located at the time the adjustment was created (a 3 character code identifying the prison)
        * @example LDS
        */
-      prisonId?: string
+      readonly prisonId?: string
       /** @description The person last updating this adjustment */
-      lastUpdatedBy?: string
+      readonly lastUpdatedBy?: string
       /**
        * @description The status of this adjustment
        * @enum {string}
        */
-      status?: 'ACTIVE' | 'INACTIVE' | 'DELETED' | 'INACTIVE_WHEN_DELETED'
+      readonly status?: 'ACTIVE' | 'INACTIVE' | 'DELETED' | 'INACTIVE_WHEN_DELETED'
       /**
        * Format: date-time
        * @description The date and time this adjustment was last updated
        */
-      lastUpdatedDate?: string
+      readonly lastUpdatedDate?: string
       /**
        * Format: date-time
        * @description The date and time this adjustment was last created
        */
-      createdDate?: string
+      readonly createdDate?: string
       /**
        * Format: int32
        * @description The number of days effective in a calculation. (for example remand minus any unused deductions)
        */
-      effectiveDays?: number
+      readonly effectiveDays?: number
+      /**
+       * @description Where was the adjustment last changed
+       * @enum {string}
+       */
+      readonly source?: 'NOMIS' | 'DPS'
+    }
+    /** @description The details of a LAL adjustment */
+    LawfullyAtLargeDto: {
+      /**
+       * @description The type of LAL
+       * @enum {string}
+       */
+      affectsDates?: 'YES' | 'NO'
     }
     /** @description The details of remand adjustment */
     RemandDto: {
       /** @description The id of the charges this remand applies to */
       chargeId: number[]
+    }
+    /** @description The details of a Special Remission adjustment */
+    SpecialRemissionDto: {
+      /**
+       * @description The type of Special Remission
+       * @enum {string}
+       */
+      type?: 'MERITORIOUS_CONDUCT' | 'RELEASE_DATE_CALCULATED_TOO_EARLY' | 'RELEASE_IN_ERROR'
     }
     /** @description The details of the tagged bail adjustment */
     TaggedBailDto: {
@@ -285,7 +550,29 @@ export interface components {
        * Format: int32
        * @description The case sequence number this tagged-bail was associated with
        */
-      caseSequence: number
+      caseSequence?: number
+      /**
+       * Format: uuid
+       * @description The dps court case id this tagged-bail was associated with
+       */
+      courtCaseUuid?: string
+    }
+    /** @description The details of the time spent as an appeal applicant adjustment */
+    TimeSpentAsAnAppealApplicantDto: {
+      /** @description The court of appeal reference number for the time spent as an appeal applicant adjustment */
+      courtOfAppealReferenceNumber?: string
+      /** @description The id of the charges for this time spent as an appeal applicant */
+      chargeIds: number[]
+    }
+    /** @description The details of the time spent in custody abroad adjustment */
+    TimeSpentInCustodyAbroadDto: {
+      /**
+       * @description The source document for the time spent in custody abroad information
+       * @enum {string}
+       */
+      documentationSource?: 'COURT_WARRANT' | 'PPCS_LETTER'
+      /** @description The id of the charges for this time spent in custody abroad adjustment */
+      chargeIds: number[]
     }
     /** @description The details of a UAL adjustment */
     UnlawfullyAtLargeDto: {
@@ -293,7 +580,7 @@ export interface components {
        * @description The type of UAL
        * @enum {string}
        */
-      type?: 'RECALL' | 'ESCAPE' | 'SENTENCED_IN_ABSENCE' | 'RELEASE_IN_ERROR'
+      type?: 'RECALL' | 'ESCAPE' | 'SENTENCED_IN_ABSENCE' | 'RELEASE_IN_ERROR' | 'IMMIGRATION_DETENTION'
     }
     LegacyAdjustmentCreatedResponse: {
       /** Format: uuid */
@@ -337,6 +624,18 @@ export interface components {
         | 'UAL_FIRST_DATE_CANNOT_BE_FUTURE'
         | 'UAL_LAST_DATE_CANNOT_BE_FUTURE'
         | 'UAL_DATE_MUST_BE_AFTER_SENTENCE_DATE'
+        | 'LAL_FROM_DATE_NOT_NULL'
+        | 'LAL_TO_DATE_NOT_NULL'
+        | 'LAL_FROM_DATE_AFTER_TO_DATE'
+        | 'LAL_AFFECTS_DATES_NOT_NULL'
+        | 'LAL_FIRST_DATE_CANNOT_BE_FUTURE'
+        | 'LAL_LAST_DATE_CANNOT_BE_FUTURE'
+        | 'LAL_DATE_MUST_BE_AFTER_SENTENCE_DATE'
+        | 'SREM_TYPE_NOT_NULL'
+        | 'TCA_DOCUMENTATION_SOURCE_NOT_NULL'
+        | 'TSA_COURT_OF_APPEAL_REFERENCE_NOT_NULL'
+        | 'TSA_COURT_OF_APPEAL_REFERENCE_WRONG_LENGTH'
+        | 'TSA_COURT_OF_APPEAL_REFERENCE_INVALID_CHARACTERS'
       arguments: string[]
       message: string
       /** @enum {string} */
@@ -346,6 +645,14 @@ export interface components {
     RestoreAdjustmentsDto: {
       /** @description The IDs of the adjustments to restore */
       ids: string[]
+    }
+    /** @description Details of the number of unused days */
+    ManualUnusedDeductionsDto: {
+      /**
+       * Format: int32
+       * @description The number of unused days
+       */
+      days: number
     }
     /** @description The DTO representing the PADAs rejected */
     ProspectiveAdaRejectionDto: {
@@ -362,6 +669,27 @@ export interface components {
        */
       dateChargeProved: string
     }
+    AdaIntercept: {
+      /** @enum {string} */
+      type: 'NONE' | 'FIRST_TIME_WITH_NO_ADJUDICATION' | 'FIRST_TIME' | 'UPDATE' | 'PADAS' | 'PADA'
+      /** Format: int32 */
+      number: number
+      anyProspective: boolean
+      messageArguments: string[]
+      message?: string
+    }
+    ThingsToDo: {
+      prisonerId: string
+      thingsToDo: 'ADA_INTERCEPT'[]
+      /** @description Will be populated if there is a ADA_INTERCEPT in the thingsToDo */
+      adaIntercept?: components['schemas']['AdaIntercept']
+    }
+    DlqMessage: {
+      body: {
+        [key: string]: Record<string, never>
+      }
+      messageId: string
+    }
     GetDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
@@ -369,14 +697,12 @@ export interface components {
       messagesReturnedCount: number
       messages: components['schemas']['DlqMessage'][]
     }
-    AdaIntercept: {
+    UnusedDeductionsCalculationResultDto: {
+      person: string
+      /** Format: date-time */
+      calculationAt: string
       /** @enum {string} */
-      type: 'NONE' | 'FIRST_TIME' | 'UPDATE' | 'PADA' | 'PADAS' | 'FIRST_TIME_WITH_NO_ADJUDICATION'
-      /** Format: int32 */
-      number: number
-      anyProspective: boolean
-      messageArguments: string[]
-      message?: string
+      status: 'NOMIS_ADJUSTMENT' | 'VALIDATION' | 'UNSUPPORTED' | 'RECALL' | 'UNKNOWN' | 'CALCULATED' | 'IN_PROGRESS'
     }
     Ada: {
       /** Format: date */
@@ -388,8 +714,7 @@ export interface components {
       status: 'AWARDED_OR_PENDING' | 'SUSPENDED' | 'QUASHED' | 'PROSPECTIVE'
       /** Format: int32 */
       days: number
-      sequence?: string
-      consecutiveToSequence?: string
+      consecutiveToChargeNumber?: string
     }
     AdaAdjudicationDetails: {
       awarded: components['schemas']['AdasByDateCharged'][]
@@ -411,6 +736,11 @@ export interface components {
       /** Format: int32 */
       totalExistingAdas: number
       showExistingAdaMessage: boolean
+      recallWithMissingOutcome: boolean
+      /** Format: date */
+      earliestNonRecallSentenceDate?: string
+      /** Format: date */
+      earliestRecallDate?: string
     }
     AdasByDateCharged: {
       /** Format: date */
@@ -430,21 +760,24 @@ export interface components {
   headers: never
   pathItems: never
 }
-
 export type $defs = Record<string, never>
-
-export type external = Record<string, never>
-
 export interface operations {
   retryDlq: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         dlqName: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           '*/*': components['schemas']['RetryDlqResult']
         }
@@ -452,9 +785,19 @@ export interface operations {
     }
   }
   retryAllDlqs: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           '*/*': components['schemas']['RetryDlqResult'][]
         }
@@ -463,61 +806,76 @@ export interface operations {
   }
   purgeQueue: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         queueName: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           '*/*': components['schemas']['PurgeQueueResult']
         }
       }
     }
   }
-  /**
-   * Get an adjustments
-   * @description Get details of an adjustment in the NOMIS system format.
-   */
   get: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description The adjustment UUID */
         adjustmentId: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Adjustment found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LegacyAdjustment']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LegacyAdjustment']
         }
       }
       /** @description Adjustment not found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LegacyAdjustment']
         }
       }
     }
   }
-  /**
-   * Update an adjustments
-   * @description Synchronise an update from NOMIS into adjustments API.
-   */
   update: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description The adjustment UUID */
         adjustmentId: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -527,86 +885,112 @@ export interface operations {
     responses: {
       /** @description Adjustment update */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Adjustment not found */
       404: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /**
-   * Delete an adjustments
-   * @description Synchronise a deletion from NOMIS into adjustments API.
-   */
   delete: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description The adjustment UUID */
         adjustmentId: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Adjustment deleted */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Adjustment not found */
       404: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /**
-   * Get an adjustments
-   * @description Get details of an adjustment
-   */
   get_1: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description The adjustment UUID */
         adjustmentId: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Adjustment found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdjustmentDto']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdjustmentDto']
         }
       }
       /** @description Adjustment not found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdjustmentDto']
         }
       }
     }
   }
-  /**
-   * Update an adjustments
-   * @description Update an adjustment.
-   */
   update_1: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description The adjustment UUID */
         adjustmentId: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -616,49 +1000,69 @@ export interface operations {
     responses: {
       /** @description Adjustment update */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Adjustment not found */
       404: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /**
-   * Delete an adjustments
-   * @description Delete an adjustment.
-   */
   delete_1: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description The adjustment UUID */
         adjustmentId: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Adjustment deleted */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Adjustment not found */
       404: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /**
-   * Create an adjustments
-   * @description Synchronise a creation from NOMIS into adjustments API.
-   */
   create: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/vnd.nomis-offence+json': components['schemas']['LegacyAdjustment']
@@ -667,23 +1071,31 @@ export interface operations {
     responses: {
       /** @description Adjustment created */
       201: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LegacyAdjustmentCreatedResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LegacyAdjustmentCreatedResponse']
         }
       }
     }
   }
-  /**
-   * Create an adjustment from the migration job
-   * @description Synchronise a creation from NOMIS into adjustments API. This endpoint is used for initial migration of data from NOMIS without raising any events.
-   */
   migration: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/vnd.nomis-offence+json': components['schemas']['LegacyAdjustment']
@@ -692,59 +1104,78 @@ export interface operations {
     responses: {
       /** @description Adjustment created */
       201: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LegacyAdjustmentCreatedResponse']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['LegacyAdjustmentCreatedResponse']
         }
       }
     }
   }
-  /**
-   * Get current adjustments by person
-   * @description Get current adjustments for a given person.
-   */
   findByPerson: {
     parameters: {
       query: {
         /** @description The noms ID of the person */
         person: string
         /** @description The status of adjustments. Defaults to ACTIVE */
-        status?: 'ACTIVE' | 'INACTIVE' | 'DELETED' | 'INACTIVE_WHEN_DELETED'
-        /** @description The earliest sentence date to filter adjustments by. Defaults to earliest active sentence date */
-        sentenceEnvelopeDate?: string
+        status?: ('ACTIVE' | 'INACTIVE' | 'DELETED' | 'INACTIVE_WHEN_DELETED')[]
+        /** @description Only get the adjustments linked to the current period of custody. Defaults to true */
+        currentPeriodOfCustody?: boolean
+        /** @description The recall ID to filter adjustments by. */
+        recallId?: string
       }
+      header?: never
+      path?: never
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Adjustment found */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdjustmentDto'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdjustmentDto'][]
         }
       }
       /** @description Adjustment not found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdjustmentDto'][]
         }
       }
     }
   }
-  /**
-   * Create adjustments
-   * @description Create adjustment.
-   */
   create_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['AdjustmentDto'][]
@@ -753,28 +1184,33 @@ export interface operations {
     responses: {
       /** @description Adjustments created */
       201: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['CreateResponseDto']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['CreateResponseDto']
         }
       }
     }
   }
-  /**
-   * Update the effective calculable days for and adjustment
-   * @description Update an adjustment's effective days.
-   */
   updateEffectiveDays: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /** @description The adjustment UUID */
         adjustmentId: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -784,23 +1220,34 @@ export interface operations {
     responses: {
       /** @description Adjustment update */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Adjustment not found */
       404: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /**
-   * Validate an adjustments
-   * @description Validate an adjustment.
-   */
   validate: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['AdjustmentDto']
@@ -809,23 +1256,31 @@ export interface operations {
     responses: {
       /** @description Adjustment validation returned */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ValidationMessage'][]
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['ValidationMessage'][]
         }
       }
     }
   }
-  /**
-   * Restore a deleted adjustment
-   * @description Restore a deleted adjustment
-   */
   restore: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
     requestBody: {
       content: {
         'application/json': components['schemas']['RestoreAdjustmentsDto']
@@ -834,21 +1289,70 @@ export interface operations {
     responses: {
       /** @description Adjustment restored */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Adjustment not found */
       404: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
-  /** Reject prospective ADA. */
+  setUnusedDaysManually: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The person */
+        person: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ManualUnusedDeductionsDto']
+      }
+    }
+    responses: {
+      /** @description Adjustment update */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorised, requires a valid Oauth2 token */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Adjustment not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   rejectProspectiveAda: {
     parameters: {
+      query?: never
+      header?: never
       path: {
         /**
          * @description The noms ID of the person
@@ -856,6 +1360,7 @@ export interface operations {
          */
         person: string
       }
+      cookie?: never
     }
     requestBody: {
       content: {
@@ -865,15 +1370,68 @@ export interface operations {
     responses: {
       /** @description Reject a prospective ADA */
       200: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
       /** @description Adjustment not found */
       404: {
-        content: never
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  getThingsToDo: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /**
+         * @description Prisoner's ID (also known as nomsId)
+         * @example A1234AB
+         */
+        prisonerId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully returns the things-to-do list */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ThingsToDo']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ThingsToDo']
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ThingsToDo']
+        }
       }
     }
   }
@@ -882,84 +1440,66 @@ export interface operations {
       query?: {
         maxMessages?: number
       }
+      header?: never
       path: {
         dlqName: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           '*/*': components['schemas']['GetDlqResult']
         }
       }
     }
   }
-  /** Determine if there needs to be an adjustment-interception for this person */
-  determineAdaIntercept: {
+  getUnusedDeductionsResult: {
     parameters: {
+      query?: never
+      header?: never
       path: {
-        /**
-         * @description The noms ID of the person
-         * @example AA1256A
-         */
+        /** @description The person */
         person: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
-      /** @description Intercept decision returned */
+      /** @description Returns result */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
-          'application/json': components['schemas']['AdaIntercept']
+          'application/json': components['schemas']['UnusedDeductionsCalculationResultDto']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
-          'application/json': components['schemas']['AdaIntercept']
+          'application/json': components['schemas']['UnusedDeductionsCalculationResultDto']
         }
       }
-      /** @description Adjustment not found */
+      /** @description Person not found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
-          'application/json': components['schemas']['AdaIntercept']
+          'application/json': components['schemas']['UnusedDeductionsCalculationResultDto']
         }
       }
     }
   }
-  /** Determine if there needs to be an adjustment-interception for this person */
-  determineAdaIntercept_1: {
-    parameters: {
-      path: {
-        /**
-         * @description The noms ID of the person
-         * @example AA1256A
-         */
-        person: string
-      }
-    }
-    responses: {
-      /** @description Intercept decision returned */
-      200: {
-        content: {
-          'application/json': components['schemas']['AdaIntercept']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        content: {
-          'application/json': components['schemas']['AdaIntercept']
-        }
-      }
-      /** @description Adjustment not found */
-      404: {
-        content: {
-          'application/json': components['schemas']['AdaIntercept']
-        }
-      }
-    }
-  }
-  /** Get all details of adjudications and associated adjustments */
   getAdaAdjudicationDetails: {
     parameters: {
       query?: {
@@ -968,12 +1508,8 @@ export interface operations {
          * @example 2022-01-10,2022-02-11
          */
         selectedProspectiveAdaDates?: string[]
-        /**
-         * @description Which service to look adas from, defaults to prison api.
-         * @example PRISON-API
-         */
-        service?: string
       }
+      header?: never
       path: {
         /**
          * @description The noms ID of the person
@@ -981,22 +1517,33 @@ export interface operations {
          */
         person: string
       }
+      cookie?: never
     }
+    requestBody?: never
     responses: {
       /** @description Details of adjudications and adjustments returned */
       200: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdaAdjudicationDetails']
         }
       }
       /** @description Unauthorised, requires a valid Oauth2 token */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdaAdjudicationDetails']
         }
       }
       /** @description Adjustment not found */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
         content: {
           'application/json': components['schemas']['AdaAdjudicationDetails']
         }

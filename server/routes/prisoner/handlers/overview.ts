@@ -5,6 +5,8 @@ import CalculateReleaseDatesService from '../../../services/calculateReleaseDate
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import PrisonService from '../../../services/prisonService'
+import UnusedDeductionsService from '../../../services/unusedDeductionsService'
+import { Adjustment } from '../../../@types/adjustmentsApi/types'
 
 export default class OverviewRoutes {
   constructor(
@@ -13,6 +15,7 @@ export default class OverviewRoutes {
     private readonly calculateReleaseDatesService: CalculateReleaseDatesService,
     private readonly remandAndSentencingService: RemandAndSentencingService,
     private readonly prisonService: PrisonService,
+    private readonly unusedDeductionsService: UnusedDeductionsService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -29,6 +32,17 @@ export default class OverviewRoutes {
       this.prisonerService.hasActiveSentences(bookingId, token),
       this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token),
     ])
+
+    const [unusedDeductionMessage, adjustments] =
+      await this.unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments(
+        prisoner.prisonerNumber,
+        bookingId,
+        username,
+        token,
+        startOfSentenceEnvelope,
+      )
+
+    const unusedDeductions = this.getUnused(unusedDeductionMessage, adjustments)
 
     const aggregatedAdjustments = showAdjustments
       ? await this.getAggregatedAdjustments(prisoner, startOfSentenceEnvelope, username)
@@ -65,7 +79,41 @@ export default class OverviewRoutes {
       showRecalls: hasRasAccess,
       latestRecall,
       anyThingsToDo,
+      unusedDeductions,
     })
+  }
+
+  private unusedDeductionsManuallyEnteredInDps(unusedDeductionMessage: string, adjustments: Adjustment[]) {
+    const unusedDeductionAdjustment = adjustments
+      .filter(it => it.source !== 'NOMIS')
+      .find(it => it.adjustmentType === 'UNUSED_DEDUCTIONS')
+    return ['UNSUPPORTED', 'RECALL'].includes(unusedDeductionMessage) && unusedDeductionAdjustment
+  }
+
+  public getUnused(unusedDeductionMessage: string, adjustments: Adjustment[]) {
+    const unusedDays: { adjustmentType: string; unusedDays: number }[] = []
+
+    if (
+      unusedDeductionMessage === 'NONE' ||
+      this.unusedDeductionsManuallyEnteredInDps(unusedDeductionMessage, adjustments)
+    ) {
+      ;[
+        'REMAND',
+        'TAGGED_BAIL',
+        'RESTORATION_OF_ADDITIONAL_DAYS_AWARDED',
+        'SPECIAL_REMISSION',
+        'CUSTODY_ABROAD',
+      ].forEach(deductionType => {
+        const filteredAdjustments = adjustments.filter(it => it.adjustmentType === deductionType)
+        const total = filteredAdjustments.map(a => a.days).reduce((sum, current) => sum + current, 0)
+        const effective = filteredAdjustments.map(a => a.effectiveDays).reduce((sum, current) => sum + current, 0)
+        const unused = total - effective
+
+        unusedDays.push({ adjustmentType: deductionType, unusedDays: unused })
+      })
+    }
+
+    return unusedDays
   }
 
   private async getAggregatedAdjustments(prisoner: Prisoner, startOfSentenceEnvelope: Date, username: string) {
@@ -75,20 +123,24 @@ export default class OverviewRoutes {
       username,
     )
 
-    return adjustments
+    const result: { [arithmeticKey: string]: { [typeKey: string]: { total: number; typeText: string } } } = {
+      ADDITION: {},
+      DEDUCTION: {},
+      NONE: {},
+    }
+
+    adjustments
       .filter(adjustment => !['LAWFULLY_AT_LARGE', 'SPECIAL_REMISSION'].includes(adjustment.adjustmentType))
-      .reduce(
-        (previous: { [arithmeticKey: string]: { [typeKey: string]: number } }, current) => {
-          const total = (previous[current.adjustmentArithmeticType][current.adjustmentTypeText] ?? 0) + current.days
-          let newAggregate = previous
-          if (total) {
-            newAggregate =
-              // eslint-disable-next-line no-param-reassign
-              ((previous[current.adjustmentArithmeticType][current.adjustmentTypeText] = total), previous)
+      .forEach(current => {
+        const total = (result[current.adjustmentArithmeticType][current.adjustmentType]?.total ?? 0) + current.days
+        if (total) {
+          result[current.adjustmentArithmeticType][current.adjustmentType] = {
+            total,
+            typeText: current.adjustmentTypeText,
           }
-          return newAggregate
-        },
-        { ADDITION: {}, DEDUCTION: {}, NONE: {} },
-      )
+        }
+      })
+
+    return result
   }
 }

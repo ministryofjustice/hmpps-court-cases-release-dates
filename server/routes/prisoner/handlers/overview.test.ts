@@ -11,16 +11,22 @@ import AdjustmentsService from '../../../services/adjustmentsService'
 import { Adjustment } from '../../../@types/adjustmentsApi/types'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
 import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesApi/types'
+import UnusedDeductionsService from '../../../services/unusedDeductionsService'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/prisonerSearchService')
 jest.mock('../../../services/adjustmentsService')
 jest.mock('../../../services/calculateReleaseDatesService')
+jest.mock('../../../services/unusedDeductionsService')
 
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 const adjustmentsService = new AdjustmentsService(null) as jest.Mocked<AdjustmentsService>
 const calculateReleaseDatesService = new CalculateReleaseDatesService() as jest.Mocked<CalculateReleaseDatesService>
+const unusedDeductionsService = new UnusedDeductionsService(
+  adjustmentsService,
+  prisonerService,
+) as jest.Mocked<UnusedDeductionsService>
 
 let app: Express
 
@@ -31,6 +37,7 @@ beforeEach(() => {
       prisonerSearchService,
       adjustmentsService,
       calculateReleaseDatesService,
+      unusedDeductionsService,
     },
     userSupplier: () => {
       return { ...user, hasAdjustmentsAccess: true }
@@ -92,6 +99,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -110,6 +118,7 @@ describe('Route Handlers - Overview', () => {
           prisonerSearchService,
           adjustmentsService,
           calculateReleaseDatesService,
+          unusedDeductionsService,
         },
         userSupplier: () => {
           return { ...user, hasInactiveBookingAccess: true, hasAdjustmentsAccess: true }
@@ -125,6 +134,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -142,6 +152,7 @@ describe('Route Handlers - Overview', () => {
           prisonerSearchService,
           adjustmentsService,
           calculateReleaseDatesService,
+          unusedDeductionsService,
         },
         userSupplier: () => {
           return { ...user, hasInactiveBookingAccess: true, hasAdjustmentsAccess: true }
@@ -157,6 +168,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -214,6 +226,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -243,6 +256,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -261,6 +275,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -284,6 +299,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
@@ -295,6 +311,46 @@ describe('Route Handlers - Overview', () => {
     })
 
     it('should render adjustments section correctly when there are adjustments', () => {
+      const adjustmentsStub = [
+        {
+          adjustmentType: 'REMAND',
+          adjustmentTypeText: 'Remand',
+          adjustmentArithmeticType: 'DEDUCTION',
+          days: 5,
+          effectiveDays: 2,
+        } as Adjustment,
+        {
+          adjustmentType: 'REMAND',
+          adjustmentTypeText: 'Remand',
+          adjustmentArithmeticType: 'DEDUCTION',
+          effectiveDays: 2,
+          days: 10,
+        } as Adjustment,
+        {
+          adjustmentType: 'UNLAWFULLY_AT_LARGE',
+          adjustmentTypeText: 'UAL',
+          adjustmentArithmeticType: 'ADDITION',
+          days: 6,
+        } as Adjustment,
+        {
+          adjustmentType: 'RESTORATION_OF_ADDITIONAL_DAYS_AWARDED',
+          adjustmentTypeText: 'RADA',
+          adjustmentArithmeticType: 'DEDUCTION',
+          days: 1,
+        } as Adjustment,
+        {
+          adjustmentType: 'TAGGED_BAIL',
+          adjustmentTypeText: 'Tagged bail',
+          adjustmentArithmeticType: 'DEDUCTION',
+          days: 0,
+        } as Adjustment,
+        {
+          adjustmentType: 'UNUSED_DEDUCTIONS',
+          adjustmentTypeText: 'Unused deductions',
+          adjustmentArithmeticType: 'NONE',
+          days: 5,
+        } as Adjustment,
+      ]
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
         firstName: 'Jane',
@@ -302,40 +358,13 @@ describe('Route Handlers - Overview', () => {
         prisonId: 'MDI',
       } as Prisoner)
       prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
-      adjustmentsService.getAdjustments.mockResolvedValue([
-        {
-          adjustmentTypeText: 'Remand',
-          adjustmentArithmeticType: 'DEDUCTION',
-          days: 5,
-        } as Adjustment,
-        {
-          adjustmentTypeText: 'Remand',
-          adjustmentArithmeticType: 'DEDUCTION',
-          days: 10,
-        } as Adjustment,
-        {
-          adjustmentTypeText: 'UAL',
-          adjustmentArithmeticType: 'ADDITION',
-          days: 6,
-        } as Adjustment,
-        {
-          adjustmentTypeText: 'RADA',
-          adjustmentArithmeticType: 'DEDUCTION',
-          days: 1,
-        } as Adjustment,
-        {
-          adjustmentTypeText: 'Tagged bail',
-          adjustmentArithmeticType: 'DEDUCTION',
-          days: 0,
-        } as Adjustment,
-        {
-          adjustmentTypeText: 'Unused deductions',
-          adjustmentArithmeticType: 'NONE',
-          days: 5,
-        } as Adjustment,
-      ])
+      adjustmentsService.getAdjustments.mockResolvedValue(adjustmentsStub)
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue([
+        'NONE',
+        adjustmentsStub,
+      ])
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
@@ -343,7 +372,9 @@ describe('Route Handlers - Overview', () => {
           expect(res.text).toContain('<h2 class="govuk-heading-l">Adjustments</h2>')
           expect(res.text).toContain('<h3 class="govuk-heading-m">Additions</h3>')
           expect(res.text).toContain('<h3 class="govuk-heading-m">Deductions</h3>')
-          expect(res.text).toMatch(/Remand\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*15 Days/)
+          expect(res.text).toMatch(
+            /Remand\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*15 Days including 11 days unused/,
+          )
           expect(res.text).toMatch(/UAL\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*6 Days/)
           expect(res.text).toMatch(/RADA\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*1 Day/)
           expect(res.text).not.toMatch(/Tagged bail\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*0 Days/)
@@ -352,14 +383,7 @@ describe('Route Handlers - Overview', () => {
     })
 
     it('do not include special remission or lawfully at large adjustments', () => {
-      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
-        prisonerNumber: 'A12345B',
-        firstName: 'Jane',
-        lastName: 'Doe',
-        prisonId: 'MDI',
-      } as Prisoner)
-      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
-      adjustmentsService.getAdjustments.mockResolvedValue([
+      const adjustmentsStub = [
         {
           adjustmentType: 'LAWFULLY_AT_LARGE',
           adjustmentTypeText: 'Lawfully at large',
@@ -372,9 +396,21 @@ describe('Route Handlers - Overview', () => {
           adjustmentArithmeticType: 'NONE',
           days: 10,
         } as Adjustment,
-      ])
+      ]
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue(adjustmentsStub)
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue([
+        'NONE',
+        adjustmentsStub,
+      ])
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
@@ -398,6 +434,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue(undefined)
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -426,6 +463,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue(undefined)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -467,6 +505,7 @@ describe('Route Handlers - Overview', () => {
       })
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -509,6 +548,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.hasIndeterminateSentences.mockResolvedValue(true)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -536,6 +576,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.hasIndeterminateSentences.mockResolvedValue(true)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -564,6 +605,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.hasIndeterminateSentences.mockResolvedValue(false)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -606,6 +648,7 @@ describe('Route Handlers - Overview', () => {
           prisonerSearchService,
           adjustmentsService,
           calculateReleaseDatesService,
+          unusedDeductionsService,
         },
         userSupplier: () => {
           return { ...user, hasReadOnlyNomisConfigAccess: true, hasAdjustmentsAccess: true }
@@ -621,6 +664,7 @@ describe('Route Handlers - Overview', () => {
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      unusedDeductionsService.getCalculatedUnusedDeductionsMessageAndAdjustments.mockResolvedValue(['NONE', []])
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
