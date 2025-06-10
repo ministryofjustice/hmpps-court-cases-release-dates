@@ -2,6 +2,21 @@ import { SuperAgentRequest } from 'superagent'
 import { stubFor } from './wiremock'
 
 export default {
+  stubUnusedDeductionsCalculationResult: (): SuperAgentRequest => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPath: '/adjustments-api/adjustments/person/A1234AB/unused-deductions-result',
+      },
+      response: {
+        status: 200,
+        headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+        jsonBody: {
+          status: 'CALCULATED',
+        },
+      },
+    })
+  },
   stubGetAdjustments: (): SuperAgentRequest => {
     return stubFor({
       request: {
