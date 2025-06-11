@@ -75,20 +75,33 @@ export default class OverviewRoutes {
       username,
     )
 
-    return adjustments
-      .filter(adjustment => !['LAWFULLY_AT_LARGE', 'SPECIAL_REMISSION'].includes(adjustment.adjustmentType))
-      .reduce(
-        (previous: { [arithmeticKey: string]: { [typeKey: string]: number } }, current) => {
-          const total = (previous[current.adjustmentArithmeticType][current.adjustmentTypeText] ?? 0) + current.days
-          let newAggregate = previous
-          if (total) {
-            newAggregate =
-              // eslint-disable-next-line no-param-reassign
-              ((previous[current.adjustmentArithmeticType][current.adjustmentTypeText] = total), previous)
-          }
-          return newAggregate
-        },
-        { ADDITION: {}, DEDUCTION: {}, NONE: {} },
-      )
+    const result: {
+      [arithmeticKey: string]: { [typeKey: string]: { total: number; typeText: string; unused: number } }
+    } = {
+      ADDITION: {},
+      DEDUCTION: {},
+      NONE: {},
+    }
+
+    const filteredAdjustments = adjustments.filter(
+      adjustment => !['LAWFULLY_AT_LARGE', 'SPECIAL_REMISSION'].includes(adjustment.adjustmentType),
+    )
+
+    filteredAdjustments.forEach(currentAdj => {
+      const adjustmentsForType = filteredAdjustments.filter(it => it.adjustmentType === currentAdj.adjustmentType)
+      const total = adjustmentsForType.map(a => a.days).reduce((sum, current) => sum + current, 0)
+      const effective = adjustmentsForType.map(a => a.effectiveDays).reduce((sum, current) => sum + current, 0)
+      const unused = total - effective
+
+      if (total) {
+        result[currentAdj.adjustmentArithmeticType][currentAdj.adjustmentType] = {
+          total,
+          typeText: currentAdj.adjustmentTypeText,
+          ...(currentAdj.adjustmentArithmeticType === 'DEDUCTION' && { unused: unused > 0 ? unused : 0 }),
+        }
+      }
+    })
+
+    return result
   }
 }

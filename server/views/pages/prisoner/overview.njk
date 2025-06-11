@@ -13,27 +13,32 @@
 {% if showAdjustments %}
   {%- set adjustmentAdditionSummarys = [] -%}
 
-  {% for adjustmentText, days in aggregatedAdjustments.ADDITION | dictsort %}
-    {%- set adjustmentRow= {
-      key: {
-        text: adjustmentText
-      },
-      value: {
-        text: days + " Day" + ("s" if days != 1 else "")
-      }
-    } -%}
-    {% set adjustmentAdditionSummarys = (adjustmentAdditionSummarys.push(adjustmentRow), adjustmentAdditionSummarys) %}
-  {% endfor %}
+  {% for adjustmentType, adjustmentData in aggregatedAdjustments.ADDITION | dictsort %}
+      {%- set adjustmentRow= {
+        key: {
+          text: adjustmentData.typeText
+        },
+        value: {
+          text: adjustmentData.total + " Day" + ("s" if days != 1 else "")
+        }
+      } -%}
+      {% set adjustmentAdditionSummarys = (adjustmentAdditionSummarys.push(adjustmentRow), adjustmentAdditionSummarys) %}
+    {% endfor %}
 
   {%- set adjustmentDeductionSummarys = [] -%}
 
-  {% for adjustmentText, days in aggregatedAdjustments.DEDUCTION | dictsort %}
+  {% for adjustmentType, adjustmentData in aggregatedAdjustments.DEDUCTION | dictsort %}
+    {%- set extraText = "" -%}
+    {%- set unused = adjustmentData.unused if adjustmentData.unused else 0 -%}
+    {% if unused > 0 %}
+      {%- set extraText = " including " + unused + " day" + ("s" if unused != 1 else "") + " unused" -%}
+    {% endif %}
     {%- set adjustmentRow= {
       key: {
-        text: adjustmentText
+        text: adjustmentData.typeText
       },
       value: {
-        text: days + " Day" + ("s" if days != 1 else "")
+        text: adjustmentData.total + " Day" + ("s" if days != 1 else "") + extraText
       }
     } -%}
     {% set adjustmentDeductionSummarys = (adjustmentDeductionSummarys.push(adjustmentRow), adjustmentDeductionSummarys) %}
