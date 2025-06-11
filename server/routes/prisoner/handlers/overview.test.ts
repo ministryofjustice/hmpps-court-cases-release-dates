@@ -304,31 +304,39 @@ describe('Route Handlers - Overview', () => {
       prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
       adjustmentsService.getAdjustments.mockResolvedValue([
         {
+          adjustmentType: 'REMAND',
           adjustmentTypeText: 'Remand',
           adjustmentArithmeticType: 'DEDUCTION',
           days: 5,
+          effectiveDays: 2,
         } as Adjustment,
         {
+          adjustmentType: 'REMAND',
           adjustmentTypeText: 'Remand',
           adjustmentArithmeticType: 'DEDUCTION',
           days: 10,
+          effectiveDays: 2,
         } as Adjustment,
         {
+          adjustmentType: 'UNLAWFULLY_AT_LARGE',
           adjustmentTypeText: 'UAL',
           adjustmentArithmeticType: 'ADDITION',
           days: 6,
         } as Adjustment,
         {
+          adjustmentType: 'RESTORATION_OF_ADDITIONAL_DAYS_AWARDED',
           adjustmentTypeText: 'RADA',
           adjustmentArithmeticType: 'DEDUCTION',
           days: 1,
         } as Adjustment,
         {
+          adjustmentType: 'TAGGED_BAIL',
           adjustmentTypeText: 'Tagged bail',
           adjustmentArithmeticType: 'DEDUCTION',
           days: 0,
         } as Adjustment,
         {
+          adjustmentType: 'UNUSED_DEDUCTIONS',
           adjustmentTypeText: 'Unused deductions',
           adjustmentArithmeticType: 'NONE',
           days: 5,
@@ -343,7 +351,9 @@ describe('Route Handlers - Overview', () => {
           expect(res.text).toContain('<h2 class="govuk-heading-l">Adjustments</h2>')
           expect(res.text).toContain('<h3 class="govuk-heading-m">Additions</h3>')
           expect(res.text).toContain('<h3 class="govuk-heading-m">Deductions</h3>')
-          expect(res.text).toMatch(/Remand\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*15 Days/)
+          expect(res.text).toMatch(
+            /Remand\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*15 Days including 11 days unused/,
+          )
           expect(res.text).toMatch(/UAL\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*6 Days/)
           expect(res.text).toMatch(/RADA\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*1 Day/)
           expect(res.text).not.toMatch(/Tagged bail\s*<\/dt>\s*<dd class="govuk-summary-list__value">\s*0 Days/)
