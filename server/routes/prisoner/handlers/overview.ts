@@ -97,7 +97,7 @@ export default class OverviewRoutes {
         result[currentAdj.adjustmentArithmeticType][currentAdj.adjustmentType] = {
           total,
           typeText: currentAdj.adjustmentTypeText,
-          unused: unused > 0 ? unused : 0,
+          ...(currentAdj.adjustmentArithmeticType === 'DEDUCTION' && { unused: unused > 0 ? unused : 0 }),
         }
       }
     })
