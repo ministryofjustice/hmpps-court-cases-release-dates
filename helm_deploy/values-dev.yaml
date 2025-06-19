@@ -19,7 +19,7 @@ generic-service:
     DOCUMENT_API_URL: "https://document-api-dev.hmpps.service.justice.gov.uk"
     DIGITAL_PRISON_SERVICES_URL: "https://digital-dev.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
-    ADJUSTMENTS_UI_URL: "https://adjust-release-dates-dev.hmpps.service.justice.gov.uk"
+    ADJUSTMENTS_UI_URL: "https://adjustments-dev.hmpps.service.justice.gov.uk"
     ADJUSTMENTS_API_URL: "https://adjustments-api-dev.hmpps.service.justice.gov.uk"
     CALCULATE_RELEASE_DATES_UI_URL: "https://calculate-release-dates-dev.hmpps.service.justice.gov.uk"
     CALCULATE_RELEASE_DATES_API_URL: "https://calculate-release-dates-api-dev.hmpps.service.justice.gov.uk"
