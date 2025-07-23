@@ -37,6 +37,7 @@ export default class RemandAndSentencingService {
     try {
       parsedRecall = recallDate instanceof Date ? recallDate : parse(recallDate, 'yyyy-MM-dd', new Date())
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error parsing recallDate:', recallDate, err)
       return 0
     }
