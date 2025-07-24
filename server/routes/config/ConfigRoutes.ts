@@ -35,7 +35,7 @@ export default class ConfigRoutes {
       readOnlyNomisScreens.map(async it => {
         return new ReadOnlyPrisonResult(
           it.id,
-          (await this.prisonerService.getPrisonsWithServiceCode(it.apiId)).map(i => i.prisonId),
+          (await this.prisonerService.getPrisonsWithServiceCode(it.apiId)).map(i => i.agencyId),
         )
       }),
     )
@@ -67,7 +67,7 @@ export default class ConfigRoutes {
   }
 
   private enableCheckedBoxes(checkedBoxes: string[], currentEnabledPrisons: PrisonApiPrisonDetails[], apiId: string) {
-    const newBoxes = checkedBoxes.filter(it => !currentEnabledPrisons.map(i => i.prisonId).includes(it))
+    const newBoxes = checkedBoxes.filter(it => !currentEnabledPrisons.map(i => i.agencyId).includes(it))
     newBoxes.forEach(it => this.prisonerService.postServiceCodeForPrison(apiId, it))
     return newBoxes
   }
@@ -77,8 +77,8 @@ export default class ConfigRoutes {
     currentEnabledPrisons: PrisonApiPrisonDetails[],
     apiId: string,
   ) {
-    const newboxes = currentEnabledPrisons.filter(it => !checkedBoxes.includes(it.prisonId))
-    newboxes.forEach(it => this.prisonerService.deleteServiceCodeForPrison(apiId, it.prisonId))
-    return newboxes.map(it => it.prisonId)
+    const newboxes = currentEnabledPrisons.filter(it => !checkedBoxes.includes(it.agencyId))
+    newboxes.forEach(it => this.prisonerService.deleteServiceCodeForPrison(apiId, it.agencyId))
+    return newboxes.map(it => it.agencyId)
   }
 }

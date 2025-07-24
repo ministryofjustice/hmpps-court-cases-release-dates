@@ -45,18 +45,18 @@ export default class PrisonApiClient {
   }
 
   async getPrisonsWithServiceCode(serviceCode: string): Promise<PrisonApiPrisonDetails[]> {
-    return this.restClient.get({ path: `/api/service-prisons/${serviceCode}` }) as Promise<PrisonApiPrisonDetails[]>
+    return this.restClient.get({ path: `/api/agency-switches/${serviceCode}` }) as Promise<PrisonApiPrisonDetails[]>
   }
 
   async postServiceCodeForPrison(serviceCode: string, prisonId: string): Promise<PrisonApiPrisonDetails> {
     return this.restClient.post({
-      path: `/api/service-prisons/${serviceCode}/prison/${prisonId}`,
+      path: `/api/agency-switches/${serviceCode}/agency/${prisonId}`,
     }) as Promise<PrisonApiPrisonDetails>
   }
 
   async deleteServiceCodeForPrison(serviceCode: string, prisonId: string): Promise<PrisonApiPrisonDetails> {
     return this.restClient.delete({
-      path: `/api/service-prisons/${serviceCode}/prison/${prisonId}`,
+      path: `/api/agency-switches/${serviceCode}/agency/${prisonId}`,
     }) as Promise<PrisonApiPrisonDetails>
   }
 }
