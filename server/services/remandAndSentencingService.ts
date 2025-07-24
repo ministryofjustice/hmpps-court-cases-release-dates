@@ -25,12 +25,26 @@ export default class RemandAndSentencingService {
       : undefined
   }
 
-  private calculateUal(recallDate: string | Date, returnToCustodyDate?: string | Date): number {
-    if (!returnToCustodyDate || isEqual(recallDate, returnToCustodyDate)) {
+  private calculateUal(
+    recallDate: string | Date | null | undefined,
+    returnToCustodyDate?: string | Date | null,
+  ): number {
+    if (!recallDate || !returnToCustodyDate || isEqual(recallDate, returnToCustodyDate)) {
       return 0
     }
-    const parsedRecall = recallDate instanceof Date ? recallDate : parse(recallDate, 'yyyy-MM-dd', new Date())
 
-    return differenceInCalendarDays(returnToCustodyDate, addDays(parsedRecall, 1))
+    let parsedRecall: Date
+    try {
+      parsedRecall = recallDate instanceof Date ? recallDate : parse(recallDate, 'yyyy-MM-dd', new Date())
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error parsing recallDate:', recallDate, err)
+      return 0
+    }
+
+    return differenceInCalendarDays(
+      returnToCustodyDate instanceof Date ? returnToCustodyDate : parse(returnToCustodyDate, 'yyyy-MM-dd', new Date()),
+      addDays(parsedRecall, 1),
+    )
   }
 }
