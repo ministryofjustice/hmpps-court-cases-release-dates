@@ -12,13 +12,14 @@ export default class RemandAndSentencingService {
 
     const mostRecent: ApiRecall = allApiRecalls.find(Boolean)
     const ual = mostRecent ? this.calculateUal(mostRecent.revocationDate, mostRecent.returnToCustodyDate) : null
-    console.log('mostRecent', mostRecent)
+    console.log('mostRecent SOURCE', mostRecent.source)
     return mostRecent
       ? {
           recallId: mostRecent.recallUuid,
           recallDate: mostRecent.revocationDate ? new Date(mostRecent.revocationDate) : null,
           returnToCustodyDate: mostRecent.returnToCustodyDate ? new Date(mostRecent.returnToCustodyDate) : null,
           recallType: getRecallType(mostRecent.recallType),
+          source: mostRecent.source,
           // TODO UAL should be stored on the recall in RaS not calculated on the fly
           ual,
           ualString: `${ual} day${ual === 1 ? '' : 's'}`,
