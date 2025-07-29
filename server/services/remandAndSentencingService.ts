@@ -6,11 +6,13 @@ export default class RemandAndSentencingService {
   async getMostRecentRecall(nomsId: string, token: string): Promise<Recall> {
     const client = new RemandAndSentencingApiClient(token)
     const allApiRecalls = await client.getAllRecalls(nomsId)
+    console.log('allApiRecalls', allApiRecalls)
 
     allApiRecalls.sort((a, b) => compareDesc(a.revocationDate, b.revocationDate))
 
     const mostRecent: ApiRecall = allApiRecalls.find(Boolean)
     const ual = mostRecent ? this.calculateUal(mostRecent.revocationDate, mostRecent.returnToCustodyDate) : null
+    console.log('mostRecent', mostRecent)
     return mostRecent
       ? {
           recallId: mostRecent.recallUuid,

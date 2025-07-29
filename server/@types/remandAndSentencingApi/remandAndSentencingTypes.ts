@@ -40,6 +40,7 @@ export interface Recall {
   ual: number
   ualString: string
   recallType: RecallType
+  recallSource: 'NOMIS' | 'DPS'
   location: string
 }
 
