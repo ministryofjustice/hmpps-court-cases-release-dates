@@ -183,7 +183,6 @@
 {% endblock %}
 
 {%  macro recallCard(recall) %}
-{{ recall.source }}
   <div class="govuk-summary-card govuk-!-margin-bottom-6">
     <div class="govuk-summary-card__title-wrapper">
       <h2 class="govuk-summary-card__title">
@@ -217,7 +216,24 @@
         </div>
         <div class="govuk-grid-column-one-half">
           {{ cardInfo('Arrest date',  recall.returnToCustodyDate | date if recall.returnToCustodyDate else 'In prison at recall' ) }}
-          {{ cardInfo('UAL (unlawfully at large)', recall.ualString ) }}
+          
+               {% if recall.source !== 'NOMIS' and recall.ualString %}
+        {{ cardInfo('UAL (unlawfully at large)', recall.ualString) }}
+      {% elseif recall.source !== 'NOMIS' and not recall.ual %}
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">UAL (unlawfully at large)</h3>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <a class="govuk-link" href="{{ urls.adjustmentsOverview }}" target="_blank" rel="noopener noreferrer">
+            View UAL details
+          </a>
+        </p>
+      {% elseif recall.source === 'NOMIS' %}
+       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">UAL (unlawfully at large)</h3>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <a class="govuk-link" href="{{ urls.adjustments }}" target="_blank" rel="noopener noreferrer">
+            View UAL details
+          </a>
+        </p>
+      {% endif %}
         </div>
       </div>
     </div>
