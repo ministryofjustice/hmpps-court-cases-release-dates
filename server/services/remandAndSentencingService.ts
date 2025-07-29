@@ -12,7 +12,7 @@ export default class RemandAndSentencingService {
 
     const mostRecent: ApiRecall = allApiRecalls.find(Boolean)
     const ual = mostRecent ? this.calculateUal(mostRecent.revocationDate, mostRecent.returnToCustodyDate) : null
-    console.log('mostRecent SOURCE', mostRecent.source)
+    console.log('mostRecent', JSON.stringify(mostRecent, undefined, 2))
     return mostRecent
       ? {
           recallId: mostRecent.recallUuid,
