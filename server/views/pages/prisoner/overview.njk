@@ -222,14 +222,14 @@
       {% elseif recall.source !== 'NOMIS' and not recall.ual %}
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">UAL (unlawfully at large)</h3>
         <p class="govuk-body govuk-!-margin-bottom-2">
-          <a class="govuk-link" href="{{ urls.adjustmentsOverview }}" target="_blank" rel="noopener noreferrer">
+          <a class="govuk-link" href="{{ adjustmentsUiUrl }}/{{ prisoner.prisonerNumber }}" target="_blank" rel="noopener noreferrer">
             View UAL details
           </a>
         </p>
       {% elseif recall.source === 'NOMIS' %}
        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">UAL (unlawfully at large)</h3>
         <p class="govuk-body govuk-!-margin-bottom-2">
-          <a class="govuk-link" href="{{ urls.adjustments }}" target="_blank" rel="noopener noreferrer">
+          <a class="govuk-link" href="{{ adjustmentsUiUrl }}/{{ prisoner.prisonerNumber }}/unlawfully-at-large/view" target="_blank" rel="noopener noreferrer">
             View UAL details
           </a>
         </p>
