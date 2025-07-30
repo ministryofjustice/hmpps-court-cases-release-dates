@@ -4,6182 +4,6096 @@
  */
 
 export interface paths {
-  '/recall/{recallUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve a recall
-     * @description This endpoint will retrieve the details of a recall
-     */
-    get: operations['getRecall']
-    /**
-     * Update a recall (or create one with the passed in details)
-     * @description This endpoint will update a recall (or create one with the passed in details)
-     */
-    put: operations['updateRecall']
-    post?: never
-    /**
-     * Delete a recall
-     * @description This endpoint will delete a recall
-     */
-    delete: operations['deleteRecall']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/sentence/{lifetimeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * retrieve a sentence
-     * @description This endpoint will retrieve sentence details.
-     */
-    get: operations['get']
-    /**
-     * Update a sentence
-     * @description Synchronise an update of sentence from NOMIS Offender sentences into remand and sentencing API.
-     */
-    put: operations['update']
-    post?: never
-    /**
-     * Delete Sentence
-     * @description Synchronise a deletion of sentence from NOMIS offender charges into remand and sentencing API.
-     */
-    delete: operations['delete']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/period-length/{periodLengthUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * retrieve a period-length
-     * @description This endpoint will retrieve period-length details.
-     */
-    get: operations['get_1']
-    /**
-     * Updates one or more period lengths related to a period-length UUID
-     * @description Updates one or more period lengths related to a period-length UUID
-     */
-    put: operations['update_1']
-    post?: never
-    /**
-     * Delete Period Length
-     * @description This endpoint will soft-delete a period-length from RAS.
-     */
-    delete: operations['delete_1']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-case/{sourceCourtCaseUuid}/unlink/{targetCourtCaseUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Unlinks a court case to another court case
-     * @description Synchronise a unlink of a court case from NOMIS into remand and sentencing API.
-     */
-    put: operations['unlinkCourtCase']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-case/{sourceCourtCaseUuid}/link/{targetCourtCaseUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Links a court case to another court case
-     * @description Synchronise a link of a court case from NOMIS into remand and sentencing API.
-     */
-    put: operations['linkCourtCase']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-case/{courtCaseUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve court case details
-     * @description This endpoint will retrieve court case details
-     */
-    get: operations['get_2']
-    /**
-     * Updates a court case
-     * @description Synchronise an update of court case from NOMIS into remand and sentencing API.
-     */
-    put: operations['update_2']
-    post?: never
-    /**
-     * Deletes a court case
-     * @description Synchronise a deletion of court case from NOMIS into remand and sentencing API.
-     */
-    delete: operations['delete_2']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-appearance/{lifetimeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve court appearance details
-     * @description This endpoint will retrieve court appearance details
-     */
-    get: operations['get_3']
-    /**
-     * Updates a court appearance
-     * @description Synchronise an update of court appearance from NOMIS court events into remand and sentencing API.
-     */
-    put: operations['update_3']
-    post?: never
-    /**
-     * Delete Appearance
-     * @description Synchronise a deletion of court appearance from NOMIS court events into remand and sentencing API.
-     */
-    delete: operations['delete_3']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-appearance/{lifetimeUuid}/charge/{chargeLifetimeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get latest charge at appearance
-     * @description This endpoint will retrieve the latest charge at a court appearance
-     */
-    get: operations['getChargeAtAppearance']
-    /**
-     * link Appearance with Charge
-     * @description Synchronise a link between court appearance and charge from NOMIS into remand and sentencing API.
-     */
-    put: operations['linkAppearanceWithCharge']
-    post?: never
-    /**
-     * Delete Appearance Charge link
-     * @description Synchronise a deletion of link between court appearance and charge from NOMIS into remand and sentencing API.
-     */
-    delete: operations['unlinkAppearanceWithCharge']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-appearance/{courtAppearanceUuid}/charge/{chargeUuid}/link': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * link a charge with a case
-     * @description Synchronise a link between charge and court case from NOMIS into remand and sentencing API.
-     */
-    put: operations['linkChargeToCaseInAppearance']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/charge/{lifetimeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * retrieve a charge
-     * @description This endpoint will retrieve charge details.
-     */
-    get: operations['get_4']
-    /**
-     * Update a charge in all appearances
-     * @description Synchronise an update of charge in all appearances from NOMIS Offender charges into remand and sentencing API.
-     */
-    put: operations['update_4']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/charge/{lifetimeUuid}/appearance/{appearanceLifetimeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Update a charge in an appearance
-     * @description Synchronise an update of charge within an appearance from NOMIS Offender charges into remand and sentencing API.
-     */
-    put: operations['updateInAppearance']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/draft/court-appearance/{draftUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieves a draft court appearance
-     * @description Retrieves a draft court appearance
-     */
-    get: operations['get_5']
-    /**
-     * Updates a draft court appearance
-     * @description Updates a draft court appearance for when a user wants to pause inputting a warrant and come back later
-     */
-    put: operations['update_5']
-    post?: never
-    /**
-     * deletes a draft court appearance
-     * @description deletes a draft court appearance
-     */
-    delete: operations['delete_4']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/{courtCaseUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve court case details
-     * @description This endpoint will retrieve court case details
-     */
-    get: operations['getCourtCaseDetails']
-    /**
-     * Create Court case
-     * @description This endpoint will create a court case
-     */
-    put: operations['putCourtCase']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/{courtCaseUuid}/case-references/refresh': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Refresh case references
-     * @description This endpoint will refresh case references
-     */
-    put: operations['refreshCaseReferences']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-appearance/{appearanceUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve court appearance details
-     * @description This endpoint will retrieve court appearance details
-     */
-    get: operations['getCourtAppearanceDetails']
-    /**
-     * Create Court appearance
-     * @description This endpoint will create a court appearance in a given court case
-     */
-    put: operations['updateCourtAppearance']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/uploaded-documents': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Creates an uploaded document entry
-     * @description Creates an uploaded document entry
-     */
-    post: operations['create']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/recall': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create a recall
-     * @description This endpoint will create a recall
-     */
-    post: operations['createRecall']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/sentence': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create a sentence
-     * @description Synchronise a creation of sentence from NOMIS Offender sentences into remand and sentencing API.
-     */
-    post: operations['create_1']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/sentence/search': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Search for multiple sentences
-     * @description This endpoint will retrieve multiple sentences by search parameters.
-     */
-    post: operations['search']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/period-length': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Creates one or more period lengths for a single sentence
-     * @description Creates one or more period lengths for a single sentence
-     */
-    post: operations['create_2']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-case': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create a court case
-     * @description Synchronise a creation of court case from NOMIS into remand and sentencing API.
-     */
-    post: operations['create_3']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-case/migration': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Creates a court case
-     * @description Migrates a court case, court appearance and charge from NOMIS into remand and sentencing API.
-     */
-    post: operations['create_4']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-appearance': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create a court appearance
-     * @description Synchronise a creation of court appearance from NOMIS court events into remand and sentencing API.
-     */
-    post: operations['create_5']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/charge': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create a charge
-     * @description Synchronise a creation of charge from NOMIS Offender charges into remand and sentencing API.
-     */
-    post: operations['create_6']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/draft/court-case': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create a draft court case
-     * @description Creates a draft court case for when a user wants to pause inputting a warrant and come back later
-     */
-    post: operations['create_7']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/draft/court-case/{courtCaseUuid}/appearance': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create a draft court appearance in court case
-     * @description Creates a draft draft court appearance in court case for when a user wants to pause inputting a warrant and come back later
-     */
-    post: operations['createDraftAppearanceInCourtCase']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create Court case
-     * @description This endpoint will create a court case
-     */
-    post: operations['createCourtCase']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/{courtCaseUuid}/sentences/update-types': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Update sentence types for unknown pre-recall sentences
-     * @description This endpoint updates the sentence types for sentences that are currently marked as 'unknown pre-recall sentence'. All updates are performed atomically - if any update fails, all changes are rolled back.
-     */
-    post: operations['updateSentenceTypes']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-appearance': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Create Court appearance
-     * @description This endpoint will create a court appearance in a given court case
-     */
-    post: operations['createCourtAppearance']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/sentence/{sentenceUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve sentence details
-     * @description This endpoint will retrieve sentence details
-     */
-    get: operations['getSentenceDetails']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/sentence/{sentenceUuid}/sentences-after-on-other-court-appearance-details': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Sentences after on other court appearance details
-     * @description This endpoint will return details of the court appearances of sentences after this sentence
-     */
-    get: operations['sentencesAfterOnOtherCourtAppearanceDetails']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/sentence/{sentenceUuid}/has-sentences-after-on-other-court-appearance': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Any sentences after on another appearance
-     * @description This endpoint will return true if any other sentence has a consecutive to link to the sentence at sentenceUuid that is on a different court appearance
-     */
-    get: operations['hasSentencesAfterOnOtherCase']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/sentence/consecutive-to-details': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve sentence consecutive to details
-     * @description This endpoint will retrieve consecutive to sentence details
-     */
-    get: operations['getConsecutiveToSentenceDetails']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/sentence-type/{sentenceTypeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get Sentence type by UUID
-     * @description This endpoint will retrieve sentence type by UUID
-     */
-    get: operations['getSentenceTypeByUuid']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/sentence-type/{sentenceTypeUuid}/is-still-valid': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Check the sentence type is still valid
-     * @description This endpoint will determine if the sentence type is still valid with the age, conviction date, statuses, offence date parameters
-     */
-    get: operations['sentenceTypeStillValid']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/sentence-type/uuid/multiple': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * get all sentence types by uuids
-     * @description This endpoint will get all sentence types by uuids
-     */
-    get: operations['getSentenceTypesByIds']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/sentence-type/search': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Search all sentence types
-     * @description This endpoint will search all sentence types
-     */
-    get: operations['searchSentenceTypes']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/recall/person/{prisonerId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve all recalls for a person
-     * @description This endpoint will retrieve  all recalls for a person
-     */
-    get: operations['getRecallsByPrisonerId']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/person/{prisonerId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve person details
-     * @description This endpoint will retrieve person details
-     */
-    get: operations['getPersonDetails']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/person/{prisonerId}/sentences-to-chain-to': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * retrieve all sentences to chain to
-     * @description This endpoint will retrieve all sentences which can be used in a consecutive to chain
-     */
-    get: operations['sentencesToChainTo']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/person/{prisonerId}/sentenced-court-cases': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve all sentenced court cases for prisoner
-     * @description This endpoint will retrieve all sentenced court cases for prisoner
-     */
-    get: operations['getSentencedCourtCases']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/person/{prisonerId}/has-sentence-to-chain-to': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Determine if there can be a sentence to chain to
-     * @description This endpoint will determine whether there can be a sentence which can be selected for a consecutive to chain
-     */
-    get: operations['hasSentenceToChainTo']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/sentence-type/summary': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get historic NOMIS sentence type by nomis sentence type reference
-     * @description Returns historic NOMIS sentence type information for the specified type in a summary format
-     */
-    get: operations['getLegacySentenceTypeSummary']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/sentence-type/all': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get all historic NOMIS sentence types
-     * @description Returns a set of historic NOMIS sentence type information in a detailed format
-     */
-    get: operations['getLegacyAllSentenceTypes']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/sentence-type/all/summary': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get summary of all historic NOMIS sentence types
-     * @description Returns a set of historic NOMIS sentence type information in a summary format
-     */
-    get: operations['getLegacyAllSentenceTypesSummaries']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/sentence-type/': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get historic NOMIS sentence type by nomis sentence type reference
-     * @description Returns historic NOMIS sentence type information for the specified type in a detailed format
-     */
-    get: operations['getLegacySentenceType']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/recall/{uuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * retrieve a recall
-     * @description This endpoint will retrieve legacy recall details.
-     */
-    get: operations['get_6']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-case/{courtCaseUuid}/test': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve court case details for testing
-     * @description This endpoint will retrieve court case details for testing
-     */
-    get: operations['getTest']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/court-case/{courtCaseUuid}/reconciliation': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve court case details for reconciliation
-     * @description This endpoint will retrieve court case details for reconciliation
-     */
-    get: operations['getReconciliation']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/{prisonerId}/recallable-court-cases': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve recallable court cases for a prisoner
-     * @description This endpoint returns filtered court cases optimised for recall processing workflows. Only includes ACTIVE cases with SENTENCING warrant type that have sentences.
-     */
-    get: operations['getRecallableCourtCases']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/{courtCaseUuid}/latest-offence-date': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve the latest offence date for a court case (checks both offence start and end dates)
-     * @description
-     *           This endpoint returns the most recent offence start or end date across all appearances and charges for a given court case.
-     *           Optionally, the result can exclude offences tied to a specific court appearance, used when editing a court appearance in the UI (the latest version of the offence dates are in the UI session).
-     *
-     */
-    get: operations['getLatestOffenceDate']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/{courtCaseUuid}/latest-appearance': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve latest court appearance of court case
-     * @description This endpoint will retrieve latest court appearance of court case
-     */
-    get: operations['getLatestAppearanceDetails']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/{courtCaseUuid}/count-numbers': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve count numbers for case
-     * @description This endpoint will retrieve all unique count numbers for a case
-     */
-    get: operations['getAllCountNumbers']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/search': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve all court cases for person (where each court case has at least one appearance in the past)
-     * @description This endpoint will retrieve all court cases for a person (where each court case has at least one appearance in the past - i.e. there exists a latest court appearance)
-     */
-    get: operations['searchCourtCases']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/court-case/paged/search': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve all court cases for person (where each court case has at least one appearance in the past)
-     * @description This endpoint will retrieve all court cases for a person (where each court case has at least one appearance in the past - i.e. there exists a latest court appearance)
-     */
-    get: operations['pagedSearchCourtCases']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/charge/{chargeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve charge details
-     * @description This endpoint will retrieve charge details
-     */
-    get: operations['getChargeDetails']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/charge-outcome/{outcomeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get charge outcome by UUID
-     * @description This endpoint will retrieve charge outcome by UUID
-     */
-    get: operations['getChargeOutcomeByUuid']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/charge-outcome/uuid/multiple': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * get all charge outcomes by uuids
-     * @description This endpoint will get all charge outcomes by uuids
-     */
-    get: operations['getChargeOutcomesByIds']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/charge-outcome/status': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get all charge outcomes by statuses
-     * @description This endpoint will get all charge outcomes by statuses
-     */
-    get: operations['getAllChargeOutcomes']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/appearance-type/{appearanceTypeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get appearance type by uuid
-     * @description This endpoint will get appearance type by uuid
-     */
-    get: operations['getAppearanceTypeById']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/appearance-type/status': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get all appearance types by statuses
-     * @description This endpoint will get all appearance types by statuses
-     */
-    get: operations['getAllAppearanceTypes']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/appearance-outcome/{outcomeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get appearance outcome by UUID
-     * @description This endpoint will retrieve appearance outcome by UUID
-     */
-    get: operations['getAppearanceOutcomeByUuid']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/appearance-outcome/status': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get all appearance outcomes by status
-     * @description This endpoint will get all appearance outcomes by status
-     */
-    get: operations['getAllAppearanceOutcomes']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/legacy/charge/{chargeUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post?: never
-    /**
-     * Delete Charge
-     * @description Synchronise a deletion of charge from NOMIS offender charges into remand and sentencing API.
-     */
-    delete: operations['delete_5']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/document-admin/cleanup': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post?: never
-    /**
-     * Deletes uploaded documents without an appearance ID
-     * @description Deletes all uploaded documents where the appearance ID is null
-     */
-    delete: operations['cleanupDocument']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    "/recall/{recallUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve a recall
+         * @description This endpoint will retrieve the details of a recall
+         */
+        get: operations["getRecall"];
+        /**
+         * Update a recall (or create one with the passed in details)
+         * @description This endpoint will update a recall (or create one with the passed in details)
+         */
+        put: operations["updateRecall"];
+        post?: never;
+        /**
+         * Delete a recall
+         * @description This endpoint will delete a recall
+         */
+        delete: operations["deleteRecall"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/sentence/{lifetimeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * retrieve a sentence
+         * @description This endpoint will retrieve sentence details.
+         */
+        get: operations["get"];
+        /**
+         * Update a sentence
+         * @description Synchronise an update of sentence from NOMIS Offender sentences into remand and sentencing API.
+         */
+        put: operations["update"];
+        post?: never;
+        /**
+         * Delete Sentence
+         * @description Synchronise a deletion of sentence from NOMIS offender charges into remand and sentencing API.
+         */
+        delete: operations["delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/period-length/{periodLengthUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * retrieve a period-length
+         * @description This endpoint will retrieve period-length details.
+         */
+        get: operations["get_1"];
+        /**
+         * Updates one or more period lengths related to a period-length UUID
+         * @description Updates one or more period lengths related to a period-length UUID
+         */
+        put: operations["update_1"];
+        post?: never;
+        /**
+         * Delete Period Length
+         * @description This endpoint will soft-delete a period-length from RAS.
+         */
+        delete: operations["delete_1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-case/{sourceCourtCaseUuid}/unlink/{targetCourtCaseUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Unlinks a court case to another court case
+         * @description Synchronise a unlink of a court case from NOMIS into remand and sentencing API.
+         */
+        put: operations["unlinkCourtCase"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-case/{sourceCourtCaseUuid}/link/{targetCourtCaseUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Links a court case to another court case
+         * @description Synchronise a link of a court case from NOMIS into remand and sentencing API.
+         */
+        put: operations["linkCourtCase"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-case/{courtCaseUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve court case details
+         * @description This endpoint will retrieve court case details
+         */
+        get: operations["get_2"];
+        /**
+         * Updates a court case
+         * @description Synchronise an update of court case from NOMIS into remand and sentencing API.
+         */
+        put: operations["update_2"];
+        post?: never;
+        /**
+         * Deletes a court case
+         * @description Synchronise a deletion of court case from NOMIS into remand and sentencing API.
+         */
+        delete: operations["delete_2"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-appearance/{lifetimeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve court appearance details
+         * @description This endpoint will retrieve court appearance details
+         */
+        get: operations["get_3"];
+        /**
+         * Updates a court appearance
+         * @description Synchronise an update of court appearance from NOMIS court events into remand and sentencing API.
+         */
+        put: operations["update_3"];
+        post?: never;
+        /**
+         * Delete Appearance
+         * @description Synchronise a deletion of court appearance from NOMIS court events into remand and sentencing API.
+         */
+        delete: operations["delete_3"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-appearance/{lifetimeUuid}/charge/{chargeLifetimeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get latest charge at appearance
+         * @description This endpoint will retrieve the latest charge at a court appearance
+         */
+        get: operations["getChargeAtAppearance"];
+        /**
+         * link Appearance with Charge
+         * @description Synchronise a link between court appearance and charge from NOMIS into remand and sentencing API.
+         */
+        put: operations["linkAppearanceWithCharge"];
+        post?: never;
+        /**
+         * Delete Appearance Charge link
+         * @description Synchronise a deletion of link between court appearance and charge from NOMIS into remand and sentencing API.
+         */
+        delete: operations["unlinkAppearanceWithCharge"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-appearance/{courtAppearanceUuid}/charge/{chargeUuid}/link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * link a charge with a case
+         * @description Synchronise a link between charge and court case from NOMIS into remand and sentencing API.
+         */
+        put: operations["linkChargeToCaseInAppearance"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/charge/{lifetimeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * retrieve a charge
+         * @description This endpoint will retrieve charge details.
+         */
+        get: operations["get_4"];
+        /**
+         * Update a charge in all appearances
+         * @description Synchronise an update of charge in all appearances from NOMIS Offender charges into remand and sentencing API.
+         */
+        put: operations["update_4"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/charge/{lifetimeUuid}/appearance/{appearanceLifetimeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update a charge in an appearance
+         * @description Synchronise an update of charge within an appearance from NOMIS Offender charges into remand and sentencing API.
+         */
+        put: operations["updateInAppearance"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/draft/court-appearance/{draftUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieves a draft court appearance
+         * @description Retrieves a draft court appearance
+         */
+        get: operations["get_5"];
+        /**
+         * Updates a draft court appearance
+         * @description Updates a draft court appearance for when a user wants to pause inputting a warrant and come back later
+         */
+        put: operations["update_5"];
+        post?: never;
+        /**
+         * deletes a draft court appearance
+         * @description deletes a draft court appearance
+         */
+        delete: operations["delete_4"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/{courtCaseUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve court case details
+         * @description This endpoint will retrieve court case details
+         */
+        get: operations["getCourtCaseDetails"];
+        /**
+         * Create Court case
+         * @description This endpoint will create a court case
+         */
+        put: operations["putCourtCase"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/{courtCaseUuid}/case-references/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Refresh case references
+         * @description This endpoint will refresh case references
+         */
+        put: operations["refreshCaseReferences"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-appearance/{appearanceUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve court appearance details
+         * @description This endpoint will retrieve court appearance details
+         */
+        get: operations["getCourtAppearanceDetails"];
+        /**
+         * Create Court appearance
+         * @description This endpoint will create a court appearance in a given court case
+         */
+        put: operations["updateCourtAppearance"];
+        post?: never;
+        /**
+         * Delete Court appearance
+         * @description This endpoint will delete a court appearance in a given court case
+         */
+        delete: operations["deleteCourtAppearance"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/uploaded-documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Creates an uploaded document entry
+         * @description Creates an uploaded document entry
+         */
+        post: operations["create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/recall": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a recall
+         * @description This endpoint will create a recall
+         */
+        post: operations["createRecall"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/sentence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a sentence
+         * @description Synchronise a creation of sentence from NOMIS Offender sentences into remand and sentencing API.
+         */
+        post: operations["create_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/sentence/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Search for multiple sentences
+         * @description This endpoint will retrieve multiple sentences by search parameters.
+         */
+        post: operations["search"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/period-length": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Creates one or more period lengths for a single sentence
+         * @description Creates one or more period lengths for a single sentence
+         */
+        post: operations["create_2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-case": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a court case
+         * @description Synchronise a creation of court case from NOMIS into remand and sentencing API.
+         */
+        post: operations["create_3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-case/migration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Creates a court case
+         * @description Migrates a court case, court appearance and charge from NOMIS into remand and sentencing API.
+         */
+        post: operations["create_4"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-appearance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a court appearance
+         * @description Synchronise a creation of court appearance from NOMIS court events into remand and sentencing API.
+         */
+        post: operations["create_5"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/charge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a charge
+         * @description Synchronise a creation of charge from NOMIS Offender charges into remand and sentencing API.
+         */
+        post: operations["create_6"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/draft/court-case": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a draft court case
+         * @description Creates a draft court case for when a user wants to pause inputting a warrant and come back later
+         */
+        post: operations["create_7"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/draft/court-case/{courtCaseUuid}/appearance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create a draft court appearance in court case
+         * @description Creates a draft draft court appearance in court case for when a user wants to pause inputting a warrant and come back later
+         */
+        post: operations["createDraftAppearanceInCourtCase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Court case
+         * @description This endpoint will create a court case
+         */
+        post: operations["createCourtCase"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/{courtCaseUuid}/sentences/update-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Update sentence types for unknown pre-recall sentences
+         * @description This endpoint updates the sentence types for sentences that are currently marked as 'unknown pre-recall sentence'. All updates are performed atomically - if any update fails, all changes are rolled back.
+         */
+        post: operations["updateSentenceTypes"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-appearance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Court appearance
+         * @description This endpoint will create a court appearance in a given court case
+         */
+        post: operations["createCourtAppearance"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sentence/{sentenceUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve sentence details
+         * @description This endpoint will retrieve sentence details
+         */
+        get: operations["getSentenceDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sentence/{sentenceUuid}/sentences-after-on-other-court-appearance-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Sentences after on other court appearance details
+         * @description This endpoint will return details of the court appearances of sentences after this sentence
+         */
+        get: operations["sentencesAfterOnOtherCourtAppearanceDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sentence/{sentenceUuid}/has-sentences-after-on-other-court-appearance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Any sentences after on another appearance
+         * @description This endpoint will return true if any other sentence has a consecutive to link to the sentence at sentenceUuid that is on a different court appearance
+         */
+        get: operations["hasSentencesAfterOnOtherCase"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sentence/consecutive-to-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve sentence consecutive to details
+         * @description This endpoint will retrieve consecutive to sentence details
+         */
+        get: operations["getConsecutiveToSentenceDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sentence-type/{sentenceTypeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Sentence type by UUID
+         * @description This endpoint will retrieve sentence type by UUID
+         */
+        get: operations["getSentenceTypeByUuid"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sentence-type/{sentenceTypeUuid}/is-still-valid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Check the sentence type is still valid
+         * @description This endpoint will determine if the sentence type is still valid with the age, conviction date, statuses, offence date parameters
+         */
+        get: operations["sentenceTypeStillValid"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sentence-type/uuid/multiple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * get all sentence types by uuids
+         * @description This endpoint will get all sentence types by uuids
+         */
+        get: operations["getSentenceTypesByIds"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sentence-type/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search all sentence types
+         * @description This endpoint will search all sentence types
+         */
+        get: operations["searchSentenceTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/recall/person/{prisonerId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve all recalls for a person
+         * @description This endpoint will retrieve  all recalls for a person
+         */
+        get: operations["getRecallsByPrisonerId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/person/{prisonerId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve person details
+         * @description This endpoint will retrieve person details
+         */
+        get: operations["getPersonDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/person/{prisonerId}/sentences-to-chain-to": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * retrieve all sentences to chain to
+         * @description This endpoint will retrieve all sentences which can be used in a consecutive to chain
+         */
+        get: operations["sentencesToChainTo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/person/{prisonerId}/sentenced-court-cases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve all sentenced court cases for prisoner
+         * @description This endpoint will retrieve all sentenced court cases for prisoner
+         */
+        get: operations["getSentencedCourtCases"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/person/{prisonerId}/has-sentence-to-chain-to": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Determine if there can be a sentence to chain to
+         * @description This endpoint will determine whether there can be a sentence which can be selected for a consecutive to chain
+         */
+        get: operations["hasSentenceToChainTo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/sentence-type/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get historic NOMIS sentence type by nomis sentence type reference
+         * @description Returns historic NOMIS sentence type information for the specified type in a summary format
+         */
+        get: operations["getLegacySentenceTypeSummary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/sentence-type/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all historic NOMIS sentence types
+         * @description Returns a set of historic NOMIS sentence type information in a detailed format
+         */
+        get: operations["getLegacyAllSentenceTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/sentence-type/all/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get summary of all historic NOMIS sentence types
+         * @description Returns a set of historic NOMIS sentence type information in a summary format
+         */
+        get: operations["getLegacyAllSentenceTypesSummaries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/sentence-type/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get historic NOMIS sentence type by nomis sentence type reference
+         * @description Returns historic NOMIS sentence type information for the specified type in a detailed format
+         */
+        get: operations["getLegacySentenceType"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/recall/{uuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * retrieve a recall
+         * @description This endpoint will retrieve legacy recall details.
+         */
+        get: operations["get_6"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-case/{courtCaseUuid}/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve court case details for testing
+         * @description This endpoint will retrieve court case details for testing
+         */
+        get: operations["getTest"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/court-case/{courtCaseUuid}/reconciliation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve court case details for reconciliation
+         * @description This endpoint will retrieve court case details for reconciliation
+         */
+        get: operations["getReconciliation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/{prisonerId}/recallable-court-cases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve recallable court cases for a prisoner
+         * @description This endpoint returns filtered court cases optimised for recall processing workflows. Only includes ACTIVE cases with SENTENCING warrant type that have sentences.
+         */
+        get: operations["getRecallableCourtCases"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/{courtCaseUuid}/latest-offence-date": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve the latest offence date for a court case (checks both offence start and end dates)
+         * @description
+         *           This endpoint returns the most recent offence start or end date across all appearances and charges for a given court case.
+         *           Optionally, the result can exclude offences tied to a specific court appearance, used when editing a court appearance in the UI (the latest version of the offence dates are in the UI session).
+         *
+         */
+        get: operations["getLatestOffenceDate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/{courtCaseUuid}/latest-appearance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve latest court appearance of court case
+         * @description This endpoint will retrieve latest court appearance of court case
+         */
+        get: operations["getLatestAppearanceDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/{courtCaseUuid}/count-numbers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve count numbers for case
+         * @description This endpoint will retrieve all unique count numbers for a case
+         */
+        get: operations["getAllCountNumbers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve all court cases for person (where each court case has at least one appearance in the past)
+         * @description This endpoint will retrieve all court cases for a person (where each court case has at least one appearance in the past - i.e. there exists a latest court appearance)
+         */
+        get: operations["searchCourtCases"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-case/paged/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve all court cases for person (where each court case has at least one appearance in the past)
+         * @description This endpoint will retrieve all court cases for a person (where each court case has at least one appearance in the past - i.e. there exists a latest court appearance)
+         */
+        get: operations["pagedSearchCourtCases"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/charge/{chargeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve charge details
+         * @description This endpoint will retrieve charge details
+         */
+        get: operations["getChargeDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/charge-outcome/{outcomeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get charge outcome by UUID
+         * @description This endpoint will retrieve charge outcome by UUID
+         */
+        get: operations["getChargeOutcomeByUuid"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/charge-outcome/uuid/multiple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * get all charge outcomes by uuids
+         * @description This endpoint will get all charge outcomes by uuids
+         */
+        get: operations["getChargeOutcomesByIds"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/charge-outcome/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all charge outcomes by statuses
+         * @description This endpoint will get all charge outcomes by statuses
+         */
+        get: operations["getAllChargeOutcomes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/appearance-type/{appearanceTypeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get appearance type by uuid
+         * @description This endpoint will get appearance type by uuid
+         */
+        get: operations["getAppearanceTypeById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/appearance-type/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all appearance types by statuses
+         * @description This endpoint will get all appearance types by statuses
+         */
+        get: operations["getAllAppearanceTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/appearance-outcome/{outcomeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get appearance outcome by UUID
+         * @description This endpoint will retrieve appearance outcome by UUID
+         */
+        get: operations["getAppearanceOutcomeByUuid"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/appearance-outcome/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get all appearance outcomes by status
+         * @description This endpoint will get all appearance outcomes by status
+         */
+        get: operations["getAllAppearanceOutcomes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/legacy/charge/{chargeUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Charge
+         * @description Synchronise a deletion of charge from NOMIS offender charges into remand and sentencing API.
+         */
+        delete: operations["delete_5"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/document-admin/cleanup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Deletes uploaded documents without an appearance ID
+         * @description Deletes all uploaded documents where the appearance ID is null
+         */
+        delete: operations["cleanupDocument"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    CreateRecall: {
-      prisonerId: string
-      /** Format: date */
-      revocationDate?: string
-      /** Format: date */
-      returnToCustodyDate?: string
-      inPrisonOnRevocationDate?: boolean
-      /** @enum {string} */
-      recallTypeCode: 'LR' | 'FTR_14' | 'FTR_28' | 'FTR_HDC_14' | 'FTR_HDC_28' | 'CUR_HDC' | 'IN_HDC'
-      createdByUsername: string
-      createdByPrison: string
-      sentenceIds?: string[]
-    }
-    SaveRecallResponse: {
-      /** Format: uuid */
-      recallUuid: string
-    }
-    LegacyCreateFine: {
-      fineAmount: number
-    }
-    LegacyCreateSentence: {
-      chargeUuids: string[]
-      /** Format: uuid */
-      appearanceUuid: string
-      fine?: components['schemas']['LegacyCreateFine']
-      /** Format: uuid */
-      consecutiveToLifetimeUuid?: string
-      active: boolean
-      legacyData: components['schemas']['SentenceLegacyData']
-      /** Format: date */
-      returnToCustodyDate?: string
-    }
-    SentenceLegacyData: {
-      sentenceCalcType?: string
-      sentenceCategory?: string
-      sentenceTypeDesc?: string
-      postedDate: string
-      active?: boolean
-      nomisLineReference?: string
-      /** Format: int64 */
-      bookingId?: number
-    }
-    /** @description Used for creating or updating period length records (aka sentence-terms in NOMIS). */
-    LegacyCreatePeriodLength: {
-      /** Format: uuid */
-      sentenceUuid: string
-      /** Format: int32 */
-      periodYears?: number
-      /** Format: int32 */
-      periodMonths?: number
-      /** Format: int32 */
-      periodWeeks?: number
-      /** Format: int32 */
-      periodDays?: number
-      legacyData: components['schemas']['PeriodLengthLegacyData']
-    }
-    PeriodLengthLegacyData: {
-      lifeSentence?: boolean
-      sentenceTermCode?: string
-      sentenceTermDescription?: string
-    }
-    EventMetadata: {
-      prisonerId: string
-      courtCaseId?: string
-      courtAppearanceId?: string
-      chargeId?: string
-      sentenceId?: string
-      recallId?: string
-      /** @enum {string} */
-      eventType:
-        | 'COURT_CASE_INSERTED'
-        | 'COURT_CASE_UPDATED'
-        | 'COURT_CASE_DELETED'
-        | 'CHARGE_INSERTED'
-        | 'CHARGE_UPDATED'
-        | 'CHARGE_DELETED'
-        | 'COURT_APPEARANCE_INSERTED'
-        | 'COURT_APPEARANCE_UPDATED'
-        | 'COURT_APPEARANCE_DELETED'
-        | 'SENTENCE_INSERTED'
-        | 'SENTENCE_FIX_SINGLE_CHARGE_INSERTED'
-        | 'SENTENCE_UPDATED'
-        | 'SENTENCE_DELETED'
-        | 'LEGACY_COURT_CASE_REFERENCES_UPDATED'
-        | 'RECALL_INSERTED'
-        | 'RECALL_UPDATED'
-        | 'RECALL_DELETED'
-        | 'PERIOD_LENGTH_INSERTED'
-        | 'PERIOD_LENGTH_UPDATED'
-        | 'PERIOD_LENGTH_DELETED'
-        | 'METADATA_ONLY'
-      periodLengthId?: string
-      sentenceIds?: string[]
-      previousRecallId?: string
-      previousSentenceIds?: string[]
-      originalSentenceId?: string
-    }
-    UnlinkEventsToEmit: {
-      courtCaseEventMetadata?: components['schemas']['EventMetadata']
-      chargesEventMetadata: components['schemas']['EventMetadata'][]
-    }
-    LegacyLinkCase: {
-      /** Format: date */
-      linkedDate?: string
-    }
-    PairStringString: {
-      first: string
-      second: string
-    }
-    CaseReferenceLegacyData: {
-      offenderCaseReference: string
-      /** Format: date-time */
-      updatedDate: string
-    }
-    CourtCaseLegacyData: {
-      caseReferences: components['schemas']['CaseReferenceLegacyData'][]
-      /** Format: int64 */
-      bookingId?: number
-    }
-    LegacyCreateCourtCase: {
-      prisonerId: string
-      active: boolean
-      legacyData: components['schemas']['CourtCaseLegacyData']
-    }
-    CourtAppearanceLegacyData: {
-      postedDate?: string
-      nomisOutcomeCode?: string
-      outcomeDescription?: string
-      /** Format: date-time */
-      nextEventDateTime?: string
-      /** @example 12:02:44.533113009 */
-      appearanceTime?: string
-      outcomeDispositionCode?: string
-      outcomeConvictionFlag?: boolean
-    }
-    LegacyCreateCourtAppearance: {
-      courtCaseUuid: string
-      courtCode: string
-      /** Format: date */
-      appearanceDate: string
-      legacyData: components['schemas']['CourtAppearanceLegacyData']
-      /** Format: uuid */
-      appearanceTypeUuid: string
-    }
-    ChargeLegacyData: {
-      postedDate?: string
-      nomisOutcomeCode?: string
-      outcomeDescription?: string
-      outcomeDispositionCode?: string
-      outcomeConvictionFlag?: boolean
-    }
-    LegacyUpdateCharge: {
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      legacyData: components['schemas']['ChargeLegacyData']
-    }
-    LegacyLinkChargeToCase: {
-      sourceCourtCaseUuid: string
-      /** Format: date */
-      linkedDate: string
-    }
-    LegacyChargeCreatedResponse: {
-      /** Format: uuid */
-      lifetimeUuid: string
-      courtCaseUuid: string
-      prisonerId: string
-    }
-    PairEntityChangeStatusLegacyChargeCreatedResponse: {
-      /** @enum {string} */
-      first: 'NO_CHANGE' | 'CREATED' | 'EDITED' | 'DELETED'
-      second: components['schemas']['LegacyChargeCreatedResponse']
-    }
-    LegacyUpdateWholeCharge: {
-      offenceCode: string
-    }
-    DraftCreateCourtAppearance: {
-      sessionBlob: components['schemas']['JsonNode']
-    }
-    JsonNode: unknown
-    CreateCharge: {
-      /** Format: uuid */
-      appearanceUuid?: string
-      /** Format: uuid */
-      chargeUuid?: string
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate: string
-      /** Format: date */
-      offenceEndDate?: string
-      /** Format: uuid */
-      outcomeUuid?: string
-      terrorRelated?: boolean
-      sentence?: components['schemas']['CreateSentence']
-      legacyData?: components['schemas']['ChargeLegacyData']
-      prisonId: string
-    }
-    CreateCourtAppearance: {
-      courtCaseUuid?: string
-      /** Format: uuid */
-      appearanceUuid?: string
-      /** Format: uuid */
-      outcomeUuid?: string
-      courtCode: string
-      courtCaseReference?: string
-      /** Format: date */
-      appearanceDate: string
-      warrantId?: string
-      warrantType: string
-      overallSentenceLength?: components['schemas']['CreatePeriodLength']
-      nextCourtAppearance?: components['schemas']['CreateNextCourtAppearance']
-      charges: components['schemas']['CreateCharge'][]
-      /** Format: date */
-      overallConvictionDate?: string
-      legacyData?: components['schemas']['CourtAppearanceLegacyData']
-      prisonId: string
-      documents?: components['schemas']['UploadedDocument'][]
-    }
-    CreateCourtCase: {
-      prisonerId: string
-      prisonId: string
-      appearances: components['schemas']['CreateCourtAppearance'][]
-      legacyData?: components['schemas']['CourtCaseLegacyData']
-    }
-    CreateFineAmount: {
-      fineAmount: number
-    }
-    CreateNextCourtAppearance: {
-      /** Format: date */
-      appearanceDate: string
-      /** @example 12:02:44.533113009 */
-      appearanceTime?: string
-      courtCode: string
-      /** Format: uuid */
-      appearanceTypeUuid: string
-      prisonId: string
-    }
-    CreatePeriodLength: {
-      /** Format: uuid */
-      periodLengthUuid?: string
-      /** Format: int32 */
-      years?: number
-      /** Format: int32 */
-      months?: number
-      /** Format: int32 */
-      weeks?: number
-      /** Format: int32 */
-      days?: number
-      periodOrder: string
-      /** @enum {string} */
-      type:
-        | 'SENTENCE_LENGTH'
-        | 'CUSTODIAL_TERM'
-        | 'LICENCE_PERIOD'
-        | 'TARIFF_LENGTH'
-        | 'TERM_LENGTH'
-        | 'OVERALL_SENTENCE_LENGTH'
-        | 'UNSUPPORTED'
-      prisonId: string
-    }
-    CreateSentence: {
-      /** Format: uuid */
-      sentenceUuid?: string
-      chargeNumber?: string
-      periodLengths: components['schemas']['CreatePeriodLength'][]
-      sentenceServeType: string
-      /** Format: uuid */
-      consecutiveToSentenceUuid?: string
-      /** Format: uuid */
-      sentenceTypeId?: string
-      /** Format: date */
-      convictionDate?: string
-      fineAmount?: components['schemas']['CreateFineAmount']
-      prisonId?: string
-      sentenceReference: string
-      consecutiveToSentenceReference?: string
-    }
-    UploadedDocument: {
-      /** Format: uuid */
-      documentUUID: string
-      documentType: string
-      fileName: string
-    }
-    CreateChargeResponse: {
-      /** Format: uuid */
-      chargeUuid: string
-    }
-    CreateCourtAppearanceResponse: {
-      /** Format: uuid */
-      appearanceUuid: string
-    }
-    CreateCourtCaseResponse: {
-      courtCaseUuid: string
-      appearances: components['schemas']['CreateCourtAppearanceResponse'][]
-      charges: components['schemas']['CreateChargeResponse'][]
-    }
-    CreateUploadedDocument: {
-      /** Format: uuid */
-      appearanceUUID?: string
-      documents: components['schemas']['UploadedDocument'][]
-    }
-    LegacySentenceCreatedResponse: {
-      prisonerId: string
-      /** Format: uuid */
-      lifetimeUuid: string
-      /** Format: uuid */
-      chargeLifetimeUuid: string
-      /** Format: uuid */
-      appearanceUuid: string
-      courtCaseId: string
-    }
-    LegacySearchSentence: {
-      lifetimeUuids: string[]
-    }
-    LegacySentence: {
-      prisonerId: string
-      courtCaseId: string
-      /** Format: uuid */
-      chargeLifetimeUuid: string
-      /** Format: uuid */
-      lifetimeUuid: string
-      /** Format: uuid */
-      appearanceUuid: string
-      active: boolean
-      sentenceCalcType: string
-      sentenceCategory: string
-      /** Format: uuid */
-      consecutiveToLifetimeUuid?: string
-      chargeNumber?: string
-      fineAmount?: number
-      /** Format: date */
-      sentenceStartDate: string
-      /** Format: date */
-      returnToCustodyDate?: string
-    }
-    LegacyPeriodLengthCreatedResponse: {
-      /** Format: uuid */
-      periodLengthUuid: string
-      prisonerId: string
-      /** Format: uuid */
-      sentenceUuid: string
-      /** Format: uuid */
-      chargeUuid: string
-      /** Format: uuid */
-      appearanceUuid: string
-      courtCaseId: string
-    }
-    LegacyCourtCaseCreatedResponse: {
-      courtCaseUuid: string
-    }
-    MigrationCreateCharge: {
-      /** Format: int64 */
-      chargeNOMISId: number
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      legacyData: components['schemas']['ChargeLegacyData']
-      sentence?: components['schemas']['MigrationCreateSentence']
-      /** Format: int64 */
-      mergedFromCaseId?: number
-      /** Format: date */
-      mergedFromDate?: string
-    }
-    MigrationCreateCourtAppearance: {
-      /** Format: int64 */
-      eventId: number
-      courtCode: string
-      /** Format: date */
-      appearanceDate: string
-      /** Format: uuid */
-      appearanceTypeUuid: string
-      legacyData: components['schemas']['CourtAppearanceLegacyData']
-      charges: components['schemas']['MigrationCreateCharge'][]
-    }
-    MigrationCreateCourtCase: {
-      /** Format: int64 */
-      caseId: number
-      active: boolean
-      courtCaseLegacyData: components['schemas']['CourtCaseLegacyData']
-      appearances: components['schemas']['MigrationCreateCourtAppearance'][]
-      merged?: boolean
-    }
-    MigrationCreateCourtCases: {
-      prisonerId: string
-      courtCases: components['schemas']['MigrationCreateCourtCase'][]
-    }
-    MigrationCreateFine: {
-      fineAmount: number
-    }
-    MigrationCreatePeriodLength: {
-      periodLengthId: components['schemas']['NomisPeriodLengthId']
-      /** Format: int32 */
-      periodYears?: number
-      /** Format: int32 */
-      periodMonths?: number
-      /** Format: int32 */
-      periodWeeks?: number
-      /** Format: int32 */
-      periodDays?: number
-      legacyData: components['schemas']['PeriodLengthLegacyData']
-    }
-    MigrationCreateSentence: {
-      sentenceId: components['schemas']['MigrationSentenceId']
-      fine?: components['schemas']['MigrationCreateFine']
-      active: boolean
-      legacyData: components['schemas']['SentenceLegacyData']
-      consecutiveToSentenceId?: components['schemas']['MigrationSentenceId']
-      periodLengths: components['schemas']['MigrationCreatePeriodLength'][]
-      /** Format: date */
-      returnToCustodyDate?: string
-    }
-    MigrationSentenceId: {
-      /** Format: int64 */
-      offenderBookingId: number
-      /** Format: int32 */
-      sequence: number
-    }
-    NomisPeriodLengthId: {
-      /** Format: int64 */
-      offenderBookingId: number
-      /** Format: int32 */
-      sentenceSequence: number
-      /** Format: int32 */
-      termSequence: number
-    }
-    MigrationCreateChargeResponse: {
-      /** Format: uuid */
-      chargeUuid: string
-      /** Format: int64 */
-      chargeNOMISId: number
-    }
-    MigrationCreateCourtAppearanceResponse: {
-      /** Format: uuid */
-      appearanceUuid: string
-      /** Format: int64 */
-      eventId: number
-    }
-    MigrationCreateCourtCaseResponse: {
-      courtCaseUuid: string
-      /** Format: int64 */
-      caseId: number
-    }
-    MigrationCreateCourtCasesResponse: {
-      courtCases: components['schemas']['MigrationCreateCourtCaseResponse'][]
-      appearances: components['schemas']['MigrationCreateCourtAppearanceResponse'][]
-      charges: components['schemas']['MigrationCreateChargeResponse'][]
-      sentences: components['schemas']['MigrationCreateSentenceResponse'][]
-      sentenceTerms: components['schemas']['MigrationCreatePeriodLengthResponse'][]
-    }
-    MigrationCreatePeriodLengthResponse: {
-      /** Format: uuid */
-      periodLengthUuid: string
-      sentenceTermNOMISId: components['schemas']['NomisPeriodLengthId']
-    }
-    MigrationCreateSentenceResponse: {
-      /** Format: uuid */
-      sentenceUuid: string
-      sentenceNOMISId: components['schemas']['MigrationSentenceId']
-    }
-    LegacyCourtAppearanceCreatedResponse: {
-      /** Format: uuid */
-      lifetimeUuid: string
-      courtCaseUuid: string
-      prisonerId: string
-    }
-    LegacyCreateCharge: {
-      /** Format: uuid */
-      appearanceLifetimeUuid: string
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      legacyData: components['schemas']['ChargeLegacyData']
-    }
-    DraftCreateCourtCase: {
-      prisonerId: string
-      draftAppearances: components['schemas']['DraftCreateCourtAppearance'][]
-    }
-    DraftCourtAppearanceCreatedResponse: {
-      /** Format: uuid */
-      draftUuid: string
-    }
-    DraftCourtCaseCreatedResponse: {
-      courtCaseUuid: string
-      draftAppearances: components['schemas']['DraftCourtAppearanceCreatedResponse'][]
-    }
-    SentenceTypeUpdate: {
-      /** Format: uuid */
-      sentenceUuid: string
-      /** Format: uuid */
-      sentenceTypeId: string
-    }
-    UpdateSentenceTypeRequest: {
-      updates: components['schemas']['SentenceTypeUpdate'][]
-    }
-    UpdateSentenceTypeResponse: {
-      updatedSentenceUuids: string[]
-    }
-    FineAmount: {
-      fineAmount: number
-    }
-    PeriodLength: {
-      /** Format: int32 */
-      years?: number
-      /** Format: int32 */
-      months?: number
-      /** Format: int32 */
-      weeks?: number
-      /** Format: int32 */
-      days?: number
-      periodOrder: string
-      /** @enum {string} */
-      periodLengthType:
-        | 'SENTENCE_LENGTH'
-        | 'CUSTODIAL_TERM'
-        | 'LICENCE_PERIOD'
-        | 'TARIFF_LENGTH'
-        | 'TERM_LENGTH'
-        | 'OVERALL_SENTENCE_LENGTH'
-        | 'UNSUPPORTED'
-      legacyData?: components['schemas']['PeriodLengthLegacyData']
-      /** Format: uuid */
-      periodLengthUuid: string
-    }
-    Sentence: {
-      /** Format: uuid */
-      sentenceUuid: string
-      chargeNumber?: string
-      periodLengths: components['schemas']['PeriodLength'][]
-      sentenceServeType: string
-      sentenceType?: components['schemas']['SentenceType']
-      /** Format: date */
-      convictionDate?: string
-      fineAmount?: components['schemas']['FineAmount']
-      legacyData?: components['schemas']['SentenceLegacyData']
-      /** Format: uuid */
-      consecutiveToSentenceUuid?: string
-      hasRecall: boolean
-    }
-    SentenceType: {
-      /** Format: uuid */
-      sentenceTypeUuid: string
-      description: string
-      /** @enum {string} */
-      classification:
-        | 'STANDARD'
-        | 'EXTENDED'
-        | 'SOPC'
-        | 'INDETERMINATE'
-        | 'BOTUS'
-        | 'CIVIL'
-        | 'DTO'
-        | 'FINE'
-        | 'LEGACY'
-        | 'NON_CUSTODIAL'
-        | 'LEGACY_RECALL'
-        | 'UNKNOWN'
-      hintText?: string
-      /** Format: int32 */
-      displayOrder: number
-    }
-    CourtAppearanceAfterSentence: {
-      /** Format: uuid */
-      appearanceUuid: string
-      caseReference?: string
-      /** Format: date */
-      appearanceDate: string
-      courtCode: string
-    }
-    SentencesAfterOnOtherCourtAppearanceDetailsResponse: {
-      appearances: components['schemas']['CourtAppearanceAfterSentence'][]
-    }
-    HasSentenceAfterOnOtherCourtAppearanceResponse: {
-      hasSentenceAfterOnOtherCourtAppearance: boolean
-    }
-    SentenceConsecutiveToDetails: {
-      courtCaseReference?: string
-      courtCode: string
-      /** Format: date */
-      appearanceDate: string
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      /** Format: uuid */
-      sentenceUuid: string
-      countNumber?: string
-    }
-    SentenceConsecutiveToDetailsResponse: {
-      sentences: components['schemas']['SentenceConsecutiveToDetails'][]
-    }
-    SentenceTypeIsValid: {
-      isStillValid: boolean
-    }
-    Recall: {
-      /** Format: uuid */
-      recallUuid: string
-      prisonerId: string
-      /** Format: date */
-      revocationDate?: string
-      /** Format: date */
-      returnToCustodyDate?: string
-      inPrisonOnRevocationDate?: boolean
-      /** @enum {string} */
-      recallType: 'LR' | 'FTR_14' | 'FTR_28' | 'FTR_HDC_14' | 'FTR_HDC_28' | 'CUR_HDC' | 'IN_HDC'
-      /** Format: date-time */
-      createdAt: string
-      createdByUsername: string
-      createdByPrison?: string
-      /** @enum {string} */
-      source: 'NOMIS' | 'DPS'
-      sentences?: components['schemas']['Sentence'][]
-      courtCaseIds?: string[]
-    }
-    PersonDetails: {
-      personId: string
-      firstName: string
-      lastName: string
-      establishment?: string
-      cellNumber?: string
-      /** Format: date */
-      dateOfBirth: string
-      pncNumber?: string
-      status?: string
-    }
-    AppearanceToChainTo: {
-      courtCode: string
-      courtCaseReference?: string
-      /** Format: date */
-      appearanceDate: string
-      sentences: components['schemas']['SentenceToChainTo'][]
-    }
-    SentenceToChainTo: {
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      /** Format: uuid */
-      sentenceUuid: string
-      countNumber?: string
-    }
-    SentencesToChainToResponse: {
-      appearances: components['schemas']['AppearanceToChainTo'][]
-    }
-    AppearanceType: {
-      /** Format: uuid */
-      appearanceTypeUuid: string
-      description: string
-      /** Format: int32 */
-      displayOrder: number
-    }
-    Charge: {
-      /** Format: uuid */
-      chargeUuid: string
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      outcome?: components['schemas']['ChargeOutcome']
-      terrorRelated?: boolean
-      sentence?: components['schemas']['Sentence']
-      legacyData?: components['schemas']['ChargeLegacyData']
-    }
-    ChargeOutcome: {
-      /** Format: uuid */
-      outcomeUuid: string
-      outcomeName: string
-      nomisCode: string
-      outcomeType: string
-      /** Format: int32 */
-      displayOrder: number
-      dispositionCode: string
-    }
-    CourtAppearance: {
-      /** Format: uuid */
-      appearanceUuid: string
-      outcome?: components['schemas']['CourtAppearanceOutcome']
-      courtCode: string
-      courtCaseReference?: string
-      /** Format: date */
-      appearanceDate: string
-      warrantId?: string
-      warrantType: string
-      nextCourtAppearance?: components['schemas']['NextCourtAppearance']
-      charges: components['schemas']['Charge'][]
-      overallSentenceLength?: components['schemas']['PeriodLength']
-      /** Format: date */
-      overallConvictionDate?: string
-      legacyData?: components['schemas']['CourtAppearanceLegacyData']
-      documents: components['schemas']['UploadedDocument'][]
-    }
-    CourtAppearanceOutcome: {
-      /** Format: uuid */
-      outcomeUuid: string
-      outcomeName: string
-      nomisCode: string
-      outcomeType: string
-      /** Format: int32 */
-      displayOrder: number
-      /** Format: uuid */
-      relatedChargeOutcomeUuid: string
-      isSubList: boolean
-    }
-    CourtCase: {
-      prisonerId: string
-      courtCaseUuid: string
-      /** @enum {string} */
-      status: 'ACTIVE' | 'INACTIVE' | 'EDITED' | 'DELETED' | 'DRAFT' | 'FUTURE' | 'MERGED' | 'MANY_CHARGES_DATA_FIX'
-      latestAppearance?: components['schemas']['CourtAppearance']
-      appearances: components['schemas']['CourtAppearance'][]
-      legacyData?: components['schemas']['CourtCaseLegacyData']
-    }
-    CourtCases: {
-      courtCases: components['schemas']['CourtCase'][]
-    }
-    NextCourtAppearance: {
-      /** Format: date */
-      appearanceDate: string
-      /** @example 12:02:44.533113009 */
-      appearanceTime?: string
-      courtCode: string
-      appearanceType: components['schemas']['AppearanceType']
-    }
-    HasSentenceToChainToResponse: {
-      hasSentenceToChainTo: boolean
-    }
-    LegacySentenceTypeGroupingSummary: {
-      nomisSentenceTypeReference: string
-      nomisDescription: string
-      isIndeterminate: boolean
-      recall: components['schemas']['RecallType']
-      nomisActive: boolean
-      /** Format: date */
-      nomisExpiryDate?: string
-    }
-    RecallType: {
-      isRecall: boolean
-      type: string
-      isFixedTermRecall: boolean
-      /** Format: int32 */
-      lengthInDays: number
-    }
-    LegacySentenceType: {
-      nomisSentenceTypeReference: string
-      /** @enum {string} */
-      classification:
-        | 'STANDARD'
-        | 'EXTENDED'
-        | 'SOPC'
-        | 'INDETERMINATE'
-        | 'BOTUS'
-        | 'CIVIL'
-        | 'DTO'
-        | 'FINE'
-        | 'LEGACY'
-        | 'NON_CUSTODIAL'
-        | 'LEGACY_RECALL'
-        | 'UNKNOWN'
-      classificationPeriodDefinition?: components['schemas']['SentenceTypePeriodDefinitions']
-      /** Format: int32 */
-      sentencingAct: number
-      eligibility?: components['schemas']['SentenceEligibility']
-      recallType: components['schemas']['RecallType']
-      inputSentenceType?: components['schemas']['SentenceTypeDetail']
-      nomisActive: boolean
-      nomisDescription: string
-      /** Format: date */
-      nomisExpiryDate?: string
-      nomisTermTypes: {
-        [key: string]: string
-      }
-    }
-    Period: {
-      /** @enum {string} */
-      type:
-        | 'SENTENCE_LENGTH'
-        | 'CUSTODIAL_TERM'
-        | 'LICENCE_PERIOD'
-        | 'TARIFF_LENGTH'
-        | 'TERM_LENGTH'
-        | 'OVERALL_SENTENCE_LENGTH'
-        | 'UNSUPPORTED'
-      auto: boolean
-      periodLength?: components['schemas']['PeriodLengthDetail']
-    }
-    PeriodLengthDetail: {
-      years: string
-      periodOrder: string[]
-      /** @enum {string} */
-      periodLengthType:
-        | 'SENTENCE_LENGTH'
-        | 'CUSTODIAL_TERM'
-        | 'LICENCE_PERIOD'
-        | 'TARIFF_LENGTH'
-        | 'TERM_LENGTH'
-        | 'OVERALL_SENTENCE_LENGTH'
-        | 'UNSUPPORTED'
-      description: string
-    }
-    SentenceEligibility: {
-      /** @enum {string} */
-      toreraEligibilityType?: 'NONE' | 'SOPC' | 'SDS'
-      /** @enum {string} */
-      sdsPlusEligibilityType?: 'NONE' | 'SECTION250' | 'SDS'
-    }
-    SentenceTypeDetail: {
-      /** Format: uuid */
-      sentenceTypeUuid: string
-      description: string
-      /** Format: int32 */
-      minAgeInclusive?: number
-      /** Format: int32 */
-      maxAgeExclusive?: number
-      /** Format: date */
-      minDateInclusive?: string
-      /** Format: date */
-      maxDateExclusive?: string
-      /** Format: date */
-      minOffenceDateInclusive?: string
-      /** Format: date */
-      maxOffenceDateExclusive?: string
-      /** @enum {string} */
-      classification:
-        | 'STANDARD'
-        | 'EXTENDED'
-        | 'SOPC'
-        | 'INDETERMINATE'
-        | 'BOTUS'
-        | 'CIVIL'
-        | 'DTO'
-        | 'FINE'
-        | 'LEGACY'
-        | 'NON_CUSTODIAL'
-        | 'LEGACY_RECALL'
-        | 'UNKNOWN'
-      hintText?: string
-      nomisCjaCode: string
-      nomisSentenceCalcType: string
-      /** Format: int32 */
-      displayOrder: number
-      /** @enum {string} */
-      status: 'ACTIVE' | 'INACTIVE'
-    }
-    SentenceTypePeriodDefinitions: {
-      periodDefinitions: components['schemas']['Period'][]
-    }
-    LegacyRecall: {
-      /** Format: uuid */
-      recallUuid: string
-      prisonerId: string
-      /** Format: date */
-      returnToCustodyDate?: string
-      /** Format: date */
-      revocationDate?: string
-      sentenceIds: string[]
-      /** @enum {string} */
-      recallType: 'LR' | 'FTR_14' | 'FTR_28' | 'FTR_HDC_14' | 'FTR_HDC_28' | 'CUR_HDC' | 'IN_HDC'
-      recallBy: string
-    }
-    LegacyPeriodLength: {
-      /** Format: int32 */
-      periodYears?: number
-      /** Format: int32 */
-      periodMonths?: number
-      /** Format: int32 */
-      periodWeeks?: number
-      /** Format: int32 */
-      periodDays?: number
-      isLifeSentence?: boolean
-      sentenceTermCode: string
-      /** Format: uuid */
-      periodLengthUuid: string
-      /** Format: uuid */
-      sentenceUuid: string
-      prisonerId: string
-      /** Format: uuid */
-      courtChargeId: string
-      courtCaseId: string
-      /** Format: uuid */
-      courtAppearanceId: string
-    }
-    LegacyCourtCase: {
-      courtCaseUuid: string
-      prisonerId: string
-      active: boolean
-      /** Format: date */
-      startDate?: string
-      courtId?: string
-      caseReference?: string
-      caseReferences: components['schemas']['CaseReferenceLegacyData'][]
-    }
-    LegacyCharge: {
-      prisonerId: string
-      courtCaseUuid: string
-      /** Format: uuid */
-      lifetimeUuid: string
-      nomisOutcomeCode?: string
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      legacyData?: components['schemas']['ChargeLegacyData']
-    }
-    LegacyCourtAppearance: {
-      /** Format: uuid */
-      lifetimeUuid: string
-      courtCaseUuid: string
-      prisonerId: string
-      nomisOutcomeCode?: string
-      courtCode: string
-      /** Format: date */
-      appearanceDate: string
-      /** @example 12:02:44.533113009 */
-      appearanceTime: string
-      charges: components['schemas']['LegacyCharge'][]
-      nextCourtAppearance?: components['schemas']['LegacyNextCourtAppearance']
-    }
-    LegacyNextCourtAppearance: {
-      /** Format: date */
-      appearanceDate: string
-      /** @example 12:02:44.533113009 */
-      appearanceTime?: string
-      courtId: string
-    }
-    TestCourtCase: {
-      courtCaseUuid: string
-      prisonerId: string
-      active: boolean
-      /** Format: date */
-      startDate?: string
-      courtId?: string
-      caseReference?: string
-      caseReferences: components['schemas']['CaseReferenceLegacyData'][]
-      appearances: components['schemas']['LegacyCourtAppearance'][]
-    }
-    ReconciliationCharge: {
-      /** Format: uuid */
-      chargeUuid: string
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      nomisOutcomeCode?: string
-      legacyData?: components['schemas']['ChargeLegacyData']
-      sentence?: components['schemas']['ReconciliationSentence']
-    }
-    ReconciliationCourtAppearance: {
-      /** Format: uuid */
-      appearanceUuid: string
-      courtCode: string
-      /** Format: date */
-      appearanceDate: string
-      /** @example 12:02:44.533113009 */
-      appearanceTime: string
-      nomisOutcomeCode?: string
-      legacyData?: components['schemas']['CourtAppearanceLegacyData']
-      nextCourtAppearance?: components['schemas']['ReconciliationNextCourtAppearance']
-      charges: components['schemas']['ReconciliationCharge'][]
-    }
-    ReconciliationCourtCase: {
-      courtCaseUuid: string
-      prisonerId: string
-      active: boolean
-      merged: boolean
-      courtCaseLegacyData?: components['schemas']['CourtCaseLegacyData']
-      appearances: components['schemas']['ReconciliationCourtAppearance'][]
-    }
-    ReconciliationNextCourtAppearance: {
-      /** Format: date */
-      appearanceDate: string
-      /** @example 12:02:44.533113009 */
-      appearanceTime?: string
-      courtId: string
-    }
-    ReconciliationPeriodLength: {
-      /** Format: uuid */
-      periodLengthUuid: string
-      /** Format: int32 */
-      periodYears?: number
-      /** Format: int32 */
-      periodMonths?: number
-      /** Format: int32 */
-      periodWeeks?: number
-      /** Format: int32 */
-      periodDays?: number
-      lifeSentence?: boolean
-      sentenceTermCode: string
-      legacyData?: components['schemas']['PeriodLengthLegacyData']
-    }
-    ReconciliationSentence: {
-      /** Format: uuid */
-      sentenceUuid: string
-      fineAmount?: number
-      sentenceCalcType?: string
-      sentenceCategory?: string
-      active: boolean
-      /** Format: date */
-      sentenceStartDate: string
-      legacyData?: components['schemas']['SentenceLegacyData']
-      /** Format: uuid */
-      consecutiveToSentenceUuid?: string
-      periodLengths: components['schemas']['ReconciliationPeriodLength'][]
-    }
-    DraftCourtAppearance: {
-      /** Format: uuid */
-      draftUuid: string
-      sessionBlob: components['schemas']['JsonNode']
-    }
-    RecallableCourtCase: {
-      courtCaseUuid: string
-      reference: string
-      courtCode: string
-      /** Format: date */
-      date: string
-      /** @enum {string} */
-      status: 'ACTIVE' | 'INACTIVE' | 'EDITED' | 'DELETED' | 'DRAFT' | 'FUTURE' | 'MERGED' | 'MANY_CHARGES_DATA_FIX'
-      isSentenced: boolean
-      sentences: components['schemas']['RecallableCourtCaseSentence'][]
-    }
-    RecallableCourtCaseSentence: {
-      /** Format: uuid */
-      sentenceUuid: string
-      offenceCode?: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      outcome?: string
-      sentenceType?: string
-      /** @enum {string} */
-      classification?:
-        | 'STANDARD'
-        | 'EXTENDED'
-        | 'SOPC'
-        | 'INDETERMINATE'
-        | 'BOTUS'
-        | 'CIVIL'
-        | 'DTO'
-        | 'FINE'
-        | 'LEGACY'
-        | 'NON_CUSTODIAL'
-        | 'LEGACY_RECALL'
-        | 'UNKNOWN'
-      systemOfRecord: string
-      periodLengths: components['schemas']['PeriodLength'][]
-      /** Format: date */
-      convictionDate?: string
-      chargeLegacyData?: components['schemas']['ChargeLegacyData']
-      countNumber?: string
-      lineNumber?: string
-      sentenceServeType?: string
-      sentenceLegacyData?: components['schemas']['SentenceLegacyData']
-      outcomeDescription?: string
-      isRecallable: boolean
-    }
-    RecallableCourtCasesResponse: {
-      /** Format: int32 */
-      totalCases: number
-      cases: components['schemas']['RecallableCourtCase'][]
-    }
-    CourtCaseCountNumber: {
-      countNumber: string
-    }
-    CourtCaseCountNumbers: {
-      countNumbers: components['schemas']['CourtCaseCountNumber'][]
-    }
-    Pageable: {
-      /** Format: int32 */
-      page?: number
-      /** Format: int32 */
-      size?: number
-      sort?: string[]
-    }
-    PageCourtCase: {
-      /** Format: int64 */
-      totalElements?: number
-      /** Format: int32 */
-      totalPages?: number
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      size?: number
-      content?: components['schemas']['CourtCase'][]
-      /** Format: int32 */
-      number?: number
-      sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
-      numberOfElements?: number
-      empty?: boolean
-    }
-    PageableObject: {
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
-      unpaged?: boolean
-    }
-    SortObject: {
-      empty?: boolean
-      sorted?: boolean
-      unsorted?: boolean
-    }
-    PagePagedCourtCase: {
-      /** Format: int64 */
-      totalElements?: number
-      /** Format: int32 */
-      totalPages?: number
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      size?: number
-      content?: components['schemas']['PagedCourtCase'][]
-      /** Format: int32 */
-      number?: number
-      sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
-      numberOfElements?: number
-      empty?: boolean
-    }
-    PagedAppearancePeriodLength: {
-      /** Format: int32 */
-      years?: number
-      /** Format: int32 */
-      months?: number
-      /** Format: int32 */
-      weeks?: number
-      /** Format: int32 */
-      days?: number
-      order: string
-      /** @enum {string} */
-      type:
-        | 'SENTENCE_LENGTH'
-        | 'CUSTODIAL_TERM'
-        | 'LICENCE_PERIOD'
-        | 'TARIFF_LENGTH'
-        | 'TERM_LENGTH'
-        | 'OVERALL_SENTENCE_LENGTH'
-        | 'UNSUPPORTED'
-    }
-    PagedCharge: {
-      /** Format: uuid */
-      chargeUuid: string
-      offenceCode: string
-      /** Format: date */
-      offenceStartDate?: string
-      /** Format: date */
-      offenceEndDate?: string
-      outcome?: components['schemas']['PagedChargeOutcome']
-      legacyData?: components['schemas']['ChargeLegacyData']
-      sentence?: components['schemas']['PagedSentence']
-      mergedFromCase?: components['schemas']['PagedMergedFromCase']
-    }
-    PagedChargeOutcome: {
-      /** Format: uuid */
-      outcomeUuid: string
-      outcomeName?: string
-    }
-    PagedCourtCase: {
-      prisonerId: string
-      courtCaseUuid: string
-      /** @enum {string} */
-      courtCaseStatus:
-        | 'ACTIVE'
-        | 'INACTIVE'
-        | 'EDITED'
-        | 'DELETED'
-        | 'DRAFT'
-        | 'FUTURE'
-        | 'MERGED'
-        | 'MANY_CHARGES_DATA_FIX'
-      legacyData?: components['schemas']['CourtCaseLegacyData']
-      /** Format: int64 */
-      appearanceCount: number
-      caseReferences: string[]
-      /** Format: date */
-      firstDayInCustody: string
-      overallSentenceLength?: components['schemas']['PagedAppearancePeriodLength']
-      latestCourtAppearance: components['schemas']['PagedLatestCourtAppearance']
-      mergedFromCases: components['schemas']['PagedMergedFromCase'][]
-      allAppearancesHaveRecall: boolean
-      mergedToCase?: components['schemas']['PagedMergedToCase']
-    }
-    PagedLatestCourtAppearance: {
-      caseReference?: string
-      courtCode: string
-      /** Format: date */
-      warrantDate: string
-      warrantType: string
-      outcome?: string
-      /** Format: date */
-      convictionDate?: string
-      legacyData?: components['schemas']['CourtAppearanceLegacyData']
-      nextCourtAppearance?: components['schemas']['PagedNextCourtAppearance']
-      charges: components['schemas']['PagedCharge'][]
-    }
-    PagedMergedFromCase: {
-      caseReference?: string
-      courtCode: string
-      /** Format: date */
-      warrantDate: string
-      /** Format: date */
-      mergedFromDate: string
-    }
-    PagedMergedToCase: {
-      caseReference?: string
-      courtCode: string
-      /** Format: date */
-      warrantDate: string
-      /** Format: date */
-      mergedToDate: string
-    }
-    PagedNextCourtAppearance: {
-      /** Format: date */
-      appearanceDate: string
-      /** @example 12:02:44.533113009 */
-      appearanceTime?: string
-      courtCode?: string
-      appearanceTypeDescription: string
-    }
-    PagedSentence: {
-      /** Format: uuid */
-      sentenceUuid: string
-      chargeNumber?: string
-      sentenceServeType: string
-      /** Format: uuid */
-      consecutiveToSentenceUuid?: string
-      /** Format: date */
-      convictionDate?: string
-      sentenceType?: components['schemas']['PagedSentenceType']
-      legacyData?: components['schemas']['SentenceLegacyData']
-      fineAmount?: number
-      periodLengths: components['schemas']['PagedSentencePeriodLength'][]
-      hasRecall: boolean
-    }
-    PagedSentencePeriodLength: {
-      /** Format: uuid */
-      periodLengthUuid: string
-      /** Format: int32 */
-      years?: number
-      /** Format: int32 */
-      months?: number
-      /** Format: int32 */
-      weeks?: number
-      /** Format: int32 */
-      days?: number
-      order: string
-      /** @enum {string} */
-      type?:
-        | 'SENTENCE_LENGTH'
-        | 'CUSTODIAL_TERM'
-        | 'LICENCE_PERIOD'
-        | 'TARIFF_LENGTH'
-        | 'TERM_LENGTH'
-        | 'OVERALL_SENTENCE_LENGTH'
-        | 'UNSUPPORTED'
-      legacyData?: components['schemas']['PeriodLengthLegacyData']
-    }
-    PagedSentenceType: {
-      /** Format: uuid */
-      sentenceTypeUuid: string
-      description: string
-      /** @enum {string} */
-      classification:
-        | 'STANDARD'
-        | 'EXTENDED'
-        | 'SOPC'
-        | 'INDETERMINATE'
-        | 'BOTUS'
-        | 'CIVIL'
-        | 'DTO'
-        | 'FINE'
-        | 'LEGACY'
-        | 'NON_CUSTODIAL'
-        | 'LEGACY_RECALL'
-        | 'UNKNOWN'
-    }
-    DeleteRecallResponse: {
-      /** Format: uuid */
-      recallUuid: string
-    }
-  }
-  responses: never
-  parameters: never
-  requestBodies: never
-  headers: never
-  pathItems: never
+    schemas: {
+        CreateRecall: {
+            prisonerId: string;
+            /** Format: date */
+            revocationDate?: string;
+            /** Format: date */
+            returnToCustodyDate?: string;
+            inPrisonOnRevocationDate?: boolean;
+            /** @enum {string} */
+            recallTypeCode: "LR" | "FTR_14" | "FTR_28" | "FTR_HDC_14" | "FTR_HDC_28" | "CUR_HDC" | "IN_HDC";
+            createdByUsername: string;
+            createdByPrison: string;
+            sentenceIds?: string[];
+        };
+        SaveRecallResponse: {
+            /** Format: uuid */
+            recallUuid: string;
+        };
+        LegacyCreateFine: {
+            fineAmount: number;
+        };
+        LegacyCreateSentence: {
+            chargeUuids: string[];
+            /** Format: uuid */
+            appearanceUuid: string;
+            fine?: components["schemas"]["LegacyCreateFine"];
+            /** Format: uuid */
+            consecutiveToLifetimeUuid?: string;
+            active: boolean;
+            legacyData: components["schemas"]["SentenceLegacyData"];
+            /** Format: date */
+            returnToCustodyDate?: string;
+        };
+        SentenceLegacyData: {
+            sentenceCalcType?: string;
+            sentenceCategory?: string;
+            sentenceTypeDesc?: string;
+            postedDate: string;
+            active?: boolean;
+            nomisLineReference?: string;
+            /** Format: int64 */
+            bookingId?: number;
+        };
+        /** @description Used for creating or updating period length records (aka sentence-terms in NOMIS). */
+        LegacyCreatePeriodLength: {
+            /** Format: uuid */
+            sentenceUuid: string;
+            /** Format: int32 */
+            periodYears?: number;
+            /** Format: int32 */
+            periodMonths?: number;
+            /** Format: int32 */
+            periodWeeks?: number;
+            /** Format: int32 */
+            periodDays?: number;
+            legacyData: components["schemas"]["PeriodLengthLegacyData"];
+        };
+        PeriodLengthLegacyData: {
+            lifeSentence?: boolean;
+            sentenceTermCode?: string;
+            sentenceTermDescription?: string;
+        };
+        EventMetadata: {
+            prisonerId: string;
+            courtCaseId?: string;
+            courtAppearanceId?: string;
+            chargeId?: string;
+            sentenceId?: string;
+            recallId?: string;
+            /** @enum {string} */
+            eventType: "COURT_CASE_INSERTED" | "COURT_CASE_UPDATED" | "COURT_CASE_DELETED" | "CHARGE_INSERTED" | "CHARGE_UPDATED" | "CHARGE_DELETED" | "COURT_APPEARANCE_INSERTED" | "COURT_APPEARANCE_UPDATED" | "COURT_APPEARANCE_DELETED" | "SENTENCE_INSERTED" | "SENTENCE_FIX_SINGLE_CHARGE_INSERTED" | "SENTENCE_UPDATED" | "SENTENCE_DELETED" | "LEGACY_COURT_CASE_REFERENCES_UPDATED" | "RECALL_INSERTED" | "RECALL_UPDATED" | "RECALL_DELETED" | "PERIOD_LENGTH_INSERTED" | "PERIOD_LENGTH_UPDATED" | "PERIOD_LENGTH_DELETED" | "METADATA_ONLY";
+            periodLengthId?: string;
+            sentenceIds?: string[];
+            previousRecallId?: string;
+            previousSentenceIds?: string[];
+            originalSentenceId?: string;
+        };
+        UnlinkEventsToEmit: {
+            courtCaseEventMetadata?: components["schemas"]["EventMetadata"];
+            chargesEventMetadata: components["schemas"]["EventMetadata"][];
+        };
+        LegacyLinkCase: {
+            /** Format: date */
+            linkedDate?: string;
+        };
+        PairStringString: {
+            first: string;
+            second: string;
+        };
+        CaseReferenceLegacyData: {
+            offenderCaseReference: string;
+            /** Format: date-time */
+            updatedDate: string;
+        };
+        CourtCaseLegacyData: {
+            caseReferences: components["schemas"]["CaseReferenceLegacyData"][];
+            /** Format: int64 */
+            bookingId?: number;
+        };
+        LegacyCreateCourtCase: {
+            prisonerId: string;
+            active: boolean;
+            legacyData: components["schemas"]["CourtCaseLegacyData"];
+        };
+        CourtAppearanceLegacyData: {
+            postedDate?: string;
+            nomisOutcomeCode?: string;
+            outcomeDescription?: string;
+            /** Format: date-time */
+            nextEventDateTime?: string;
+            /** @example 10:07:27.613693692 */
+            appearanceTime?: string;
+            outcomeDispositionCode?: string;
+            outcomeConvictionFlag?: boolean;
+        };
+        LegacyCreateCourtAppearance: {
+            courtCaseUuid: string;
+            courtCode: string;
+            /** Format: date */
+            appearanceDate: string;
+            legacyData: components["schemas"]["CourtAppearanceLegacyData"];
+            /** Format: uuid */
+            appearanceTypeUuid: string;
+        };
+        ChargeLegacyData: {
+            postedDate?: string;
+            nomisOutcomeCode?: string;
+            outcomeDescription?: string;
+            outcomeDispositionCode?: string;
+            outcomeConvictionFlag?: boolean;
+        };
+        LegacyUpdateCharge: {
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            legacyData: components["schemas"]["ChargeLegacyData"];
+        };
+        LegacyLinkChargeToCase: {
+            sourceCourtCaseUuid: string;
+            /** Format: date */
+            linkedDate: string;
+        };
+        LegacyChargeCreatedResponse: {
+            /** Format: uuid */
+            lifetimeUuid: string;
+            courtCaseUuid: string;
+            prisonerId: string;
+        };
+        PairEntityChangeStatusLegacyChargeCreatedResponse: {
+            /** @enum {string} */
+            first: "NO_CHANGE" | "CREATED" | "EDITED" | "DELETED";
+            second: components["schemas"]["LegacyChargeCreatedResponse"];
+        };
+        LegacyUpdateWholeCharge: {
+            offenceCode: string;
+        };
+        DraftCreateCourtAppearance: {
+            sessionBlob: components["schemas"]["JsonNode"];
+        };
+        JsonNode: unknown;
+        CreateCharge: {
+            /** Format: uuid */
+            appearanceUuid?: string;
+            /** Format: uuid */
+            chargeUuid?: string;
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            /** Format: uuid */
+            outcomeUuid?: string;
+            terrorRelated?: boolean;
+            sentence?: components["schemas"]["CreateSentence"];
+            legacyData?: components["schemas"]["ChargeLegacyData"];
+            prisonId: string;
+        };
+        CreateCourtAppearance: {
+            courtCaseUuid?: string;
+            /** Format: uuid */
+            appearanceUuid?: string;
+            /** Format: uuid */
+            outcomeUuid?: string;
+            courtCode: string;
+            courtCaseReference?: string;
+            /** Format: date */
+            appearanceDate: string;
+            warrantId?: string;
+            warrantType: string;
+            overallSentenceLength?: components["schemas"]["CreatePeriodLength"];
+            nextCourtAppearance?: components["schemas"]["CreateNextCourtAppearance"];
+            charges: components["schemas"]["CreateCharge"][];
+            /** Format: date */
+            overallConvictionDate?: string;
+            legacyData?: components["schemas"]["CourtAppearanceLegacyData"];
+            prisonId: string;
+            documents?: components["schemas"]["UploadedDocument"][];
+        };
+        CreateCourtCase: {
+            prisonerId: string;
+            prisonId: string;
+            appearances: components["schemas"]["CreateCourtAppearance"][];
+            legacyData?: components["schemas"]["CourtCaseLegacyData"];
+        };
+        CreateFineAmount: {
+            fineAmount: number;
+        };
+        CreateNextCourtAppearance: {
+            /** Format: date */
+            appearanceDate: string;
+            /** @example 10:07:27.613693692 */
+            appearanceTime?: string;
+            courtCode: string;
+            /** Format: uuid */
+            appearanceTypeUuid: string;
+            prisonId: string;
+        };
+        CreatePeriodLength: {
+            /** Format: uuid */
+            periodLengthUuid?: string;
+            /** Format: int32 */
+            years?: number;
+            /** Format: int32 */
+            months?: number;
+            /** Format: int32 */
+            weeks?: number;
+            /** Format: int32 */
+            days?: number;
+            periodOrder: string;
+            /** @enum {string} */
+            type: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "UNSUPPORTED";
+            prisonId: string;
+        };
+        CreateSentence: {
+            /** Format: uuid */
+            sentenceUuid?: string;
+            chargeNumber?: string;
+            periodLengths: components["schemas"]["CreatePeriodLength"][];
+            sentenceServeType: string;
+            /** Format: uuid */
+            consecutiveToSentenceUuid?: string;
+            /** Format: uuid */
+            sentenceTypeId?: string;
+            /** Format: date */
+            convictionDate?: string;
+            fineAmount?: components["schemas"]["CreateFineAmount"];
+            prisonId?: string;
+            sentenceReference: string;
+            consecutiveToSentenceReference?: string;
+        };
+        UploadedDocument: {
+            /** Format: uuid */
+            documentUUID: string;
+            documentType: string;
+            fileName: string;
+        };
+        CreateChargeResponse: {
+            /** Format: uuid */
+            chargeUuid: string;
+        };
+        CreateCourtAppearanceResponse: {
+            /** Format: uuid */
+            appearanceUuid: string;
+        };
+        CreateCourtCaseResponse: {
+            courtCaseUuid: string;
+            appearances: components["schemas"]["CreateCourtAppearanceResponse"][];
+            charges: components["schemas"]["CreateChargeResponse"][];
+        };
+        CreateUploadedDocument: {
+            /** Format: uuid */
+            appearanceUUID?: string;
+            documents: components["schemas"]["UploadedDocument"][];
+        };
+        LegacySentenceCreatedResponse: {
+            prisonerId: string;
+            /** Format: uuid */
+            lifetimeUuid: string;
+            /** Format: uuid */
+            chargeLifetimeUuid: string;
+            /** Format: uuid */
+            appearanceUuid: string;
+            courtCaseId: string;
+        };
+        LegacySearchSentence: {
+            lifetimeUuids: string[];
+        };
+        LegacySentence: {
+            prisonerId: string;
+            courtCaseId: string;
+            /** Format: uuid */
+            chargeLifetimeUuid: string;
+            /** Format: uuid */
+            lifetimeUuid: string;
+            /** Format: uuid */
+            appearanceUuid: string;
+            active: boolean;
+            sentenceCalcType: string;
+            sentenceCategory: string;
+            /** Format: uuid */
+            consecutiveToLifetimeUuid?: string;
+            chargeNumber?: string;
+            fineAmount?: number;
+            /** Format: date */
+            sentenceStartDate: string;
+            /** Format: date */
+            returnToCustodyDate?: string;
+        };
+        LegacyPeriodLengthCreatedResponse: {
+            /** Format: uuid */
+            periodLengthUuid: string;
+            prisonerId: string;
+            /** Format: uuid */
+            sentenceUuid: string;
+            /** Format: uuid */
+            chargeUuid: string;
+            /** Format: uuid */
+            appearanceUuid: string;
+            courtCaseId: string;
+        };
+        LegacyCourtCaseCreatedResponse: {
+            courtCaseUuid: string;
+        };
+        MigrationCreateCharge: {
+            /** Format: int64 */
+            chargeNOMISId: number;
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            legacyData: components["schemas"]["ChargeLegacyData"];
+            sentence?: components["schemas"]["MigrationCreateSentence"];
+            /** Format: int64 */
+            mergedFromCaseId?: number;
+            /** Format: date */
+            mergedFromDate?: string;
+        };
+        MigrationCreateCourtAppearance: {
+            /** Format: int64 */
+            eventId: number;
+            courtCode: string;
+            /** Format: date */
+            appearanceDate: string;
+            /** Format: uuid */
+            appearanceTypeUuid: string;
+            legacyData: components["schemas"]["CourtAppearanceLegacyData"];
+            charges: components["schemas"]["MigrationCreateCharge"][];
+        };
+        MigrationCreateCourtCase: {
+            /** Format: int64 */
+            caseId: number;
+            active: boolean;
+            courtCaseLegacyData: components["schemas"]["CourtCaseLegacyData"];
+            appearances: components["schemas"]["MigrationCreateCourtAppearance"][];
+            merged?: boolean;
+        };
+        MigrationCreateCourtCases: {
+            prisonerId: string;
+            courtCases: components["schemas"]["MigrationCreateCourtCase"][];
+        };
+        MigrationCreateFine: {
+            fineAmount: number;
+        };
+        MigrationCreatePeriodLength: {
+            periodLengthId: components["schemas"]["NomisPeriodLengthId"];
+            /** Format: int32 */
+            periodYears?: number;
+            /** Format: int32 */
+            periodMonths?: number;
+            /** Format: int32 */
+            periodWeeks?: number;
+            /** Format: int32 */
+            periodDays?: number;
+            legacyData: components["schemas"]["PeriodLengthLegacyData"];
+        };
+        MigrationCreateSentence: {
+            sentenceId: components["schemas"]["MigrationSentenceId"];
+            fine?: components["schemas"]["MigrationCreateFine"];
+            active: boolean;
+            legacyData: components["schemas"]["SentenceLegacyData"];
+            consecutiveToSentenceId?: components["schemas"]["MigrationSentenceId"];
+            periodLengths: components["schemas"]["MigrationCreatePeriodLength"][];
+            /** Format: date */
+            returnToCustodyDate?: string;
+        };
+        MigrationSentenceId: {
+            /** Format: int64 */
+            offenderBookingId: number;
+            /** Format: int32 */
+            sequence: number;
+        };
+        NomisPeriodLengthId: {
+            /** Format: int64 */
+            offenderBookingId: number;
+            /** Format: int32 */
+            sentenceSequence: number;
+            /** Format: int32 */
+            termSequence: number;
+        };
+        MigrationCreateChargeResponse: {
+            /** Format: uuid */
+            chargeUuid: string;
+            /** Format: int64 */
+            chargeNOMISId: number;
+        };
+        MigrationCreateCourtAppearanceResponse: {
+            /** Format: uuid */
+            appearanceUuid: string;
+            /** Format: int64 */
+            eventId: number;
+        };
+        MigrationCreateCourtCaseResponse: {
+            courtCaseUuid: string;
+            /** Format: int64 */
+            caseId: number;
+        };
+        MigrationCreateCourtCasesResponse: {
+            courtCases: components["schemas"]["MigrationCreateCourtCaseResponse"][];
+            appearances: components["schemas"]["MigrationCreateCourtAppearanceResponse"][];
+            charges: components["schemas"]["MigrationCreateChargeResponse"][];
+            sentences: components["schemas"]["MigrationCreateSentenceResponse"][];
+            sentenceTerms: components["schemas"]["MigrationCreatePeriodLengthResponse"][];
+        };
+        MigrationCreatePeriodLengthResponse: {
+            /** Format: uuid */
+            periodLengthUuid: string;
+            sentenceTermNOMISId: components["schemas"]["NomisPeriodLengthId"];
+        };
+        MigrationCreateSentenceResponse: {
+            /** Format: uuid */
+            sentenceUuid: string;
+            sentenceNOMISId: components["schemas"]["MigrationSentenceId"];
+        };
+        LegacyCourtAppearanceCreatedResponse: {
+            /** Format: uuid */
+            lifetimeUuid: string;
+            courtCaseUuid: string;
+            prisonerId: string;
+        };
+        LegacyCreateCharge: {
+            /** Format: uuid */
+            appearanceLifetimeUuid: string;
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            legacyData: components["schemas"]["ChargeLegacyData"];
+        };
+        DraftCreateCourtCase: {
+            prisonerId: string;
+            draftAppearances: components["schemas"]["DraftCreateCourtAppearance"][];
+        };
+        DraftCourtAppearanceCreatedResponse: {
+            /** Format: uuid */
+            draftUuid: string;
+        };
+        DraftCourtCaseCreatedResponse: {
+            courtCaseUuid: string;
+            draftAppearances: components["schemas"]["DraftCourtAppearanceCreatedResponse"][];
+        };
+        SentenceTypeUpdate: {
+            /** Format: uuid */
+            sentenceUuid: string;
+            /** Format: uuid */
+            sentenceTypeId: string;
+        };
+        UpdateSentenceTypeRequest: {
+            updates: components["schemas"]["SentenceTypeUpdate"][];
+        };
+        UpdateSentenceTypeResponse: {
+            updatedSentenceUuids: string[];
+        };
+        FineAmount: {
+            fineAmount: number;
+        };
+        PeriodLength: {
+            /** Format: int32 */
+            years?: number;
+            /** Format: int32 */
+            months?: number;
+            /** Format: int32 */
+            weeks?: number;
+            /** Format: int32 */
+            days?: number;
+            periodOrder: string;
+            /** @enum {string} */
+            periodLengthType: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "UNSUPPORTED";
+            legacyData?: components["schemas"]["PeriodLengthLegacyData"];
+            /** Format: uuid */
+            periodLengthUuid: string;
+        };
+        Sentence: {
+            /** Format: uuid */
+            sentenceUuid: string;
+            chargeNumber?: string;
+            periodLengths: components["schemas"]["PeriodLength"][];
+            sentenceServeType: string;
+            sentenceType?: components["schemas"]["SentenceType"];
+            /** Format: date */
+            convictionDate?: string;
+            fineAmount?: components["schemas"]["FineAmount"];
+            legacyData?: components["schemas"]["SentenceLegacyData"];
+            /** Format: uuid */
+            consecutiveToSentenceUuid?: string;
+            hasRecall: boolean;
+        };
+        SentenceType: {
+            /** Format: uuid */
+            sentenceTypeUuid: string;
+            description: string;
+            /** @enum {string} */
+            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+            hintText?: string;
+            /** Format: int32 */
+            displayOrder: number;
+        };
+        CourtAppearanceAfterSentence: {
+            /** Format: uuid */
+            appearanceUuid: string;
+            caseReference?: string;
+            /** Format: date */
+            appearanceDate: string;
+            courtCode: string;
+        };
+        SentencesAfterOnOtherCourtAppearanceDetailsResponse: {
+            appearances: components["schemas"]["CourtAppearanceAfterSentence"][];
+        };
+        HasSentenceAfterOnOtherCourtAppearanceResponse: {
+            hasSentenceAfterOnOtherCourtAppearance: boolean;
+        };
+        SentenceConsecutiveToDetails: {
+            courtCaseReference?: string;
+            courtCode: string;
+            /** Format: date */
+            appearanceDate: string;
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            /** Format: uuid */
+            sentenceUuid: string;
+            countNumber?: string;
+        };
+        SentenceConsecutiveToDetailsResponse: {
+            sentences: components["schemas"]["SentenceConsecutiveToDetails"][];
+        };
+        SentenceTypeIsValid: {
+            isStillValid: boolean;
+        };
+        Recall: {
+            /** Format: uuid */
+            recallUuid: string;
+            prisonerId: string;
+            /** Format: date */
+            revocationDate?: string;
+            /** Format: date */
+            returnToCustodyDate?: string;
+            inPrisonOnRevocationDate?: boolean;
+            /** @enum {string} */
+            recallType: "LR" | "FTR_14" | "FTR_28" | "FTR_HDC_14" | "FTR_HDC_28" | "CUR_HDC" | "IN_HDC";
+            /** Format: date-time */
+            createdAt: string;
+            createdByUsername: string;
+            createdByPrison?: string;
+            /** @enum {string} */
+            source: "NOMIS" | "DPS";
+            sentences?: components["schemas"]["Sentence"][];
+            courtCaseIds?: string[];
+        };
+        PersonDetails: {
+            personId: string;
+            firstName: string;
+            lastName: string;
+            establishment?: string;
+            cellNumber?: string;
+            /** Format: date */
+            dateOfBirth: string;
+            pncNumber?: string;
+            status?: string;
+        };
+        AppearanceToChainTo: {
+            courtCode: string;
+            courtCaseReference?: string;
+            /** Format: date */
+            appearanceDate: string;
+            sentences: components["schemas"]["SentenceToChainTo"][];
+        };
+        SentenceToChainTo: {
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            /** Format: uuid */
+            sentenceUuid: string;
+            countNumber?: string;
+        };
+        SentencesToChainToResponse: {
+            appearances: components["schemas"]["AppearanceToChainTo"][];
+        };
+        AppearanceType: {
+            /** Format: uuid */
+            appearanceTypeUuid: string;
+            description: string;
+            /** Format: int32 */
+            displayOrder: number;
+        };
+        Charge: {
+            /** Format: uuid */
+            chargeUuid: string;
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            outcome?: components["schemas"]["ChargeOutcome"];
+            terrorRelated?: boolean;
+            sentence?: components["schemas"]["Sentence"];
+            legacyData?: components["schemas"]["ChargeLegacyData"];
+        };
+        ChargeOutcome: {
+            /** Format: uuid */
+            outcomeUuid: string;
+            outcomeName: string;
+            nomisCode: string;
+            outcomeType: string;
+            /** Format: int32 */
+            displayOrder: number;
+            dispositionCode: string;
+        };
+        CourtAppearance: {
+            /** Format: uuid */
+            appearanceUuid: string;
+            outcome?: components["schemas"]["CourtAppearanceOutcome"];
+            courtCode: string;
+            courtCaseReference?: string;
+            /** Format: date */
+            appearanceDate: string;
+            warrantId?: string;
+            warrantType: string;
+            nextCourtAppearance?: components["schemas"]["NextCourtAppearance"];
+            charges: components["schemas"]["Charge"][];
+            overallSentenceLength?: components["schemas"]["PeriodLength"];
+            /** Format: date */
+            overallConvictionDate?: string;
+            legacyData?: components["schemas"]["CourtAppearanceLegacyData"];
+            documents: components["schemas"]["UploadedDocument"][];
+        };
+        CourtAppearanceOutcome: {
+            /** Format: uuid */
+            outcomeUuid: string;
+            outcomeName: string;
+            nomisCode: string;
+            outcomeType: string;
+            /** Format: int32 */
+            displayOrder: number;
+            /** Format: uuid */
+            relatedChargeOutcomeUuid: string;
+            isSubList: boolean;
+        };
+        CourtCase: {
+            prisonerId: string;
+            courtCaseUuid: string;
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE" | "EDITED" | "DELETED" | "DRAFT" | "FUTURE" | "MERGED" | "MANY_CHARGES_DATA_FIX";
+            latestAppearance?: components["schemas"]["CourtAppearance"];
+            appearances: components["schemas"]["CourtAppearance"][];
+            legacyData?: components["schemas"]["CourtCaseLegacyData"];
+        };
+        CourtCases: {
+            courtCases: components["schemas"]["CourtCase"][];
+        };
+        NextCourtAppearance: {
+            /** Format: date */
+            appearanceDate: string;
+            /** @example 10:07:27.613693692 */
+            appearanceTime?: string;
+            courtCode: string;
+            appearanceType: components["schemas"]["AppearanceType"];
+        };
+        HasSentenceToChainToResponse: {
+            hasSentenceToChainTo: boolean;
+        };
+        LegacySentenceTypeGroupingSummary: {
+            nomisSentenceTypeReference: string;
+            nomisDescription: string;
+            isIndeterminate: boolean;
+            recall: components["schemas"]["RecallType"];
+            nomisActive: boolean;
+            /** Format: date */
+            nomisExpiryDate?: string;
+        };
+        RecallType: {
+            isRecall: boolean;
+            type: string;
+            isFixedTermRecall: boolean;
+            /** Format: int32 */
+            lengthInDays: number;
+        };
+        LegacySentenceType: {
+            nomisSentenceTypeReference: string;
+            /** @enum {string} */
+            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+            classificationPeriodDefinition?: components["schemas"]["SentenceTypePeriodDefinitions"];
+            /** Format: int32 */
+            sentencingAct: number;
+            eligibility?: components["schemas"]["SentenceEligibility"];
+            recallType: components["schemas"]["RecallType"];
+            inputSentenceType?: components["schemas"]["SentenceTypeDetail"];
+            nomisActive: boolean;
+            nomisDescription: string;
+            /** Format: date */
+            nomisExpiryDate?: string;
+            nomisTermTypes: {
+                [key: string]: string;
+            };
+        };
+        Period: {
+            /** @enum {string} */
+            type: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "UNSUPPORTED";
+            auto: boolean;
+            periodLength?: components["schemas"]["PeriodLengthDetail"];
+        };
+        PeriodLengthDetail: {
+            years: string;
+            periodOrder: string[];
+            /** @enum {string} */
+            periodLengthType: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "UNSUPPORTED";
+            description: string;
+        };
+        SentenceEligibility: {
+            /** @enum {string} */
+            toreraEligibilityType?: "NONE" | "SOPC" | "SDS";
+            /** @enum {string} */
+            sdsPlusEligibilityType?: "NONE" | "SECTION250" | "SDS";
+        };
+        SentenceTypeDetail: {
+            /** Format: uuid */
+            sentenceTypeUuid: string;
+            description: string;
+            /** Format: int32 */
+            minAgeInclusive?: number;
+            /** Format: int32 */
+            maxAgeExclusive?: number;
+            /** Format: date */
+            minDateInclusive?: string;
+            /** Format: date */
+            maxDateExclusive?: string;
+            /** Format: date */
+            minOffenceDateInclusive?: string;
+            /** Format: date */
+            maxOffenceDateExclusive?: string;
+            /** @enum {string} */
+            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+            hintText?: string;
+            nomisCjaCode: string;
+            nomisSentenceCalcType: string;
+            /** Format: int32 */
+            displayOrder: number;
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE";
+        };
+        SentenceTypePeriodDefinitions: {
+            periodDefinitions: components["schemas"]["Period"][];
+        };
+        LegacyRecall: {
+            /** Format: uuid */
+            recallUuid: string;
+            prisonerId: string;
+            /** Format: date */
+            returnToCustodyDate?: string;
+            /** Format: date */
+            revocationDate?: string;
+            sentenceIds: string[];
+            /** @enum {string} */
+            recallType: "LR" | "FTR_14" | "FTR_28" | "FTR_HDC_14" | "FTR_HDC_28" | "CUR_HDC" | "IN_HDC";
+            recallBy: string;
+        };
+        LegacyPeriodLength: {
+            /** Format: int32 */
+            periodYears?: number;
+            /** Format: int32 */
+            periodMonths?: number;
+            /** Format: int32 */
+            periodWeeks?: number;
+            /** Format: int32 */
+            periodDays?: number;
+            isLifeSentence?: boolean;
+            sentenceTermCode: string;
+            /** Format: uuid */
+            periodLengthUuid: string;
+            /** Format: uuid */
+            sentenceUuid: string;
+            prisonerId: string;
+            /** Format: uuid */
+            courtChargeId: string;
+            courtCaseId: string;
+            /** Format: uuid */
+            courtAppearanceId: string;
+        };
+        LegacyCourtCase: {
+            courtCaseUuid: string;
+            prisonerId: string;
+            active: boolean;
+            /** Format: date */
+            startDate?: string;
+            courtId?: string;
+            caseReference?: string;
+            caseReferences: components["schemas"]["CaseReferenceLegacyData"][];
+        };
+        LegacyCharge: {
+            prisonerId: string;
+            courtCaseUuid: string;
+            /** Format: uuid */
+            lifetimeUuid: string;
+            nomisOutcomeCode?: string;
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            legacyData?: components["schemas"]["ChargeLegacyData"];
+        };
+        LegacyCourtAppearance: {
+            /** Format: uuid */
+            lifetimeUuid: string;
+            courtCaseUuid: string;
+            prisonerId: string;
+            nomisOutcomeCode?: string;
+            courtCode: string;
+            /** Format: date */
+            appearanceDate: string;
+            /** @example 10:07:27.613693692 */
+            appearanceTime: string;
+            charges: components["schemas"]["LegacyCharge"][];
+            nextCourtAppearance?: components["schemas"]["LegacyNextCourtAppearance"];
+        };
+        LegacyNextCourtAppearance: {
+            /** Format: date */
+            appearanceDate: string;
+            /** @example 10:07:27.613693692 */
+            appearanceTime?: string;
+            courtId: string;
+        };
+        TestCourtCase: {
+            courtCaseUuid: string;
+            prisonerId: string;
+            active: boolean;
+            /** Format: date */
+            startDate?: string;
+            courtId?: string;
+            caseReference?: string;
+            caseReferences: components["schemas"]["CaseReferenceLegacyData"][];
+            appearances: components["schemas"]["LegacyCourtAppearance"][];
+        };
+        ReconciliationCharge: {
+            /** Format: uuid */
+            chargeUuid: string;
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            nomisOutcomeCode?: string;
+            legacyData?: components["schemas"]["ChargeLegacyData"];
+            sentence?: components["schemas"]["ReconciliationSentence"];
+        };
+        ReconciliationCourtAppearance: {
+            /** Format: uuid */
+            appearanceUuid: string;
+            courtCode: string;
+            /** Format: date */
+            appearanceDate: string;
+            /** @example 10:07:27.613693692 */
+            appearanceTime: string;
+            nomisOutcomeCode?: string;
+            legacyData?: components["schemas"]["CourtAppearanceLegacyData"];
+            nextCourtAppearance?: components["schemas"]["ReconciliationNextCourtAppearance"];
+            charges: components["schemas"]["ReconciliationCharge"][];
+        };
+        ReconciliationCourtCase: {
+            courtCaseUuid: string;
+            prisonerId: string;
+            active: boolean;
+            merged: boolean;
+            courtCaseLegacyData?: components["schemas"]["CourtCaseLegacyData"];
+            appearances: components["schemas"]["ReconciliationCourtAppearance"][];
+        };
+        ReconciliationNextCourtAppearance: {
+            /** Format: date */
+            appearanceDate: string;
+            /** @example 10:07:27.613693692 */
+            appearanceTime?: string;
+            courtId: string;
+        };
+        ReconciliationPeriodLength: {
+            /** Format: uuid */
+            periodLengthUuid: string;
+            /** Format: int32 */
+            periodYears?: number;
+            /** Format: int32 */
+            periodMonths?: number;
+            /** Format: int32 */
+            periodWeeks?: number;
+            /** Format: int32 */
+            periodDays?: number;
+            lifeSentence?: boolean;
+            sentenceTermCode: string;
+            legacyData?: components["schemas"]["PeriodLengthLegacyData"];
+        };
+        ReconciliationSentence: {
+            /** Format: uuid */
+            sentenceUuid: string;
+            fineAmount?: number;
+            sentenceCalcType?: string;
+            sentenceCategory?: string;
+            active: boolean;
+            /** Format: date */
+            sentenceStartDate: string;
+            legacyData?: components["schemas"]["SentenceLegacyData"];
+            /** Format: uuid */
+            consecutiveToSentenceUuid?: string;
+            periodLengths: components["schemas"]["ReconciliationPeriodLength"][];
+        };
+        DraftCourtAppearance: {
+            /** Format: uuid */
+            draftUuid: string;
+            sessionBlob: components["schemas"]["JsonNode"];
+        };
+        RecallableCourtCase: {
+            courtCaseUuid: string;
+            reference: string;
+            courtCode: string;
+            /** Format: date */
+            date: string;
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE" | "EDITED" | "DELETED" | "DRAFT" | "FUTURE" | "MERGED" | "MANY_CHARGES_DATA_FIX";
+            isSentenced: boolean;
+            sentences: components["schemas"]["RecallableCourtCaseSentence"][];
+        };
+        RecallableCourtCaseSentence: {
+            /** Format: uuid */
+            sentenceUuid: string;
+            offenceCode?: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            outcome?: string;
+            sentenceType?: string;
+            /** @enum {string} */
+            classification?: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+            systemOfRecord: string;
+            periodLengths: components["schemas"]["PeriodLength"][];
+            /** Format: date */
+            convictionDate?: string;
+            chargeLegacyData?: components["schemas"]["ChargeLegacyData"];
+            countNumber?: string;
+            lineNumber?: string;
+            sentenceServeType?: string;
+            sentenceLegacyData?: components["schemas"]["SentenceLegacyData"];
+            outcomeDescription?: string;
+            isRecallable: boolean;
+        };
+        RecallableCourtCasesResponse: {
+            /** Format: int32 */
+            totalCases: number;
+            cases: components["schemas"]["RecallableCourtCase"][];
+        };
+        CourtCaseCountNumber: {
+            countNumber: string;
+        };
+        CourtCaseCountNumbers: {
+            countNumbers: components["schemas"]["CourtCaseCountNumber"][];
+        };
+        Pageable: {
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            sort?: string[];
+        };
+        PageCourtCase: {
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            first?: boolean;
+            last?: boolean;
+            /** Format: int32 */
+            size?: number;
+            content?: components["schemas"]["CourtCase"][];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
+            empty?: boolean;
+        };
+        PageableObject: {
+            /** Format: int64 */
+            offset?: number;
+            sort?: components["schemas"]["SortObject"];
+            /** Format: int32 */
+            pageSize?: number;
+            paged?: boolean;
+            /** Format: int32 */
+            pageNumber?: number;
+            unpaged?: boolean;
+        };
+        SortObject: {
+            empty?: boolean;
+            sorted?: boolean;
+            unsorted?: boolean;
+        };
+        PagePagedCourtCase: {
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            first?: boolean;
+            last?: boolean;
+            /** Format: int32 */
+            size?: number;
+            content?: components["schemas"]["PagedCourtCase"][];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
+            empty?: boolean;
+        };
+        PagedAppearancePeriodLength: {
+            /** Format: int32 */
+            years?: number;
+            /** Format: int32 */
+            months?: number;
+            /** Format: int32 */
+            weeks?: number;
+            /** Format: int32 */
+            days?: number;
+            order: string;
+            /** @enum {string} */
+            type: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "UNSUPPORTED";
+        };
+        PagedCharge: {
+            /** Format: uuid */
+            chargeUuid: string;
+            offenceCode: string;
+            /** Format: date */
+            offenceStartDate?: string;
+            /** Format: date */
+            offenceEndDate?: string;
+            outcome?: components["schemas"]["PagedChargeOutcome"];
+            legacyData?: components["schemas"]["ChargeLegacyData"];
+            sentence?: components["schemas"]["PagedSentence"];
+            mergedFromCase?: components["schemas"]["PagedMergedFromCase"];
+        };
+        PagedChargeOutcome: {
+            /** Format: uuid */
+            outcomeUuid: string;
+            outcomeName?: string;
+        };
+        PagedCourtCase: {
+            prisonerId: string;
+            courtCaseUuid: string;
+            /** @enum {string} */
+            courtCaseStatus: "ACTIVE" | "INACTIVE" | "EDITED" | "DELETED" | "DRAFT" | "FUTURE" | "MERGED" | "MANY_CHARGES_DATA_FIX";
+            legacyData?: components["schemas"]["CourtCaseLegacyData"];
+            /** Format: int64 */
+            appearanceCount: number;
+            caseReferences: string[];
+            /** Format: date */
+            firstDayInCustody: string;
+            overallSentenceLength?: components["schemas"]["PagedAppearancePeriodLength"];
+            latestCourtAppearance: components["schemas"]["PagedLatestCourtAppearance"];
+            mergedFromCases: components["schemas"]["PagedMergedFromCase"][];
+            allAppearancesHaveRecall: boolean;
+            mergedToCase?: components["schemas"]["PagedMergedToCase"];
+        };
+        PagedLatestCourtAppearance: {
+            caseReference?: string;
+            courtCode: string;
+            /** Format: date */
+            warrantDate: string;
+            warrantType: string;
+            outcome?: string;
+            /** Format: date */
+            convictionDate?: string;
+            legacyData?: components["schemas"]["CourtAppearanceLegacyData"];
+            nextCourtAppearance?: components["schemas"]["PagedNextCourtAppearance"];
+            charges: components["schemas"]["PagedCharge"][];
+        };
+        PagedMergedFromCase: {
+            caseReference?: string;
+            courtCode: string;
+            /** Format: date */
+            warrantDate: string;
+            /** Format: date */
+            mergedFromDate: string;
+        };
+        PagedMergedToCase: {
+            caseReference?: string;
+            courtCode: string;
+            /** Format: date */
+            warrantDate: string;
+            /** Format: date */
+            mergedToDate: string;
+        };
+        PagedNextCourtAppearance: {
+            /** Format: date */
+            appearanceDate: string;
+            /** @example 10:07:27.613693692 */
+            appearanceTime?: string;
+            courtCode?: string;
+            appearanceTypeDescription: string;
+        };
+        PagedSentence: {
+            /** Format: uuid */
+            sentenceUuid: string;
+            chargeNumber?: string;
+            sentenceServeType: string;
+            /** Format: uuid */
+            consecutiveToSentenceUuid?: string;
+            /** Format: date */
+            convictionDate?: string;
+            sentenceType?: components["schemas"]["PagedSentenceType"];
+            legacyData?: components["schemas"]["SentenceLegacyData"];
+            fineAmount?: number;
+            periodLengths: components["schemas"]["PagedSentencePeriodLength"][];
+            hasRecall: boolean;
+        };
+        PagedSentencePeriodLength: {
+            /** Format: uuid */
+            periodLengthUuid: string;
+            /** Format: int32 */
+            years?: number;
+            /** Format: int32 */
+            months?: number;
+            /** Format: int32 */
+            weeks?: number;
+            /** Format: int32 */
+            days?: number;
+            order: string;
+            /** @enum {string} */
+            type?: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "UNSUPPORTED";
+            legacyData?: components["schemas"]["PeriodLengthLegacyData"];
+        };
+        PagedSentenceType: {
+            /** Format: uuid */
+            sentenceTypeUuid: string;
+            description: string;
+            /** @enum {string} */
+            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+        };
+        DeleteRecallResponse: {
+            /** Format: uuid */
+            recallUuid: string;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
-  getRecall: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        recallUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns recall details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Recall']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Recall']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Recall']
-        }
-      }
-      /** @description Not found if no recall uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Recall']
-        }
-      }
-    }
-  }
-  updateRecall: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        recallUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateRecall']
-      }
-    }
-    responses: {
-      /** @description Returns court case UUID */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SaveRecallResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SaveRecallResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SaveRecallResponse']
-        }
-      }
-    }
-  }
-  deleteRecall: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        recallUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Recall deleted */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DeleteRecallResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DeleteRecallResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DeleteRecallResponse']
-        }
-      }
-    }
-  }
-  get: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns sentence details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentence']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentence']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentence']
-        }
-      }
-    }
-  }
-  update: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreateSentence']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  delete: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description No Content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  get_1: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        periodLengthUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns period-length details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyPeriodLength']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyPeriodLength']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyPeriodLength']
-        }
-      }
-      /** @description Not found: Period length either doesn't exist, has no sentence, or is deleted */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyPeriodLength']
-        }
-      }
-    }
-  }
-  update_1: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        periodLengthUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreatePeriodLength']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Period length or sentence not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  delete_1: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        periodLengthUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description No Content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  unlinkCourtCase: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        sourceCourtCaseUuid: string
-        targetCourtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UnlinkEventsToEmit']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UnlinkEventsToEmit']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UnlinkEventsToEmit']
-        }
-      }
-    }
-  }
-  linkCourtCase: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        sourceCourtCaseUuid: string
-        targetCourtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'application/json': components['schemas']['LegacyLinkCase']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PairStringString']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PairStringString']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PairStringString']
-        }
-      }
-    }
-  }
-  get_2: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns court case details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtCase']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtCase']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtCase']
-        }
-      }
-      /** @description Not found if no court case at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtCase']
-        }
-      }
-    }
-  }
-  update_2: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreateCourtCase']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  delete_2: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description court case deleted */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  get_3: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns court appearance details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtAppearance']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtAppearance']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtAppearance']
-        }
-      }
-      /** @description Not found if no court appearance at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtAppearance']
-        }
-      }
-    }
-  }
-  update_3: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreateCourtAppearance']
-      }
-    }
-    responses: {
-      /** @description court appearance updated */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  delete_3: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  getChargeAtAppearance: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-        chargeLifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCharge']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCharge']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCharge']
-        }
-      }
-    }
-  }
-  linkAppearanceWithCharge: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-        chargeLifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyUpdateCharge']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  unlinkAppearanceWithCharge: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-        chargeLifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  linkChargeToCaseInAppearance: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtAppearanceUuid: string
-        chargeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyLinkChargeToCase']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PairEntityChangeStatusLegacyChargeCreatedResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PairEntityChangeStatusLegacyChargeCreatedResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PairEntityChangeStatusLegacyChargeCreatedResponse']
-        }
-      }
-    }
-  }
-  get_4: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns charge details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCharge']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCharge']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCharge']
-        }
-      }
-    }
-  }
-  update_4: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyUpdateWholeCharge']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  updateInAppearance: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        lifetimeUuid: string
-        appearanceLifetimeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyUpdateCharge']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  get_5: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        draftUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description court appearance updated */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtAppearance']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtAppearance']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtAppearance']
-        }
-      }
-    }
-  }
-  update_5: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        draftUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DraftCreateCourtAppearance']
-      }
-    }
-    responses: {
-      /** @description court appearance updated */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  delete_4: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        draftUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description court appearance deleted */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  getCourtCaseDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns court case details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCase']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCase']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCase']
-        }
-      }
-      /** @description Not found if no court case at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCase']
-        }
-      }
-    }
-  }
-  putCourtCase: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateCourtCase']
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateCourtCaseResponse']
-        }
-      }
-      /** @description Returns court case UUID */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateCourtCaseResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateCourtCaseResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateCourtCaseResponse']
-        }
-      }
-    }
-  }
-  refreshCaseReferences: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CourtCaseLegacyData']
-      }
-    }
-    responses: {
-      /** @description No content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  getCourtAppearanceDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        appearanceUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns court appearance details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CourtAppearance']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CourtAppearance']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CourtAppearance']
-        }
-      }
-      /** @description Not found if no court appearance at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CourtAppearance']
-        }
-      }
-    }
-  }
-  updateCourtAppearance: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        appearanceUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateCourtAppearance']
-      }
-    }
-    responses: {
-      /** @description Returns court case UUID */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CreateCourtAppearanceResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CreateCourtAppearanceResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CreateCourtAppearanceResponse']
-        }
-      }
-    }
-  }
-  create: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateUploadedDocument']
-      }
-    }
-    responses: {
-      /** @description uploaded document created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  createRecall: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateRecall']
-      }
-    }
-    responses: {
-      /** @description Returns recall UUID */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SaveRecallResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SaveRecallResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SaveRecallResponse']
-        }
-      }
-    }
-  }
-  create_1: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreateSentence']
-      }
-    }
-    responses: {
-      /** @description sentence created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceCreatedResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceCreatedResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceCreatedResponse']
-        }
-      }
-      /** @description Unprocessable entity, charge must not be already sentenced */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceCreatedResponse']
-        }
-      }
-    }
-  }
-  search: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacySearchSentence']
-      }
-    }
-    responses: {
-      /** @description Returns matching sentence details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentence'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentence'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentence'][]
-        }
-      }
-    }
-  }
-  create_2: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreatePeriodLength']
-      }
-    }
-    responses: {
-      /** @description period length created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyPeriodLengthCreatedResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyPeriodLengthCreatedResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyPeriodLengthCreatedResponse']
-        }
-      }
-    }
-  }
-  create_3: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreateCourtCase']
-      }
-    }
-    responses: {
-      /** @description court case created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtCaseCreatedResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtCaseCreatedResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtCaseCreatedResponse']
-        }
-      }
-    }
-  }
-  create_4: {
-    parameters: {
-      query?: {
-        deleteExisting?: boolean
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['MigrationCreateCourtCases']
-      }
-    }
-    responses: {
-      /** @description court case created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['MigrationCreateCourtCasesResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['MigrationCreateCourtCasesResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['MigrationCreateCourtCasesResponse']
-        }
-      }
-    }
-  }
-  create_5: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreateCourtAppearance']
-      }
-    }
-    responses: {
-      /** @description court appearance created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtAppearanceCreatedResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtAppearanceCreatedResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyCourtAppearanceCreatedResponse']
-        }
-      }
-    }
-  }
-  create_6: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['LegacyCreateCharge']
-      }
-    }
-    responses: {
-      /** @description charge created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyChargeCreatedResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyChargeCreatedResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyChargeCreatedResponse']
-        }
-      }
-    }
-  }
-  create_7: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DraftCreateCourtCase']
-      }
-    }
-    responses: {
-      /** @description court case created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtCaseCreatedResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtCaseCreatedResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtCaseCreatedResponse']
-        }
-      }
-    }
-  }
-  createDraftAppearanceInCourtCase: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DraftCreateCourtAppearance']
-      }
-    }
-    responses: {
-      /** @description draft court appearance created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtAppearanceCreatedResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtAppearanceCreatedResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DraftCourtAppearanceCreatedResponse']
-        }
-      }
-    }
-  }
-  createCourtCase: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateCourtCase']
-      }
-    }
-    responses: {
-      /** @description Returns court case UUID */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateCourtCaseResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateCourtCaseResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CreateCourtCaseResponse']
-        }
-      }
-    }
-  }
-  updateSentenceTypes: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateSentenceTypeRequest']
-      }
-    }
-    responses: {
-      /** @description All sentence types successfully updated */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UpdateSentenceTypeResponse']
-        }
-      }
-      /** @description Invalid request (invalid sentence type, missing fields) */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UpdateSentenceTypeResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UpdateSentenceTypeResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UpdateSentenceTypeResponse']
-        }
-      }
-      /** @description Court case or sentence not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UpdateSentenceTypeResponse']
-        }
-      }
-      /** @description Business rule violation (e.g., sentence not in 'unknown pre-recall sentence' state) */
-      422: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UpdateSentenceTypeResponse']
-        }
-      }
-    }
-  }
-  createCourtAppearance: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateCourtAppearance']
-      }
-    }
-    responses: {
-      /** @description Returns court case UUID */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CreateCourtAppearanceResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CreateCourtAppearanceResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CreateCourtAppearanceResponse']
-        }
-      }
-    }
-  }
-  getSentenceDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        sentenceUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns sentence details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Sentence']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Sentence']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Sentence']
-        }
-      }
-      /** @description Not found if no sentence at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Sentence']
-        }
-      }
-    }
-  }
-  sentencesAfterOnOtherCourtAppearanceDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        sentenceUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns true or false */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SentencesAfterOnOtherCourtAppearanceDetailsResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SentencesAfterOnOtherCourtAppearanceDetailsResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SentencesAfterOnOtherCourtAppearanceDetailsResponse']
-        }
-      }
-    }
-  }
-  hasSentencesAfterOnOtherCase: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        sentenceUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns true or false */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['HasSentenceAfterOnOtherCourtAppearanceResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['HasSentenceAfterOnOtherCourtAppearanceResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['HasSentenceAfterOnOtherCourtAppearanceResponse']
-        }
-      }
-    }
-  }
-  getConsecutiveToSentenceDetails: {
-    parameters: {
-      query: {
-        sentenceUuids: string[]
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns consecutive to sentence details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SentenceConsecutiveToDetailsResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SentenceConsecutiveToDetailsResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SentenceConsecutiveToDetailsResponse']
-        }
-      }
-    }
-  }
-  getSentenceTypeByUuid: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        sentenceTypeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns sentence */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType']
-        }
-      }
-      /** @description Not found if no sentence type at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType']
-        }
-      }
-    }
-  }
-  sentenceTypeStillValid: {
-    parameters: {
-      query: {
-        age: number
-        convictionDate: string
-        statuses?: ('ACTIVE' | 'INACTIVE')[]
-        offenceDate: string
-      }
-      header?: never
-      path: {
-        sentenceTypeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns whether the sentence type is still valid */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceTypeIsValid']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceTypeIsValid']
-        }
-      }
-    }
-  }
-  getSentenceTypesByIds: {
-    parameters: {
-      query: {
-        uuids: string[]
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns sentence types */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType'][]
-        }
-      }
-    }
-  }
-  searchSentenceTypes: {
-    parameters: {
-      query: {
-        age: number
-        convictionDate: string
-        statuses?: ('ACTIVE' | 'INACTIVE')[]
-        offenceDate: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns sentence types */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentenceType'][]
-        }
-      }
-    }
-  }
-  getRecallsByPrisonerId: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonerId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns all recalls for person */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Recall'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Recall'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Recall'][]
-        }
-      }
-    }
-  }
-  getPersonDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonerId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns person details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PersonDetails']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PersonDetails']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PersonDetails']
-        }
-      }
-    }
-  }
-  sentencesToChainTo: {
-    parameters: {
-      query: {
-        beforeOrOnAppearanceDate: string
-      }
-      header?: never
-      path: {
-        prisonerId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns all sentences for a consecutive to chain */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentencesToChainToResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentencesToChainToResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SentencesToChainToResponse']
-        }
-      }
-    }
-  }
-  getSentencedCourtCases: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonerId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns sentenced court cases */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCases']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCases']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCases']
-        }
-      }
-    }
-  }
-  hasSentenceToChainTo: {
-    parameters: {
-      query: {
-        beforeOrOnAppearanceDate: string
-      }
-      header?: never
-      path: {
-        prisonerId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns whether there is a sentence for a consecutive to chain */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HasSentenceToChainToResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HasSentenceToChainToResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['HasSentenceToChainToResponse']
-        }
-      }
-    }
-  }
-  getLegacySentenceTypeSummary: {
-    parameters: {
-      query: {
-        nomisSentenceTypeReference: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns historic NOMIS sentence type */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceTypeGroupingSummary']
-        }
-      }
-      /** @description Unauthorised, requires a valid OAuth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceTypeGroupingSummary']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceTypeGroupingSummary']
-        }
-      }
-      /** @description Not found if no sentence type at given NOMIS type */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceTypeGroupingSummary']
-        }
-      }
-    }
-  }
-  getLegacyAllSentenceTypes: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns historic NOMIS sentence type */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceType'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid OAuth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceType'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceType'][]
-        }
-      }
-      /** @description Not found if no sentence type at given NOMIS type */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceType'][]
-        }
-      }
-    }
-  }
-  getLegacyAllSentenceTypesSummaries: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns historic NOMIS sentence type */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid OAuth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'][]
-        }
-      }
-      /** @description Not found if no sentence type at given NOMIS type */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'][]
-        }
-      }
-    }
-  }
-  getLegacySentenceType: {
-    parameters: {
-      query: {
-        nomisSentenceTypeReference: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns historic NOMIS sentence type */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceType'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid OAuth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceType'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceType'][]
-        }
-      }
-      /** @description Not found if no sentence type at given NOMIS type */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacySentenceType'][]
-        }
-      }
-    }
-  }
-  get_6: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        uuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns recall details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyRecall']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyRecall']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['LegacyRecall']
-        }
-      }
-    }
-  }
-  getTest: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns court case details for testing */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TestCourtCase']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TestCourtCase']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TestCourtCase']
-        }
-      }
-      /** @description Not found if no court case at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['TestCourtCase']
-        }
-      }
-    }
-  }
-  getReconciliation: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns court case details for reconciliation */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ReconciliationCourtCase']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ReconciliationCourtCase']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ReconciliationCourtCase']
-        }
-      }
-      /** @description Not found if no court case at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ReconciliationCourtCase']
-        }
-      }
-    }
-  }
-  getRecallableCourtCases: {
-    parameters: {
-      query?: {
-        sortBy?: string
-        sortOrder?: string
-      }
-      header?: never
-      path: {
-        prisonerId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns recallable court cases */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RecallableCourtCasesResponse']
-        }
-      }
-      /** @description Bad request - invalid prisoner ID format or query parameters */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RecallableCourtCasesResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RecallableCourtCasesResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RecallableCourtCasesResponse']
-        }
-      }
-      /** @description Prisoner not found in system */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['RecallableCourtCasesResponse']
-        }
-      }
-    }
-  }
-  getLatestOffenceDate: {
-    parameters: {
-      query?: {
-        appearanceUuidToExclude?: string
-      }
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns the latest offence date */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': string
-        }
-      }
-      /** @description No offence dates found */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': string
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': string
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': string
-        }
-      }
-    }
-  }
-  getLatestAppearanceDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns latest appearance details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearance']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearance']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearance']
-        }
-      }
-      /** @description Not found if no court case at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearance']
-        }
-      }
-    }
-  }
-  getAllCountNumbers: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        courtCaseUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns all count numbers */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCaseCountNumbers']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCaseCountNumbers']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtCaseCountNumbers']
-        }
-      }
-    }
-  }
-  searchCourtCases: {
-    parameters: {
-      query: {
-        prisonerId: string
-        pageable: components['schemas']['Pageable']
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns court cases */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PageCourtCase']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PageCourtCase']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PageCourtCase']
-        }
-      }
-    }
-  }
-  pagedSearchCourtCases: {
-    parameters: {
-      query: {
-        prisonerId: string
-        pageable: components['schemas']['Pageable']
-        pagedCourtCaseOrderBy?: 'STATUS_APPEARANCE_DATE_DESC' | 'APPEARANCE_DATE_ASC' | 'APPEARANCE_DATE_DESC'
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns court cases */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PagePagedCourtCase']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PagePagedCourtCase']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PagePagedCourtCase']
-        }
-      }
-    }
-  }
-  getChargeDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        chargeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns charge details */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Charge']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Charge']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Charge']
-        }
-      }
-      /** @description Not found if no charge at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Charge']
-        }
-      }
-    }
-  }
-  getChargeOutcomeByUuid: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        outcomeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns charge outcome */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome']
-        }
-      }
-      /** @description Not found if no charge outcome at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome']
-        }
-      }
-    }
-  }
-  getChargeOutcomesByIds: {
-    parameters: {
-      query: {
-        uuids: string[]
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns charge outcomes */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome'][]
-        }
-      }
-    }
-  }
-  getAllChargeOutcomes: {
-    parameters: {
-      query: {
-        statuses: ('ACTIVE' | 'INACTIVE')[]
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns charge outcomes */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ChargeOutcome'][]
-        }
-      }
-    }
-  }
-  getAppearanceTypeById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        appearanceTypeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns appearance type */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AppearanceType']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AppearanceType']
-        }
-      }
-      /** @description Appearance type not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AppearanceType']
-        }
-      }
-    }
-  }
-  getAllAppearanceTypes: {
-    parameters: {
-      query: {
-        statuses: ('ACTIVE' | 'INACTIVE')[]
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns appearance types */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AppearanceType'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['AppearanceType'][]
-        }
-      }
-    }
-  }
-  getAppearanceOutcomeByUuid: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        outcomeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns appearance outcome */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearanceOutcome']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearanceOutcome']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearanceOutcome']
-        }
-      }
-      /** @description Not found if no appearance outcome at uuid */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearanceOutcome']
-        }
-      }
-    }
-  }
-  getAllAppearanceOutcomes: {
-    parameters: {
-      query: {
-        statuses: ('ACTIVE' | 'INACTIVE')[]
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns appearance outcomes */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearanceOutcome'][]
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearanceOutcome'][]
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['CourtAppearanceOutcome'][]
-        }
-      }
-    }
-  }
-  delete_5: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        chargeUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description No Content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  cleanupDocument: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Cleanup completed */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
+    getRecall: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                recallUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns recall details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recall"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recall"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recall"];
+                };
+            };
+            /** @description Not found if no recall uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recall"];
+                };
+            };
+        };
+    };
+    updateRecall: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                recallUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRecall"];
+            };
+        };
+        responses: {
+            /** @description Returns court case UUID */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaveRecallResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaveRecallResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaveRecallResponse"];
+                };
+            };
+        };
+    };
+    deleteRecall: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                recallUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Recall deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeleteRecallResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeleteRecallResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeleteRecallResponse"];
+                };
+            };
+        };
+    };
+    get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns sentence details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentence"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentence"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentence"];
+                };
+            };
+        };
+    };
+    update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreateSentence"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                periodLengthUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns period-length details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyPeriodLength"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyPeriodLength"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyPeriodLength"];
+                };
+            };
+            /** @description Not found: Period length either doesn't exist, has no sentence, or is deleted */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyPeriodLength"];
+                };
+            };
+        };
+    };
+    update_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                periodLengthUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreatePeriodLength"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Period length or sentence not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    delete_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                periodLengthUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unlinkCourtCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceCourtCaseUuid: string;
+                targetCourtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnlinkEventsToEmit"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnlinkEventsToEmit"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnlinkEventsToEmit"];
+                };
+            };
+        };
+    };
+    linkCourtCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceCourtCaseUuid: string;
+                targetCourtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["LegacyLinkCase"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PairStringString"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PairStringString"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PairStringString"];
+                };
+            };
+        };
+    };
+    get_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns court case details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtCase"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtCase"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtCase"];
+                };
+            };
+            /** @description Not found if no court case at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtCase"];
+                };
+            };
+        };
+    };
+    update_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreateCourtCase"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    delete_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description court case deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns court appearance details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtAppearance"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtAppearance"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtAppearance"];
+                };
+            };
+            /** @description Not found if no court appearance at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtAppearance"];
+                };
+            };
+        };
+    };
+    update_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreateCourtAppearance"];
+            };
+        };
+        responses: {
+            /** @description court appearance updated */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    delete_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getChargeAtAppearance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+                chargeLifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCharge"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCharge"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCharge"];
+                };
+            };
+        };
+    };
+    linkAppearanceWithCharge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+                chargeLifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyUpdateCharge"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unlinkAppearanceWithCharge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+                chargeLifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    linkChargeToCaseInAppearance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtAppearanceUuid: string;
+                chargeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyLinkChargeToCase"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PairEntityChangeStatusLegacyChargeCreatedResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PairEntityChangeStatusLegacyChargeCreatedResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PairEntityChangeStatusLegacyChargeCreatedResponse"];
+                };
+            };
+        };
+    };
+    get_4: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns charge details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCharge"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCharge"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCharge"];
+                };
+            };
+        };
+    };
+    update_4: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyUpdateWholeCharge"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    updateInAppearance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lifetimeUuid: string;
+                appearanceLifetimeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyUpdateCharge"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_5: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draftUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description court appearance updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtAppearance"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtAppearance"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtAppearance"];
+                };
+            };
+        };
+    };
+    update_5: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draftUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftCreateCourtAppearance"];
+            };
+        };
+        responses: {
+            /** @description court appearance updated */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    delete_4: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draftUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description court appearance deleted */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getCourtCaseDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns court case details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCase"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCase"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCase"];
+                };
+            };
+            /** @description Not found if no court case at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCase"];
+                };
+            };
+        };
+    };
+    putCourtCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCourtCase"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                };
+            };
+            /** @description Returns court case UUID */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                };
+            };
+        };
+    };
+    refreshCaseReferences: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CourtCaseLegacyData"];
+            };
+        };
+        responses: {
+            /** @description No content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getCourtAppearanceDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appearanceUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns court appearance details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CourtAppearance"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CourtAppearance"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CourtAppearance"];
+                };
+            };
+            /** @description Not found if no court appearance at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CourtAppearance"];
+                };
+            };
+        };
+    };
+    updateCourtAppearance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appearanceUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCourtAppearance"];
+            };
+        };
+        responses: {
+            /** @description Returns court case UUID */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                };
+            };
+        };
+    };
+    deleteCourtAppearance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appearanceUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Court appearance deleted successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not found if no court appearance at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateUploadedDocument"];
+            };
+        };
+        responses: {
+            /** @description uploaded document created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    createRecall: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRecall"];
+            };
+        };
+        responses: {
+            /** @description Returns recall UUID */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaveRecallResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaveRecallResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaveRecallResponse"];
+                };
+            };
+        };
+    };
+    create_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreateSentence"];
+            };
+        };
+        responses: {
+            /** @description sentence created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceCreatedResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceCreatedResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceCreatedResponse"];
+                };
+            };
+            /** @description Unprocessable entity, charge must not be already sentenced */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceCreatedResponse"];
+                };
+            };
+        };
+    };
+    search: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacySearchSentence"];
+            };
+        };
+        responses: {
+            /** @description Returns matching sentence details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentence"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentence"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentence"][];
+                };
+            };
+        };
+    };
+    create_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreatePeriodLength"];
+            };
+        };
+        responses: {
+            /** @description period length created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyPeriodLengthCreatedResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyPeriodLengthCreatedResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyPeriodLengthCreatedResponse"];
+                };
+            };
+        };
+    };
+    create_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreateCourtCase"];
+            };
+        };
+        responses: {
+            /** @description court case created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtCaseCreatedResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtCaseCreatedResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtCaseCreatedResponse"];
+                };
+            };
+        };
+    };
+    create_4: {
+        parameters: {
+            query?: {
+                deleteExisting?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MigrationCreateCourtCases"];
+            };
+        };
+        responses: {
+            /** @description court case created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MigrationCreateCourtCasesResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MigrationCreateCourtCasesResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MigrationCreateCourtCasesResponse"];
+                };
+            };
+        };
+    };
+    create_5: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreateCourtAppearance"];
+            };
+        };
+        responses: {
+            /** @description court appearance created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtAppearanceCreatedResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtAppearanceCreatedResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyCourtAppearanceCreatedResponse"];
+                };
+            };
+        };
+    };
+    create_6: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LegacyCreateCharge"];
+            };
+        };
+        responses: {
+            /** @description charge created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyChargeCreatedResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyChargeCreatedResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyChargeCreatedResponse"];
+                };
+            };
+        };
+    };
+    create_7: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftCreateCourtCase"];
+            };
+        };
+        responses: {
+            /** @description court case created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtCaseCreatedResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtCaseCreatedResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtCaseCreatedResponse"];
+                };
+            };
+        };
+    };
+    createDraftAppearanceInCourtCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftCreateCourtAppearance"];
+            };
+        };
+        responses: {
+            /** @description draft court appearance created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtAppearanceCreatedResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtAppearanceCreatedResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftCourtAppearanceCreatedResponse"];
+                };
+            };
+        };
+    };
+    createCourtCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCourtCase"];
+            };
+        };
+        responses: {
+            /** @description Returns court case UUID */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                };
+            };
+        };
+    };
+    updateSentenceTypes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSentenceTypeRequest"];
+            };
+        };
+        responses: {
+            /** @description All sentence types successfully updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                };
+            };
+            /** @description Invalid request (invalid sentence type, missing fields) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                };
+            };
+            /** @description Court case or sentence not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                };
+            };
+            /** @description Business rule violation (e.g., sentence not in 'unknown pre-recall sentence' state) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                };
+            };
+        };
+    };
+    createCourtAppearance: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCourtAppearance"];
+            };
+        };
+        responses: {
+            /** @description Returns court case UUID */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                };
+            };
+        };
+    };
+    getSentenceDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sentenceUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns sentence details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Sentence"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Sentence"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Sentence"];
+                };
+            };
+            /** @description Not found if no sentence at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Sentence"];
+                };
+            };
+        };
+    };
+    sentencesAfterOnOtherCourtAppearanceDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sentenceUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns true or false */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SentencesAfterOnOtherCourtAppearanceDetailsResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SentencesAfterOnOtherCourtAppearanceDetailsResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SentencesAfterOnOtherCourtAppearanceDetailsResponse"];
+                };
+            };
+        };
+    };
+    hasSentencesAfterOnOtherCase: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sentenceUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns true or false */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["HasSentenceAfterOnOtherCourtAppearanceResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["HasSentenceAfterOnOtherCourtAppearanceResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["HasSentenceAfterOnOtherCourtAppearanceResponse"];
+                };
+            };
+        };
+    };
+    getConsecutiveToSentenceDetails: {
+        parameters: {
+            query: {
+                sentenceUuids: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns consecutive to sentence details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SentenceConsecutiveToDetailsResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SentenceConsecutiveToDetailsResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["SentenceConsecutiveToDetailsResponse"];
+                };
+            };
+        };
+    };
+    getSentenceTypeByUuid: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sentenceTypeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns sentence */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"];
+                };
+            };
+            /** @description Not found if no sentence type at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"];
+                };
+            };
+        };
+    };
+    sentenceTypeStillValid: {
+        parameters: {
+            query: {
+                age: number;
+                convictionDate: string;
+                statuses?: ("ACTIVE" | "INACTIVE")[];
+                offenceDate: string;
+            };
+            header?: never;
+            path: {
+                sentenceTypeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns whether the sentence type is still valid */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceTypeIsValid"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceTypeIsValid"];
+                };
+            };
+        };
+    };
+    getSentenceTypesByIds: {
+        parameters: {
+            query: {
+                uuids: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns sentence types */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"][];
+                };
+            };
+        };
+    };
+    searchSentenceTypes: {
+        parameters: {
+            query: {
+                age: number;
+                convictionDate: string;
+                statuses?: ("ACTIVE" | "INACTIVE")[];
+                offenceDate: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns sentence types */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceType"][];
+                };
+            };
+        };
+    };
+    getRecallsByPrisonerId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns all recalls for person */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recall"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recall"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Recall"][];
+                };
+            };
+        };
+    };
+    getPersonDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns person details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonDetails"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonDetails"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonDetails"];
+                };
+            };
+        };
+    };
+    sentencesToChainTo: {
+        parameters: {
+            query: {
+                beforeOrOnAppearanceDate: string;
+            };
+            header?: never;
+            path: {
+                prisonerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns all sentences for a consecutive to chain */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentencesToChainToResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentencesToChainToResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentencesToChainToResponse"];
+                };
+            };
+        };
+    };
+    getSentencedCourtCases: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns sentenced court cases */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCases"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCases"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCases"];
+                };
+            };
+        };
+    };
+    hasSentenceToChainTo: {
+        parameters: {
+            query: {
+                beforeOrOnAppearanceDate: string;
+            };
+            header?: never;
+            path: {
+                prisonerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns whether there is a sentence for a consecutive to chain */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HasSentenceToChainToResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HasSentenceToChainToResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HasSentenceToChainToResponse"];
+                };
+            };
+        };
+    };
+    getLegacySentenceTypeSummary: {
+        parameters: {
+            query: {
+                nomisSentenceTypeReference: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns historic NOMIS sentence type */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"];
+                };
+            };
+            /** @description Unauthorised, requires a valid OAuth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"];
+                };
+            };
+            /** @description Not found if no sentence type at given NOMIS type */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"];
+                };
+            };
+        };
+    };
+    getLegacyAllSentenceTypes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns historic NOMIS sentence type */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceType"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid OAuth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceType"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceType"][];
+                };
+            };
+            /** @description Not found if no sentence type at given NOMIS type */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceType"][];
+                };
+            };
+        };
+    };
+    getLegacyAllSentenceTypesSummaries: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns historic NOMIS sentence type */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid OAuth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"][];
+                };
+            };
+            /** @description Not found if no sentence type at given NOMIS type */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"][];
+                };
+            };
+        };
+    };
+    getLegacySentenceType: {
+        parameters: {
+            query: {
+                nomisSentenceTypeReference: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns historic NOMIS sentence type */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceType"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid OAuth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceType"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceType"][];
+                };
+            };
+            /** @description Not found if no sentence type at given NOMIS type */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacySentenceType"][];
+                };
+            };
+        };
+    };
+    get_6: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                uuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns recall details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyRecall"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyRecall"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegacyRecall"];
+                };
+            };
+        };
+    };
+    getTest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns court case details for testing */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestCourtCase"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestCourtCase"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestCourtCase"];
+                };
+            };
+            /** @description Not found if no court case at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TestCourtCase"];
+                };
+            };
+        };
+    };
+    getReconciliation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns court case details for reconciliation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReconciliationCourtCase"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReconciliationCourtCase"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReconciliationCourtCase"];
+                };
+            };
+            /** @description Not found if no court case at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReconciliationCourtCase"];
+                };
+            };
+        };
+    };
+    getRecallableCourtCases: {
+        parameters: {
+            query?: {
+                sortBy?: string;
+                sortOrder?: string;
+            };
+            header?: never;
+            path: {
+                prisonerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns recallable court cases */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                };
+            };
+            /** @description Bad request - invalid prisoner ID format or query parameters */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                };
+            };
+            /** @description Prisoner not found in system */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                };
+            };
+        };
+    };
+    getLatestOffenceDate: {
+        parameters: {
+            query?: {
+                appearanceUuidToExclude?: string;
+            };
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the latest offence date */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description No offence dates found */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
+    };
+    getLatestAppearanceDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns latest appearance details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearance"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearance"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearance"];
+                };
+            };
+            /** @description Not found if no court case at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearance"];
+                };
+            };
+        };
+    };
+    getAllCountNumbers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                courtCaseUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns all count numbers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCaseCountNumbers"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCaseCountNumbers"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtCaseCountNumbers"];
+                };
+            };
+        };
+    };
+    searchCourtCases: {
+        parameters: {
+            query: {
+                prisonerId: string;
+                pageable: components["schemas"]["Pageable"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns court cases */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageCourtCase"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageCourtCase"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageCourtCase"];
+                };
+            };
+        };
+    };
+    pagedSearchCourtCases: {
+        parameters: {
+            query: {
+                prisonerId: string;
+                pageable: components["schemas"]["Pageable"];
+                pagedCourtCaseOrderBy?: "STATUS_APPEARANCE_DATE_DESC" | "APPEARANCE_DATE_ASC" | "APPEARANCE_DATE_DESC";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns court cases */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PagePagedCourtCase"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PagePagedCourtCase"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PagePagedCourtCase"];
+                };
+            };
+        };
+    };
+    getChargeDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chargeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns charge details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Charge"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Charge"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Charge"];
+                };
+            };
+            /** @description Not found if no charge at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Charge"];
+                };
+            };
+        };
+    };
+    getChargeOutcomeByUuid: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                outcomeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns charge outcome */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"];
+                };
+            };
+            /** @description Not found if no charge outcome at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"];
+                };
+            };
+        };
+    };
+    getChargeOutcomesByIds: {
+        parameters: {
+            query: {
+                uuids: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns charge outcomes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"][];
+                };
+            };
+        };
+    };
+    getAllChargeOutcomes: {
+        parameters: {
+            query: {
+                statuses: ("ACTIVE" | "INACTIVE")[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns charge outcomes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChargeOutcome"][];
+                };
+            };
+        };
+    };
+    getAppearanceTypeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appearanceTypeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns appearance type */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppearanceType"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppearanceType"];
+                };
+            };
+            /** @description Appearance type not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppearanceType"];
+                };
+            };
+        };
+    };
+    getAllAppearanceTypes: {
+        parameters: {
+            query: {
+                statuses: ("ACTIVE" | "INACTIVE")[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns appearance types */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppearanceType"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AppearanceType"][];
+                };
+            };
+        };
+    };
+    getAppearanceOutcomeByUuid: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                outcomeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns appearance outcome */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                };
+            };
+            /** @description Not found if no appearance outcome at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                };
+            };
+        };
+    };
+    getAllAppearanceOutcomes: {
+        parameters: {
+            query: {
+                statuses: ("ACTIVE" | "INACTIVE")[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns appearance outcomes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearanceOutcome"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearanceOutcome"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourtAppearanceOutcome"][];
+                };
+            };
+        };
+    };
+    delete_5: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chargeUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    cleanupDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Cleanup completed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
 }
