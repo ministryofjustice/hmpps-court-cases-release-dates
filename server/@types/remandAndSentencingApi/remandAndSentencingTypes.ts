@@ -36,10 +36,13 @@ const RecallTypes = {
 export interface Recall {
   recallId: string
   recallDate: Date
+  revocationDate: string
+  createdAt: string
   returnToCustodyDate: Date
   ual: number
   ualString: string
   recallType: RecallType
+  source: 'NOMIS' | 'DPS'
   location: string
 }
 

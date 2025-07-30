@@ -185,26 +185,55 @@
 {%  macro recallCard(recall) %}
   <div class="govuk-summary-card govuk-!-margin-bottom-6">
     <div class="govuk-summary-card__title-wrapper">
-      <h2 class="govuk-summary-card__title">Recalled on {{ recall.recallDate | date }}
-        <span class="moj-badge moj-badge--green govuk-!-margin-bottom-1 govuk-!-margin-left-1">Active</span>
+      <h2 class="govuk-summary-card__title">
+         Recorded on {{ recall.createdAt | date }}{% if recall.locationName %} at {{ recall.locationName }}{% endif %}
+        {% if recall.source !== 'NOMIS' %}
+        <span class="moj-badge moj-badge--green govuk-!-margin-bottom-1 govuk-!-margin-left-1" data-qa="active-badge">Active</span>
+      {% endif %}
       </h2>
       <ul class="govuk-summary-card__actions">
-        <div class="">
+          {% if recall.source === 'NOMIS' %}
+        <li class="govuk-summary-card__action">
+          <span class="moj-badge moj-badge--grey govuk-!-margin-bottom-1 govuk-!-margin-left-1" data-qa="nomis-badge">NOMIS</span>
+        </li>
+        {% else %}
           <li class="govuk-summary-card__action">
             <a class="govuk-link" href={{ recallsUiUrl + '/person/' + prisoner.prisonerNumber + '/edit-recall/' + recall.recallId + '?entrypoint=ccards' }}>Edit<span class="govuk-visually-hidden"> recall recorded on {{ recall.recallDate | date }}</span></a>
           </li>
-        </div>
+        {% endif %}
       </ul>
+
     </div>
     <div class="govuk-summary-card__content" id="recall-summary">
       <div class="govuk-grid-row govuk-!-padding-bottom-2 govuk-!-margin-top-2">
         <div class="govuk-grid-column-one-half">
           {{ cardInfo('Recall type', recall.recallType.description) }}
-          {{ cardInfo('Location', recall.location) }}
+          {% if recall.source === 'NOMIS' %}
+            {{ cardInfo('Revocation date', 'Not entered') }}
+         {% else %}
+          {{ cardInfo('Revocation date', recall.revocationDate | date) }}
+        {% endif %}
         </div>
         <div class="govuk-grid-column-one-half">
           {{ cardInfo('Arrest date',  recall.returnToCustodyDate | date if recall.returnToCustodyDate else 'In prison at recall' ) }}
-          {{ cardInfo('UAL (unlawfully at large)', recall.ualString ) }}
+          
+               {% if recall.source !== 'NOMIS' and recall.ualString %}
+        {{ cardInfo('UAL (unlawfully at large)', recall.ualString) }}
+      {% elseif recall.source !== 'NOMIS' and not recall.ual %}
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">UAL (unlawfully at large)</h3>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <a class="govuk-link" href="{{ adjustmentsUiUrl }}/{{ prisoner.prisonerNumber }}" target="_blank" rel="noopener noreferrer">
+            View UAL details
+          </a>
+        </p>
+      {% elseif recall.source === 'NOMIS' %}
+       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">UAL (unlawfully at large)</h3>
+        <p class="govuk-body govuk-!-margin-bottom-2">
+          <a class="govuk-link" href="{{ adjustmentsUiUrl }}/{{ prisoner.prisonerNumber }}/unlawfully-at-large/view" target="_blank" rel="noopener noreferrer">
+            View UAL details
+          </a>
+        </p>
+      {% endif %}
         </div>
       </div>
     </div>

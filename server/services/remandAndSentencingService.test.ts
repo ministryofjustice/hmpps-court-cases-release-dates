@@ -27,6 +27,7 @@ describe('Remand and sentencing service', () => {
         recallUuid: 'a-uuid',
         returnToCustodyDate: '2023-06-18',
         createdByPrison: 'PRI',
+        source: 'DPS',
       }
 
       const latestApiRecall: ApiRecall = {
@@ -38,9 +39,11 @@ describe('Remand and sentencing service', () => {
         recallUuid: 'b-uuid',
         returnToCustodyDate: '2024-12-25',
         createdByPrison: 'HMI',
+        source: 'DPS',
       }
 
       const latestRecallCard: Recall = {
+        createdAt: '2024-12-18T00:00:00.000Z',
         recallId: 'b-uuid',
         recallDate: new Date('2024-12-18'),
         recallType: RecallTypes.HDC_CURFEW_VIOLATION_RECALL,
@@ -48,6 +51,8 @@ describe('Remand and sentencing service', () => {
         ual: 6,
         ualString: '6 days',
         location: 'HMI',
+        source: 'DPS',
+        revocationDate: '2024-12-18',
       }
 
       fakeApi.get(`/recall/person/${prisonerId}`).reply(200, [earlyApiRecall, latestApiRecall])
