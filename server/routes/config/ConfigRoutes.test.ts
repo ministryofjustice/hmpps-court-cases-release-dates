@@ -107,7 +107,7 @@ describe('Compare routes tests', () => {
 
   it('POST /config for unchecking a checked prison results in call to the api to disable it', () => {
     prisonerService.getActivePrisons.mockResolvedValue(allPrisons)
-    prisonerService.getPrisonsWithServiceCode.mockResolvedValue([{ prisonId: 'BFI', prison: 'Bedford (HMP)' }])
+    prisonerService.getPrisonsWithServiceCode.mockResolvedValue([{ agencyId: 'BFI', name: 'Bedford (HMP)' }])
 
     return request(app)
       .post('/config')
@@ -122,7 +122,7 @@ describe('Compare routes tests', () => {
 
   it('POST /config creates the correct update url for the update banner', () => {
     prisonerService.getActivePrisons.mockResolvedValue(allPrisons)
-    prisonerService.getPrisonsWithServiceCode.mockResolvedValue([{ prisonId: 'BFI', prison: 'Bedford (HMP)' }])
+    prisonerService.getPrisonsWithServiceCode.mockResolvedValue([{ agencyId: 'BFI', name: 'Bedford (HMP)' }])
 
     return request(app)
       .post('/config')
