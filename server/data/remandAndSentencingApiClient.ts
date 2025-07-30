@@ -14,7 +14,6 @@ export default class RemandAndSentencingApiClient {
   }
 
   async getAllRecalls(prisonerId: string): Promise<ApiRecall[]> {
-    console.log('--------', `getAllRecalls`)
     return this.restClient.get({
       path: `/recall/person/${prisonerId}`,
     }) as Promise<ApiRecall[]>

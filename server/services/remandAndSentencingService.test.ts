@@ -43,7 +43,6 @@ describe('Remand and sentencing service', () => {
       }
 
       const latestRecallCard: Recall = {
-      
         createdAt: '2024-12-18T00:00:00.000Z',
         recallId: 'b-uuid',
         recallDate: new Date('2024-12-18'),
@@ -53,7 +52,7 @@ describe('Remand and sentencing service', () => {
         ualString: '6 days',
         location: 'HMI',
         source: 'DPS',
-        revocationDate: '2024-12-18'
+        revocationDate: '2024-12-18',
       }
 
       fakeApi.get(`/recall/person/${prisonerId}`).reply(200, [earlyApiRecall, latestApiRecall])
