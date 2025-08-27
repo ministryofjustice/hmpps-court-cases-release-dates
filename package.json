@@ -99,7 +99,7 @@
     ]
   },
   "dependencies": {
-    "@microsoft/applicationinsights-clickanalytics-js": "^3.3.5",
+    "@microsoft/applicationinsights-clickanalytics-js": "^3.3.9",
     "@microsoft/applicationinsights-web": "^3.3.5",
     "@ministryofjustice/frontend": "^4.0.1",
     "@ministryofjustice/hmpps-court-cases-release-dates-design": "^4.4.5",
