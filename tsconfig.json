@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "es2018",
+    "target": "ES2022",
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./dist",
@@ -15,6 +15,7 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "experimentalDecorators": true,
+    "isolatedModules": true,
     "typeRoots": ["./server/@types", "./node_modules/@types"]
   },
   "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "cypress.config.ts"],

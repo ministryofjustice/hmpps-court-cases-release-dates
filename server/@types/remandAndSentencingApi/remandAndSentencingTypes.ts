@@ -50,4 +50,5 @@ function getRecallType(code: string): RecallType {
   return Object.values(RecallTypes).find(it => it.code === code)
 }
 
-export { RecallTypes, RecallType, getRecallType }
+export { RecallTypes, getRecallType }
+export type { RecallType }
