@@ -19,7 +19,9 @@ export default class RemandAndSentencingApiClient {
     }) as Promise<ApiRecall[]>
   }
 
-  async findImmigrationDetentionByPerson(person: string): Promise<ImmigrationDetention[]> {
-    return this.restClient.get({ path: `/immigration-detention/person/${person}` }) as Promise<ImmigrationDetention[]>
+  async findLatestImmigrationDetentionRecordByPerson(person: string): Promise<ImmigrationDetention> {
+    return this.restClient.get({
+      path: `/immigration-detention/person/${person}/latest`,
+    }) as Promise<ImmigrationDetention>
   }
 }

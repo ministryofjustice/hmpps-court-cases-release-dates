@@ -3,18 +3,6 @@ import { ImmigrationDetention } from '../@types/remandAndSentencingApi/remandAnd
 import RemandAndSentencingApiClient from './remandAndSentencingApiClient'
 import config from '../config'
 
-const immigrationDetentionUuid = '123e4567-e89b-12d3-a456-426614174000'
-
-const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
-  createdAt: '2025-11-03T08:06:37.123Z',
-  recordDate: '2022-06-22',
-  source: 'DPS',
-  prisonerId: 'ABC123',
-  immigrationDetentionUuid,
-  immigrationDetentionRecordType: 'IS91',
-  homeOfficeReferenceNumber: 'ABC123',
-}
-
 const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   source: 'DPS',
   immigrationDetentionUuid: 'IMM-DET-UUID-12345',
@@ -42,11 +30,11 @@ describe('remandAndSentencingApiClient', () => {
 
   it('Test getting immigration detention details for an prisoner', async () => {
     fakeRemandAndSentencingApiClient
-      .get(`/immigration-detention/person/ABC123`)
-      .reply(200, [IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT])
+      .get(`/immigration-detention/person/ABC123/latest`)
+      .reply(200, IMMIGRATION_DETENTION_NLI_OBJECT)
 
-    const result = await client.findImmigrationDetentionByPerson('ABC123')
+    const result = await client.findLatestImmigrationDetentionRecordByPerson('ABC123')
 
-    expect(result).toEqual([IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT])
+    expect(result).toEqual(IMMIGRATION_DETENTION_NLI_OBJECT)
   })
 })

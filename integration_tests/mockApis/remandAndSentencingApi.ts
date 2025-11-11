@@ -1,15 +1,15 @@
 import { stubFor } from './wiremock'
 
-const stubGetImmigrationDetentionByPrisoner = () =>
+const stubGetLatestImmigrationDetentionRecordByPrisoner = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/ras-api/immigration-detention/person/A1234AB',
+      urlPattern: '/ras-api/immigration-detention/person/A1234AB/latest',
     },
     response: {
-      status: 200,
+      status: 404,
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: [],
+      jsonBody: {},
     },
   })
 
@@ -25,6 +25,6 @@ const ping = () =>
   })
 
 export default {
-  stubGetImmigrationDetentionByPrisoner,
+  stubGetLatestImmigrationDetentionRecordByPrisoner,
   stubRASApiPing: ping,
 }

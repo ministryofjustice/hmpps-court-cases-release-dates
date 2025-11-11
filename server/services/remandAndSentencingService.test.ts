@@ -30,6 +30,7 @@ describe('Remand and sentencing service', () => {
   describe('Latest calc card', () => {
     it('Should get all recalls and map to latest recall', async () => {
       const earlyApiRecall: ApiRecall = {
+        isManual: false,
         createdAt: '2024-12-18T00:00:00.000Z',
         createdByUsername: 'JBLOGGS',
         prisonerId: 'A1234AB',
@@ -71,6 +72,7 @@ describe('Remand and sentencing service', () => {
       }
 
       const latestApiRecall: ApiRecall = {
+        isManual: false,
         createdAt: '2024-12-18T00:00:00.000Z',
         createdByUsername: 'JBLOGGS',
         prisonerId: 'A1234AB',
@@ -136,16 +138,6 @@ describe('Remand and sentencing service', () => {
     })
 
     it('GetImmigrationDetentionByPrisoner', async () => {
-      const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
-        createdAt: '2025-11-03T08:06:37.123Z',
-        recordDate: '2022-06-22',
-        source: 'DPS',
-        prisonerId,
-        immigrationDetentionUuid: 'UMM-DET-UUID-1234',
-        immigrationDetentionRecordType: 'IS91',
-        homeOfficeReferenceNumber: 'ABC123',
-      }
-
       const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
         source: 'DPS',
         immigrationDetentionUuid: 'IMM-DET-UUID-12345',
@@ -157,16 +149,14 @@ describe('Remand and sentencing service', () => {
         noLongerOfInterestComment: 'Confirmed not of interest',
         createdAt: '2025-11-03T08:06:37.123Z',
       }
-      fakeApi
-        .get(`/immigration-detention/person/${prisonerId}`)
-        .reply(200, [IMMIGRATION_DETENTION_NLI_OBJECT, IMMIGRATION_DETENTION_OBJECT])
+      fakeApi.get(`/immigration-detention/person/${prisonerId}/latest`).reply(200, IMMIGRATION_DETENTION_NLI_OBJECT)
 
-      const result = await remandAndSentencingService.getImmigrationDetentionRecordsForPrisoner(
+      const result = await remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner(
         prisonerId,
         'test-username',
       )
 
-      expect(result).toEqual([IMMIGRATION_DETENTION_NLI_OBJECT, IMMIGRATION_DETENTION_OBJECT])
+      expect(result).toEqual(IMMIGRATION_DETENTION_NLI_OBJECT)
     })
   })
 })

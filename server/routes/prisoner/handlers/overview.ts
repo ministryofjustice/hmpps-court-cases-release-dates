@@ -25,10 +25,11 @@ export default class OverviewRoutes {
     const isPrisonerOutside = prisoner.prisonId === 'OUT'
     const isPrisonerBeingTransferred = prisoner.prisonId === 'TRN'
     const showAdjustments = !(hasInactiveBookingAccess && (isPrisonerOutside || isPrisonerBeingTransferred))
-    const immigrationRecords = await this.remandAndSentencingService.getImmigrationDetentionRecordsForPrisoner(
-      prisoner.prisonerNumber,
-      username,
-    )
+    const latestImmigrationRecord =
+      await this.remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner(
+        prisoner.prisonerNumber,
+        username,
+      )
 
     const startOfSentenceEnvelope = await this.prisonerService.getStartOfSentenceEnvelope(bookingId, token)
     const [nextCourtEvent, hasActiveSentences, serviceDefinitions] = await Promise.all([
@@ -60,7 +61,7 @@ export default class OverviewRoutes {
     }
     const addImmigrationDetentionUrl = `${config.applications.immigrationDetention.url}/${prisoner.prisonerNumber}/immigration-detention/add`
     let overviewImmigrationDetentionUrl
-    if (immigrationRecords.length > 0) {
+    if (latestImmigrationRecord) {
       overviewImmigrationDetentionUrl = `${config.applications.immigrationDetention.url}/${prisoner.prisonerNumber}/immigration-detention/overview`
     }
 
@@ -77,19 +78,15 @@ export default class OverviewRoutes {
       showRecalls: hasRasAccess,
       latestRecall,
       anyThingsToDo,
-      immigrationDetentionMessage: this.getImmigrationDetentionMessage(immigrationRecords),
+      immigrationDetentionMessage: this.getImmigrationDetentionMessage(latestImmigrationRecord),
       addImmigrationDetentionUrl,
       overviewImmigrationDetentionUrl,
     })
   }
 
-  private getImmigrationDetentionMessage(immigrationDetentionRecords: ImmigrationDetention[]) {
+  private getImmigrationDetentionMessage(latestRecord: ImmigrationDetention) {
     let message = ''
-    if (immigrationDetentionRecords.length > 0) {
-      const sortedRecords = immigrationDetentionRecords.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )
-      const [latestRecord] = sortedRecords
+    if (latestRecord) {
       const formattedCreatedAt = dayjs(latestRecord.createdAt).format('D MMMM YYYY')
       const recordedStr = `recorded on ${formattedCreatedAt}`
 
