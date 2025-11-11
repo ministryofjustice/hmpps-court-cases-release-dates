@@ -175,6 +175,10 @@ export default {
     courtCasesReleaseDates: {
       url: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
     },
+    immigrationDetention: {
+      url: get('IMMIGRATION_DETENTION_URL', 'http://localhost:9082', requiredInProduction),
+      enabled: get('IMMIGRATION_DETENTION_ENABLED', false) === 'true',
+    },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),

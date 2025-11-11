@@ -1,8 +1,28 @@
 import { addDays, compareDesc, differenceInCalendarDays, isEqual, parse } from 'date-fns'
 import RemandAndSentencingApiClient from '../data/remandAndSentencingApiClient'
-import { ApiRecall, getRecallType, Recall } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import {
+  ApiRecall,
+  getRecallType,
+  ImmigrationDetention,
+  Recall,
+} from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import { HmppsAuthClient } from '../data'
 
 export default class RemandAndSentencingService {
+  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+
+  public async getImmigrationDetentionRecordsForPrisoner(
+    prisonerId: string,
+    username: string,
+  ): Promise<ImmigrationDetention[]> {
+    const client = new RemandAndSentencingApiClient(await this.getSystemClientToken(username))
+    return client.findImmigrationDetentionByPerson(prisonerId)
+  }
+
+  private async getSystemClientToken(username: string): Promise<string> {
+    return this.hmppsAuthClient.getSystemClientToken(username)
+  }
+
   async getMostRecentRecall(nomsId: string, token: string): Promise<Recall> {
     const client = new RemandAndSentencingApiClient(token)
     const allApiRecalls = await client.getAllRecalls(nomsId)
