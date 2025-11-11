@@ -31,6 +31,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.appInsightsApplicationName = applicationInfo.applicationName
   app.locals.buildNumber = config.buildNumber
   app.locals.calculateReleaseDatesUiUrl = config.applications.calculateReleaseDates.url
+  app.locals.immigrationDetentionEnabled = config.applications.immigrationDetention.enabled
 
   if (config.environmentName === 'LOCAL') {
     app.locals.environment = 'local'

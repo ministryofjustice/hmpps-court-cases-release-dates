@@ -1,5 +1,7 @@
 import { components } from './index'
 
+export type ImmigrationDetention = components['schemas']['ImmigrationDetention']
+
 export type ApiRecall = components['schemas']['Recall']
 
 type RecallType = { code: string; description: string }

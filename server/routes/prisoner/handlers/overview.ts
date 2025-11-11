@@ -1,10 +1,13 @@
 import { Request, Response } from 'express'
+import dayjs from 'dayjs'
 import PrisonerService from '../../../services/prisonerService'
 import AdjustmentsService from '../../../services/adjustmentsService'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import PrisonService from '../../../services/prisonService'
+import { ImmigrationDetention } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import config from '../../../config'
 
 export default class OverviewRoutes {
   constructor(
@@ -22,6 +25,11 @@ export default class OverviewRoutes {
     const isPrisonerOutside = prisoner.prisonId === 'OUT'
     const isPrisonerBeingTransferred = prisoner.prisonId === 'TRN'
     const showAdjustments = !(hasInactiveBookingAccess && (isPrisonerOutside || isPrisonerBeingTransferred))
+    const latestImmigrationRecord =
+      await this.remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner(
+        prisoner.prisonerNumber,
+        username,
+      )
 
     const startOfSentenceEnvelope = await this.prisonerService.getStartOfSentenceEnvelope(bookingId, token)
     const [nextCourtEvent, hasActiveSentences, serviceDefinitions] = await Promise.all([
@@ -51,6 +59,11 @@ export default class OverviewRoutes {
     if (latestRecall) {
       latestRecall.location = await this.prisonService.getPrisonName(latestRecall.location, username)
     }
+    const addImmigrationDetentionUrl = `${config.applications.immigrationDetention.url}/${prisoner.prisonerNumber}/immigration-detention/add`
+    let overviewImmigrationDetentionUrl
+    if (latestImmigrationRecord) {
+      overviewImmigrationDetentionUrl = `${config.applications.immigrationDetention.url}/${prisoner.prisonerNumber}/immigration-detention/overview`
+    }
 
     return res.render('pages/prisoner/overview', {
       prisoner,
@@ -65,7 +78,29 @@ export default class OverviewRoutes {
       showRecalls: hasRasAccess,
       latestRecall,
       anyThingsToDo,
+      immigrationDetentionMessage: this.getImmigrationDetentionMessage(latestImmigrationRecord),
+      addImmigrationDetentionUrl,
+      overviewImmigrationDetentionUrl,
     })
+  }
+
+  private getImmigrationDetentionMessage(latestRecord: ImmigrationDetention) {
+    let message = ''
+    if (latestRecord) {
+      const formattedCreatedAt = dayjs(latestRecord.createdAt).format('D MMMM YYYY')
+      const recordedStr = `recorded on ${formattedCreatedAt}`
+
+      if (latestRecord.immigrationDetentionRecordType === 'IS91') {
+        message = `IS91 Detention Authority ${recordedStr}`
+      } else if (latestRecord.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
+        message = `Deportation order ${recordedStr}`
+      } else {
+        message = `No longer of interest to Home Office ${recordedStr}`
+      }
+    } else {
+      message = `There are no immigration documents recorded.`
+    }
+    return message
   }
 
   private async getAggregatedAdjustments(prisoner: Prisoner, startOfSentenceEnvelope: Date, username: string) {

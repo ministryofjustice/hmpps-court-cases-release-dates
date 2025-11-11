@@ -11,16 +11,21 @@ import AdjustmentsService from '../../../services/adjustmentsService'
 import { Adjustment } from '../../../@types/adjustmentsApi/types'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
 import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesApi/types'
+import RemandAndSentencingService from '../../../services/remandAndSentencingService'
+import config from '../../../config'
+import { ImmigrationDetention } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/prisonerSearchService')
 jest.mock('../../../services/adjustmentsService')
 jest.mock('../../../services/calculateReleaseDatesService')
+jest.mock('../../../services/remandAndSentencingService')
 
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 const adjustmentsService = new AdjustmentsService(null) as jest.Mocked<AdjustmentsService>
 const calculateReleaseDatesService = new CalculateReleaseDatesService() as jest.Mocked<CalculateReleaseDatesService>
+const remandAndSentencingService = new RemandAndSentencingService(null) as jest.Mocked<RemandAndSentencingService>
 
 let app: Express
 
@@ -31,6 +36,7 @@ beforeEach(() => {
       prisonerSearchService,
       adjustmentsService,
       calculateReleaseDatesService,
+      remandAndSentencingService,
     },
     userSupplier: () => {
       return { ...user, hasAdjustmentsAccess: true }
@@ -92,11 +98,148 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
         .expect(res => {
+          expect(res.text).toContain('Overview')
+          expect(res.text).toContain('Adjustments')
+          expect(res.text).toContain('Release dates and calculations')
+        })
+    })
+
+    it('should render immigration detention section when there is a record', () => {
+      app.locals.immigrationDetentionEnabled = true
+      config.applications.immigrationDetention.url = 'http://localhost:9005/immigration-detention'
+
+      const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
+        source: 'DPS',
+        immigrationDetentionUuid: 'IMM-DET-UUID-12345',
+        prisonerId: 'A12345B',
+        immigrationDetentionRecordType: 'NO_LONGER_OF_INTEREST',
+        recordDate: '2022-06-22',
+        homeOfficeReferenceNumber: 'A12345B',
+        noLongerOfInterestReason: 'OTHER_REASON',
+        noLongerOfInterestComment: 'Confirmed not of interest',
+        createdAt: '2025-11-03T08:06:37.123Z',
+      }
+
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.hasActiveSentences.mockResolvedValue(false)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(
+        IMMIGRATION_DETENTION_NLI_OBJECT,
+      )
+
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+
+          const immigrationDetentionTitle = $('[data-qa=immigration-detention-header]').first()
+          expect(immigrationDetentionTitle.text().trim()).toStrictEqual('Immigration documents')
+
+          const addImmigrationDetentionLink = $('[data-qa=immigration-detention-record-link]').first()
+          expect(addImmigrationDetentionLink.attr('href')).toStrictEqual(
+            'http://localhost:9005/immigration-detention/A12345B/immigration-detention/add',
+          )
+
+          const immigrationDetentionMsg = $('[data-qa=immigration-detention-message]').first()
+          expect(immigrationDetentionMsg.text().trim()).toStrictEqual(
+            'No longer of interest to Home Office recorded on 3 November 2025',
+          )
+
+          const overviewImmigrationDetentionLink = $('[data-qa=immigration-detention-overview-link]')
+          expect(overviewImmigrationDetentionLink.attr('href')).toStrictEqual(
+            'http://localhost:9005/immigration-detention/A12345B/immigration-detention/overview',
+          )
+
+          expect(res.text).toContain('Overview')
+          expect(res.text).toContain('Adjustments')
+          expect(res.text).toContain('Release dates and calculations')
+        })
+    })
+
+    it('should render immigration detention section', () => {
+      app.locals.immigrationDetentionEnabled = true
+      config.applications.immigrationDetention.url = 'http://localhost:9005/immigration-detention'
+
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.hasActiveSentences.mockResolvedValue(false)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
+
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+
+          const immigrationDetentionTitle = $('[data-qa=immigration-detention-header]').first()
+          expect(immigrationDetentionTitle.text().trim()).toStrictEqual('Immigration documents')
+
+          const addImmigrationDetentionLink = $('[data-qa=immigration-detention-record-link]').first()
+          expect(addImmigrationDetentionLink.attr('href')).toStrictEqual(
+            'http://localhost:9005/immigration-detention/A12345B/immigration-detention/add',
+          )
+
+          const immigrationDetentionMsg = $('[data-qa=immigration-detention-message]').first()
+          expect(immigrationDetentionMsg.text().trim()).toStrictEqual('There are no immigration documents recorded.')
+
+          const overviewImmigrationDetentionLink = $('[data-qa=immigration-detention-overview-link]')
+          expect(overviewImmigrationDetentionLink.length).toBe(0)
+
+          expect(res.text).toContain('Overview')
+          expect(res.text).toContain('Adjustments')
+          expect(res.text).toContain('Release dates and calculations')
+        })
+    })
+
+    it('should not render immigration detention section', () => {
+      app.locals.immigrationDetentionEnabled = false
+      config.applications.immigrationDetention.url = 'http://localhost:9005/immigration-detention'
+
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.hasActiveSentences.mockResolvedValue(false)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
+
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+
+          const immigrationDetentionTitle = $('[data-qa=immigration-detention-header]')
+          expect(immigrationDetentionTitle.length).toBe(0)
+
+          const addImmigrationDetentionLink = $('[data-qa=immigration-detention-record-link]')
+          expect(addImmigrationDetentionLink.length).toBe(0)
+
+          const overviewImmigrationDetentionLink = $('[data-qa=immigration-detention-overview-link]')
+          expect(overviewImmigrationDetentionLink.length).toBe(0)
+
+          const immigrationDetentionMsg = $('[data-qa=immigration-detention-message]')
+          expect(immigrationDetentionMsg.length).toBe(0)
+
           expect(res.text).toContain('Overview')
           expect(res.text).toContain('Adjustments')
           expect(res.text).toContain('Release dates and calculations')
@@ -110,6 +253,7 @@ describe('Route Handlers - Overview', () => {
           prisonerSearchService,
           adjustmentsService,
           calculateReleaseDatesService,
+          remandAndSentencingService,
         },
         userSupplier: () => {
           return { ...user, hasInactiveBookingAccess: true, hasAdjustmentsAccess: true }
@@ -125,6 +269,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -142,6 +287,7 @@ describe('Route Handlers - Overview', () => {
           prisonerSearchService,
           adjustmentsService,
           calculateReleaseDatesService,
+          remandAndSentencingService,
         },
         userSupplier: () => {
           return { ...user, hasInactiveBookingAccess: true, hasAdjustmentsAccess: true }
@@ -157,6 +303,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -214,6 +361,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -243,6 +391,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -261,6 +410,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -284,6 +434,7 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
@@ -344,6 +495,7 @@ describe('Route Handlers - Overview', () => {
       ])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
@@ -385,6 +537,7 @@ describe('Route Handlers - Overview', () => {
       ])
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
@@ -408,6 +561,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue(undefined)
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -436,6 +590,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue(undefined)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -477,6 +632,7 @@ describe('Route Handlers - Overview', () => {
       })
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -519,6 +675,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.hasIndeterminateSentences.mockResolvedValue(true)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -546,6 +703,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.hasIndeterminateSentences.mockResolvedValue(true)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -574,6 +732,7 @@ describe('Route Handlers - Overview', () => {
       calculateReleaseDatesService.hasIndeterminateSentences.mockResolvedValue(false)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -616,6 +775,7 @@ describe('Route Handlers - Overview', () => {
           prisonerSearchService,
           adjustmentsService,
           calculateReleaseDatesService,
+          remandAndSentencingService,
         },
         userSupplier: () => {
           return { ...user, hasReadOnlyNomisConfigAccess: true, hasAdjustmentsAccess: true }
@@ -631,6 +791,8 @@ describe('Route Handlers - Overview', () => {
       prisonerService.hasActiveSentences.mockResolvedValue(false)
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
+
       return request(app)
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
