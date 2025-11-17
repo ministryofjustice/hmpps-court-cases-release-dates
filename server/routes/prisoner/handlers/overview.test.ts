@@ -39,7 +39,7 @@ beforeEach(() => {
       remandAndSentencingService,
     },
     userSupplier: () => {
-      return { ...user, hasAdjustmentsAccess: true }
+      return { ...user, hasAdjustmentsAccess: true, hasRasAccess: true }
     },
   })
 })
@@ -799,6 +799,29 @@ describe('Route Handlers - Overview', () => {
         .expect(res => {
           expect(res.text).toContain('Configuration')
           expect(res.text).toContain('<a href="/config">Configure Nomis read only screens</a>')
+        })
+    })
+  })
+
+  describe('Recalls section', () => {
+    it('should set the correct href for the "Record a recall" button when no recalls exist', () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          const $ = cheerio.load(res.text)
+
+          const recordRecallButton = $('[data-qa=create-new-recall-btn]').first()
+          expect(recordRecallButton.attr('href')).toEqual(
+            `${config.applications.recordARecall.url}/person/A12345B/recall/create/start?entrypoint=ccards`,
+          )
         })
     })
   })
