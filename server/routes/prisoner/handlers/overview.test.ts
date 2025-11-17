@@ -818,7 +818,7 @@ describe('Route Handlers - Overview', () => {
         .expect(res => {
           const $ = cheerio.load(res.text)
 
-          const recordRecallButton = $('[data-qa=create-new-recall-btn]').first()
+          const recordRecallButton = $('[data-qa=create-new-recall-btn]')
           expect(recordRecallButton.attr('href')).toEqual(
             `${config.applications.recordARecall.url}/person/A12345B/recall/create/start?entrypoint=ccards`,
           )
