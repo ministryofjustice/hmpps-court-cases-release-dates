@@ -52,13 +52,32 @@ export default class OverviewRoutes {
         : false
 
     const anyThingsToDo = Object.values(serviceDefinitions.services).some(it => it.thingsToDo.count > 0)
-    const latestRecall = hasRasAccess
-      ? await this.remandAndSentencingService.getMostRecentRecall(prisoner.prisonerNumber, token)
-      : null
+   let latestRecall = null
 
-    if (latestRecall) {
-      latestRecall.location = await this.prisonService.getPrisonName(latestRecall.location, username)
-    }
+if (hasRasAccess) {
+  const summary = await this.remandAndSentencingService.getMostRecentRecall(
+    prisoner.prisonerNumber,
+    token,
+  )
+
+  if (summary) {
+    // Fetch full details (includes courtCases)
+    latestRecall = await this.remandAndSentencingService.getRecallWithDetails(
+      summary.recallId,
+      username,
+    )
+
+    // Add location if available
+ if (latestRecall?.createdByPrison) {
+  (latestRecall as any).locationName = await this.prisonService.getPrisonName(
+    latestRecall.createdByPrison,
+    username,
+  )
+}
+  }
+}
+
+
     const addImmigrationDetentionUrl = `${config.applications.immigrationDetention.url}/${prisoner.prisonerNumber}/immigration-detention/add`
     let overviewImmigrationDetentionUrl
     if (latestImmigrationRecord) {

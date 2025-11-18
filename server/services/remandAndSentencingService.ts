@@ -52,6 +52,7 @@ export default class RemandAndSentencingService {
           returnToCustodyDate: mostRecent.returnToCustodyDate ? new Date(mostRecent.returnToCustodyDate) : null,
           recallType: getRecallType(mostRecent.recallType),
           source: mostRecent.source,
+          // courtCases: mostRecent.courtCases,
           // TODO UAL should be stored on the recall in RaS not calculated on the fly
           ual,
           ualString: `${ual} day${ual === 1 ? '' : 's'}`,
@@ -59,6 +60,13 @@ export default class RemandAndSentencingService {
         }
       : undefined
   }
+
+  async getRecallWithDetails(recallId: string, username: string) {
+    const token = await this.getSystemClientToken(username)
+    const client = new RemandAndSentencingApiClient(token)
+    return client.getRecallById(recallId)
+  } 
+
 
   private calculateUal(
     recallDate: string | Date | null | undefined,

@@ -24,4 +24,9 @@ export default class RemandAndSentencingApiClient {
       path: `/immigration-detention/person/${person}/latest`,
     }) as Promise<ImmigrationDetention>
   }
+
+async getRecallById(recallId: string): Promise<ApiRecall> {
+    return this.restClient.get({ path: `/recalls/${recallId}` })
+  }
+
 }

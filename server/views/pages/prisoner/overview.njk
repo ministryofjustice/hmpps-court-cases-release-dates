@@ -112,9 +112,13 @@
 
         {{ recallCard(latestRecall) }}
 
-        <p class="govuk-body govuk-!-margin-top-4">
-          <a href="{{ recallsUiUrl }}/person/{{ prisoner.prisonerNumber }}">View all recalls</a>
-        </p>
+      {{ govukButton({
+        classes: "govuk-button--secondary",
+        text: "Record a recall",
+        preventDoubleClick: true,
+        href: "{{ recallsUiUrl }}/person/{{ prisoner.prisonerNumber }}",
+        attributes: { 'data-qa': 'create-new-recall-btn' }
+      }) }}
 
       {% else %}
           <p> There are no recalls recorded.</p>
@@ -205,11 +209,9 @@
         <li class="govuk-summary-card__action">
           <span class="moj-badge moj-badge--grey govuk-!-margin-bottom-1 govuk-!-margin-left-1" data-qa="nomis-badge">NOMIS</span>
         </li>
-        {% else %}
-          <li class="govuk-summary-card__action">
-            <a class="govuk-link" href={{ recallsUiUrl + '/person/' + prisoner.prisonerNumber + '/edit-recall/' + recall.recallId + '?entrypoint=ccards' }}>Edit<span class="govuk-visually-hidden"> recall recorded on {{ recall.recallDate | date }}</span></a>
-          </li>
         {% endif %}
+          <li class="govuk-summary-card__action"><span class="govuk-visually-hidden"> recall recorded on {{ recall.recallDate | date }}</span>
+        </li>
       </ul>
 
     </div>
@@ -245,6 +247,72 @@
       {% endif %}
         </div>
       </div>
+       {% if recall.courtCases and recall.courtCases.length %}
+      <div class="govuk-grid-row govuk-!-margin-top-4">
+        <div class="govuk-grid-column-full">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Court cases</h3>
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text" data-qa="recall-{{ recall.recallUuid }}-court-case-details">
+              Court cases ({{ recall.courtCases.length }})
+            </span>
+            </summary>
+            <div class="govuk-details__text govuk-!-margin-top-0" style="width: 100%; max-width: none;">
+              {% for courtCase in recall.courtCases %}
+                  {% set courtCaseIndex = loop.index %}
+                  {% if courtCase.courtCaseReference or courtCase.courtName or courtCase.courtCaseDate %}
+                    <h3 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-3"  data-qa="recall-{{ recall.recallUuid  }}-court-case-heading-{{ courtCaseIndex }}">
+                      {% if courtCase.courtCaseReference %}
+                        {{ courtCase.courtCaseReference }}{% if courtCase.courtName %} at {{ courtCase.courtName }}{% endif %}{% if courtCase.courtCaseDate %} on {{ courtCase.courtCaseDate | formatDate('DD/MM/YYYY') }}{% endif %}
+                        {% elif courtCase.courtName %}
+                        Case held at {{ courtCase.courtName }}{% if courtCase.courtCaseDate %} on {{ courtCase.courtCaseDate | formatDate('DD/MM/YYYY') }}{% endif %}
+                        {% elif courtCase.courtCaseDate %}
+                        Case on {{ courtCase.courtCaseDate | formatDate('DD/MM/YYYY') }}
+                      {% endif %}
+                    </h3>
+                  {% endif %}
+
+                  {% for sentence in courtCase.sentences %}
+                    <div class="govuk-!-margin-top-2 govuk-!-margin-bottom-4"  data-qa="recall-{{ recall.recallUuid  }}-court-case-{{ courtCaseIndex }}-sentences-{{ loop.index }}">
+                      {% set offenceStartDate = sentence.offenceStartDate | formatDate('DD/MM/YYYY') if sentence.offenceStartDate else 'Not entered' %}
+                      {% set offenceEndDate = sentence.offenceEndDate | formatDate('DD/MM/YYYY') if sentence.offenceEndDate else null %}
+                      {% set sentenceDate = sentence.sentenceDate | formatDate('DD/MM/YYYY') if sentence.sentenceDate else 'Not entered' %}
+                      {# Determine numeric values for count and line number#}
+                      {% if sentence.countNumber and sentence.countNumber != '-1' %}
+                        {% set countNumberWithText = sentence.countNumber %}
+                        {% set lineNumberWithText = null %}
+                      {% elseif not sentence.countNumber %}
+                        {% set countNumberWithText = null %}
+                        {% set lineNumberWithText = sentence.lineNumber %}
+                      {% else %}
+                        {# countNumber is '-1' → show neither#}
+                        {% set countNumberWithText = null %}
+                        {% set lineNumberWithText = null %}
+                      {% endif %}
+
+                      {{ offenceCard({
+                        countNumber: countNumberWithText,
+                        lineNumber: lineNumberWithText,
+                        offenceCode: sentence.offenceCode | default('Not entered'),
+                        offenceName: sentence.offenceDescription | default('Offence description not available'),
+                        offenceStartDate: offenceStartDate,
+                        offenceEndDate: offenceEndDate,
+                        hideOutcome: true,
+                        periodLengths: (sentence.periodLengths | default([])) | periodLengthsToSentenceLengths,
+                        sentenceServeType: sentence.sentenceServeType | default(null),
+                        sentenceType: sentence.sentenceTypeDescription | default('Not entered'),
+                        sentenceDate: sentenceDate,
+                        isSentenced: true,
+                        detailsClasses: 'govuk-!-padding-4 offence-card-for-sentence-' + sentence.sentenceUiid
+                      }) }}
+                    </div>
+                {% endfor %}
+              {% endfor %}
+            </div>
+          </details>
+        </div>
+      </div>
+    {% endif %}
     </div>
   </div>
 {% endmacro %}
