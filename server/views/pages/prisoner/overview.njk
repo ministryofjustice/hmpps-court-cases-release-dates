@@ -205,10 +205,6 @@
         <li class="govuk-summary-card__action">
           <span class="moj-badge moj-badge--grey govuk-!-margin-bottom-1 govuk-!-margin-left-1" data-qa="nomis-badge">NOMIS</span>
         </li>
-        {% else %}
-          <li class="govuk-summary-card__action">
-            <a class="govuk-link" href={{ recallsUiUrl + '/person/' + prisoner.prisonerNumber + '/edit-recall/' + recall.recallId + '?entrypoint=ccards' }}>Edit<span class="govuk-visually-hidden"> recall recorded on {{ recall.recallDate | date }}</span></a>
-          </li>
         {% endif %}
       </ul>
 
