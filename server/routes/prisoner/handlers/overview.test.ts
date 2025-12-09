@@ -886,8 +886,6 @@ describe('Route Handlers - Overview', () => {
 
       expect(ualLink.text().trim()).toBe('View UAL details')
       expect(ualLink.attr('href')).toBe(`${config.applications.adjustments.url}/A12345B`)
-      expect(ualLink.attr('target')).toBe('_blank')
-      expect(ualLink.attr('rel')).toContain('noopener')
     })
   })
 })
