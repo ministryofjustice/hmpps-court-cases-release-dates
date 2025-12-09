@@ -819,7 +819,6 @@ describe('Route Handlers - Overview', () => {
       } as Prisoner)
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
-      // no recalls returned by default / in beforeEach
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -842,7 +841,6 @@ describe('Route Handlers - Overview', () => {
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
 
-      // Latest recall from RaS (non-NOMIS) with a numeric UAL
       remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
         source: 'DPS',
         createdAt: '2024-01-01',
