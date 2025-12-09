@@ -13,8 +13,14 @@ import CalculateReleaseDatesService from '../../../services/calculateReleaseDate
 import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import config from '../../../config'
-import { ImmigrationDetention } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import {
+  ImmigrationDetention,
+  Recall,
+  RecallTypes,
+} from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import PrisonService from '../../../services/prisonService'
 
+jest.mock('../../../services/prisonService')
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/prisonerSearchService')
 jest.mock('../../../services/adjustmentsService')
@@ -26,12 +32,14 @@ const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<Pri
 const adjustmentsService = new AdjustmentsService(null) as jest.Mocked<AdjustmentsService>
 const calculateReleaseDatesService = new CalculateReleaseDatesService() as jest.Mocked<CalculateReleaseDatesService>
 const remandAndSentencingService = new RemandAndSentencingService(null) as jest.Mocked<RemandAndSentencingService>
+const prisonService = new PrisonService(null) as jest.Mocked<PrisonService>
 
 let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({
     services: {
+      prisonService,
       prisonerService,
       prisonerSearchService,
       adjustmentsService,
@@ -811,6 +819,7 @@ describe('Route Handlers - Overview', () => {
       } as Prisoner)
       adjustmentsService.getAdjustments.mockResolvedValue([])
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      // no recalls returned by default / in beforeEach
 
       return request(app)
         .get('/prisoner/A12345B/overview')
@@ -823,6 +832,64 @@ describe('Route Handlers - Overview', () => {
             `${config.applications.recordARecall.url}/person/A12345B/recall/create/start?entrypoint=ccards`,
           )
         })
+    })
+
+    it('should display UAL when latest recall has a UAL value and is not from NOMIS', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+
+      // Latest recall from RaS (non-NOMIS) with a numeric UAL
+      remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
+        source: 'DPS',
+        createdAt: '2024-01-01',
+        recallType: RecallTypes.STANDARD_RECALL,
+        location: 'LDS',
+        revocationDate: '2024-01-05',
+        returnToCustodyDate: new Date('2024-01-10'),
+        ual: 5,
+      } as Recall)
+      prisonService.getPrisonName.mockResolvedValue('Leeds')
+
+      const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+      const $ = cheerio.load(res.text)
+
+      const ualValue = $('[data-qa="recall-ual"]').text().trim()
+      expect(ualValue).toBe('5 days')
+    })
+
+    it('should display a "View UAL details" link for NOMIS recalls', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+
+      remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
+        source: 'NOMIS',
+        createdAt: '2024-01-01',
+        recallType: RecallTypes.STANDARD_RECALL,
+        location: 'LDS',
+        revocationDate: '2024-01-05',
+        returnToCustodyDate: new Date('2024-01-10'),
+      } as Recall)
+      prisonService.getPrisonName.mockResolvedValue('Leeds')
+
+      const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+      const $ = cheerio.load(res.text)
+
+      const ualLink = $('[data-qa="recall-ual"] a')
+
+      expect(ualLink.text().trim()).toBe('View UAL details')
+      expect(ualLink.attr('href')).toBe(`${config.applications.adjustments.url}/A12345B`)
+      expect(ualLink.attr('target')).toBe('_blank')
+      expect(ualLink.attr('rel')).toContain('noopener')
     })
   })
 })

@@ -42,7 +42,6 @@ export interface Recall {
   createdAt: string
   returnToCustodyDate: Date
   ual: number
-  ualString: string
   recallType: RecallType
   source: 'NOMIS' | 'DPS'
   location: string
