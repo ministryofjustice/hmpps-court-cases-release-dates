@@ -81,4 +81,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('dateTime', date => `${dayjs(date).format('dddd, DD MMMM YYYY')} at ${dayjs(date).format('HH:mm')}`)
   njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)
   njkEnv.addFilter('hmppsFormatDate', hmppsFormatDate)
+  njkEnv.addFilter('pluralise', (word, number, appender) => (number === 1 ? word : `${word}${appender || 's'}`))
 }

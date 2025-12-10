@@ -82,6 +82,7 @@ describe('Remand and sentencing service', () => {
         returnToCustodyDate: '2024-12-25',
         createdByPrison: 'HMI',
         source: 'DPS',
+        ual: { id: '1', days: 6 },
         courtCases: [
           {
             courtCaseReference: 'case-123',
@@ -120,7 +121,6 @@ describe('Remand and sentencing service', () => {
         recallType: RecallTypes.HDC_CURFEW_VIOLATION_RECALL,
         returnToCustodyDate: new Date('2024-12-25'),
         ual: 6,
-        ualString: '6 days',
         location: 'HMI',
         source: 'DPS',
         revocationDate: '2024-12-18',
