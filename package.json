@@ -102,7 +102,7 @@
     "@ministryofjustice/hmpps-court-cases-release-dates-design": "^4.14.2",
     "@types/lodash": "^4.17.20",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^3.5.0",
+    "applicationinsights": "^2.9.8",
     "body-parser": "^2.2.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
@@ -135,6 +135,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.7.5",

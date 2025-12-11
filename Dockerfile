@@ -43,7 +43,7 @@ RUN apt-get update && \
         rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
-RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
+RUN npm run setup
 
 COPY . .
 RUN npm run build
