@@ -33,7 +33,8 @@
     "generate-calculate-release-dates-api-types": "openapi-typescript https://calculate-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/calculateReleaseDatesApi/index.d.ts",
     "generate-court-cases-release-dates-api-types": "openapi-typescript https://court-cases-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > server/@types/courtCasesReleaseDatesApi/index.d.ts",
     "generate-remand-and-sentencing-api-types": "openapi-typescript https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/remandAndSentencingApi/index.d.ts",
-    "generate-prison-register-api-types": "openapi-typescript https://prison-register-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonRegisterApi/index.d.ts"
+    "generate-prison-register-api-types": "openapi-typescript https://prison-register-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonRegisterApi/index.d.ts",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
     "node": "^22",
