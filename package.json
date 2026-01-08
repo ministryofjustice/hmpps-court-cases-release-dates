@@ -99,7 +99,7 @@
   "dependencies": {
     "@microsoft/applicationinsights-clickanalytics-js": "^3.3.5",
     "@microsoft/applicationinsights-web": "^3.3.5",
-    "@ministryofjustice/frontend": "^6.0.0",
+    "@ministryofjustice/frontend": "^8.0.0",
     "@ministryofjustice/hmpps-court-cases-release-dates-design": "^4.14.2",
     "@types/lodash": "^4.17.20",
     "agentkeepalive": "^4.6.0",
