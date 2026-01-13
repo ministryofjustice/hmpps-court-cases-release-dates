@@ -81,6 +81,7 @@ export default class OverviewRoutes {
       immigrationDetentionMessage: this.getImmigrationDetentionMessage(latestImmigrationRecord),
       addImmigrationDetentionUrl,
       overviewImmigrationDetentionUrl,
+      immigrationDetentionUser: res.locals.user.hasImmigrationDetentionAccess,
     })
   }
 
