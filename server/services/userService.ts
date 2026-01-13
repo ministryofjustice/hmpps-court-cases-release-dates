@@ -10,6 +10,7 @@ export interface UserDetails extends User {
   hasRasAccess: boolean
   hasInactiveBookingAccess: boolean
   hasReadOnlyNomisConfigAccess: boolean
+  hasImmigrationDetentionAccess: boolean
   caseloads: string[]
   caseloadDescriptions: string[]
   caseloadMap: Map<string, string>
@@ -34,6 +35,7 @@ export default class UserService {
       hasRasAccess: this.hasRasAccess(roles),
       hasInactiveBookingAccess: this.hasInactiveBookingAccess(roles),
       hasReadOnlyNomisConfigAccess: this.hasReadOnlyNomisConfigAccess(roles),
+      hasImmigrationDetentionAccess: this.hasImmigrationDetentionAccess(roles),
       caseloads: userCaseloads.map(uc => uc.caseLoadId),
       caseloadDescriptions: userCaseloads.map(uc => uc.description),
       caseloadMap: new Map(userCaseloads.map(uc => [uc.caseLoadId, uc.description])),
@@ -55,5 +57,9 @@ export default class UserService {
 
   hasReadOnlyNomisConfigAccess(roles: string[]): boolean {
     return roles.includes('COURTCASE_RELEASEDATE_SUPPORT')
+  }
+
+  hasImmigrationDetentionAccess(roles: string[]): boolean {
+    return roles.includes('IMMIGRATION_DETENTION_USER') || roles.includes('IMMIGRATION_DETENTION_ADMIN')
   }
 }

@@ -36,16 +36,24 @@ const prisonService = new PrisonService(null) as jest.Mocked<PrisonService>
 
 let app: Express
 
+const defaultServices = {
+  prisonService,
+  prisonerService,
+  prisonerSearchService,
+  adjustmentsService,
+  calculateReleaseDatesService,
+  remandAndSentencingService,
+}
+
+const userWithImmigrationDetentionAccess = {
+  ...user,
+  hasAdjustmentsAccess: true,
+  hasImmigrationDetentionAccess: true,
+}
+
 beforeEach(() => {
   app = appWithAllRoutes({
-    services: {
-      prisonService,
-      prisonerService,
-      prisonerSearchService,
-      adjustmentsService,
-      calculateReleaseDatesService,
-      remandAndSentencingService,
-    },
+    services: defaultServices,
     userSupplier: () => {
       return { ...user, hasAdjustmentsAccess: true, hasRasAccess: true }
     },
@@ -118,7 +126,11 @@ describe('Route Handlers - Overview', () => {
         })
     })
 
-    it('should render immigration detention section when there is a record', () => {
+    it('should render immigration detention section when there is a record and the user has the correct role', () => {
+      app = appWithAllRoutes({
+        services: defaultServices,
+        userSupplier: () => userWithImmigrationDetentionAccess,
+      })
       app.locals.immigrationDetentionEnabled = true
       config.applications.immigrationDetention.url = 'http://localhost:9005/immigration-detention'
 
@@ -176,7 +188,11 @@ describe('Route Handlers - Overview', () => {
         })
     })
 
-    it('should render immigration detention section', () => {
+    it('should render immigration detention section if the user has the correct role', () => {
+      app = appWithAllRoutes({
+        services: defaultServices,
+        userSupplier: () => userWithImmigrationDetentionAccess,
+      })
       app.locals.immigrationDetentionEnabled = true
       config.applications.immigrationDetention.url = 'http://localhost:9005/immigration-detention'
 
@@ -216,7 +232,56 @@ describe('Route Handlers - Overview', () => {
         })
     })
 
-    it('should not render immigration detention section', () => {
+    test.each`
+      immigrationDetentionToggle
+      ${true}
+      ${false}
+    `(
+      'should not render immigration detention section if the user does not have a suitable role',
+      immigrationDetentionToggle => {
+        app.locals.immigrationDetentionEnabled = immigrationDetentionToggle
+        config.applications.immigrationDetention.url = 'http://localhost:9005/immigration-detention'
+
+        prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+          prisonerNumber: 'A12345B',
+          prisonId: 'MDI',
+        } as Prisoner)
+        prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+        adjustmentsService.getAdjustments.mockResolvedValue([])
+        prisonerService.hasActiveSentences.mockResolvedValue(false)
+        prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+        remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
+
+        return request(app)
+          .get('/prisoner/A12345B/overview')
+          .expect('Content-Type', /html/)
+          .expect(res => {
+            const $ = cheerio.load(res.text)
+
+            const immigrationDetentionTitle = $('[data-qa=immigration-detention-header]')
+            expect(immigrationDetentionTitle.length).toBe(0)
+
+            const addImmigrationDetentionLink = $('[data-qa=immigration-detention-record-link]')
+            expect(addImmigrationDetentionLink.length).toBe(0)
+
+            const overviewImmigrationDetentionLink = $('[data-qa=immigration-detention-overview-link]')
+            expect(overviewImmigrationDetentionLink.length).toBe(0)
+
+            const immigrationDetentionMsg = $('[data-qa=immigration-detention-message]')
+            expect(immigrationDetentionMsg.length).toBe(0)
+
+            expect(res.text).toContain('Overview')
+            expect(res.text).toContain('Adjustments')
+            expect(res.text).toContain('Release dates and calculations')
+          })
+      },
+    )
+
+    it('should not render immigration detention section if it is toggle off, even if the user has the role', () => {
+      app = appWithAllRoutes({
+        services: defaultServices,
+        userSupplier: () => userWithImmigrationDetentionAccess,
+      })
       app.locals.immigrationDetentionEnabled = false
       config.applications.immigrationDetention.url = 'http://localhost:9005/immigration-detention'
 
@@ -238,16 +303,6 @@ describe('Route Handlers - Overview', () => {
 
           const immigrationDetentionTitle = $('[data-qa=immigration-detention-header]')
           expect(immigrationDetentionTitle.length).toBe(0)
-
-          const addImmigrationDetentionLink = $('[data-qa=immigration-detention-record-link]')
-          expect(addImmigrationDetentionLink.length).toBe(0)
-
-          const overviewImmigrationDetentionLink = $('[data-qa=immigration-detention-overview-link]')
-          expect(overviewImmigrationDetentionLink.length).toBe(0)
-
-          const immigrationDetentionMsg = $('[data-qa=immigration-detention-message]')
-          expect(immigrationDetentionMsg.length).toBe(0)
-
           expect(res.text).toContain('Overview')
           expect(res.text).toContain('Adjustments')
           expect(res.text).toContain('Release dates and calculations')
@@ -256,13 +311,7 @@ describe('Route Handlers - Overview', () => {
 
     it('displays the "prisoner released" banner when the prisoner is inactive OUT and the user has the required access to view inactive bookings', async () => {
       app = appWithAllRoutes({
-        services: {
-          prisonerService,
-          prisonerSearchService,
-          adjustmentsService,
-          calculateReleaseDatesService,
-          remandAndSentencingService,
-        },
+        services: defaultServices,
         userSupplier: () => {
           return { ...user, hasInactiveBookingAccess: true, hasAdjustmentsAccess: true }
         },
@@ -778,13 +827,7 @@ describe('Route Handlers - Overview', () => {
     })
     it('Config section visible when the user has the correct role', () => {
       app = appWithAllRoutes({
-        services: {
-          prisonerService,
-          prisonerSearchService,
-          adjustmentsService,
-          calculateReleaseDatesService,
-          remandAndSentencingService,
-        },
+        services: defaultServices,
         userSupplier: () => {
           return { ...user, hasReadOnlyNomisConfigAccess: true, hasAdjustmentsAccess: true }
         },
