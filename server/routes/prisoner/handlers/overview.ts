@@ -95,6 +95,8 @@ export default class OverviewRoutes {
         message = `IS91 Detention Authority ${recordedStr}`
       } else if (latestRecord.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
         message = `Deportation order ${recordedStr}`
+      } else if (latestRecord.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+        message = `Immigration bail ${recordedStr}`
       } else {
         message = `No longer of interest to Home Office ${recordedStr}`
       }
