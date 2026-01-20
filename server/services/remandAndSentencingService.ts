@@ -42,6 +42,8 @@ export default class RemandAndSentencingService {
     allApiRecalls.sort((a, b) => compareDesc(a.revocationDate, b.revocationDate))
 
     const mostRecent: ApiRecall = allApiRecalls.find(Boolean)
+
+    // TODO not exactly sure why we've defined our own type for this rather than using the type as per the api, to revisit
     return mostRecent
       ? {
           recallId: mostRecent.recallUuid,
@@ -53,6 +55,7 @@ export default class RemandAndSentencingService {
           source: mostRecent.source,
           ual: mostRecent.ual?.days,
           location: mostRecent.createdByPrison,
+          inPrisonOnRevocationDate: mostRecent.inPrisonOnRevocationDate,
         }
       : undefined
   }

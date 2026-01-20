@@ -222,7 +222,16 @@
           {% endif %}
         </div>
         <div class="govuk-grid-column-one-half">
-          {{ cardInfo('Arrest date',  recall.returnToCustodyDate | date if recall.returnToCustodyDate else 'In prison at recall' ) }}
+          {% set arrestDateDisplay %}
+            {% if recall.inPrisonOnRevocationDate === true %}
+              In prison at recall
+            {% elseif recall.returnToCustodyDate %}
+              {{ recall.returnToCustodyDate | date }}
+            {% else %}
+              Not entered
+            {% endif %}
+          {% endset %}
+          {{ cardInfo('Arrest date', arrestDateDisplay, 'arrest-date') }}
 
           {% set ual = 'None' %}
           {% if isNomisRecall %}

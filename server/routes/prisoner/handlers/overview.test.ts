@@ -930,6 +930,56 @@ describe('Route Handlers - Overview', () => {
       expect(ualLink.text().trim()).toBe('View UAL details')
       expect(ualLink.attr('href')).toBe(`${config.applications.adjustments.url}/A12345B`)
     })
+
+    describe('arrest date display', () => {
+      beforeEach(() => {
+        prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+          prisonerNumber: 'A12345B',
+          prisonId: 'MDI',
+        } as Prisoner)
+        adjustmentsService.getAdjustments.mockResolvedValue([])
+        prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      })
+
+      test.each([
+        {
+          name: 'shows formatted rtc date when returnToCustodyDate exists (inPrison false)',
+          returnToCustodyDate: new Date('2024-01-10'),
+          inPrisonOnRevocationDate: false,
+          expected: '10 January 2024',
+        },
+        {
+          name: 'shows formatted rtc date when returnToCustodyDate exists (inPrison null)',
+          returnToCustodyDate: new Date('2024-01-10'),
+          inPrisonOnRevocationDate: null,
+          expected: '10 January 2024',
+        },
+        {
+          name: 'shows In prison at recall when inPrison true',
+          returnToCustodyDate: null,
+          inPrisonOnRevocationDate: true,
+          expected: 'In prison at recall',
+        },
+        {
+          name: 'shows Not entered when rtc date missing and inPrison false',
+          expected: 'Not entered',
+        },
+      ])('$name', async ({ returnToCustodyDate, inPrisonOnRevocationDate, expected }) => {
+        remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
+          recallType: RecallTypes.STANDARD_RECALL,
+          revocationDate: '2024-01-05',
+          returnToCustodyDate,
+          inPrisonOnRevocationDate,
+        } as Recall)
+
+        const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+        const $ = cheerio.load(res.text)
+        const arrestDate = $('[data-qa="arrest-date"]').text().trim()
+
+        expect(arrestDate).toBe(expected)
+      })
+    })
   })
 })
 

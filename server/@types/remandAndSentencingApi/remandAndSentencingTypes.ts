@@ -35,6 +35,7 @@ const RecallTypes = {
   },
 } as const
 
+// TODO revisit heis.. we could use the types from the RAS api
 export interface Recall {
   recallId: string
   recallDate: Date
@@ -45,6 +46,7 @@ export interface Recall {
   recallType: RecallType
   source: 'NOMIS' | 'DPS'
   location: string
+  inPrisonOnRevocationDate?: boolean
 }
 
 function getRecallType(code: string): RecallType {
