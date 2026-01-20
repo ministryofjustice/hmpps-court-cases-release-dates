@@ -124,6 +124,7 @@ describe('Remand and sentencing service', () => {
         location: 'HMI',
         source: 'DPS',
         revocationDate: '2024-12-18',
+        inPrisonOnRevocationDate: undefined,
       }
 
       fakeApi.get(`/recall/person/${prisonerId}`).reply(200, [earlyApiRecall, latestApiRecall])
