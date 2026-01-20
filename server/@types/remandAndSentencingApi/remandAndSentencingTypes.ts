@@ -33,6 +33,10 @@ const RecallTypes = {
     code: 'IN_HDC',
     description: 'HDC recalled from inability to monitor',
   },
+  FIFTY_SIX_DAY_FIXED_TERM_RECALL: {
+    code: 'FTR_56',
+    description: '56-day fixed term',
+  },
 } as const
 
 // TODO revisit this.. we could use the types from the RAS api
