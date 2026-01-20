@@ -35,7 +35,7 @@ const RecallTypes = {
   },
 } as const
 
-// TODO revisit heis.. we could use the types from the RAS api
+// TODO revisit this.. we could use the types from the RAS api
 export interface Recall {
   recallId: string
   recallDate: Date
