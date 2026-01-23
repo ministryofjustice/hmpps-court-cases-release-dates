@@ -20,16 +20,18 @@ export default class OverviewRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { prisoner } = req
-    const { token, username, hasInactiveBookingAccess, hasReadOnlyNomisConfigAccess, hasRasAccess } = res.locals.user
+    const {
+      token,
+      username,
+      hasInactiveBookingAccess,
+      hasReadOnlyNomisConfigAccess,
+      hasRasAccess,
+      hasImmigrationDetentionAccess,
+    } = res.locals.user
     const bookingId = prisoner.bookingId as unknown as number
     const isPrisonerOutside = prisoner.prisonId === 'OUT'
     const isPrisonerBeingTransferred = prisoner.prisonId === 'TRN'
     const showAdjustments = !(hasInactiveBookingAccess && (isPrisonerOutside || isPrisonerBeingTransferred))
-    const latestImmigrationRecord =
-      await this.remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner(
-        prisoner.prisonerNumber,
-        username,
-      )
 
     const startOfSentenceEnvelope = await this.prisonerService.getStartOfSentenceEnvelope(bookingId, token)
     const [nextCourtEvent, hasActiveSentences, serviceDefinitions] = await Promise.all([
@@ -59,6 +61,13 @@ export default class OverviewRoutes {
     if (latestRecall) {
       latestRecall.location = await this.prisonService.getPrisonName(latestRecall.location, username)
     }
+
+    const latestImmigrationRecord = hasImmigrationDetentionAccess
+      ? await this.remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner(
+          prisoner.prisonerNumber,
+          username,
+        )
+      : null
     const addImmigrationDetentionUrl = `${config.applications.immigrationDetention.url}/${prisoner.prisonerNumber}/immigration-detention/add`
     let overviewImmigrationDetentionUrl
     if (latestImmigrationRecord) {
@@ -88,8 +97,8 @@ export default class OverviewRoutes {
   private getImmigrationDetentionMessage(latestRecord: ImmigrationDetention) {
     let message = ''
     if (latestRecord) {
-      const formattedCreatedAt = dayjs(latestRecord.createdAt).format('D MMMM YYYY')
-      const recordedStr = `recorded on ${formattedCreatedAt}`
+      const formattedRecordDate = dayjs(latestRecord.recordDate).format('D MMMM YYYY')
+      const recordedStr = `dated ${formattedRecordDate}`
 
       if (latestRecord.immigrationDetentionRecordType === 'IS91') {
         message = `IS91 Detention Authority ${recordedStr}`
