@@ -174,7 +174,7 @@ describe('Route Handlers - Overview', () => {
 
           const immigrationDetentionMsg = $('[data-qa=immigration-detention-message]').first()
           expect(immigrationDetentionMsg.text().trim()).toStrictEqual(
-            'No longer of interest to Home Office recorded on 3 November 2025',
+            'No longer of interest to Home Office dated 22 June 2022',
           )
 
           const overviewImmigrationDetentionLink = $('[data-qa=immigration-detention-overview-link]')
