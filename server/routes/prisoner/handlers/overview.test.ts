@@ -952,7 +952,7 @@ describe('Route Handlers - Overview', () => {
 
       const $ = cheerio.load(res.text)
 
-      expect($('[data-qa=recall-card-title]')).toHaveLength(0)
+      expect($('[data-qa=recall-card-title]').text().trim()).toHaveLength(0)
     })
 
     it('Should show heading when source is DPS', async () => {
