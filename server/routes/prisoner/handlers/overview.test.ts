@@ -931,6 +931,54 @@ describe('Route Handlers - Overview', () => {
       expect(ualLink.attr('href')).toBe(`${config.applications.adjustments.url}/A12345B`)
     })
 
+    it('Should not show heading when source is NOMIS', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
+        source: 'NOMIS',
+        createdAt: '2024-01-01',
+        recallType: RecallTypes.STANDARD_RECALL,
+        location: 'LDS',
+        revocationDate: '2024-01-05',
+        returnToCustodyDate: new Date('2024-01-10'),
+      } as Recall)
+      prisonService.getPrisonName.mockResolvedValue('Leeds')
+
+      const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+      const $ = cheerio.load(res.text)
+
+      expect($('[data-qa=recall-card-title]')).toHaveLength(0)
+    })
+
+    it('Should show heading when source is DPS', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
+        source: 'DPS',
+        createdAt: '2024-01-01',
+        recallType: RecallTypes.STANDARD_RECALL,
+        location: 'LDS',
+        revocationDate: '2024-01-05',
+        returnToCustodyDate: new Date('2024-01-10'),
+      } as Recall)
+      prisonService.getPrisonName.mockResolvedValue('Leeds')
+
+      const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+      const $ = cheerio.load(res.text)
+
+      expect($('[data-qa=recall-card-title]').text().trim()).toBe('Recorded on 01 January 2024')
+    })
+
     describe('arrest date display', () => {
       beforeEach(() => {
         prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
