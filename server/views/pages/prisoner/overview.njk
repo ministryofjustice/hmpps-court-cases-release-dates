@@ -199,9 +199,12 @@
 
   <div class="govuk-summary-card govuk-!-margin-bottom-6">
     <div class="govuk-summary-card__title-wrapper">
-      <h2 class="govuk-summary-card__title">
-        Recorded on {{ recall.createdAt | date }}{% if recall.locationName %} at {{ recall.locationName }}{% endif %}
+      <h2 class="govuk-summary-card__title" data-qa="recall-card-title">
+        {% if not isNomisRecall %}
+          Recorded on {{ recall.createdAt | date }}{% if recall.locationName %} at {{ recall.locationName }}{% endif %}
+        {% endif %}
       </h2>
+
       <ul class="govuk-summary-card__actions">
         {% if isNomisRecall %}
           <li class="govuk-summary-card__action">
