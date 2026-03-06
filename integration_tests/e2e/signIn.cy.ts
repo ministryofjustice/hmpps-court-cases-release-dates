@@ -18,6 +18,7 @@ context('Sign In', () => {
     cy.task('stubGetSentencesAndOffences')
     cy.task('stubGetThingsToDo')
     cy.task('stubGetLatestImmigrationDetentionRecordByPrisoner')
+    cy.task('stubComponentsFail')
   })
 
   it('Unauthenticated user directed to auth', () => {

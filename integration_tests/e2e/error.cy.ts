@@ -8,6 +8,7 @@ context('Error', () => {
     cy.task('stubManageUser')
     cy.task('stubGetPrisonerDetails')
     cy.task('stubGetUserDifferentCaseload')
+    cy.task('stubComponents')
   })
 
   it('Must display mini profile on page', () => {
