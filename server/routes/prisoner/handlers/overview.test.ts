@@ -45,6 +45,8 @@ const defaultServices = {
   remandAndSentencingService,
 }
 
+const defaultUser = { ...user, hasAdjustmentsAccess: true, hasRasAccess: true, hasRecallsAccess: true }
+
 const userWithImmigrationDetentionAccess = {
   ...user,
   hasAdjustmentsAccess: true,
@@ -55,7 +57,7 @@ beforeEach(() => {
   app = appWithAllRoutes({
     services: defaultServices,
     userSupplier: () => {
-      return { ...user, hasAdjustmentsAccess: true, hasRasAccess: true }
+      return defaultUser
     },
   })
 })
@@ -977,6 +979,56 @@ describe('Route Handlers - Overview', () => {
       const $ = cheerio.load(res.text)
 
       expect($('[data-qa=recall-card-title]').text().trim()).toBe('Recorded on 01 January 2024')
+    })
+
+    it('should not show view all recalls link when user does not have access to recalls', async () => {
+      app = appWithAllRoutes({
+        services: defaultServices,
+        userSupplier: () => {
+          return { ...defaultUser, hasRecallsAccess: false }
+        },
+      })
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
+        source: 'DPS',
+        createdAt: '2024-01-01',
+        recallType: RecallTypes.STANDARD_RECALL,
+        location: 'LDS',
+        revocationDate: '2024-01-05',
+        returnToCustodyDate: new Date('2024-01-10'),
+      } as Recall)
+      prisonService.getPrisonName.mockResolvedValue('Leeds')
+
+      const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+      const $ = cheerio.load(res.text)
+
+      expect($('[data-qa=view-all-recalls-link]').length).toBe(0)
+    })
+
+    it('should not show "Record a recall" button when no recalls exist and no access to recalls', async () => {
+      app = appWithAllRoutes({
+        services: defaultServices,
+        userSupplier: () => {
+          return { ...defaultUser, hasRecallsAccess: false }
+        },
+      })
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+      const $ = cheerio.load(res.text)
+      const recordRecallButton = $('[data-qa=create-new-recall-btn]')
+      expect(recordRecallButton.length).toBe(0)
     })
 
     describe('arrest date display', () => {
