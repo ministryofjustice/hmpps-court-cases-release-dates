@@ -9,15 +9,16 @@ import adjustmentsApi from './integration_tests/mockApis/adjustmentsApi'
 import calculateReleaseDatesApi from './integration_tests/mockApis/calculateReleaseDatesApi'
 import courtCasesReleaseDatesApi from './integration_tests/mockApis/courtCasesReleaseDatesApi'
 import remandAndSentencingApi from './integration_tests/mockApis/remandAndSentencingApi'
+import components from './integration_tests/mockApis/components'
 
 export default defineConfig({
   chromeWebSecurity: false,
   fixturesFolder: 'integration_tests/fixtures',
   screenshotsFolder: 'integration_tests/screenshots',
   videosFolder: 'integration_tests/videos',
-  reporter: 'cypress-multi-reporters',
+  reporter: 'junit',
   reporterOptions: {
-    configFile: 'reporter-config.json',
+    mochaFile: 'test_results/cypress/results-[hash].xml',
   },
   taskTimeout: 60000,
   e2e: {
@@ -33,6 +34,7 @@ export default defineConfig({
         ...calculateReleaseDatesApi,
         ...courtCasesReleaseDatesApi,
         ...remandAndSentencingApi,
+        ...components,
       })
     },
     baseUrl: 'http://localhost:3007',
