@@ -8,6 +8,7 @@ export interface UserDetails extends User {
   displayName: string
   roles: string[]
   hasRasAccess: boolean
+  hasRecallsAccess: boolean
   hasInactiveBookingAccess: boolean
   hasReadOnlyNomisConfigAccess: boolean
   hasImmigrationDetentionAccess: boolean
@@ -33,6 +34,7 @@ export default class UserService {
       roles,
       displayName: convertToTitleCase(user.name),
       hasRasAccess: this.hasRasAccess(roles),
+      hasRecallsAccess: this.hasRecallAccess(roles),
       hasInactiveBookingAccess: this.hasInactiveBookingAccess(roles),
       hasReadOnlyNomisConfigAccess: this.hasReadOnlyNomisConfigAccess(roles),
       hasImmigrationDetentionAccess: this.hasImmigrationDetentionAccess(roles),
@@ -49,6 +51,10 @@ export default class UserService {
 
   hasRasAccess(roles: string[]): boolean {
     return roles.includes('REMAND_AND_SENTENCING')
+  }
+
+  hasRecallAccess(roles: string[]): boolean {
+    return roles.includes('RECALL_MAINTAINER')
   }
 
   hasInactiveBookingAccess(roles: string[]): boolean {

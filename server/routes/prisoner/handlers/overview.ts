@@ -85,6 +85,7 @@ export default class OverviewRoutes {
       hasReadOnlyNomisConfigAccess,
       serviceDefinitions,
       showRecalls: hasRasAccess,
+      showRecallsLink: res.locals.user.hasRecallsAccess,
       latestRecall,
       anyThingsToDo,
       immigrationDetentionMessage: this.getImmigrationDetentionMessage(latestImmigrationRecord),

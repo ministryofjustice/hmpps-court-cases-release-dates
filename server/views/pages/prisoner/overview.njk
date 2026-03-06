@@ -111,20 +111,23 @@
         {% if latestRecall %}
 
           {{ recallCard(latestRecall) }}
-
-          <p class="govuk-body govuk-!-margin-top-4">
-            <a href="{{ recallsUiUrl }}/person/{{ prisoner.prisonerNumber }}">View all recalls</a>
-          </p>
+          {% if showRecallsLink %}
+            <p class="govuk-body govuk-!-margin-top-4">
+              <a href="{{ recallsUiUrl }}/person/{{ prisoner.prisonerNumber }}" data-qa="view-all-recalls-link">View all recalls</a>
+            </p>
+          {% endif %}
 
         {% else %}
           <p> There are no recalls recorded.</p>
-          {{ govukButton({
-            classes: "govuk-button--secondary",
-            text: "Record a recall",
-            preventDoubleClick: true,
-            href: recallsUiUrl + '/person/' + prisoner.prisonerNumber + '/recall/create/start?entrypoint=ccards',
-            attributes: {  'data-qa': 'create-new-recall-btn' }
-          }) }}
+          {% if showRecallsLink %}
+            {{ govukButton({
+              classes: "govuk-button--secondary",
+              text: "Record a recall",
+              preventDoubleClick: true,
+              href: recallsUiUrl + '/person/' + prisoner.prisonerNumber + '/recall/create/start?entrypoint=ccards',
+              attributes: {  'data-qa': 'create-new-recall-btn' }
+            }) }}
+          {% endif %}
         {% endif %}
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
