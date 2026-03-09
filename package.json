@@ -114,7 +114,7 @@
     "jest-html-reporter": "^4.3.0",
     "jest-junit": "^16.0.0",
     "jsonwebtoken": "^9.0.3",
-    "lint-staged": "^16.2.7",
+    "lint-staged": "^16.3.2",
     "nock": "^14.0.11",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.8.1",
@@ -126,7 +126,7 @@
   },
   "overrides": {
     "@aws-sdk/xml-builder": {
-      "fast-xml-parser": "^5.4.1"
+      "fast-xml-parser": "^5.4.2"
     }
   }
 }
