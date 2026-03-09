@@ -4,11 +4,11 @@ $path: "/assets/images/";
 $moj-page-width: 1170px;
 $govuk-page-width: $moj-page-width;
 
-@import 'govuk/all';
-@import 'moj/all';
-@import 'hmpps/all';
+@import "govuk-frontend/dist/govuk/index";
+@import "@ministryofjustice/frontend/moj/all";
+@import '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/all';
 
 @import './components/header-bar';
 @import './components/prisoner-banner';
 @import './components/prisoner-search-results';
-@import 'assets/scss/local';
+@import './overrides/local';

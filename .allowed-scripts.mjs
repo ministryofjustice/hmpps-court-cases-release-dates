@@ -8,7 +8,9 @@ export default configureAllowedScripts({
     'node_modules/dtrace-provider@0.8.8': 'ALLOW',
     // Needed by jest for running tests in watch mode
     'node_modules/fsevents@2.3.3': 'ALLOW',
-    // Need by playwright for detecting file system changes during test runs
+    // Needed by esbuild for building the package
+    'node_modules/esbuild@0.27.3': 'ALLOW',
+    // Needed by cypress for running the browser
     'node_modules/cypress@13.17.0': 'ALLOW',
     // Native solution to quickly resolve module paths, used by jest and eslint
     'node_modules/unrs-resolver@1.11.1': 'ALLOW',
