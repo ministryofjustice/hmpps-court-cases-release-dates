@@ -2,6 +2,7 @@
 import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
+import { filesize } from 'filesize'
 import {
   personProfileName,
   personDateOfBirth,
@@ -95,4 +96,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('hmppsFormatDate', hmppsFormatDate)
   njkEnv.addFilter('pluralise', (word, number, appender) => (number === 1 ? word : `${word}${appender || 's'}`))
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+  njkEnv.addFilter('uppercase', text => text.toUpperCase())
+  njkEnv.addFilter('humanReadableFileSize', (numberOfBytes: number) =>
+    filesize(numberOfBytes || 0, { base: 2, standard: 'jedec' }),
+  )
 }

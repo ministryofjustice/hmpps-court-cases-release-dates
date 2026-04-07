@@ -8,6 +8,7 @@ import ImageRoutes from './handlers/image'
 import OverviewRoutes from './handlers/overview'
 import ReleaseDatesRoutes from './handlers/releaseDates'
 import ConfigRoutes from '../config/ConfigRoutes'
+import DocumentRoutes from './handlers/documents'
 
 export default function Index({
   prisonerService,
@@ -16,6 +17,7 @@ export default function Index({
   calculateReleaseDatesService,
   remandAndSentencingService,
   prisonService,
+  documentManagementService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) =>
@@ -36,6 +38,12 @@ export default function Index({
     ).GET,
   )
   get('/:prisonerNumber/release-dates', new ReleaseDatesRoutes().GET)
+
+  get('/:prisonerNumber/documents', new DocumentRoutes(prisonerService, documentManagementService).documents)
+  get(
+    '/:prisonerNumber/documents/:documentId/download',
+    new DocumentRoutes(prisonerService, documentManagementService).downloadDocument,
+  )
 
   router.get('/config', new ConfigRoutes(prisonerService).getConfig)
   router.post('/config', new ConfigRoutes(prisonerService).postConfig)
