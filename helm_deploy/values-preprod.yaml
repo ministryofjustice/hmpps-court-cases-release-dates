@@ -29,6 +29,7 @@ generic-service:
     REMAND_AND_SENTENCING_API_URL: "https://remand-and-sentencing-api-preprod.hmpps.service.justice.gov.uk"
     RECALLS_UI_URL: "https://record-a-recall-preprod.hmpps.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register-preprod.hmpps.service.justice.gov.uk"
+    DOCUMENT_MANAGEMENT_API_URL: "https://document-api-preprod.hmpps.service.justice.gov.uk"
 
   allowlist:
     ark-dom1-farnborough: 194.33.192.0/24

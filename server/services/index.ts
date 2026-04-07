@@ -7,9 +7,11 @@ import AdjustmentsService from './adjustmentsService'
 import CalculateReleaseDatesService from './calculateReleaseDatesService'
 import RemandAndSentencingService from './remandAndSentencingService'
 import PrisonService from './prisonService'
+import DocumentManagementService from './documentManagementService'
 
 export const services = () => {
-  const { applicationInfo, hmppsAuthClient, manageUsersApiClient, feComponentsClient } = dataAccess()
+  const { applicationInfo, hmppsAuthClient, hmppsAuthenticationClient, manageUsersApiClient, feComponentsClient } =
+    dataAccess()
 
   const feComponentsService = new FeComponentsService(feComponentsClient)
 
@@ -27,6 +29,8 @@ export const services = () => {
 
   const prisonService = new PrisonService(hmppsAuthClient)
 
+  const documentManagementService = new DocumentManagementService(hmppsAuthenticationClient)
+
   return {
     applicationInfo,
     userService,
@@ -37,6 +41,7 @@ export const services = () => {
     calculateReleaseDatesService,
     remandAndSentencingService,
     prisonService,
+    documentManagementService,
   }
 }
 
