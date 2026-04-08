@@ -37,13 +37,12 @@ export function addCustomDataToRequests(
   if (isRequest) {
     const { username } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
     const { prisonId } = contextObjects?.['http.ServerRequest']?.prisoner || {}
-    if (username) {
-      // eslint-disable-next-line no-param-reassign
-      envelope.data.baseData.properties.username = username
-    }
-    if (prisonId) {
-      // eslint-disable-next-line no-param-reassign
-      envelope.data.baseData.properties.prisonId = prisonId
+    const { properties } = envelope.data.baseData
+    // eslint-disable-next-line no-param-reassign
+    envelope.data.baseData.properties = {
+      ...properties,
+      ...(username && { username }),
+      ...(prisonId && { prisonId }),
     }
   }
   return true
