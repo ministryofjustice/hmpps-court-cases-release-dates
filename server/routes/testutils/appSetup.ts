@@ -8,6 +8,7 @@ import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import type { Services } from '../../services'
 import type { ApplicationInfo } from '../../applicationInfo'
+import getPrisoner from '../../middleware/getPrisoner'
 
 const testAppInfo: ApplicationInfo = {
   applicationName: 'test',
@@ -49,6 +50,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+  app.use('/prisoner/:prisonerNumber', getPrisoner(services.prisonerSearchService))
   app.use(routes(services))
   app.use((req, res, next) => next(new NotFound()))
   app.use(errorHandler(production))
