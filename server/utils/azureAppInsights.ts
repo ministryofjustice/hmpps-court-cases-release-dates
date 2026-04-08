@@ -1,5 +1,11 @@
-import { setup, defaultClient, TelemetryClient, DistributedTracingModes } from 'applicationinsights'
+import { Contracts, setup, defaultClient, TelemetryClient, DistributedTracingModes } from 'applicationinsights'
+import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import type { ApplicationInfo } from '../applicationInfo'
+
+export type ContextObject = {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  [name: string]: any
+}
 
 export function initialiseAppInsights(): void {
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
@@ -17,7 +23,28 @@ export function buildAppInsightsClient(
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
     defaultClient.context.tags['ai.cloud.role'] = overrideName || applicationName
     defaultClient.context.tags['ai.application.ver'] = buildNumber
+    defaultClient.addTelemetryProcessor(addCustomDataToRequests)
     return defaultClient
   }
   return null
+}
+
+export function addCustomDataToRequests(
+  envelope: EnvelopeTelemetry,
+  contextObjects: ContextObject | undefined,
+): boolean {
+  const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
+  if (isRequest) {
+    const { username } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
+    const { prisonId } = contextObjects?.['http.ServerRequest']?.prisoner || {}
+    if (username) {
+      // eslint-disable-next-line no-param-reassign
+      envelope.data.baseData.properties.username = username
+    }
+    if (prisonId) {
+      // eslint-disable-next-line no-param-reassign
+      envelope.data.baseData.properties.prisonId = prisonId
+    }
+  }
+  return true
 }

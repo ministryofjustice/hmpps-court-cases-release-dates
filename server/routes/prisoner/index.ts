@@ -1,7 +1,6 @@
 import { RequestHandler, Router } from 'express'
 import { Services } from '../../services'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
-import getPrisoner from '../../middleware/getPrisoner'
 import AdjustmentsRoutes from './handlers/adjustments'
 import CourtCasesRoutes from './handlers/courtCases'
 import ImageRoutes from './handlers/image'
@@ -12,7 +11,6 @@ import DocumentRoutes from './handlers/documents'
 
 export default function Index({
   prisonerService,
-  prisonerSearchService,
   adjustmentsService,
   calculateReleaseDatesService,
   remandAndSentencingService,
@@ -20,8 +18,7 @@ export default function Index({
   documentManagementService,
 }: Services): Router {
   const router = Router()
-  const get = (path: string | string[], handler: RequestHandler) =>
-    router.get(path, getPrisoner(prisonerSearchService), asyncMiddleware(handler))
+  const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
   router.get('/:prisonerNumber/image', new ImageRoutes(prisonerService).GET)
 
