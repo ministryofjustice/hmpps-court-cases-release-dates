@@ -7,7 +7,6 @@
 {% block beforeContent %}
     {{ super() }}
     <nav>
-        {% set backlink = "/" %}
         {{ govukBackLink({
             text: "Back",
             href: backlink
@@ -37,13 +36,12 @@
                 <a href="https://mcmw.abilitynet.org.uk/">AbilityNet</a> has advice on making your device easier to use
                 if you have a disability.</p>
             <h2 class="govuk-heading-m">How accessible this website is</h2>
-            <p class="govuk-body">The Court cases and release dates service has been independently audited and is partially
-                compliant against WCAG 2.2 Level AA.</p>
+            <p class="govuk-body">The Court cases and release dates service has been independently audited and is partially compliant against WCAG 2.2 Level AA.</p>
             <h2 class="govuk-heading-m">Feedback and contact information</h2>
             <p class="govuk-body">If you need information on this website in a different format, email
                 {{ createSupportLink({
-                    emailAddress: 'calculatereleasedates@digital.justice.gov.uk',
-                    linkText: 'calculatereleasedates@digital.justice.gov.uk',
+                    emailAddress: 'courtcasesandreleasedates@justice.gov.uk',
+                    linkText: 'courtcasesandreleasedates@justice.gov.uk',
                     emailSubjectText: 'Request for accessible format'
                 }) | safe }}.
                 We’ll review your request and get back to you within one working day.
@@ -69,14 +67,9 @@
                 with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations
                 2018.</p>
             <h2 class="govuk-heading-m">Compliance status</h2>
-            <p class="govuk-body">This website is fully compliant with the <a href="https://www.w3.org/TR/WCAG21/">Web
-                    Content Accessibility Guidelines version 2.1</a> AA standard.</p>
+            <p class="govuk-body">This website is partially compliant with the <a href="https://www.w3.org/TR/WCAG21/">Web
+                    Content Accessibility Guidelines version 2.2</a> AA standard.</p>
             <h2 class="govuk-heading-m">Non-accessible content</h2>
-            <p class="govuk-body">The ‘Start now’ button fails to meet the minimum non-text contrast requirements with a
-                contrast ratio of 1.3.1. This cannot be changed as the button follows the style guide set by the
-                Government Digital Services (GDS) design system. The Court cases and release dates service team will get
-                in touch with GDS to provide feedback on this usability issue. The team are also exploring alternative
-                designs using more accessible patterns.</p>
             <p class="govuk-body">The search button and menu button are obscured when 400 percent browser zoom is
                 applied. The search button is completely lost off-screen and the menu button is partially obscured. You
                 must scroll horizontally to access these elements.</p>
@@ -88,11 +81,10 @@
                 unexpected focus order. The focus shifts first to the search button, then proceeds into the menu items.
                 This unexpected sequence could cause confusion to keyboard users.</p>
             <h2 class="govuk-heading-m">Preparation of this accessibility statement</h2>
-            <p class="govuk-body">This statement was prepared on 13 November 2024. It was last reviewed on 13 November
-                2024.</p>
-            <p class="govuk-body">This website was last tested on 15 August 2024.</p>
+            <p class="govuk-body">This statement was prepared on 13 November 2024. It was last reviewed on 30 March 2026.</p>
+            <p class="govuk-body">This website was last tested on 11 January 2026.</p>
             <p class="govuk-body">The following approach was taken for the accessibility audit by a team of experienced
-                accessibility consultants from User Vision.</p>
+                accessibility consultants from User Vision on 15 August 2024.</p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>Automated testing using Accessibility Insights and WAVE.</li>
                 <li>Manual accessibility evaluation to code level using browser code inspectors, an
@@ -114,6 +106,24 @@
                     contrast in the visual presentation.
                 </li>
             </ul>
+            <p class="govuk-body">The following approach was taken for the accessibility audit by a the court cases and release dates team on 11 January 2026.</p>
+                        <ul class="govuk-list govuk-list--bullet">
+                            <li>Automated testing using AXE, ARC and WAVE.</li>
+                            <li>Manual accessibility evaluation to code level using browser code inspectors, an approach that identifies issues that cannot be captured by automated tools.
+                            </li>
+                            <li>We viewed the application on a range of browsers:
+                                <ul class="govuk-list govuk-list--bullet">
+                                    <li>Chrome and Edge on desktop</li>
+                                </ul>
+                            </li>
+                            <li>We assessed pages using the following assistive technology:
+                                <ul class="govuk-list govuk-list--bullet">
+                                    <li>Voiceover (with Chrome on Mac) screen reader for desktop.</li>
+                                </ul>
+                            </li>
+                            <li>We checked colour combinations using a colour contrast analyser to determine if there is enough contrast in the visual presentation.</li>
+                        </ul>
+
 
         </div>
     </div>
