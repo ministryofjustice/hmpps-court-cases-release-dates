@@ -6,6 +6,9 @@ export default class AccessibilityRoutes {
   }
 
   public getAccessibilityStatement: RequestHandler = async (req, res) => {
-    return res.render('pages/accessibility/index', { errorMessage: null })
+    return res.render('pages/accessibility/index', {
+      backLink: req.get('referer') || '/',
+      errorMessage: null,
+    })
   }
 }
