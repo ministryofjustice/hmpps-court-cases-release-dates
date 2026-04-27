@@ -8,8 +8,11 @@
     {{ super() }}
     <nav>
         {{ govukBackLink({
-            text: "Back",
-            href: backlink
+                    text: "Back",
+                    href: "/",
+                    attributes: {
+                        onclick: "if (window.history.length > 1) { window.history.back(); return false; }"
+                    }
         }) }}
     </nav>
 {% endblock %}
