@@ -85,6 +85,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   )
 
   njkEnv.addGlobal('createSupportLink', createSupportLink)
+  njkEnv.addGlobal('applications', config.applications)
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('personProfileName', personProfileName)

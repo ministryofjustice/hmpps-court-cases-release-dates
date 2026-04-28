@@ -36,10 +36,13 @@ export default function Index({
   )
   get('/:prisonerNumber/release-dates', new ReleaseDatesRoutes().GET)
 
-  get('/:prisonerNumber/documents', new DocumentRoutes(prisonerService, documentManagementService).documents)
+  get(
+    '/:prisonerNumber/documents',
+    new DocumentRoutes(prisonerService, documentManagementService, remandAndSentencingService).documents,
+  )
   get(
     '/:prisonerNumber/documents/:documentId/download',
-    new DocumentRoutes(prisonerService, documentManagementService).downloadDocument,
+    new DocumentRoutes(prisonerService, documentManagementService, remandAndSentencingService).downloadDocument,
   )
 
   router.get('/config', new ConfigRoutes(prisonerService).getConfig)

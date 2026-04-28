@@ -1,6 +1,7 @@
 import { components } from './index'
 
 export type ImmigrationDetention = components['schemas']['ImmigrationDetention']
+export type RasPrisonerDocuments = components['schemas']['PrisonerDocuments']
 
 export type ApiRecall = components['schemas']['Recall']
 
