@@ -18,7 +18,16 @@ export default class DocumentManagementApiClient extends RestClient {
           Username: username,
         },
         data: {
-          documentType: 'HMCTS_WARRANT',
+          documentTypes: [
+            'HMCTS_WARRANT',
+            'TRIAL_RECORD_SHEET',
+            'INDICTMENT',
+            'PRISON_COURT_REGISTER',
+            'BAIL_ORDER',
+            'SUSPENDED_IMPRISONMENT_ORDER',
+            'NOTICE_OF_DISCONTINUANCE',
+            'COMMUNITY_ORDER',
+          ],
           orderBy: 'CREATED_TIME',
           orderByDirection: 'DESC',
           metadata: {

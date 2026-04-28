@@ -4,6 +4,7 @@ import {
   ApiRecall,
   getRecallType,
   ImmigrationDetention,
+  RasPrisonerDocuments,
   Recall,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import { HmppsAuthClient } from '../data'
@@ -58,5 +59,9 @@ export default class RemandAndSentencingService {
           inPrisonOnRevocationDate: mostRecent.inPrisonOnRevocationDate,
         }
       : undefined
+  }
+
+  public async getDocuments(prisonerId: string, username: string): Promise<RasPrisonerDocuments> {
+    return new RemandAndSentencingApiClient(await this.getSystemClientToken(username)).getDocuments(prisonerId)
   }
 }

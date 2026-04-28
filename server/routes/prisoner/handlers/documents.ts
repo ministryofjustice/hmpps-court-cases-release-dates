@@ -3,11 +3,14 @@ import { Readable } from 'stream'
 import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
+import RemandAndSentencingService from '../../../services/remandAndSentencingService'
+import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 
 export default class DocumentRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly documentManagementService: DocumentManagementService,
+    private readonly remandAndSentencingService: RemandAndSentencingService,
   ) {}
 
   documents = async (req: Request, res: Response): Promise<void> => {
@@ -16,20 +19,47 @@ export default class DocumentRoutes {
 
     const serviceDefinitions = await this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token)
     const documents = await this.documentManagementService.searchDocument(prisoner.prisonerNumber, username)
+    const rasDocuments = await this.remandAndSentencingService.getDocuments(prisoner.prisonerNumber, username)
+
+    const viewModelDocuments = documents.results.map(it => {
+      const document = {
+        documentUuid: it.documentUuid,
+        createdTime: it.createdTime,
+        filename: it.filename,
+        fileExtension: it.fileExtension,
+        fileSize: it.fileSize,
+      } as Partial<DocumentViewModel>
+
+      if (it.metadata.source === 'court-data-ingestion-api') {
+        // From CP
+        document.type = it.documentType
+        document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
+          type => type.type === it.documentType,
+        ).name
+      } else {
+        // From RaS
+        rasDocuments.courtCaseDocuments.forEach(caseDocument =>
+          Object.entries(caseDocument.appearanceDocumentsByType).forEach(appearanceAndType =>
+            appearanceAndType[1].forEach(appearanceDocument => {
+              if (appearanceDocument.documentUUID === it.documentUuid) {
+                ;[document.type] = appearanceAndType
+                document.typeDescription = expectedTypes[
+                  appearanceDocument.warrantType as 'SENTENCING' | 'NON_SENTENCING'
+                ].find(type => type.type === appearanceAndType[0]).name
+                document.courtCaseUuid = caseDocument.courtCaseUuid
+              }
+            }),
+          ),
+        )
+      }
+
+      return document
+    })
 
     res.render('pages/prisoner/documents', {
       prisoner,
       serviceDefinitions,
-      documents: documents.results.map(it => {
-        return {
-          type: 'Remand warrant',
-          documentUuid: it.documentUuid,
-          createdTime: it.createdTime,
-          filename: it.filename,
-          fileExtension: it.fileExtension,
-          fileSize: it.fileSize,
-        } as Document
-      }),
+      documents: viewModelDocuments,
     })
   }
 
@@ -89,11 +119,13 @@ export default class DocumentRoutes {
   }
 }
 
-type Document = {
-  type: 'Remand warrant'
+type DocumentViewModel = {
+  type: string
+  typeDescription: string
   documentUuid: string
   filename: string
   fileExtension: string
   fileSize: number
   createdTime: string
+  courtCaseUuid: string
 }

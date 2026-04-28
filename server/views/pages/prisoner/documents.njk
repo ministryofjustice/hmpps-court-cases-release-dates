@@ -9,24 +9,31 @@
 
 <hr class="govuk-section-break govuk-section-break--visible">
   {% for document in documents %}
-  <div class="govuk-grid-row govuk-!-padding-bottom-2 govuk-!-margin-top-2">
-    <div class="govuk-grid-column-full">
-        <p class="govuk-body">
-             <a class="govuk-link govuk-link--no-visited-state"
-                target="_blank"
-                href="/prisoner/{{prisoner.prisonerNumber}}/documents/{{document.documentUuid}}/download">{{document.type}}</a>
-            {{document.fileSize | humanReadableFileSize}} {{document.fileExtension | uppercase}}
-        </p>
+  <div data-qa="document-{{document.documentUuid}}"> 
+    <div class="govuk-grid-row govuk-!-padding-bottom-2 govuk-!-margin-top-2">
+      <div class="govuk-grid-column-full">
+          <p class="govuk-body">
+              <a class="govuk-link govuk-link--no-visited-state"
+                  target="_blank"
+                  href="/prisoner/{{prisoner.prisonerNumber}}/documents/{{document.documentUuid}}/download">{{document.typeDescription}}</a>
+              {{document.fileSize | humanReadableFileSize}} {{document.fileExtension | uppercase}}
+          </p>
+      </div>
     </div>
-  </div>
-  <div class="govuk-grid-row govuk-!-padding-bottom-2">
-    <div class="govuk-grid-column-one-third">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date</h3>
-        <p class="govuk-body govuk-!-margin-bottom-2">{{document.createdTime | dateTime}}</p>
-    </div>
-    <div class="govuk-grid-column-two-thirds">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Filename</h3>
-        <p class="govuk-body govuk-!-margin-bottom-2">{{document.filename}}.{{document.fileExtension}}</p>
+    <div class="govuk-grid-row govuk-!-padding-bottom-2">
+      <div class="govuk-grid-column-two-thirds">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Source</h3>
+          {% if document.courtCaseUuid %}
+            <p class="govuk-body govuk-!-margin-bottom-2"><a data-qa="court-case-link" href="{{applications.remandAndSentencing.url}}/person/{{prisoner.prisonerNumber}}/view-court-case/{{document.courtCaseUuid}}/details">Court cases</a></p>
+          {% else %}
+            <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
+          {% endif %}
+          <p class="govuk-body govuk-!-margin-bottom-2 govuk-hint">File name: {{document.filename}}.{{document.fileExtension}}</p>
+      </div>
+      <div class="govuk-grid-column-one-third">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date added</h3>
+          <p class="govuk-body govuk-!-margin-bottom-2">{{document.createdTime | date}}</p>
+      </div>
     </div>
    </div>
    <hr class="govuk-section-break govuk-section-break--visible">

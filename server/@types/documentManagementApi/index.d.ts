@@ -207,7 +207,7 @@ export interface components {
        * @example HMCTS_WARRANT
        * @enum {string}
        */
-      documentType?: 'HMCTS_WARRANT' | 'SUBJECT_ACCESS_REQUEST_REPORT'
+      documentTypes?: string[]
       metadata?: components['schemas']['JsonNode']
       /**
        * Format: int32

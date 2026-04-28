@@ -1,6 +1,10 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
-import { ApiRecall, ImmigrationDetention } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import {
+  ApiRecall,
+  ImmigrationDetention,
+  RasPrisonerDocuments,
+} from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 export default class RemandAndSentencingApiClient {
   restClient: RestClient
@@ -23,5 +27,11 @@ export default class RemandAndSentencingApiClient {
     return this.restClient.get({
       path: `/immigration-detention/person/${person}/latest`,
     }) as Promise<ImmigrationDetention>
+  }
+
+  async getDocuments(person: string): Promise<RasPrisonerDocuments> {
+    return this.restClient.get({
+      path: `/person/${person}/documents`,
+    }) as Promise<RasPrisonerDocuments>
   }
 }
