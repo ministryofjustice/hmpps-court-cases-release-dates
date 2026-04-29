@@ -65,6 +65,12 @@ describe('Route Handlers - Overview', () => {
           '<a class="moj-sub-navigation__link" aria-current="page" href="http://localhost:8000/prisoner/AB1234AB/documents">Documents</a>',
         )
         expect(res.text).toContain('Documents')
+        expect(res.text).toContain(
+          'Sort by: <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" href="/prisoner/A12345B/documents?sortBy=MOST_RECENT">Most recent</a>',
+        )
+        expect(res.text).toContain(
+          '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner/A12345B/documents?sortBy=EARLIEST">Earliest<a>',
+        )
 
         const $ = cheerio.load(res.text)
         const firstCommonPlatformDocumentText = $('[data-qa=document-4fd5f7b0-eebf-4b69-9489-0cc48550e03b]').text()

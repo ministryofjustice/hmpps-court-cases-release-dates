@@ -21,3 +21,13 @@ export const initialiseName = (fullName?: string): string | null => {
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
 }
+
+export const getAsStringOrDefault = (value: unknown, defaultValue: string): string | null => {
+  if (typeof value === 'string') return value
+  return defaultValue
+}
+
+export const minOf = (a: number, b: number): number => {
+  if (a > b) return b
+  return a
+}

@@ -5,6 +5,10 @@ import DocumentManagementService from '../../../services/documentManagementServi
 import logger from '../../../../logger'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
+import { getAsStringOrDefault } from '../../../utils/utils'
+import { DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
+import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
+import config from '../../../config'
 
 export default class DocumentRoutes {
   constructor(
@@ -17,8 +21,20 @@ export default class DocumentRoutes {
     const { prisoner } = req
     const { token, username } = req.user
 
+    const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
+    const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
+
+    const documentSearchRequest = {
+      ...defaultSearchParams,
+      orderByDirection: sortByQuery === 'MOST_RECENT' ? 'DESC' : 'ASC',
+      page: pageNumber,
+      metadata: {
+        prisonerId: prisoner.prisonerNumber,
+      } as unknown as Record<string, never>,
+    } as DocumentSearchRequest
+
     const serviceDefinitions = await this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token)
-    const documents = await this.documentManagementService.searchDocument(prisoner.prisonerNumber, username)
+    const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
     const rasDocuments = await this.remandAndSentencingService.getDocuments(prisoner.prisonerNumber, username)
 
     const viewModelDocuments = documents.results.map(it => {
@@ -56,10 +72,17 @@ export default class DocumentRoutes {
       return document
     })
 
+    const pagedDataResponse = getPagedDataResponse(documents)
     res.render('pages/prisoner/documents', {
       prisoner,
       serviceDefinitions,
       documents: viewModelDocuments,
+      sortByQuery,
+      pageNumber,
+      pageSize: documentSearchRequest.pageSize,
+      pagination: govukPagination(pagedDataResponse, new URL(req.originalUrl, config.domain)),
+      paginationResults: getPaginationResults(pagedDataResponse),
+      totalResults: documents.totalResultsCount,
     })
   }
 
@@ -118,6 +141,21 @@ export default class DocumentRoutes {
     }
   }
 }
+
+const defaultSearchParams = {
+  documentTypes: [
+    'HMCTS_WARRANT',
+    'TRIAL_RECORD_SHEET',
+    'INDICTMENT',
+    'PRISON_COURT_REGISTER',
+    'BAIL_ORDER',
+    'SUSPENDED_IMPRISONMENT_ORDER',
+    'NOTICE_OF_DISCONTINUANCE',
+    'COMMUNITY_ORDER',
+  ],
+  orderBy: 'CREATED_TIME',
+  pageSize: 10,
+} as DocumentSearchRequest
 
 type DocumentViewModel = {
   type: string

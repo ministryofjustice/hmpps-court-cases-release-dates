@@ -9,7 +9,7 @@ export default class DocumentManagementApiClient extends RestClient {
     super('Document Management API', config.apis.documentManagementApi, logger, authenticationClient)
   }
 
-  async searchDocuments(prisonerId: string, username: string): Promise<DocumentSearchResult> {
+  async searchDocuments(documentSearchRequest: DocumentSearchRequest, username: string): Promise<DocumentSearchResult> {
     return this.post(
       {
         path: `/documents/search`,
@@ -17,23 +17,7 @@ export default class DocumentManagementApiClient extends RestClient {
           'Service-Name': 'Court Case and Release Dates',
           Username: username,
         },
-        data: {
-          documentTypes: [
-            'HMCTS_WARRANT',
-            'TRIAL_RECORD_SHEET',
-            'INDICTMENT',
-            'PRISON_COURT_REGISTER',
-            'BAIL_ORDER',
-            'SUSPENDED_IMPRISONMENT_ORDER',
-            'NOTICE_OF_DISCONTINUANCE',
-            'COMMUNITY_ORDER',
-          ],
-          orderBy: 'CREATED_TIME',
-          orderByDirection: 'DESC',
-          metadata: {
-            prisonerId,
-          } as unknown as Record<string, never>,
-        } as DocumentSearchRequest,
+        data: documentSearchRequest,
       },
       asSystem(username),
     )
