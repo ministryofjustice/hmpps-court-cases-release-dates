@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response } from 'express'
 
-const maintenanceMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const maintenanceMiddleware = (req: Request, res: Response) => {
   return res.status(503).render('maintenance')
 }
 
