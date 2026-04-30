@@ -195,4 +195,5 @@ export default {
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   appInsightsConnectionString: get('APPLICATIONINSIGHTS_CONNECTION_STRING', '', requiredInProduction),
+  maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
 }
