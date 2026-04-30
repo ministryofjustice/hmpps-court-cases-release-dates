@@ -20,6 +20,8 @@ import getFrontendComponents from './middleware/getFeComponents'
 import routes from './routes'
 import type { Services } from './services'
 import getPrisoner from './middleware/getPrisoner'
+import config from './config'
+import maintenanceMiddleware from './middleware/maintenanceMiddleware'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -39,10 +41,14 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware(['ROLE_RELEASE_DATES_CALCULATOR']))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser(services))
-  app.use('/prisoner/:prisonerNumber', getPrisoner(services.prisonerSearchService))
-  app.get('/{*any}', getFrontendComponents(services))
 
-  app.use(routes(services))
+  if (config.maintenanceMode) {
+    app.use(maintenanceMiddleware)
+  } else {
+    app.use('/prisoner/:prisonerNumber', getPrisoner(services.prisonerSearchService))
+    app.get('/{*any}', getFrontendComponents(services))
+    app.use(routes(services))
+  }
 
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
