@@ -42,7 +42,7 @@
         });
       appInsights.trackPageView(null, {
          username: '{{ user.username | default("") | safe }}',
-         prisonId: '{{ user.activeCaseLoadId | default("") | safe }}'
+         caseloadId: '{{ prisoner.prisonId | default("") | safe }}'
       })
     </script>
   {% endif %}
