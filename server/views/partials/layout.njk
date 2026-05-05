@@ -40,7 +40,10 @@
           envelope.tags["ai.cloud.role"] = "{{ appInsightsApplicationName }}"
           envelope.tags["ai.application.ver"] = "{{ buildNumber }}"
         });
-      appInsights.trackPageView();
+      appInsights.trackPageView(null, {
+         username: '{{ user.username | default("") | safe }}',
+         prisonId: '{{ user.activeCaseLoadId | default("") | safe }}'
+      })
     </script>
   {% endif %}
 
