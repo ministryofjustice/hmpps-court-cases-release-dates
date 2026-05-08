@@ -60,7 +60,8 @@ export default class DocumentRoutes {
             appearanceAndType[1].forEach(appearanceDocument => {
               if (appearanceDocument.documentUUID === it.documentUuid) {
                 ;[document.type] = appearanceAndType
-                document.typeDescription = AppearanceDocumentConverter.getDocumentTypeDescription(appearanceDocument,
+                document.typeDescription = AppearanceDocumentConverter.getDocumentTypeDescription(
+                  appearanceDocument,
                   document.type
                 )
                 document.courtCaseUuid = caseDocument.courtCaseUuid
