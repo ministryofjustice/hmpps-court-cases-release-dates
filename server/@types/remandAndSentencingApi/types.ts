@@ -14,7 +14,7 @@ export class AppearanceDocumentConverter {
     return null
   }
 
-  static getDocumentTypeDescription(document: AppearanceDocument, documentType:string):string {
+  static getDocumentTypeDescription(document: AppearanceDocument, documentType: string): string {
     return expectedTypes[document.warrantType as 'SENTENCING' | 'NON_SENTENCING'].find(
       type => type.type === documentType,
     ).name
