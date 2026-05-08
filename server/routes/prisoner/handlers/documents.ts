@@ -62,7 +62,7 @@ export default class DocumentRoutes {
                 ;[document.type] = appearanceAndType
                 document.typeDescription = AppearanceDocumentConverter.getDocumentTypeDescription(
                   appearanceDocument,
-                  document.type
+                  document.type,
                 )
                 document.courtCaseUuid = caseDocument.courtCaseUuid
                 document.courtCode = appearanceDocument.courtCode
