@@ -24,13 +24,13 @@
     <hr class="govuk-section-break govuk-section-break--visible">
     {% for document in documents %}
       <div data-qa="document-{{document.documentUuid}}"> 
-        <div class="govuk-grid-row govuk-!-padding-bottom-2 govuk-!-margin-top-2">
-          <div class="govuk-grid-column-full">
+        <div class="govuk-grid-row govuk-!-padding-bottom-0 govuk-!-margin-top-2">
+          <div class="govuk-grid-column-full prisoner-doc-link">
               <p class="govuk-body">
                   <a class="govuk-link govuk-link--no-visited-state prisoner-doc-link"
                       target="_blank"
                       href="/prisoner/{{prisoner.prisonerNumber}}/documents/{{document.documentUuid}}/download">{{document.typeDescription}}</a>
-                    {{document.fileExtension | uppercase}}  {{document.fileSize | humanReadableFileSize}}
+                    {{document.fileExtension | uppercase}} {{document.fileSize | humanReadableFileSize}}
               </p>
           </div>
         </div>
@@ -73,7 +73,6 @@
               {% else %}
                 <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
               {% endif %}
-              <p class="govuk-body govuk-!-margin-bottom-2 govuk-hint">File name: {{document.filename}}.{{document.fileExtension}}</p>
           </div>
         </div>
       </div>
