@@ -115,7 +115,7 @@ describe('Route Handlers - Overview', () => {
   })
 })
 
-function getColumnLabelAndValue(label:string, value:string):string {
+function getColumnLabelAndValue(label: string, value: string): string {
   return `${label}\n                ${value}`
 }
 
