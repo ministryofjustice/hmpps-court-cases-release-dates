@@ -1,9 +1,9 @@
-.prisoner-doc-link p {
+.prisoner-doc-type-title {
   @include govuk-responsive-margin(2, 'bottom');
 }
-.prisoner-doc-link a {
+.prisoner-doc-link {
   @include govuk-font($size: 24, $weight: 'bold');
-  margin-right: 0.2em;
+  @include govuk-responsive-margin(1, 'right');
 }
 
 .prisoner-doc-filename {
