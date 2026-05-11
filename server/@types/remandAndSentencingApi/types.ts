@@ -3,7 +3,7 @@ import expectedTypes from './documentTypes'
 
 export type AppearanceDocument = components['schemas']['AppearanceDocument']
 
-export class AppearanceDocumentConverter {
+export class RaSDocumentMapper {
   static getHearingDate(document: AppearanceDocument): string {
     if (document.warrantType === 'NON_SENTENCING') return document.warrantDate
     return null

@@ -9,7 +9,7 @@ import { getAsStringOrDefault } from '../../../utils/utils'
 import { DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
-import { AppearanceDocumentConverter } from '../../../@types/remandAndSentencingApi/types'
+import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 
 export default class DocumentRoutes {
   constructor(
@@ -60,15 +60,15 @@ export default class DocumentRoutes {
             appearanceAndType[1].forEach(appearanceDocument => {
               if (appearanceDocument.documentUUID === it.documentUuid) {
                 ;[document.type] = appearanceAndType
-                document.typeDescription = AppearanceDocumentConverter.getDocumentTypeDescription(
+                document.typeDescription = RaSDocumentMapper.getDocumentTypeDescription(
                   appearanceDocument,
                   document.type,
                 )
                 document.courtCaseUuid = caseDocument.courtCaseUuid
                 document.courtCode = appearanceDocument.courtCode
                 document.caseReference = appearanceDocument.caseReference
-                document.hearingDate = AppearanceDocumentConverter.getHearingDate(appearanceDocument)
-                document.warrantDate = AppearanceDocumentConverter.getWarrantDate(appearanceDocument)
+                document.hearingDate = RaSDocumentMapper.getHearingDate(appearanceDocument)
+                document.warrantDate = RaSDocumentMapper.getWarrantDate(appearanceDocument)
               }
             }),
           ),
