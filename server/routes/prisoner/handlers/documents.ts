@@ -4,7 +4,6 @@ import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
-import CourtRegisterService from '../../../services/courtRegisterService'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import { getAsStringOrDefault } from '../../../utils/utils'
 import { DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
@@ -17,7 +16,6 @@ export default class DocumentRoutes {
     private readonly prisonerService: PrisonerService,
     private readonly documentManagementService: DocumentManagementService,
     private readonly remandAndSentencingService: RemandAndSentencingService,
-    private readonly courtRegisterService: CourtRegisterService,
   ) {}
 
   documents = async (req: Request, res: Response): Promise<void> => {
@@ -39,8 +37,6 @@ export default class DocumentRoutes {
     const serviceDefinitions = await this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token)
     const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
     const rasDocuments = await this.remandAndSentencingService.getDocuments(prisoner.prisonerNumber, username)
-
-    // const test = await this.courtRegisterService.getCourt('LVRPCC', username)
 
     const viewModelDocuments = documents.results.map(it => {
       const document = {
