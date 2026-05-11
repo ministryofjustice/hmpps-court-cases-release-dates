@@ -93,7 +93,7 @@ describe('Route Handlers - Overview', () => {
         const thirdRasDocument = $('[data-qa=document-80dffad6-ec63-47e5-9d79-cb96537081e7]')
         const thirdRasDocumentText = thirdRasDocument.text()
         expect(thirdRasDocumentText).toContain('Sentencing warrant')
-        expect(thirdRasDocumentText).toContain('11.47 GB PDF')
+        expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
         expect(thirdRasDocumentText).toContain('29 March 2026')
         const thirdRasDocumentLink = thirdRasDocument.find('a[data-qa=court-case-link]').attr('href')
