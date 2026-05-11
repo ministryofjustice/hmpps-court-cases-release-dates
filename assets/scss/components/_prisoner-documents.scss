@@ -1,11 +1,4 @@
-.prisoner-doc-type-title {
-  @include govuk-responsive-margin(2, 'bottom');
-}
 .prisoner-doc-link {
   @include govuk-font($size: 24, $weight: 'bold');
   @include govuk-responsive-margin(1, 'right');
-}
-
-.prisoner-doc-filename {
-  @include govuk-font($size: 16);
 }
