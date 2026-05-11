@@ -10,7 +10,6 @@ import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesAp
 import DocumentManagementService from '../../../services/documentManagementService'
 import { DocumentSearchResult } from '../../../@types/documentManagementApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
-import Regex from 'prettier-plugin-jinja-template/src/regex'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
