@@ -10,6 +10,7 @@ import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesAp
 import DocumentManagementService from '../../../services/documentManagementService'
 import { DocumentSearchResult } from '../../../@types/documentManagementApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
+import Regex from 'prettier-plugin-jinja-template/src/regex'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
@@ -87,9 +88,9 @@ describe('Route Handlers - Overview', () => {
         expect(secondRasDocumentText).toContain('Prison court register')
         expect(secondRasDocumentText).toContain('PDF 119.41 MB')
         expect(secondRasDocumentText).toContain('Court cases')
-        expect(secondRasDocumentText).toContain(getColumnLabelAndValue('Case reference', 'BC23456789B'))
-        expect(secondRasDocumentText).toContain(getColumnLabelAndValue('Court name', 'LVRPCC'))
-        expect(secondRasDocumentText).toContain(getColumnLabelAndValue('Hearing date', '05 October 2025'))
+        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Case reference', 'BC23456789B'))
+        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Court name', 'LVRPCC'))
+        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Hearing date', '05 October 2025'))
         expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
         const secondRasDocumentLink = secondRasDocument.find('a[data-qa=court-case-link]').attr('href')
@@ -102,9 +103,9 @@ describe('Route Handlers - Overview', () => {
         expect(thirdRasDocumentText).toContain('Sentencing warrant')
         expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
-        expect(thirdRasDocumentText).toContain(getColumnLabelAndValue('Case reference', 'AB12345678A'))
-        expect(thirdRasDocumentText).toContain(getColumnLabelAndValue('Court name', 'MNCHMC'))
-        expect(thirdRasDocumentText).toContain(getColumnLabelAndValue('Warrant date', '04 November 2025'))
+        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Case reference', 'AB12345678A'))
+        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Court name', 'MNCHMC'))
+        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Warrant date', '04 November 2025'))
         expect(thirdRasDocumentText).not.toContain('Hearing date')
         expect(thirdRasDocumentText).toContain('29 March 2026')
         const thirdRasDocumentLink = thirdRasDocument.find('a[data-qa=court-case-link]').attr('href')
@@ -115,8 +116,8 @@ describe('Route Handlers - Overview', () => {
   })
 })
 
-function getColumnLabelAndValue(label: string, value: string): string {
-  return `${label}\n                ${value}`
+function getColumnLabelAndValue(label: string, value: string): RegExp {
+  return new RegExp(`(${label})(\\s*)(${value})`)
 }
 
 const serviceDefinitionsNoThingsToDo = {
