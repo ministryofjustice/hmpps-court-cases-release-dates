@@ -28,9 +28,8 @@ export default class CourtRegisterService {
       await this.getSystemClientToken(username),
     ).findCourtsByIds(courtCodes)
 
-    courtNames.map(court => {
-      if (!this.courtNamesCache.has(court.courtId))
-        this.courtNamesCache.set(court.courtId, court.courtName)
+    courtNames.forEach(court => {
+      if (!this.courtNamesCache.has(court.courtId)) this.courtNamesCache.set(court.courtId, court.courtName)
     })
   }
 }
