@@ -59,31 +59,29 @@ export default class DocumentRoutes {
       } else {
         // From RaS
         rasDocuments.courtCaseDocuments.forEach(caseDocument =>
-          Object.entries(caseDocument.appearanceDocumentsByType).forEach(
-            appearanceAndType => {
-              rasDocumentPromises = [
-                ...rasDocumentPromises,
-                ...appearanceAndType[1].map(async appearanceDocument => {
-                  if (appearanceDocument.documentUUID === it.documentUuid) {
-                    ;[document.type] = appearanceAndType
-                    document.typeDescription = RaSDocumentMapper.getDocumentTypeDescription(
-                      appearanceDocument,
-                      document.type,
-                    )
-
-                    document.courtCaseUuid = caseDocument.courtCaseUuid
-                    document.caseReference = appearanceDocument.caseReference
-                    document.hearingDate = RaSDocumentMapper.getHearingDate(appearanceDocument)
-                    document.warrantDate = RaSDocumentMapper.getWarrantDate(appearanceDocument)
-                    document.courtCode = appearanceDocument.courtCode
-                    document.courtName = appearanceDocument.courtCode
-                    document.courtName = await this.courtRegisterService.getCourtName(
-                      appearanceDocument.courtCode,
-                      username,
-                    )
-                  }
-                }),
-              ]},
+          Object.entries(caseDocument.appearanceDocumentsByType).forEach(appearanceAndType => {
+            rasDocumentPromises = [
+              ...rasDocumentPromises,
+              ...appearanceAndType[1].map(async appearanceDocument => {
+                if (appearanceDocument.documentUUID === it.documentUuid) {
+                  ;[document.type] = appearanceAndType
+                  document.typeDescription = RaSDocumentMapper.getDocumentTypeDescription(
+                    appearanceDocument,
+                    document.type,
+                  )
+                  document.courtCaseUuid = caseDocument.courtCaseUuid
+                  document.caseReference = appearanceDocument.caseReference
+                  document.hearingDate = RaSDocumentMapper.getHearingDate(appearanceDocument)
+                  document.warrantDate = RaSDocumentMapper.getWarrantDate(appearanceDocument)
+                  document.courtCode = appearanceDocument.courtCode
+                  document.courtName = await this.courtRegisterService.getCourtName(
+                    appearanceDocument.courtCode,
+                    username,
+                  )
+                }
+              }),
+            ]
+            },
           ),
         )
       }
