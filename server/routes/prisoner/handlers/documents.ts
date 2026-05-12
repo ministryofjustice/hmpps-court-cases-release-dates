@@ -144,7 +144,7 @@ export default class DocumentRoutes {
         try {
           await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
         } catch (error: unknown) {
-          //Allow 404 errors for documents not in CDIA
+          // Allow 404 errors for documents not in CDIA
           if ((error as { status?: number })?.status !== 404) {
             throw error
           }
