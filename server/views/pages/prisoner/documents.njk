@@ -24,17 +24,48 @@
     <hr class="govuk-section-break govuk-section-break--visible">
     {% for document in documents %}
       <div data-qa="document-{{document.documentUuid}}"> 
-        <div class="govuk-grid-row govuk-!-padding-bottom-2 govuk-!-margin-top-2">
+        <div class="govuk-grid-row govuk-!-padding-bottom-0 govuk-!-margin-top-2">
           <div class="govuk-grid-column-full">
-              <p class="govuk-body">
-                  <a class="govuk-link govuk-link--no-visited-state"
+              <p class="govuk-body govuk-!-margin-bottom-1">
+                  <a class="govuk-link govuk-link--no-visited-state prisoner-doc-link"
                       target="_blank"
                       href="/prisoner/{{prisoner.prisonerNumber}}/documents/{{document.documentUuid}}/download">{{document.typeDescription}}</a>
-                  {{document.fileSize | humanReadableFileSize}} {{document.fileExtension | uppercase}}
+                    {{document.fileExtension | uppercase}} {{document.fileSize | humanReadableFileSize}}
               </p>
           </div>
         </div>
+
         <div class="govuk-grid-row govuk-!-padding-bottom-2">
+          <div class="govuk-grid-column-one-third">
+            {% if document.caseReference %}
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Case reference</h3>
+                <p class="govuk-body govuk-!-margin-bottom-2">{{document.caseReference | uppercase}}</p>
+            {% endif %}
+          </div>
+          <div class="govuk-grid-column-one-third">
+            {% if document.courtCode %}
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Court name</h3>
+                <p class="govuk-body govuk-!-margin-bottom-2">{{document.courtCode}}</p>
+            {% endif %}
+          </div>
+          <div class="govuk-grid-column-one-third">
+            {% if document.hearingDate %}
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing date</h3>
+                <p class="govuk-body govuk-!-margin-bottom-2">{{document.hearingDate | date}}</p>
+            {% else %}
+            {% if document.warrantDate %}
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Warrant date</h3>
+                <p class="govuk-body govuk-!-margin-bottom-2">{{document.warrantDate | date}}</p>
+            {% endif %}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="govuk-grid-row govuk-!-padding-bottom-2">
+          <div class="govuk-grid-column-one-third">
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date added</h3>
+            <p class="govuk-body govuk-!-margin-bottom-2">{{document.createdTime | date}}</p>
+          </div>
           <div class="govuk-grid-column-two-thirds">
               <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Source</h3>
               {% if document.courtCaseUuid %}
@@ -42,11 +73,6 @@
               {% else %}
                 <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
               {% endif %}
-              <p class="govuk-body govuk-!-margin-bottom-2 govuk-hint">File name: {{document.filename}}.{{document.fileExtension}}</p>
-          </div>
-          <div class="govuk-grid-column-one-third">
-              <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date added</h3>
-              <p class="govuk-body govuk-!-margin-bottom-2">{{document.createdTime | date}}</p>
           </div>
         </div>
       </div>

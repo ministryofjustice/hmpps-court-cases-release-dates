@@ -75,15 +75,22 @@ describe('Route Handlers - Overview', () => {
         const $ = cheerio.load(res.text)
         const firstCommonPlatformDocumentText = $('[data-qa=document-4fd5f7b0-eebf-4b69-9489-0cc48550e03b]').text()
         expect(firstCommonPlatformDocumentText).toContain('Prison court register')
-        expect(firstCommonPlatformDocumentText).toContain('2.18 KB PDF')
+        expect(firstCommonPlatformDocumentText).toContain('PDF 2.18 KB')
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
+        expect(firstCommonPlatformDocumentText).not.toContain('Case reference')
+        expect(firstCommonPlatformDocumentText).not.toContain('Court name')
+        expect(firstCommonPlatformDocumentText).not.toContain('Hearing dates')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
 
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
         const secondRasDocumentText = secondRasDocument.text()
         expect(secondRasDocumentText).toContain('Prison court register')
-        expect(secondRasDocumentText).toContain('119.41 MB PDF')
+        expect(secondRasDocumentText).toContain('PDF 119.41 MB')
         expect(secondRasDocumentText).toContain('Court cases')
+        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Case reference', 'BC23456789B'))
+        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Court name', 'LVRPCC'))
+        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Hearing date', '05 October 2025'))
+        expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
         const secondRasDocumentLink = secondRasDocument.find('a[data-qa=court-case-link]').attr('href')
         expect(secondRasDocumentLink).toContain(
@@ -93,8 +100,12 @@ describe('Route Handlers - Overview', () => {
         const thirdRasDocument = $('[data-qa=document-80dffad6-ec63-47e5-9d79-cb96537081e7]')
         const thirdRasDocumentText = thirdRasDocument.text()
         expect(thirdRasDocumentText).toContain('Sentencing warrant')
-        expect(thirdRasDocumentText).toContain('11.47 GB PDF')
+        expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
+        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Case reference', 'AB12345678A'))
+        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Court name', 'MNCHMC'))
+        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Warrant date', '04 November 2025'))
+        expect(thirdRasDocumentText).not.toContain('Hearing date')
         expect(thirdRasDocumentText).toContain('29 March 2026')
         const thirdRasDocumentLink = thirdRasDocument.find('a[data-qa=court-case-link]').attr('href')
         expect(thirdRasDocumentLink).toContain(
@@ -103,6 +114,10 @@ describe('Route Handlers - Overview', () => {
       })
   })
 })
+
+function getColumnLabelAndValue(label: string, value: string): RegExp {
+  return new RegExp(`(${label})(\\s*)(${value})`)
+}
 
 const serviceDefinitionsNoThingsToDo = {
   services: {
