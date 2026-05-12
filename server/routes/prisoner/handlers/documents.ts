@@ -45,6 +45,7 @@ export default class DocumentRoutes {
     const documentIdsFromCp = documents.results
       .filter(it => it.metadata.source === 'court-data-ingestion-api')
       .map(it => it.documentUuid)
+
     let cpDocuments: CourtDocument[] = []
     if (documentIdsFromCp.length) {
       cpDocuments = await this.courtDataIngestionService.getDocuments(
@@ -53,6 +54,8 @@ export default class DocumentRoutes {
         username,
       )
     }
+
+    await this.courtRegisterService.getCourtNames(RaSDocumentMapper.collectCourtCodes(rasDocuments), username)
 
     let rasDocumentPromises: Promise<void>[] = []
     const viewModelDocuments = documents.results.map(it => {
@@ -70,7 +73,7 @@ export default class DocumentRoutes {
           type => type.type === it.documentType,
         ).name
         const cpDocument = cpDocuments.find(itCpDocument => itCpDocument.prisonDocumentId === it.documentUuid)
-        document.isNew = cpDocument.isUnread
+        document.isNew = cpDocument ? cpDocument.isUnread : false
       } else {
         // From RaS
         rasDocuments.courtCaseDocuments.forEach(caseDocument =>

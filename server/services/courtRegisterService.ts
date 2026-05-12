@@ -22,4 +22,17 @@ export default class CourtRegisterService {
   private async findCourtById(courtCode: string, username: string): Promise<CourtDto> {
     return new CourtRegisterApiClient(await this.getSystemClientToken(username)).findCourtById(courtCode)
   }
+
+  public async getCourtNames(courtCodes: string[], username: string) {
+    const courtNames: CourtDto[] = await new CourtRegisterApiClient(
+      await this.getSystemClientToken(username),
+    ).findCourtsByIds(courtCodes)
+
+    courtNames.map(court => {
+      if (this.courtNamesCache.has(court.courtId)) return
+
+      this.courtNamesCache.set(court.courtId, court.courtName)
+      return court.courtName
+    })
+  }
 }
