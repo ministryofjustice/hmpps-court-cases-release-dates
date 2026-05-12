@@ -22,7 +22,7 @@ const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService
 const documentManagementService = new DocumentManagementService(null) as jest.Mocked<DocumentManagementService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 const remandAndSentencingService = new RemandAndSentencingService(null) as jest.Mocked<RemandAndSentencingService>
-let courtRegisterService = new CourtRegisterService(null) as jest.Mocked<CourtRegisterService>
+const courtRegisterService = new CourtRegisterService(null) as jest.Mocked<CourtRegisterService>
 
 let app: Express
 

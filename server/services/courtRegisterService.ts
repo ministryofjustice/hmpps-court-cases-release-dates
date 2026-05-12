@@ -1,7 +1,6 @@
 import CourtRegisterApiClient from '../data/courtRegisterApiClient'
 import { CourtDto } from '../@types/courtRegisterApi/types'
 import { HmppsAuthClient } from '../data'
-import logger from '../../logger'
 
 export default class CourtRegisterService {
   public courtNamesCache: Map<string, string> = new Map<string, string>()
