@@ -58,8 +58,8 @@ export default class DocumentRoutes {
         ).name
       } else {
         // From RaS
-        rasDocuments.courtCaseDocuments.forEach(caseDocument =>
-          Object.entries(caseDocument.appearanceDocumentsByType).forEach(
+        rasDocuments.courtCaseDocuments.map(caseDocument =>
+          Object.entries(caseDocument.appearanceDocumentsByType).map(
             appearanceAndType =>
               (rasDocumentPromises = [
                 ...rasDocumentPromises,
@@ -82,7 +82,7 @@ export default class DocumentRoutes {
                       username,
                     )
                   }
-                })
+                }),
               ]),
           ),
         )
