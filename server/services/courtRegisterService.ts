@@ -24,7 +24,7 @@ export default class CourtRegisterService {
   }
 
   public async getCourtNames(courtCodes: string[], username: string): Promise<void> {
-    const missingCourtCodes = courtCodes.filter((courtCode) => !this.courtNamesCache.has(courtCode))
+    const missingCourtCodes = courtCodes.filter(courtCode => !this.courtNamesCache.has(courtCode))
 
     if (!missingCourtCodes.length) return
 
