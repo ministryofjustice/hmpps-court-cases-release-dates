@@ -24,13 +24,13 @@ export default class CourtRegisterService {
   }
 
   public async getCourtNames(courtCodes: string[], username: string): Promise<void> {
-    courtCodes = courtCodes.filter((courtCode) => !this.courtNamesCache.has(courtCode))
+    const missingCourtCodes = courtCodes.filter((courtCode) => !this.courtNamesCache.has(courtCode))
 
-    if (!courtCodes.length) return
+    if (!missingCourtCodes.length) return
 
     const courtNames: CourtDto[] = await new CourtRegisterApiClient(
       await this.getSystemClientToken(username),
-    ).findCourtsByIds(courtCodes)
+    ).findCourtsByIds(missingCourtCodes)
 
     courtNames.forEach(court => {
       if (!this.courtNamesCache.has(court.courtId)) this.courtNamesCache.set(court.courtId, court.courtName)
