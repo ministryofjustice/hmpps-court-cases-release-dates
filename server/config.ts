@@ -150,6 +150,14 @@ export default {
       },
       agent: new AgentConfig(Number(get('REMAND_AND_SENTENCING_API_TIMEOUT_RESPONSE', 10000))),
     },
+    courtRegisterApi: {
+      url: get('COURT_REGISTER_API_URL', 'http://localhost:8083', requiredInProduction),
+      timeout: {
+        response: Number(get('COURT_REGISTER_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('COURT_REGISTER_API_TIMEOUT_RESPONSE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('COURT_REGISTER_API_TIMEOUT_RESPONSE', 10000))),
+    },
     prisonRegisterApi: {
       url: get('PRISON_REGISTER_API_URL', 'http://localhost:8083', requiredInProduction),
       timeout: {
@@ -184,12 +192,12 @@ export default {
     courtCasesReleaseDates: {
       url: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
     },
+    remandAndSentencing: {
+      url: get('REMAND_AND_SENTENCING_UI_URL', 'http://localhost:3000', requiredInProduction),
+    },
     immigrationDetention: {
       url: get('IMMIGRATION_DETENTION_URL', 'http://localhost:9082', requiredInProduction),
       enabled: get('IMMIGRATION_DETENTION_ENABLED', false) === 'true',
-    },
-    remandAndSentencing: {
-      url: get('REMAND_AND_SENTENCING_UI_URL', 'http://localhost:3000', requiredInProduction),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),

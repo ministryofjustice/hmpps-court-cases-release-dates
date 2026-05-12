@@ -10,16 +10,19 @@ import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesAp
 import DocumentManagementService from '../../../services/documentManagementService'
 import { DocumentSearchResult } from '../../../@types/documentManagementApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
+import CourtRegisterService from '../../../services/courtRegisterService'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
 jest.mock('../../../services/prisonerSearchService')
 jest.mock('../../../services/remandAndSentencingService')
+jest.mock('../../../services/courtRegisterService')
 
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 const documentManagementService = new DocumentManagementService(null) as jest.Mocked<DocumentManagementService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 const remandAndSentencingService = new RemandAndSentencingService(null) as jest.Mocked<RemandAndSentencingService>
+let courtRegisterService = new CourtRegisterService(null) as jest.Mocked<CourtRegisterService>
 
 let app: Express
 
@@ -28,6 +31,7 @@ const defaultServices = {
   documentManagementService,
   prisonerSearchService,
   remandAndSentencingService,
+  courtRegisterService,
 }
 
 const defaultUser = { ...user, hasAdjustmentsAccess: true, hasRasAccess: true, hasRecallsAccess: true }
@@ -55,6 +59,10 @@ describe('Route Handlers - Overview', () => {
     prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
     documentManagementService.searchDocument.mockResolvedValue(documents)
     remandAndSentencingService.getDocuments.mockResolvedValue(rasDocuments)
+    courtRegisterService.getCourtName
+      .mockReturnValue('LVRPCC' as unknown as Promise<string>)
+      .mockReturnValueOnce('LV Liverpool Court' as unknown as Promise<string>)
+      .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
 
     return request(app)
       .get('/prisoner/A12345B/documents')
@@ -79,7 +87,8 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
         expect(firstCommonPlatformDocumentText).not.toContain('Case reference')
         expect(firstCommonPlatformDocumentText).not.toContain('Court name')
-        expect(firstCommonPlatformDocumentText).not.toContain('Hearing dates')
+        expect(firstCommonPlatformDocumentText).not.toContain('Hearing date')
+        expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
 
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
@@ -87,9 +96,15 @@ describe('Route Handlers - Overview', () => {
         expect(secondRasDocumentText).toContain('Prison court register')
         expect(secondRasDocumentText).toContain('PDF 119.41 MB')
         expect(secondRasDocumentText).toContain('Court cases')
-        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Case reference', 'BC23456789B'))
-        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Court name', 'LVRPCC'))
-        expect(secondRasDocumentText).toMatch(getColumnLabelAndValue('Hearing date', '05 October 2025'))
+        expect(secondRasDocumentText).toContain('Case reference')
+        const secondRasDocumentCaseRef = secondRasDocument.find('[data-qa=case-reference]').text()
+        expect(secondRasDocumentCaseRef).toContain('BC23456789B')
+        expect(secondRasDocumentText).toContain('Court name')
+        const secondRasDocumentCourtName = secondRasDocument.find('[data-qa=court-name]').text()
+        expect(secondRasDocumentCourtName).toContain('LV Liverpool Court')
+        expect(secondRasDocumentText).toContain('Hearing date')
+        const secondRasDocumentHearingDate = secondRasDocument.find('[data-qa=hearing-date]').text()
+        expect(secondRasDocumentHearingDate).toContain('05 October 2025')
         expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
         const secondRasDocumentLink = secondRasDocument.find('a[data-qa=court-case-link]').attr('href')
@@ -102,10 +117,16 @@ describe('Route Handlers - Overview', () => {
         expect(thirdRasDocumentText).toContain('Sentencing warrant')
         expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
-        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Case reference', 'AB12345678A'))
-        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Court name', 'MNCHMC'))
-        expect(thirdRasDocumentText).toMatch(getColumnLabelAndValue('Warrant date', '04 November 2025'))
+        expect(thirdRasDocumentText).toContain('Case reference')
+        const thirdRasDocumentCaseRef = thirdRasDocument.find('[data-qa=case-reference]').text()
+        expect(thirdRasDocumentCaseRef).toContain('AB12345678A')
+        expect(thirdRasDocumentText).toContain('Court name')
+        const thirdRasDocumentTextCourtName = thirdRasDocument.find('[data-qa=court-name]').text()
+        expect(thirdRasDocumentTextCourtName).toContain('MN Manchester Court')
         expect(thirdRasDocumentText).not.toContain('Hearing date')
+        expect(thirdRasDocumentText).toContain('Warrant date')
+        const thirdRasDocumentWarrantDate = thirdRasDocument.find('[data-qa=warrant-date]').text()
+        expect(thirdRasDocumentWarrantDate).toContain('04 November 2025')
         expect(thirdRasDocumentText).toContain('29 March 2026')
         const thirdRasDocumentLink = thirdRasDocument.find('a[data-qa=court-case-link]').attr('href')
         expect(thirdRasDocumentLink).toContain(
@@ -114,10 +135,6 @@ describe('Route Handlers - Overview', () => {
       })
   })
 })
-
-function getColumnLabelAndValue(label: string, value: string): RegExp {
-  return new RegExp(`(${label})(\\s*)(${value})`)
-}
 
 const serviceDefinitionsNoThingsToDo = {
   services: {
