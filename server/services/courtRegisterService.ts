@@ -3,7 +3,7 @@ import { CourtDto } from '../@types/courtRegisterApi/types'
 import { HmppsAuthClient } from '../data'
 
 export default class CourtRegisterService {
-  public courtNamesCache: Map<string, string> = new Map<string, string>()
+  private courtNamesCache: Map<string, string> = new Map<string, string>()
 
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
 
