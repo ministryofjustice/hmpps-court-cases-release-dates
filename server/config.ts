@@ -192,12 +192,12 @@ export default {
     courtCasesReleaseDates: {
       url: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
     },
-    remandAndSentencing: {
-      url: get('REMAND_AND_SENTENCING_UI_URL', 'http://localhost:3000', requiredInProduction),
-    },
     immigrationDetention: {
       url: get('IMMIGRATION_DETENTION_URL', 'http://localhost:9082', requiredInProduction),
       enabled: get('IMMIGRATION_DETENTION_ENABLED', false) === 'true',
+    },
+    remandAndSentencing: {
+      url: get('REMAND_AND_SENTENCING_UI_URL', 'http://localhost:3000', requiredInProduction),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
