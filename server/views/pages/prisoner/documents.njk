@@ -1,5 +1,6 @@
 {% extends "../../partials/prisonerLayout.njk" %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% set pageTitle = "Court cases and release dates - documents" %}
 {% set activeSubNav = 'documents' %}
@@ -23,15 +24,20 @@
     </div>
     <hr class="govuk-section-break govuk-section-break--visible">
     {% for document in documents %}
-      <div data-qa="document-{{document.documentUuid}}"> 
+      <div data-qa="document-{{document.documentUuid}}" class="document {{'new' if document.isNew else ''}}"> 
         <div class="govuk-grid-row govuk-!-padding-bottom-0 govuk-!-margin-top-2">
-          <div class="govuk-grid-column-full">
+          <div class="govuk-grid-column-two-thirds">
               <p class="govuk-body govuk-!-margin-bottom-1">
                   <a class="govuk-link govuk-link--no-visited-state prisoner-doc-link"
                       target="_blank"
                       href="/prisoner/{{prisoner.prisonerNumber}}/documents/{{document.documentUuid}}/download">{{document.typeDescription}}</a>
                     {{document.fileExtension | uppercase}} {{document.fileSize | humanReadableFileSize}}
               </p>
+          </div>
+          <div class="govuk-grid-column-one-third">
+              {% if document.isNew %}
+                {{govukTag({ text: "New" })}}
+              {% endif %}
           </div>
         </div>
 

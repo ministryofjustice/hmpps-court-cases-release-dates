@@ -10,12 +10,15 @@ import { DocumentSearchRequest } from '../../../@types/documentManagementApi/typ
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
+import CourtDataIngestionService from '../../../services/courtDataIngestionService'
+import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 
 export default class DocumentRoutes {
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly documentManagementService: DocumentManagementService,
     private readonly remandAndSentencingService: RemandAndSentencingService,
+    private readonly courtDataIngestionService: CourtDataIngestionService,
   ) {}
 
   documents = async (req: Request, res: Response): Promise<void> => {
@@ -37,6 +40,17 @@ export default class DocumentRoutes {
     const serviceDefinitions = await this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token)
     const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
     const rasDocuments = await this.remandAndSentencingService.getDocuments(prisoner.prisonerNumber, username)
+    const documentIdsFromCp = documents.results
+      .filter(it => it.metadata.source === 'court-data-ingestion-api')
+      .map(it => it.documentUuid)
+    let cpDocuments: CourtDocument[] = []
+    if (documentIdsFromCp.length) {
+      cpDocuments = await this.courtDataIngestionService.getDocuments(
+        prisoner.prisonerNumber,
+        documentIdsFromCp,
+        username,
+      )
+    }
 
     const viewModelDocuments = documents.results.map(it => {
       const document = {
@@ -46,13 +60,14 @@ export default class DocumentRoutes {
         fileExtension: it.fileExtension,
         fileSize: it.fileSize,
       } as Partial<DocumentViewModel>
-
       if (it.metadata.source === 'court-data-ingestion-api') {
         // From CP
         document.type = it.documentType
         document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
           type => type.type === it.documentType,
         ).name
+        const cpDocument = cpDocuments.find(itCpDocument => itCpDocument.prisonDocumentId === it.documentUuid)
+        document.isNew = cpDocument.isUnread
       } else {
         // From RaS
         rasDocuments.courtCaseDocuments.forEach(caseDocument =>
@@ -126,6 +141,14 @@ export default class DocumentRoutes {
 
       fileStream.on('end', async () => {
         logger.info(`Successfully streamed document ${documentId} to client.`)
+        try {
+          await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
+        } catch (error: unknown) {
+          //Allow 404 errors for documents not in CDIA
+          if ((error as { status?: number })?.status !== 404) {
+            throw error
+          }
+        }
         // TODO audit & update notification endpoint document has been downloaded.
       })
 
@@ -176,4 +199,5 @@ type DocumentViewModel = {
   caseReference: string
   hearingDate: string
   warrantDate: string
+  isNew: boolean
 }
