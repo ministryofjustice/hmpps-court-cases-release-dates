@@ -58,10 +58,10 @@ export default class DocumentRoutes {
         ).name
       } else {
         // From RaS
-        rasDocuments.courtCaseDocuments.map(caseDocument =>
-          Object.entries(caseDocument.appearanceDocumentsByType).map(
-            appearanceAndType =>
-              (rasDocumentPromises = [
+        rasDocuments.courtCaseDocuments.forEach(caseDocument =>
+          Object.entries(caseDocument.appearanceDocumentsByType).forEach(
+            appearanceAndType => {
+              rasDocumentPromises = [
                 ...rasDocumentPromises,
                 ...appearanceAndType[1].map(async appearanceDocument => {
                   if (appearanceDocument.documentUUID === it.documentUuid) {
@@ -83,7 +83,7 @@ export default class DocumentRoutes {
                     )
                   }
                 }),
-              ]),
+              ]},
           ),
         )
       }
