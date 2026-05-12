@@ -8,6 +8,7 @@ import CalculateReleaseDatesService from './calculateReleaseDatesService'
 import RemandAndSentencingService from './remandAndSentencingService'
 import PrisonService from './prisonService'
 import DocumentManagementService from './documentManagementService'
+import CourtDataIngestionService from './courtDataIngestionService'
 import CourtRegisterService from './courtRegisterService'
 
 export const services = () => {
@@ -32,6 +33,8 @@ export const services = () => {
 
   const documentManagementService = new DocumentManagementService(hmppsAuthenticationClient)
 
+  const courtDataIngestionService = new CourtDataIngestionService(hmppsAuthClient)
+
   const courtRegisterService = new CourtRegisterService(hmppsAuthClient)
 
   return {
@@ -45,6 +48,7 @@ export const services = () => {
     remandAndSentencingService,
     prisonService,
     documentManagementService,
+    courtDataIngestionService,
     courtRegisterService,
   }
 }

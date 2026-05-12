@@ -16,6 +16,7 @@ export default function Index({
   remandAndSentencingService,
   prisonService,
   documentManagementService,
+  courtDataIngestionService,
   courtRegisterService,
 }: Services): Router {
   const router = Router()
@@ -39,13 +40,23 @@ export default function Index({
 
   get(
     '/:prisonerNumber/documents',
-    new DocumentRoutes(prisonerService, documentManagementService, remandAndSentencingService, courtRegisterService)
-      .documents,
+    new DocumentRoutes(
+      prisonerService,
+      documentManagementService,
+      remandAndSentencingService,
+      courtDataIngestionService,
+      courtRegisterService,
+    ).documents,
   )
   get(
     '/:prisonerNumber/documents/:documentId/download',
-    new DocumentRoutes(prisonerService, documentManagementService, remandAndSentencingService, courtRegisterService)
-      .downloadDocument,
+    new DocumentRoutes(
+      prisonerService,
+      documentManagementService,
+      remandAndSentencingService,
+      courtDataIngestionService,
+      courtRegisterService,
+    ).downloadDocument,
   )
 
   router.get('/config', new ConfigRoutes(prisonerService).getConfig)

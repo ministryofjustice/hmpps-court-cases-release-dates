@@ -11,17 +11,21 @@ import DocumentManagementService from '../../../services/documentManagementServi
 import { DocumentSearchResult } from '../../../@types/documentManagementApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import CourtRegisterService from '../../../services/courtRegisterService'
+import CourtDataIngestionService from '../../../services/courtDataIngestionService'
+import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
 jest.mock('../../../services/prisonerSearchService')
 jest.mock('../../../services/remandAndSentencingService')
+jest.mock('../../../services/courtDataIngestionService')
 jest.mock('../../../services/courtRegisterService')
 
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 const documentManagementService = new DocumentManagementService(null) as jest.Mocked<DocumentManagementService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 const remandAndSentencingService = new RemandAndSentencingService(null) as jest.Mocked<RemandAndSentencingService>
+const courtDataIngestionService = new CourtDataIngestionService(null) as jest.Mocked<CourtDataIngestionService>
 const courtRegisterService = new CourtRegisterService(null) as jest.Mocked<CourtRegisterService>
 
 let app: Express
@@ -31,6 +35,7 @@ const defaultServices = {
   documentManagementService,
   prisonerSearchService,
   remandAndSentencingService,
+  courtDataIngestionService,
   courtRegisterService,
 }
 
@@ -59,6 +64,7 @@ describe('Route Handlers - Overview', () => {
     prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
     documentManagementService.searchDocument.mockResolvedValue(documents)
     remandAndSentencingService.getDocuments.mockResolvedValue(rasDocuments)
+    courtDataIngestionService.getDocuments.mockResolvedValue(cpDocuments)
     courtRegisterService.getCourtName
       .mockReturnValue('LVRPCC' as unknown as Promise<string>)
       .mockReturnValueOnce('LV Liverpool Court' as unknown as Promise<string>)
@@ -90,6 +96,7 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).not.toContain('Hearing date')
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
+        expect(firstCommonPlatformDocumentText).toContain('New')
 
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
         const secondRasDocumentText = secondRasDocument.text()
@@ -107,6 +114,7 @@ describe('Route Handlers - Overview', () => {
         expect(secondRasDocumentHearingDate).toContain('05 October 2025')
         expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
+        expect(secondRasDocumentText).not.toContain('New')
         const secondRasDocumentLink = secondRasDocument.find('a[data-qa=court-case-link]').attr('href')
         expect(secondRasDocumentLink).toContain(
           'http://localhost:3000/person/A12345B/view-court-case/c6bbb5bb-1086-473f-8eff-1d25ee305750/details',
@@ -128,6 +136,7 @@ describe('Route Handlers - Overview', () => {
         const thirdRasDocumentWarrantDate = thirdRasDocument.find('[data-qa=warrant-date]').text()
         expect(thirdRasDocumentWarrantDate).toContain('04 November 2025')
         expect(thirdRasDocumentText).toContain('29 March 2026')
+        expect(thirdRasDocumentText).not.toContain('New')
         const thirdRasDocumentLink = thirdRasDocument.find('a[data-qa=court-case-link]').attr('href')
         expect(thirdRasDocumentLink).toContain(
           'http://localhost:3000/person/A12345B/view-court-case/9916c639-b188-47fe-842f-451d1f598cab/details',
@@ -223,6 +232,15 @@ const documents = {
   ],
   totalResultsCount: 3,
 } as DocumentSearchResult
+
+const cpDocuments = [
+  {
+    caseReferences: ['CommonPlatformCase123'],
+    prisonDocumentId: '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
+    isUnread: true,
+  },
+] as CourtDocument[]
+
 const rasDocuments = {
   courtCaseDocuments: [
     {
