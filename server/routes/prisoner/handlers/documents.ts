@@ -81,7 +81,7 @@ export default class DocumentRoutes {
                 }
               }),
             ]
-            },
+            }
           ),
         )
       }
