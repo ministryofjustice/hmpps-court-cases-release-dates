@@ -5,6 +5,12 @@ import { RasPrisonerDocuments } from './remandAndSentencingTypes'
 export type AppearanceDocument = components['schemas']['AppearanceDocument']
 
 export class RaSDocumentMapper {
+  public static CASE_REFERENCE_NOT_ENTERED: string = 'Not entered'
+
+  static getCaseReference(document: AppearanceDocument): string {
+    return document.caseReference ? document.caseReference.toUpperCase() : this.CASE_REFERENCE_NOT_ENTERED
+  }
+
   static getHearingDate(document: AppearanceDocument): string {
     if (document.warrantType === 'NON_SENTENCING') return document.warrantDate
     return null

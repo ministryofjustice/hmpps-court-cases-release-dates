@@ -13,6 +13,7 @@ import RemandAndSentencingService from '../../../services/remandAndSentencingSer
 import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
+import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
@@ -68,6 +69,7 @@ describe('Route Handlers - Overview', () => {
     courtRegisterService.getCourtName
       .mockReturnValue('LVRPCC' as unknown as Promise<string>)
       .mockReturnValueOnce('LV Liverpool Court' as unknown as Promise<string>)
+      .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
       .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
 
     return request(app)
@@ -139,6 +141,28 @@ describe('Route Handlers - Overview', () => {
         expect(thirdRasDocumentText).not.toContain('New')
         const thirdRasDocumentLink = thirdRasDocument.find('a[data-qa=court-case-link]').attr('href')
         expect(thirdRasDocumentLink).toContain(
+          'http://localhost:3000/person/A12345B/view-court-case/9916c639-b188-47fe-842f-451d1f598cab/details',
+        )
+
+        const fourthRasDocument = $('[data-qa=document-80dffad6-ec63-47e5-9d79-cb96537081e8]')
+        const fourthRasDocumentText = fourthRasDocument.text()
+        expect(fourthRasDocumentText).toContain('Sentencing warrant')
+        expect(fourthRasDocumentText).toContain('PDF 11.47 GB')
+        expect(fourthRasDocumentText).toContain('Court cases')
+        expect(fourthRasDocumentText).toContain('Case reference')
+        const fourthRasDocumentCaseRef = fourthRasDocument.find('[data-qa=case-reference]').text()
+        expect(fourthRasDocumentCaseRef).toContain(RaSDocumentMapper.CASE_REFERENCE_NOT_ENTERED)
+        expect(fourthRasDocumentText).toContain('Court name')
+        const fourthRasDocumentTextCourtName = fourthRasDocument.find('[data-qa=court-name]').text()
+        expect(fourthRasDocumentTextCourtName).toContain('MN Manchester Court')
+        expect(fourthRasDocumentText).not.toContain('Hearing date')
+        expect(fourthRasDocumentText).toContain('Warrant date')
+        const fourthRasDocumentWarrantDate = fourthRasDocument.find('[data-qa=warrant-date]').text()
+        expect(fourthRasDocumentWarrantDate).toContain('31 January 2026')
+        expect(fourthRasDocumentText).toContain('13 May 2026')
+        expect(fourthRasDocumentText).not.toContain('New')
+        const fourthRasDocumentLink = fourthRasDocument.find('a[data-qa=court-case-link]').attr('href')
+        expect(fourthRasDocumentLink).toContain(
           'http://localhost:3000/person/A12345B/view-court-case/9916c639-b188-47fe-842f-451d1f598cab/details',
         )
       })
@@ -229,8 +253,22 @@ const documents = {
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
       metadata: {},
     },
+    {
+      documentUuid: '80dffad6-ec63-47e5-9d79-cb96537081e8',
+      documentType: 'HMCTS_WARRANT',
+      documentFilename: '[devwarrant] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd; AB12345678A  .pdf',
+      filename: '[devwarrant] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd; AB12345678A  ',
+      fileExtension: 'pdf',
+      fileSize: 12312556666,
+      fileHash: '',
+      mimeType: 'application/pdf',
+      createdTime: '2026-05-13T14:08:14',
+      createdByServiceName: 'Remand and Sentencing',
+      createdByUsername: 'REMAND_SENTENCING_TEST_USER',
+      metadata: {},
+    },
   ],
-  totalResultsCount: 3,
+  totalResultsCount: 4,
 } as DocumentSearchResult
 
 const cpDocuments = [
@@ -269,6 +307,22 @@ const rasDocuments = {
             fileName: '[devwarrant] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd; AB12345678A  .pdf',
             warrantDate: '2025-11-04',
             caseReference: 'AB12345678A',
+            courtCode: 'MNCHMC',
+            warrantType: 'SENTENCING',
+          },
+        ],
+      },
+    },
+    {
+      courtCaseUuid: '9916c639-b188-47fe-842f-451d1f598cab',
+      appearanceDocumentsByType: {
+        HMCTS_WARRANT: [
+          {
+            documentUUID: '80dffad6-ec63-47e5-9d79-cb96537081e8',
+            documentType: 'HMCTS_WARRANT',
+            fileName: '[devwarrant] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd;  .pdf',
+            warrantDate: '2026-01-31',
+            caseReference: '',
             courtCode: 'MNCHMC',
             warrantType: 'SENTENCING',
           },

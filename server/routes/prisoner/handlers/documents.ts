@@ -88,7 +88,7 @@ export default class DocumentRoutes {
                     document.type,
                   )
                   document.courtCaseUuid = caseDocument.courtCaseUuid
-                  document.caseReference = appearanceDocument.caseReference
+                  document.caseReference = RaSDocumentMapper.getCaseReference(appearanceDocument)
                   document.hearingDate = RaSDocumentMapper.getHearingDate(appearanceDocument)
                   document.warrantDate = RaSDocumentMapper.getWarrantDate(appearanceDocument)
                   document.courtCode = appearanceDocument.courtCode
