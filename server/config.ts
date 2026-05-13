@@ -158,6 +158,14 @@ export default {
       },
       agent: new AgentConfig(Number(get('REMAND_AND_SENTENCING_API_TIMEOUT_RESPONSE', 10000))),
     },
+    courtRegisterApi: {
+      url: get('COURT_REGISTER_API_URL', 'http://localhost:8083', requiredInProduction),
+      timeout: {
+        response: Number(get('COURT_REGISTER_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('COURT_REGISTER_API_TIMEOUT_RESPONSE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('COURT_REGISTER_API_TIMEOUT_RESPONSE', 10000))),
+    },
     prisonRegisterApi: {
       url: get('PRISON_REGISTER_API_URL', 'http://localhost:8083', requiredInProduction),
       timeout: {

@@ -17,6 +17,7 @@ export default function Index({
   prisonService,
   documentManagementService,
   courtDataIngestionService,
+  courtRegisterService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -44,6 +45,7 @@ export default function Index({
       documentManagementService,
       remandAndSentencingService,
       courtDataIngestionService,
+      courtRegisterService,
     ).documents,
   )
   get(
@@ -53,6 +55,7 @@ export default function Index({
       documentManagementService,
       remandAndSentencingService,
       courtDataIngestionService,
+      courtRegisterService,
     ).downloadDocument,
   )
 

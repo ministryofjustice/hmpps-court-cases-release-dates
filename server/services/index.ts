@@ -9,6 +9,7 @@ import RemandAndSentencingService from './remandAndSentencingService'
 import PrisonService from './prisonService'
 import DocumentManagementService from './documentManagementService'
 import CourtDataIngestionService from './courtDataIngestionService'
+import CourtRegisterService from './courtRegisterService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuthClient, hmppsAuthenticationClient, manageUsersApiClient, feComponentsClient } =
@@ -34,6 +35,8 @@ export const services = () => {
 
   const courtDataIngestionService = new CourtDataIngestionService(hmppsAuthClient)
 
+  const courtRegisterService = new CourtRegisterService(hmppsAuthClient)
+
   return {
     applicationInfo,
     userService,
@@ -46,6 +49,7 @@ export const services = () => {
     prisonService,
     documentManagementService,
     courtDataIngestionService,
+    courtRegisterService,
   }
 }
 

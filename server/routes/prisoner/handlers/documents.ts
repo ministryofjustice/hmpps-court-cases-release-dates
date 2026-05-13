@@ -4,6 +4,7 @@ import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
+import CourtRegisterService from '../../../services/courtRegisterService'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import { getAsStringOrDefault } from '../../../utils/utils'
 import { DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
@@ -19,6 +20,7 @@ export default class DocumentRoutes {
     private readonly documentManagementService: DocumentManagementService,
     private readonly remandAndSentencingService: RemandAndSentencingService,
     private readonly courtDataIngestionService: CourtDataIngestionService,
+    private readonly courtRegisterService: CourtRegisterService,
   ) {}
 
   documents = async (req: Request, res: Response): Promise<void> => {
@@ -43,6 +45,7 @@ export default class DocumentRoutes {
     const documentIdsFromCp = documents.results
       .filter(it => it.metadata.source === 'court-data-ingestion-api')
       .map(it => it.documentUuid)
+
     let cpDocuments: CourtDocument[] = []
     if (documentIdsFromCp.length) {
       cpDocuments = await this.courtDataIngestionService.getDocuments(
@@ -52,6 +55,9 @@ export default class DocumentRoutes {
       )
     }
 
+    await this.courtRegisterService.getCourtNames(RaSDocumentMapper.collectCourtCodes(rasDocuments), username)
+
+    let rasDocumentPromises: Promise<void>[] = []
     const viewModelDocuments = documents.results.map(it => {
       const document = {
         documentUuid: it.documentUuid,
@@ -67,33 +73,43 @@ export default class DocumentRoutes {
           type => type.type === it.documentType,
         ).name
         const cpDocument = cpDocuments.find(itCpDocument => itCpDocument.prisonDocumentId === it.documentUuid)
-        document.isNew = cpDocument.isUnread
+        document.isNew = cpDocument ? cpDocument.isUnread : false
       } else {
         // From RaS
         rasDocuments.courtCaseDocuments.forEach(caseDocument =>
-          Object.entries(caseDocument.appearanceDocumentsByType).forEach(appearanceAndType =>
-            appearanceAndType[1].forEach(appearanceDocument => {
-              if (appearanceDocument.documentUUID === it.documentUuid) {
-                ;[document.type] = appearanceAndType
-                document.typeDescription = RaSDocumentMapper.getDocumentTypeDescription(
-                  appearanceDocument,
-                  document.type,
-                )
-                document.courtCaseUuid = caseDocument.courtCaseUuid
-                document.courtCode = appearanceDocument.courtCode
-                document.caseReference = appearanceDocument.caseReference
-                document.hearingDate = RaSDocumentMapper.getHearingDate(appearanceDocument)
-                document.warrantDate = RaSDocumentMapper.getWarrantDate(appearanceDocument)
-              }
-            }),
-          ),
+          Object.entries(caseDocument.appearanceDocumentsByType).forEach(appearanceAndType => {
+            rasDocumentPromises = [
+              ...rasDocumentPromises,
+              ...appearanceAndType[1].map(async appearanceDocument => {
+                if (appearanceDocument.documentUUID === it.documentUuid) {
+                  ;[document.type] = appearanceAndType
+                  document.typeDescription = RaSDocumentMapper.getDocumentTypeDescription(
+                    appearanceDocument,
+                    document.type,
+                  )
+                  document.courtCaseUuid = caseDocument.courtCaseUuid
+                  document.caseReference = appearanceDocument.caseReference
+                  document.hearingDate = RaSDocumentMapper.getHearingDate(appearanceDocument)
+                  document.warrantDate = RaSDocumentMapper.getWarrantDate(appearanceDocument)
+                  document.courtCode = appearanceDocument.courtCode
+                  document.courtName = await this.courtRegisterService.getCourtName(
+                    appearanceDocument.courtCode,
+                    username,
+                  )
+                }
+              }),
+            ]
+          }),
         )
       }
 
       return document
     })
 
+    await Promise.all(rasDocumentPromises) // Seems necessary to make all request before rendering, still now waiting for response
+
     const pagedDataResponse = getPagedDataResponse(documents)
+
     res.render('pages/prisoner/documents', {
       prisoner,
       serviceDefinitions,
@@ -196,6 +212,7 @@ type DocumentViewModel = {
   createdTime: string
   courtCaseUuid: string
   courtCode: string
+  courtName: string
   caseReference: string
   hearingDate: string
   warrantDate: string
