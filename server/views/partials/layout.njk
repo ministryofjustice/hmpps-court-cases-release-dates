@@ -72,7 +72,18 @@
 {% endblock %}
 
 {% block footer %}
-  {{ footer({environment: environment}) }}
+  {{
+    footer({
+      environment: environment,
+      support: {
+        href: 'mailto:courtcasesandreleasedates@justice.gov.uk',
+        text: 'courtcasesandreleasedates@justice.gov.uk'
+      },
+      attributes: {
+        "data-qa": "ccrds-footer"
+      }
+    })
+  }}
 {% endblock %}
 
 {% block bodyEnd %}
