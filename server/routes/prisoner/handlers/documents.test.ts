@@ -268,7 +268,7 @@ const documents = {
       metadata: {},
     },
   ],
-  totalResultsCount: 3,
+  totalResultsCount: 4,
 } as DocumentSearchResult
 
 const cpDocuments = [
