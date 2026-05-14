@@ -1,0 +1,4 @@
+.prisoner-doc-link {
+  @include govuk-font($size: 24, $weight: 'bold');
+  @include govuk-responsive-margin(1, 'right');
+}

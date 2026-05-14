@@ -2,3 +2,10 @@
   min-height: 600px;
   padding-top: 0px;
 }
+
+.document {
+  &.new {
+    border-left: 6px solid govuk-colour("blue");
+    padding-left: 6px;
+  }
+}

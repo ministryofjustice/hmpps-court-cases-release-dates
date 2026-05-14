@@ -10,16 +10,24 @@ import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesAp
 import DocumentManagementService from '../../../services/documentManagementService'
 import { DocumentSearchResult } from '../../../@types/documentManagementApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
+import CourtRegisterService from '../../../services/courtRegisterService'
+import CourtDataIngestionService from '../../../services/courtDataIngestionService'
+import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
+import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
 jest.mock('../../../services/prisonerSearchService')
 jest.mock('../../../services/remandAndSentencingService')
+jest.mock('../../../services/courtDataIngestionService')
+jest.mock('../../../services/courtRegisterService')
 
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 const documentManagementService = new DocumentManagementService(null) as jest.Mocked<DocumentManagementService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 const remandAndSentencingService = new RemandAndSentencingService(null) as jest.Mocked<RemandAndSentencingService>
+const courtDataIngestionService = new CourtDataIngestionService(null) as jest.Mocked<CourtDataIngestionService>
+const courtRegisterService = new CourtRegisterService(null) as jest.Mocked<CourtRegisterService>
 
 let app: Express
 
@@ -28,6 +36,8 @@ const defaultServices = {
   documentManagementService,
   prisonerSearchService,
   remandAndSentencingService,
+  courtDataIngestionService,
+  courtRegisterService,
 }
 
 const defaultUser = { ...user, hasAdjustmentsAccess: true, hasRasAccess: true, hasRecallsAccess: true }
@@ -55,6 +65,12 @@ describe('Route Handlers - Overview', () => {
     prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
     documentManagementService.searchDocument.mockResolvedValue(documents)
     remandAndSentencingService.getDocuments.mockResolvedValue(rasDocuments)
+    courtDataIngestionService.getDocuments.mockResolvedValue(cpDocuments)
+    courtRegisterService.getCourtName
+      .mockReturnValue('LVRPCC' as unknown as Promise<string>)
+      .mockReturnValueOnce('LV Liverpool Court' as unknown as Promise<string>)
+      .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
+      .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
 
     return request(app)
       .get('/prisoner/A12345B/documents')
@@ -75,16 +91,32 @@ describe('Route Handlers - Overview', () => {
         const $ = cheerio.load(res.text)
         const firstCommonPlatformDocumentText = $('[data-qa=document-4fd5f7b0-eebf-4b69-9489-0cc48550e03b]').text()
         expect(firstCommonPlatformDocumentText).toContain('Prison court register')
-        expect(firstCommonPlatformDocumentText).toContain('2.18 KB PDF')
+        expect(firstCommonPlatformDocumentText).toContain('PDF 2.18 KB')
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
+        expect(firstCommonPlatformDocumentText).not.toContain('Case reference')
+        expect(firstCommonPlatformDocumentText).not.toContain('Court name')
+        expect(firstCommonPlatformDocumentText).not.toContain('Hearing date')
+        expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
+        expect(firstCommonPlatformDocumentText).toContain('New')
 
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
         const secondRasDocumentText = secondRasDocument.text()
         expect(secondRasDocumentText).toContain('Prison court register')
-        expect(secondRasDocumentText).toContain('119.41 MB PDF')
+        expect(secondRasDocumentText).toContain('PDF 119.41 MB')
         expect(secondRasDocumentText).toContain('Court cases')
+        expect(secondRasDocumentText).toContain('Case reference')
+        const secondRasDocumentCaseRef = secondRasDocument.find('[data-qa=case-reference]').text()
+        expect(secondRasDocumentCaseRef).toContain('BC23456789B')
+        expect(secondRasDocumentText).toContain('Court name')
+        const secondRasDocumentCourtName = secondRasDocument.find('[data-qa=court-name]').text()
+        expect(secondRasDocumentCourtName).toContain('LV Liverpool Court')
+        expect(secondRasDocumentText).toContain('Hearing date')
+        const secondRasDocumentHearingDate = secondRasDocument.find('[data-qa=hearing-date]').text()
+        expect(secondRasDocumentHearingDate).toContain('05 October 2025')
+        expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
+        expect(secondRasDocumentText).not.toContain('New')
         const secondRasDocumentLink = secondRasDocument.find('a[data-qa=court-case-link]').attr('href')
         expect(secondRasDocumentLink).toContain(
           'http://localhost:3000/person/A12345B/view-court-case/c6bbb5bb-1086-473f-8eff-1d25ee305750/details',
@@ -93,11 +125,44 @@ describe('Route Handlers - Overview', () => {
         const thirdRasDocument = $('[data-qa=document-80dffad6-ec63-47e5-9d79-cb96537081e7]')
         const thirdRasDocumentText = thirdRasDocument.text()
         expect(thirdRasDocumentText).toContain('Sentencing warrant')
-        expect(thirdRasDocumentText).toContain('11.47 GB PDF')
+        expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
+        expect(thirdRasDocumentText).toContain('Case reference')
+        const thirdRasDocumentCaseRef = thirdRasDocument.find('[data-qa=case-reference]').text()
+        expect(thirdRasDocumentCaseRef).toContain('AB12345678A')
+        expect(thirdRasDocumentText).toContain('Court name')
+        const thirdRasDocumentTextCourtName = thirdRasDocument.find('[data-qa=court-name]').text()
+        expect(thirdRasDocumentTextCourtName).toContain('MN Manchester Court')
+        expect(thirdRasDocumentText).not.toContain('Hearing date')
+        expect(thirdRasDocumentText).toContain('Warrant date')
+        const thirdRasDocumentWarrantDate = thirdRasDocument.find('[data-qa=warrant-date]').text()
+        expect(thirdRasDocumentWarrantDate).toContain('04 November 2025')
         expect(thirdRasDocumentText).toContain('29 March 2026')
+        expect(thirdRasDocumentText).not.toContain('New')
         const thirdRasDocumentLink = thirdRasDocument.find('a[data-qa=court-case-link]').attr('href')
         expect(thirdRasDocumentLink).toContain(
+          'http://localhost:3000/person/A12345B/view-court-case/9916c639-b188-47fe-842f-451d1f598cab/details',
+        )
+
+        const fourthRasDocument = $('[data-qa=document-80dffad6-ec63-47e5-9d79-cb96537081e8]')
+        const fourthRasDocumentText = fourthRasDocument.text()
+        expect(fourthRasDocumentText).toContain('Sentencing warrant')
+        expect(fourthRasDocumentText).toContain('PDF 11.47 GB')
+        expect(fourthRasDocumentText).toContain('Court cases')
+        expect(fourthRasDocumentText).toContain('Case reference')
+        const fourthRasDocumentCaseRef = fourthRasDocument.find('[data-qa=case-reference]').text()
+        expect(fourthRasDocumentCaseRef).toContain(RaSDocumentMapper.CASE_REFERENCE_NOT_ENTERED)
+        expect(fourthRasDocumentText).toContain('Court name')
+        const fourthRasDocumentTextCourtName = fourthRasDocument.find('[data-qa=court-name]').text()
+        expect(fourthRasDocumentTextCourtName).toContain('MN Manchester Court')
+        expect(fourthRasDocumentText).not.toContain('Hearing date')
+        expect(fourthRasDocumentText).toContain('Warrant date')
+        const fourthRasDocumentWarrantDate = fourthRasDocument.find('[data-qa=warrant-date]').text()
+        expect(fourthRasDocumentWarrantDate).toContain('31 January 2026')
+        expect(fourthRasDocumentText).toContain('13 May 2026')
+        expect(fourthRasDocumentText).not.toContain('New')
+        const fourthRasDocumentLink = fourthRasDocument.find('a[data-qa=court-case-link]').attr('href')
+        expect(fourthRasDocumentLink).toContain(
           'http://localhost:3000/person/A12345B/view-court-case/9916c639-b188-47fe-842f-451d1f598cab/details',
         )
       })
@@ -188,9 +253,32 @@ const documents = {
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
       metadata: {},
     },
+    {
+      documentUuid: '80dffad6-ec63-47e5-9d79-cb96537081e8',
+      documentType: 'HMCTS_WARRANT',
+      documentFilename: '[devwarrant] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd; AB12345678A  .pdf',
+      filename: '[devwarrant] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd; AB12345678A  ',
+      fileExtension: 'pdf',
+      fileSize: 12312556666,
+      fileHash: '',
+      mimeType: 'application/pdf',
+      createdTime: '2026-05-13T14:08:14',
+      createdByServiceName: 'Remand and Sentencing',
+      createdByUsername: 'REMAND_SENTENCING_TEST_USER',
+      metadata: {},
+    },
   ],
-  totalResultsCount: 3,
+  totalResultsCount: 4,
 } as DocumentSearchResult
+
+const cpDocuments = [
+  {
+    caseReferences: ['CommonPlatformCase123'],
+    prisonDocumentId: '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
+    isUnread: true,
+  },
+] as CourtDocument[]
+
 const rasDocuments = {
   courtCaseDocuments: [
     {
@@ -219,6 +307,22 @@ const rasDocuments = {
             fileName: '[devwarrant] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd; AB12345678A  .pdf',
             warrantDate: '2025-11-04',
             caseReference: 'AB12345678A',
+            courtCode: 'MNCHMC',
+            warrantType: 'SENTENCING',
+          },
+        ],
+      },
+    },
+    {
+      courtCaseUuid: '9916c639-b188-47fe-842f-451d1f598cab',
+      appearanceDocumentsByType: {
+        HMCTS_WARRANT: [
+          {
+            documentUUID: '80dffad6-ec63-47e5-9d79-cb96537081e8',
+            documentType: 'HMCTS_WARRANT',
+            fileName: '[devwarrant] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd;  .pdf',
+            warrantDate: '2026-01-31',
+            caseReference: '',
             courtCode: 'MNCHMC',
             warrantType: 'SENTENCING',
           },

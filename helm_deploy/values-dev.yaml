@@ -26,11 +26,13 @@ generic-service:
     CALCULATE_RELEASE_DATES_UI_URL: "https://calculate-release-dates-dev.hmpps.service.justice.gov.uk"
     CALCULATE_RELEASE_DATES_API_URL: "https://calculate-release-dates-api-dev.hmpps.service.justice.gov.uk"
     COURT_CASES_RELEASE_DATES_API_URL: "https://court-cases-release-dates-api-dev.hmpps.service.justice.gov.uk"
+    COURT_REGISTER_API_URL: "https://court-register-api-dev.hmpps.service.justice.gov.uk"
     REMAND_AND_SENTENCING_API_URL: "https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk"
     REMAND_AND_SENTENCING_UI_URL: "https://remand-and-sentencing-dev.hmpps.service.justice.gov.uk"
     RECALLS_UI_URL: "https://record-a-recall-dev.hmpps.service.justice.gov.uk"
     PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
     DOCUMENT_MANAGEMENT_API_URL: "https://document-api-dev.hmpps.service.justice.gov.uk"
+    COURT_DATA_INGESTION_API_URL: "https://court-data-ingestion-api-dev.hmpps.service.justice.gov.uk"
 
   # Switches off the allow list in the DEV env only.
   allowlist: null
