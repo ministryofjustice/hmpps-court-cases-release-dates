@@ -13,6 +13,7 @@ import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
+import { constants } from 'node:http2'
 
 export default class DocumentRoutes {
   constructor(
@@ -128,7 +129,7 @@ export default class DocumentRoutes {
     const { username } = res.locals.user
 
     try {
-      await this.validateDocumentForDownload(documentId, prisonerNumber, username)
+      await this.validateDocumentForDownload(documentId, prisonerNumber, res)
 
       const result = await this.documentManagementService.downloadDocument(documentId, username)
 
@@ -180,7 +181,10 @@ export default class DocumentRoutes {
       })
     } catch (err) {
       logger.error(`Error downloading document ${documentId}: ${err.message}`)
-      if (!res.headersSent) {
+      if (res.statusCode != constants.HTTP_STATUS_OK) {
+        res.redirect(res.statusCode, `/prisoner/${prisonerNumber}/documents`)
+      } else if (!res.headersSent) {
+        console.log(res.statusCode)
         res.redirect(`/prisoner/${prisonerNumber}/documents`)
       } else {
         res.end()
@@ -188,11 +192,14 @@ export default class DocumentRoutes {
     }
   }
 
-  validateDocumentForDownload = async (documentId: string, prisonerNumber: string, username: string): Promise<void> => {
+  validateDocumentForDownload = async (documentId: string, prisonerNumber: string, res: Response): Promise<void> => {
+    const { username } = res.locals.user
+
     const document: Document = await this.documentManagementService.getDocument(documentId, username)
-    const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)+'2'
+    const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)
 
     if (prisonerNumber !== documentPrisonerId) {
+      res.status(constants.HTTP_STATUS_FORBIDDEN)
       throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`)
     }
   }

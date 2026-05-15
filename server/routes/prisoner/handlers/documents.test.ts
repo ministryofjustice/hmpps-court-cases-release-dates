@@ -8,12 +8,13 @@ import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import PrisonerSearchService from '../../../services/prisonerSearchService'
 import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesApi/types'
 import DocumentManagementService from '../../../services/documentManagementService'
-import { DocumentSearchResult } from '../../../@types/documentManagementApi/types'
+import { Document, DocumentSearchResult, FileDownload } from '../../../@types/documentManagementApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
+import { Readable } from 'stream'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
@@ -169,6 +170,43 @@ describe('Route Handlers - Overview', () => {
   })
 })
 
+describe('Route Handlers - Validate Document Before Download', () => {
+  it('should return as valid with error 302 on actual download', () => {
+    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+      prisonerNumber: 'A12345B',
+      imprisonmentStatusDescription: 'Life imprisonment',
+      prisonId: 'MDI',
+    } as Prisoner)
+    prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+    documentManagementService.downloadDocument.mockReturnValueOnce(fileDownload)
+
+    return request(app)
+      .get('/prisoner/A12345B/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/download')
+      .expect('Content-Type', 'text/plain; charset=utf-8')
+      .expect(res => {
+        expect(res.status).toBe(302) // We're only interested in testing the validation here, not the download
+      })
+  }),
+  it('should return as as invalid with error 302 on actual download', () => {
+    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+      prisonerNumber: 'A12345B',
+      imprisonmentStatusDescription: 'Life imprisonment',
+      prisonId: 'MDI',
+    } as Prisoner)
+    prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+    documentManagementService.downloadDocument.mockReturnValueOnce(fileDownload)
+
+    return request(app)
+      .get('/prisoner/A12345C/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/download')
+      .expect('Content-Type', 'text/plain; charset=utf-8')
+      .expect(res => {
+        expect(res.status).toBe(403)
+      })
+  })
+})
+
 const serviceDefinitionsNoThingsToDo = {
   services: {
     overview: {
@@ -223,6 +261,7 @@ const documents = {
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
       metadata: {
         source: 'court-data-ingestion-api',
+        prisonerId: 'A12345B',
       },
     },
     {
@@ -331,3 +370,12 @@ const rasDocuments = {
     },
   ],
 }
+
+const fileDownload = {
+  body: new Readable(),
+  header: {
+    'content-disposition': null,
+    'content-length': null,
+    'content-type': null,
+  },
+} as unknown as Promise<FileDownload>
