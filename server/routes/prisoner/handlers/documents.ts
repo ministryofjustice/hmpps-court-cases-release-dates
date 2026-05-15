@@ -7,7 +7,7 @@ import RemandAndSentencingService from '../../../services/remandAndSentencingSer
 import CourtRegisterService from '../../../services/courtRegisterService'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import { getAsStringOrDefault } from '../../../utils/utils'
-import { DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
+import { Document, DocumentManagementMapper, DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
@@ -128,6 +128,8 @@ export default class DocumentRoutes {
     const { username } = res.locals.user
 
     try {
+      await this.validateDocumentForDownload(documentId, prisonerNumber, username)
+
       const result = await this.documentManagementService.downloadDocument(documentId, username)
 
       let fileStream: Readable
@@ -183,6 +185,15 @@ export default class DocumentRoutes {
       } else {
         res.end()
       }
+    }
+  }
+
+  validateDocumentForDownload = async (documentId: string, prisonerNumber: string, username: string): Promise<void> => {
+    const document: Document = await this.documentManagementService.getDocument(documentId, username)
+    const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)+'2'
+
+    if (prisonerNumber !== documentPrisonerId) {
+      throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`)
     }
   }
 }
