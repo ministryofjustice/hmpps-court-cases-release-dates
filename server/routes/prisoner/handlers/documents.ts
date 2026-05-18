@@ -16,6 +16,9 @@ import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import { constants } from 'node:http2'
 
 export default class DocumentRoutes {
+  public readonly DOC_ERROR_COOKIE: string = 'DOC_ERROR_COOKIE'
+  private readonly DOC_ERROR_COOKIE_TIMEOUT = 900000
+
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly documentManagementService: DocumentManagementService,
@@ -27,6 +30,15 @@ export default class DocumentRoutes {
   documents = async (req: Request, res: Response): Promise<void> => {
     const { prisoner } = req
     const { token, username } = req.user
+
+    let errorMessage: string = this.checkForErrors(req)
+
+    if (errorMessage) {
+      logger.error(errorMessage)
+      res.clearCookie(this.DOC_ERROR_COOKIE)
+    } else {
+      console.log('There are no errors')
+    }
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
     const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
@@ -172,24 +184,37 @@ export default class DocumentRoutes {
       })
 
       fileStream.on('error', err => {
-        logger.error(`Stream error during document download ${documentId}: ${err.message}`)
+        let errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
+        logger.error(errorMessage)
         if (!res.headersSent) {
+          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
           res.redirect(`/prisoner/${prisonerNumber}/documents`)
         } else {
           res.end()
         }
       })
     } catch (err) {
-      logger.error(`Error downloading document ${documentId}: ${err.message}`)
-      if (res.statusCode != constants.HTTP_STATUS_OK) {
-        res.redirect(res.statusCode, `/prisoner/${prisonerNumber}/documents`)
-      } else if (!res.headersSent) {
-        console.log(res.statusCode)
-        res.redirect(`/prisoner/${prisonerNumber}/documents`)
+      const errorMessage = `Error downloading document ${documentId}: ${err.message}`
+      logger.error(errorMessage)
+      if (!res.headersSent) {
+        if (res.statusCode != constants.HTTP_STATUS_OK) {
+          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
+          res.redirect(res.statusCode, `/prisoner/${prisonerNumber}/documents`)
+        } else {
+          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
+          res.redirect(`/prisoner/${prisonerNumber}/documents`)
+        }
       } else {
         res.end()
       }
     }
+  }
+
+  checkForErrors = (req: Request): string => {
+    let errorCookies: string[] = req.headers.cookie
+      ?.split(';')
+      .filter(c => c.trim().split('=')[0]?.match(this.DOC_ERROR_COOKIE))
+    return errorCookies ? errorCookies[0]?.split('=')[0] : null
   }
 
   validateDocumentForDownload = async (documentId: string, prisonerNumber: string, res: Response): Promise<void> => {
@@ -199,7 +224,7 @@ export default class DocumentRoutes {
     const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)
 
     if (prisonerNumber !== documentPrisonerId) {
-      res.status(constants.HTTP_STATUS_FORBIDDEN)
+      res.status(303)
       throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`)
     }
   }
