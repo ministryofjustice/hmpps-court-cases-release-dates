@@ -2,6 +2,7 @@ import { Express } from 'express'
 
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+import { Readable } from 'stream'
 import PrisonerService from '../../../services/prisonerService'
 import { appWithAllRoutes, user } from '../../testutils/appSetup'
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
@@ -14,7 +15,6 @@ import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
-import { Readable } from 'stream'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
@@ -170,7 +170,7 @@ describe('Route Handlers - Overview', () => {
   })
 })
 
-describe('Route Handlers - Validate Document Before Download', () => {
+describe('Route Handlers - Valid Document Before Download', () => {
   it('should return as valid with error 302 on actual download', () => {
     prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
       prisonerNumber: 'A12345B',
@@ -187,7 +187,10 @@ describe('Route Handlers - Validate Document Before Download', () => {
       .expect(res => {
         expect(res.status).toBe(302) // We're only interested in testing the validation here, not the download
       })
-  }),
+  })
+})
+
+describe('Route Handlers - Invalid Document Download', () => {
   it('should return as as invalid with error 303 on actual download', () => {
     prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
       prisonerNumber: 'A12345B',

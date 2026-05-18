@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { Readable } from 'stream'
+import { constants } from 'node:http2'
 import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
@@ -13,10 +14,10 @@ import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
-import { constants } from 'node:http2'
 
 export default class DocumentRoutes {
   public readonly DOC_ERROR_COOKIE: string = 'DOC_ERROR_COOKIE'
+
   private readonly DOC_ERROR_COOKIE_TIMEOUT = 900000
 
   constructor(
@@ -31,13 +32,11 @@ export default class DocumentRoutes {
     const { prisoner } = req
     const { token, username } = req.user
 
-    let errorMessage: string = this.checkForErrors(req)
+    const errorMessage: string = this.checkForErrors(req)
 
     if (errorMessage) {
       logger.error(errorMessage)
       res.clearCookie(this.DOC_ERROR_COOKIE)
-    } else {
-      console.log('There are no errors')
     }
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
@@ -184,7 +183,7 @@ export default class DocumentRoutes {
       })
 
       fileStream.on('error', err => {
-        let errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
+        const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
         logger.error(errorMessage)
         if (!res.headersSent) {
           res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
@@ -197,7 +196,7 @@ export default class DocumentRoutes {
       const errorMessage = `Error downloading document ${documentId}: ${err.message}`
       logger.error(errorMessage)
       if (!res.headersSent) {
-        if (res.statusCode != constants.HTTP_STATUS_OK) {
+        if (res.statusCode !== constants.HTTP_STATUS_OK) {
           res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
           res.redirect(res.statusCode, `/prisoner/${prisonerNumber}/documents`)
         } else {
@@ -211,7 +210,7 @@ export default class DocumentRoutes {
   }
 
   checkForErrors = (req: Request): string => {
-    let errorCookies: string[] = req.headers.cookie
+    const errorCookies: string[] = req.headers.cookie
       ?.split(';')
       .filter(c => c.trim().split('=')[0]?.match(this.DOC_ERROR_COOKIE))
     return errorCookies ? errorCookies[0]?.split('=')[0] : null
