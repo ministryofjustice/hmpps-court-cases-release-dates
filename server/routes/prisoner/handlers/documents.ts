@@ -17,7 +17,7 @@ import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 export default class DocumentRoutes {
   public readonly DOC_ERROR_COOKIE: string = 'DOC_ERROR_COOKIE'
 
-  private readonly DOC_ERROR_COOKIE_TIMEOUT = 900000
+  private readonly DOC_ERROR_COOKIE_MAX_AGE = 900000
 
   constructor(
     private readonly prisonerService: PrisonerService,
@@ -185,7 +185,7 @@ export default class DocumentRoutes {
         const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
         logger.error(errorMessage)
         if (!res.headersSent) {
-          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
+          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_MAX_AGE })
           res.redirect(`/prisoner/${prisonerNumber}/documents`)
         } else {
           res.end()
@@ -195,7 +195,7 @@ export default class DocumentRoutes {
       const errorMessage = `Error downloading document ${documentId}: ${err.message}`
       logger.error(errorMessage)
       if (!res.headersSent) {
-        res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
+        res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_MAX_AGE })
 
         if (err.cause === this.DOC_ERROR_COOKIE) {
           res.redirect(303, `/prisoner/${prisonerNumber}/documents`)
