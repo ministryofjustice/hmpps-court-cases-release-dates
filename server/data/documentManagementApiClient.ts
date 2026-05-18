@@ -2,7 +2,12 @@ import { RestClient, asSystem } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import config from '../config'
 import logger from '../../logger'
-import { DocumentSearchRequest, DocumentSearchResult, FileDownload } from '../@types/documentManagementApi/types'
+import {
+  Document,
+  DocumentSearchRequest,
+  DocumentSearchResult,
+  FileDownload,
+} from '../@types/documentManagementApi/types'
 
 export default class DocumentManagementApiClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
@@ -18,6 +23,19 @@ export default class DocumentManagementApiClient extends RestClient {
           Username: username,
         },
         data: documentSearchRequest,
+      },
+      asSystem(username),
+    )
+  }
+
+  async getDocument(documentId: string, username: string): Promise<Document> {
+    return this.get(
+      {
+        path: `/documents/${documentId}`,
+        headers: {
+          'Service-Name': 'Court Case and Release Dates',
+          Username: username,
+        },
       },
       asSystem(username),
     )

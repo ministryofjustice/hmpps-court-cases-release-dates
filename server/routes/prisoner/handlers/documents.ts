@@ -7,7 +7,7 @@ import RemandAndSentencingService from '../../../services/remandAndSentencingSer
 import CourtRegisterService from '../../../services/courtRegisterService'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import { getAsStringOrDefault } from '../../../utils/utils'
-import { DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
+import { Document, DocumentManagementMapper, DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
@@ -15,6 +15,10 @@ import CourtDataIngestionService from '../../../services/courtDataIngestionServi
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 
 export default class DocumentRoutes {
+  public readonly DOC_ERROR_COOKIE: string = 'DOC_ERROR_COOKIE'
+
+  private readonly DOC_ERROR_COOKIE_MAX_AGE = 900000
+
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly documentManagementService: DocumentManagementService,
@@ -26,6 +30,13 @@ export default class DocumentRoutes {
   documents = async (req: Request, res: Response): Promise<void> => {
     const { prisoner } = req
     const { token, username } = req.user
+
+    const errorMessage: string = this.checkForErrors(req)
+
+    if (errorMessage) {
+      logger.error(errorMessage)
+      res.clearCookie(this.DOC_ERROR_COOKIE)
+    }
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
     const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
@@ -125,9 +136,11 @@ export default class DocumentRoutes {
 
   downloadDocument = async (req: Request, res: Response): Promise<void> => {
     const { prisonerNumber, documentId } = req.params
-    const { username } = res.locals.user
+    const { username } = req.user
 
     try {
+      await this.validateDocumentForDownload(documentId, prisonerNumber, username)
+
       const result = await this.documentManagementService.downloadDocument(documentId, username)
 
       let fileStream: Readable
@@ -169,20 +182,47 @@ export default class DocumentRoutes {
       })
 
       fileStream.on('error', err => {
-        logger.error(`Stream error during document download ${documentId}: ${err.message}`)
+        const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
+        logger.error(errorMessage)
         if (!res.headersSent) {
+          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_MAX_AGE })
           res.redirect(`/prisoner/${prisonerNumber}/documents`)
         } else {
           res.end()
         }
       })
     } catch (err) {
-      logger.error(`Error downloading document ${documentId}: ${err.message}`)
+      const errorMessage = `Error downloading document ${documentId}: ${err.message}`
+      logger.error(errorMessage)
       if (!res.headersSent) {
-        res.redirect(`/prisoner/${prisonerNumber}/documents`)
+        res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_MAX_AGE })
+
+        if (err.cause === this.DOC_ERROR_COOKIE) {
+          res.redirect(303, `/prisoner/${prisonerNumber}/documents`)
+        } else {
+          res.redirect(`/prisoner/${prisonerNumber}/documents`)
+        }
       } else {
         res.end()
       }
+    }
+  }
+
+  checkForErrors = (req: Request): string => {
+    const errorCookies: string[] = req.headers.cookie
+      ?.split(';')
+      .filter(c => c.trim().split('=')[0]?.match(this.DOC_ERROR_COOKIE))
+    return errorCookies ? errorCookies[0]?.split('=')[0] : null
+  }
+
+  validateDocumentForDownload = async (documentId: string, prisonerNumber: string, username: string): Promise<void> => {
+    const document: Document = await this.documentManagementService.getDocument(documentId, username)
+    const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)
+
+    if (prisonerNumber !== documentPrisonerId) {
+      throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`, {
+        cause: this.DOC_ERROR_COOKIE,
+      })
     }
   }
 }
