@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { Readable } from 'stream'
-import { constants } from 'node:http2'
 import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
@@ -137,10 +136,10 @@ export default class DocumentRoutes {
 
   downloadDocument = async (req: Request, res: Response): Promise<void> => {
     const { prisonerNumber, documentId } = req.params
-    const { username } = res.locals.user
+    const { username } = req.user
 
     try {
-      await this.validateDocumentForDownload(documentId, prisonerNumber, res)
+      await this.validateDocumentForDownload(documentId, prisonerNumber, username)
 
       const result = await this.documentManagementService.downloadDocument(documentId, username)
 
@@ -196,11 +195,11 @@ export default class DocumentRoutes {
       const errorMessage = `Error downloading document ${documentId}: ${err.message}`
       logger.error(errorMessage)
       if (!res.headersSent) {
-        if (res.statusCode !== constants.HTTP_STATUS_OK) {
-          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
-          res.redirect(res.statusCode, `/prisoner/${prisonerNumber}/documents`)
+        res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
+
+        if (err.cause === this.DOC_ERROR_COOKIE) {
+          res.redirect(303, `/prisoner/${prisonerNumber}/documents`)
         } else {
-          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_TIMEOUT })
           res.redirect(`/prisoner/${prisonerNumber}/documents`)
         }
       } else {
@@ -216,15 +215,14 @@ export default class DocumentRoutes {
     return errorCookies ? errorCookies[0]?.split('=')[0] : null
   }
 
-  validateDocumentForDownload = async (documentId: string, prisonerNumber: string, res: Response): Promise<void> => {
-    const { username } = res.locals.user
-
+  validateDocumentForDownload = async (documentId: string, prisonerNumber: string, username: string): Promise<void> => {
     const document: Document = await this.documentManagementService.getDocument(documentId, username)
     const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)
 
     if (prisonerNumber !== documentPrisonerId) {
-      res.status(303)
-      throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`)
+      throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`, {
+        cause: this.DOC_ERROR_COOKIE,
+      })
     }
   }
 }
