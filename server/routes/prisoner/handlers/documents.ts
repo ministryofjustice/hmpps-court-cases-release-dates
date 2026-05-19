@@ -16,10 +16,6 @@ import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import { constants } from 'node:http2'
 
 export default class DocumentRoutes {
-  public readonly DOC_ERROR_COOKIE: string = 'DOC_ERROR_COOKIE'
-
-  private readonly DOC_ERROR_COOKIE_MAX_AGE = 900000
-
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly documentManagementService: DocumentManagementService,
@@ -31,13 +27,6 @@ export default class DocumentRoutes {
   documents = async (req: Request, res: Response): Promise<void> => {
     const { prisoner } = req
     const { token, username } = req.user
-
-    const errorMessage: string = this.checkForErrors(req)
-
-    if (errorMessage) {
-      logger.error(errorMessage)
-      res.clearCookie(this.DOC_ERROR_COOKIE)
-    }
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
     const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
@@ -156,7 +145,7 @@ export default class DocumentRoutes {
             await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
           } catch (error: unknown) {
             // Allow 404 errors for documents not in CDIA
-            if ((error as { status?: number })?.status !== 404) {
+            if ((error as { status?: number })?.status !== constants.HTTP_STATUS_NOT_FOUND) {
               throw error
             }
           }
@@ -177,7 +166,7 @@ export default class DocumentRoutes {
       const errorMessage = `Error downloading document ${documentId}: ${err.message}`
       logger.error(errorMessage)
       if (!res.headersSent) {
-        if (err.cause === this.DOC_ERROR_COOKIE) {
+        if (err.cause === constants.HTTP_STATUS_FORBIDDEN) {
           res.status(constants.HTTP_STATUS_FORBIDDEN).end()
         } else {
           res.redirect(`/prisoner/${prisonerNumber}/documents`)
@@ -188,20 +177,13 @@ export default class DocumentRoutes {
     }
   }
 
-  checkForErrors = (req: Request): string => {
-    const errorCookies: string[] = req.headers.cookie
-      ?.split(';')
-      .filter(c => c.trim().split('=')[0]?.match(this.DOC_ERROR_COOKIE))
-    return errorCookies ? errorCookies[0]?.split('=')[0] : null
-  }
-
   validateDocumentForDownload = async (documentId: string, prisonerNumber: string, username: string): Promise<void> => {
     const document: Document = await this.documentManagementService.getDocument(documentId, username)
     const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)
 
     if (prisonerNumber !== documentPrisonerId) {
       throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`, {
-        cause: this.DOC_ERROR_COOKIE,
+        cause: constants.HTTP_STATUS_FORBIDDEN,
       })
     }
   }
