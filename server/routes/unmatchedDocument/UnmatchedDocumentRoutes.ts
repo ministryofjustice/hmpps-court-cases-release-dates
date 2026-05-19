@@ -1,11 +1,7 @@
 import { Request, Response } from 'express'
 import { Readable } from 'stream'
 import { constants } from 'node:http2'
-import {
-  Document,
-  DocumentManagementMapper,
-  FileDownload,
-} from '../../@types/documentManagementApi/types'
+import { Document, DocumentManagementMapper, FileDownload } from '../../@types/documentManagementApi/types'
 import DocumentManagementService from '../../services/documentManagementService'
 import logger from '../../../logger'
 
