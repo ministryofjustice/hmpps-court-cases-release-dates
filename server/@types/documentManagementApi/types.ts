@@ -1,5 +1,6 @@
-import { components } from './index'
 import { Readable } from 'stream'
+import { components } from './index'
+import expectedTypes from '../remandAndSentencingApi/documentTypes'
 
 export interface FileDownload {
   body: Buffer
@@ -13,8 +14,21 @@ export type DocumentSearchResult = components['schemas']['DocumentSearchResult']
 export type Document = components['schemas']['Document']
 
 export class DocumentManagementMapper {
+  public static SOURCE_COMMON_PLATFORM: string = 'Common platform'
+
+  public static SOURCE_COURT_CASE: string = 'Court cases'
+
   static getPrisonerId(document: Document): string {
     return document?.metadata?.prisonerId
+  }
+
+  public static getTypeDescription(it: Document) {
+    return [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(type => type.type === it.documentType)
+      .name
+  }
+
+  public static getSource(it: Document) {
+    return it.metadata.source === 'court-data-ingestion-api' ? this.SOURCE_COMMON_PLATFORM : this.SOURCE_COURT_CASE
   }
 
   static getDownloadHeaders(file: FileDownload) {

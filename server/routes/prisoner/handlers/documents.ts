@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { Readable } from 'stream'
+import { constants } from 'node:http2'
 import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
@@ -13,7 +14,6 @@ import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
-import { constants } from 'node:http2'
 
 export default class DocumentRoutes {
   constructor(
@@ -138,7 +138,7 @@ export default class DocumentRoutes {
         res.set(key, value)
       })
 
-      let fileStream: Readable = DocumentManagementMapper.getFileStreamForClient(result, documentId)
+      const fileStream: Readable = DocumentManagementMapper.getFileStreamForClient(result, documentId)
         .on('end', async (): Promise<void> => {
           logger.info(`Successfully streamed document ${documentId} to client.`)
           try {

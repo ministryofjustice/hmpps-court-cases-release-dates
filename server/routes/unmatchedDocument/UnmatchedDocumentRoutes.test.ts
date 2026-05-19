@@ -1,9 +1,9 @@
 import { Express } from 'express'
 import request from 'supertest'
+import { constants } from 'node:http2'
 import { appWithAllRoutes, user } from '../testutils/appSetup'
 import { Document, DocumentSearchResult, FileDownload } from '../../@types/documentManagementApi/types'
 import DocumentManagementService from '../../services/documentManagementService'
-import { constants } from 'node:http2'
 
 jest.mock('../../services/documentManagementService')
 
