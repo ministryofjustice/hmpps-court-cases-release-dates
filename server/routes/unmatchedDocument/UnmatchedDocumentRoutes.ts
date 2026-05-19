@@ -1,24 +1,16 @@
 import { Request, Response } from 'express'
-import { getAsStringOrDefault } from '../../utils/utils'
+import { Readable } from 'stream'
+import { constants } from 'node:http2'
 import {
   Document,
   DocumentManagementMapper,
-  DocumentSearchRequest,
   FileDownload,
 } from '../../@types/documentManagementApi/types'
-import expectedTypes from '../../@types/remandAndSentencingApi/documentTypes'
-import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../data/pagination'
-import config from '../../config'
 import DocumentManagementService from '../../services/documentManagementService'
-import { Readable } from 'stream'
 import logger from '../../../logger'
-import { constants } from 'node:http2'
-
 
 export default class UnmatchedDocumentRoutes {
   constructor(private readonly documentManagementService: DocumentManagementService) {}
-
-
 
   download = async (req: Request, res: Response): Promise<void> => {
     const { documentId } = req.params
@@ -35,7 +27,7 @@ export default class UnmatchedDocumentRoutes {
       })
 
       // Stream to client - prepare data and callbacks
-      let fileStream: Readable = DocumentManagementMapper.getFileStreamForClient(downloadResult, documentId)
+      const fileStream: Readable = DocumentManagementMapper.getFileStreamForClient(downloadResult, documentId)
         .on('end', async (): Promise<void> => {
           logger.info(`Successfully streamed document ${documentId} to client.`)
           res.status(constants.HTTP_STATUS_OK).end()
@@ -52,7 +44,7 @@ export default class UnmatchedDocumentRoutes {
       logger.error(errorMessage)
       res
         .status(
-          err.cause == constants.HTTP_STATUS_FORBIDDEN
+          err.cause === constants.HTTP_STATUS_FORBIDDEN
             ? constants.HTTP_STATUS_FORBIDDEN
             : constants.HTTP_STATUS_INTERNAL_SERVER_ERROR,
         )
@@ -71,4 +63,3 @@ export default class UnmatchedDocumentRoutes {
     }
   }
 }
-
