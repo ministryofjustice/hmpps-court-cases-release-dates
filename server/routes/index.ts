@@ -5,6 +5,7 @@ import prisonerRoutes from './prisoner'
 import configRoutes from './config'
 import feedbackRoutes from './feedback'
 import accessibilityRoutes from './accessibility'
+import unmatchedDocumentRoutes from './unmatchedDocument'
 import config from '../config'
 
 export default function routes(services: Services): Router {
@@ -17,6 +18,8 @@ export default function routes(services: Services): Router {
   router.use('/config', configRoutes(services))
   router.use('/feedback', feedbackRoutes())
   router.use('/accessibility', accessibilityRoutes())
+
+  router.use('/unmatched-documents', unmatchedDocumentRoutes(services.documentManagementService))
 
   return router
 }

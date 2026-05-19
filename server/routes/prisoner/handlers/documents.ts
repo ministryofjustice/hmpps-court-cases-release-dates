@@ -13,6 +13,7 @@ import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
+import { constants } from 'node:http2'
 
 export default class DocumentRoutes {
   public readonly DOC_ERROR_COOKIE: string = 'DOC_ERROR_COOKIE'
@@ -143,62 +144,41 @@ export default class DocumentRoutes {
 
       const result = await this.documentManagementService.downloadDocument(documentId, username)
 
-      let fileStream: Readable
-      if (result.body instanceof Readable) {
-        fileStream = result.body
-      } else if (Buffer.isBuffer(result.body)) {
-        fileStream = new Readable()
-        fileStream.push(result.body)
-        fileStream.push(null)
-      } else {
-        throw new Error(`Unexpected body type for documentId=${documentId}`)
-      }
-
       // Copy headers from API response
-      if (result.header['content-disposition']) {
-        res.set('content-disposition', result.header['content-disposition'])
-      }
-      if (result.header['content-length']) {
-        res.set('content-length', result.header['content-length'])
-      }
-      if (result.header['content-type']) {
-        res.set('content-type', result.header['content-type'])
-      }
+      DocumentManagementMapper.getDownloadHeaders(result).forEach((value: string, key: string): void => {
+        res.set(key, value)
+      })
 
+      let fileStream: Readable = DocumentManagementMapper.getFileStreamForClient(result, documentId)
+        .on('end', async (): Promise<void> => {
+          logger.info(`Successfully streamed document ${documentId} to client.`)
+          try {
+            await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
+          } catch (error: unknown) {
+            // Allow 404 errors for documents not in CDIA
+            if ((error as { status?: number })?.status !== 404) {
+              throw error
+            }
+          }
+          // TODO audit & update notification endpoint document has been downloaded.
+        })
+        .on('error', async (err: Error): Promise<void> => {
+          const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
+          logger.error(errorMessage)
+          if (!res.headersSent) {
+            res.redirect(`/prisoner/${prisonerNumber}/documents`)
+          } else {
+            res.end()
+          }
+        })
       // Stream to client
       fileStream.pipe(res)
-
-      fileStream.on('end', async () => {
-        logger.info(`Successfully streamed document ${documentId} to client.`)
-        try {
-          await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
-        } catch (error: unknown) {
-          // Allow 404 errors for documents not in CDIA
-          if ((error as { status?: number })?.status !== 404) {
-            throw error
-          }
-        }
-        // TODO audit & update notification endpoint document has been downloaded.
-      })
-
-      fileStream.on('error', err => {
-        const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
-        logger.error(errorMessage)
-        if (!res.headersSent) {
-          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_MAX_AGE })
-          res.redirect(`/prisoner/${prisonerNumber}/documents`)
-        } else {
-          res.end()
-        }
-      })
     } catch (err) {
       const errorMessage = `Error downloading document ${documentId}: ${err.message}`
       logger.error(errorMessage)
       if (!res.headersSent) {
-        res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_MAX_AGE })
-
         if (err.cause === this.DOC_ERROR_COOKIE) {
-          res.redirect(303, `/prisoner/${prisonerNumber}/documents`)
+          res.status(constants.HTTP_STATUS_FORBIDDEN).end()
         } else {
           res.redirect(`/prisoner/${prisonerNumber}/documents`)
         }
