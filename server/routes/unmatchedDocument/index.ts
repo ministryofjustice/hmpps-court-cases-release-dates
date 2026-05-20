@@ -7,7 +7,6 @@ export default function Index(documentManagementService: DocumentManagementServi
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  // get('/', new UnmatchedDocumentRoutes(documentManagementService).documents,)
   get('/:documentId/download', new UnmatchedDocumentRoutes(documentManagementService).download)
 
   return router
