@@ -188,7 +188,7 @@ describe('Route Handlers - Download Document', () => {
         expect(res.status).toBe(constants.HTTP_STATUS_OK) // We're only interested in testing the validation here, not the download
       })
   })
-  it('Invalid document not matching prisonerIds - should return 303 on successful redirect after error download', () => {
+  it('Invalid document not matching prisonerIds - should return 403 after download error', () => {
     prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
       prisonerNumber: 'A12345B',
       imprisonmentStatusDescription: 'Life imprisonment',
