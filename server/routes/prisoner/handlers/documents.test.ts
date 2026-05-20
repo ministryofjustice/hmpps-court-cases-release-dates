@@ -2,7 +2,7 @@ import { Express } from 'express'
 
 import request from 'supertest'
 import * as cheerio from 'cheerio'
-import { Readable } from 'stream'
+import { constants } from 'node:http2'
 import PrisonerService from '../../../services/prisonerService'
 import { appWithAllRoutes, user } from '../../testutils/appSetup'
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
@@ -170,8 +170,8 @@ describe('Route Handlers - Overview', () => {
   })
 })
 
-describe('Route Handlers - Valid Document Before Download', () => {
-  it('should return as valid with error 302 on actual download', () => {
+describe('Route Handlers - Download Document', () => {
+  it('Valid document - should return 200 on successful download', () => {
     prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
       prisonerNumber: 'A12345B',
       imprisonmentStatusDescription: 'Life imprisonment',
@@ -185,13 +185,10 @@ describe('Route Handlers - Valid Document Before Download', () => {
       .get('/prisoner/A12345B/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/download')
       .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(res => {
-        expect(res.status).toBe(302) // We're only interested in testing the validation here, not the download
+        expect(res.status).toBe(constants.HTTP_STATUS_OK) // We're only interested in testing the validation here, not the download
       })
   })
-})
-
-describe('Route Handlers - Invalid Document Download', () => {
-  it('should return as as invalid with error 303 on actual download', () => {
+  it('Invalid document not matching prisonerIds - should return 403 after download error', () => {
     prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
       prisonerNumber: 'A12345B',
       imprisonmentStatusDescription: 'Life imprisonment',
@@ -203,9 +200,8 @@ describe('Route Handlers - Invalid Document Download', () => {
 
     return request(app)
       .get('/prisoner/A12345C/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/download')
-      .expect('Content-Type', 'text/plain; charset=utf-8')
       .expect(res => {
-        expect(res.status).toBe(303)
+        expect(res.status).toBe(constants.HTTP_STATUS_FORBIDDEN)
       })
   })
 })
@@ -375,10 +371,10 @@ const rasDocuments = {
 }
 
 const fileDownload = {
-  body: new Readable(),
+  body: Buffer.from('test', 'utf-8'),
   header: {
-    'content-disposition': null,
-    'content-length': null,
-    'content-type': null,
+    'content-disposition': 'attachment',
+    'content-length': '4',
+    'content-type': 'text/plain',
   },
 } as unknown as Promise<FileDownload>

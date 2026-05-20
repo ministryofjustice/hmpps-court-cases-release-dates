@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { Readable } from 'stream'
+import { constants } from 'node:http2'
 import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
@@ -15,10 +16,6 @@ import CourtDataIngestionService from '../../../services/courtDataIngestionServi
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 
 export default class DocumentRoutes {
-  public readonly DOC_ERROR_COOKIE: string = 'DOC_ERROR_COOKIE'
-
-  private readonly DOC_ERROR_COOKIE_MAX_AGE = 900000
-
   constructor(
     private readonly prisonerService: PrisonerService,
     private readonly documentManagementService: DocumentManagementService,
@@ -30,13 +27,6 @@ export default class DocumentRoutes {
   documents = async (req: Request, res: Response): Promise<void> => {
     const { prisoner } = req
     const { token, username } = req.user
-
-    const errorMessage: string = this.checkForErrors(req)
-
-    if (errorMessage) {
-      logger.error(errorMessage)
-      res.clearCookie(this.DOC_ERROR_COOKIE)
-    }
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
     const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
@@ -143,62 +133,41 @@ export default class DocumentRoutes {
 
       const result = await this.documentManagementService.downloadDocument(documentId, username)
 
-      let fileStream: Readable
-      if (result.body instanceof Readable) {
-        fileStream = result.body
-      } else if (Buffer.isBuffer(result.body)) {
-        fileStream = new Readable()
-        fileStream.push(result.body)
-        fileStream.push(null)
-      } else {
-        throw new Error(`Unexpected body type for documentId=${documentId}`)
-      }
-
       // Copy headers from API response
-      if (result.header['content-disposition']) {
-        res.set('content-disposition', result.header['content-disposition'])
-      }
-      if (result.header['content-length']) {
-        res.set('content-length', result.header['content-length'])
-      }
-      if (result.header['content-type']) {
-        res.set('content-type', result.header['content-type'])
-      }
+      DocumentManagementMapper.getDownloadHeaders(result).forEach((value: string, key: string): void => {
+        res.set(key, value)
+      })
 
+      const fileStream: Readable = DocumentManagementMapper.getFileStreamForClient(result, documentId)
+        .on('end', async (): Promise<void> => {
+          logger.info(`Successfully streamed document ${documentId} to client.`)
+          try {
+            await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
+          } catch (error: unknown) {
+            // Allow 404 errors for documents not in CDIA
+            if ((error as { status?: number })?.status !== constants.HTTP_STATUS_NOT_FOUND) {
+              throw error
+            }
+          }
+          // TODO audit & update notification endpoint document has been downloaded.
+        })
+        .on('error', async (err: Error): Promise<void> => {
+          const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
+          logger.error(errorMessage)
+          if (!res.headersSent) {
+            res.redirect(`/prisoner/${prisonerNumber}/documents`)
+          } else {
+            res.end()
+          }
+        })
       // Stream to client
       fileStream.pipe(res)
-
-      fileStream.on('end', async () => {
-        logger.info(`Successfully streamed document ${documentId} to client.`)
-        try {
-          await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
-        } catch (error: unknown) {
-          // Allow 404 errors for documents not in CDIA
-          if ((error as { status?: number })?.status !== 404) {
-            throw error
-          }
-        }
-        // TODO audit & update notification endpoint document has been downloaded.
-      })
-
-      fileStream.on('error', err => {
-        const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
-        logger.error(errorMessage)
-        if (!res.headersSent) {
-          res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_MAX_AGE })
-          res.redirect(`/prisoner/${prisonerNumber}/documents`)
-        } else {
-          res.end()
-        }
-      })
     } catch (err) {
       const errorMessage = `Error downloading document ${documentId}: ${err.message}`
       logger.error(errorMessage)
       if (!res.headersSent) {
-        res.cookie(this.DOC_ERROR_COOKIE, errorMessage, { maxAge: this.DOC_ERROR_COOKIE_MAX_AGE })
-
-        if (err.cause === this.DOC_ERROR_COOKIE) {
-          res.redirect(303, `/prisoner/${prisonerNumber}/documents`)
+        if (err.cause === constants.HTTP_STATUS_FORBIDDEN) {
+          res.status(constants.HTTP_STATUS_FORBIDDEN).end()
         } else {
           res.redirect(`/prisoner/${prisonerNumber}/documents`)
         }
@@ -208,20 +177,13 @@ export default class DocumentRoutes {
     }
   }
 
-  checkForErrors = (req: Request): string => {
-    const errorCookies: string[] = req.headers.cookie
-      ?.split(';')
-      .filter(c => c.trim().split('=')[0]?.match(this.DOC_ERROR_COOKIE))
-    return errorCookies ? errorCookies[0]?.split('=')[0] : null
-  }
-
   validateDocumentForDownload = async (documentId: string, prisonerNumber: string, username: string): Promise<void> => {
     const document: Document = await this.documentManagementService.getDocument(documentId, username)
     const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)
 
     if (prisonerNumber !== documentPrisonerId) {
       throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`, {
-        cause: this.DOC_ERROR_COOKIE,
+        cause: constants.HTTP_STATUS_FORBIDDEN,
       })
     }
   }
