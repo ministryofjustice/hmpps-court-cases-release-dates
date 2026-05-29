@@ -127,13 +127,16 @@ describe('Remand and sentencing service', () => {
         inPrisonOnRevocationDate: undefined,
       }
 
-      fakeApi.get(`/recall/person/${prisonerId}`).reply(200, [earlyApiRecall, latestApiRecall])
+      fakeApi.get(`/recall/person/${prisonerId}/search`).reply(200, {
+        recalls: [earlyApiRecall, latestApiRecall],
+        prisonerRecallTotal: 2,
+      })
       const result = await remandAndSentencingService.getMostRecentRecall(prisonerId, null)
       expect(result).toStrictEqual(latestRecallCard)
     })
 
     it('Should return undefined card if no prisoner or calc found', async () => {
-      fakeApi.get(`/recall/person/${prisonerId}`).reply(200, [])
+      fakeApi.get(`/recall/person/${prisonerId}/search`).reply(200, { recalls: [], prisonerRecallTotal: 0 })
       const result = await remandAndSentencingService.getMostRecentRecall(prisonerId, null)
       expect(result).toStrictEqual(undefined)
     })

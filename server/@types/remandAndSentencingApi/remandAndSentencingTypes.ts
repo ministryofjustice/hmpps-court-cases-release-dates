@@ -4,6 +4,7 @@ export type ImmigrationDetention = components['schemas']['ImmigrationDetention']
 export type RasPrisonerDocuments = components['schemas']['PrisonerDocuments']
 
 export type ApiRecall = components['schemas']['Recall']
+export type PrisonerRecallsResponse = components['schemas']['PrisonerRecallsResponse']
 
 type RecallType = { code: string; description: string }
 
