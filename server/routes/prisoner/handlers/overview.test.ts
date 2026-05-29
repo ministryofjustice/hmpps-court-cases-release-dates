@@ -139,6 +139,7 @@ describe('Route Handlers - Overview', () => {
       const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
         source: 'DPS',
         immigrationDetentionUuid: 'IMM-DET-UUID-12345',
+        courtAppearanceUuid: 'ca-uuid-0001',
         prisonerId: 'A12345B',
         immigrationDetentionRecordType: 'NO_LONGER_OF_INTEREST',
         recordDate: '2022-06-22',

@@ -6,6 +6,7 @@ import config from '../config'
 const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   source: 'DPS',
   immigrationDetentionUuid: 'IMM-DET-UUID-12345',
+  courtAppearanceUuid: 'ca-uuid-0001',
   prisonerId: 'ABC123',
   immigrationDetentionRecordType: 'NO_LONGER_OF_INTEREST',
   recordDate: '2022-06-22',
