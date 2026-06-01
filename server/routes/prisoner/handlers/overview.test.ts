@@ -979,7 +979,55 @@ describe('Route Handlers - Overview', () => {
 
       const $ = cheerio.load(res.text)
 
+      expect($('[data-qa=recall-card-title]').text().trim()).toBe('Recorded on 01 January 2024 at Leeds')
+    })
+
+    it('Should load location name from prison register when location is set and show in recall card title', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
+        source: 'DPS',
+        createdAt: '2024-01-01',
+        recallType: RecallTypes.STANDARD_RECALL,
+        location: 'LDS',
+        revocationDate: '2024-01-05',
+        returnToCustodyDate: new Date('2024-01-10'),
+      } as Recall)
+      prisonService.getPrisonName.mockResolvedValue('Leeds')
+
+      const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+      const $ = cheerio.load(res.text)
+
+      expect($('[data-qa=recall-card-title]').text().trim()).toBe('Recorded on 01 January 2024 at Leeds')
+    })
+
+    it('Should not load location name from prison register when location is not set and omit from the recall card title', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getMostRecentRecall.mockResolvedValue({
+        source: 'DPS',
+        createdAt: '2024-01-01',
+        recallType: RecallTypes.STANDARD_RECALL,
+        location: null,
+        revocationDate: '2024-01-05',
+        returnToCustodyDate: new Date('2024-01-10'),
+      } as Recall)
+
+      const res = await request(app).get('/prisoner/A12345B/overview').expect(200).expect('Content-Type', /html/)
+
+      const $ = cheerio.load(res.text)
+
       expect($('[data-qa=recall-card-title]').text().trim()).toBe('Recorded on 01 January 2024')
+      expect(prisonService.getPrisonName).not.toHaveBeenCalled()
     })
 
     it('should not show view all recalls link when user does not have access to recalls', async () => {
