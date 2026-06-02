@@ -1,20 +1,20 @@
-const commonPlatformDocumentTypes = [
-  {
-    type: 'SENTENCING_WARRANT',
+const commonPlatformDocumentTypes = {
+  SENTENCING_WARRANT: {
     name: 'Sentencing warrant',
   },
-  {
-    type: 'REMAND_WARRANT',
+  REMAND_WARRANT: {
     name: 'Remand warrant',
   },
-  {
-    type: 'COMMON_PLATFORM_DOCUMENT',
+  COMMON_PLATFORM_DOCUMENT: {
     name: 'Common platform document',
   },
-  {
-    type: 'PRISON_COURT_REGISTER',
+  PRISON_COURT_REGISTER: {
     name: 'Prison court register',
   },
-]
+} as Record<string, CommonPlatformDocumentType>
+
+type CommonPlatformDocumentType = {
+  name: string
+}
 
 export default commonPlatformDocumentTypes

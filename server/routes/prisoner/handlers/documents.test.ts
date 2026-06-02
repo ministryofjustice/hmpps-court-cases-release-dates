@@ -174,6 +174,10 @@ describe('Route Handlers - Overview', () => {
         const sixthCommonPlatformDocument = $('[data-qa=document-bdee9909-ba50-48d6-ad80-e8ecf6ffa912]')
         const sxithCommonPlatformDocumentText = sixthCommonPlatformDocument.text()
         expect(sxithCommonPlatformDocumentText).toContain('Common platform document')
+
+        const seventhCommonPlatformDocument = $('[data-qa=document-9612b032-383b-4a83-9765-30484182c7fa]')
+        const seventhCommonPlatformDocumentText = seventhCommonPlatformDocument.text()
+        expect(seventhCommonPlatformDocumentText).toContain('Remand warrant')
       })
   })
 })
@@ -347,8 +351,26 @@ const documents = {
         prisonerId: 'A12345B',
       },
     },
+    {
+      // Has missing entry in CDIA
+      documentUuid: '9612b032-383b-4a83-9765-30484182c7fa',
+      documentType: 'HMCTS_WARRANT',
+      documentFilename: 'CommonPlatformfile.pdf',
+      filename: 'CommonPlatformfile',
+      fileExtension: 'pdf',
+      fileSize: 2233,
+      fileHash: '',
+      mimeType: 'application/pdf',
+      createdTime: '2026-03-09T14:22:30',
+      createdByServiceName: 'Remand and Sentencing',
+      createdByUsername: 'REMAND_SENTENCING_TEST_USER',
+      metadata: {
+        source: 'court-data-ingestion-api',
+        prisonerId: 'A12345B',
+      },
+    },
   ],
-  totalResultsCount: 6,
+  totalResultsCount: 7,
 } as DocumentSearchResult
 
 const cpDocuments = [
