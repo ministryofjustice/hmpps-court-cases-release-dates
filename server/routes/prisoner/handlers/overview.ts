@@ -6,7 +6,7 @@ import CalculateReleaseDatesService from '../../../services/calculateReleaseDate
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import PrisonService from '../../../services/prisonService'
-import { ImmigrationDetention } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import { ImmigrationDetention, Recall } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import config from '../../../config'
 
 export default class OverviewRoutes {
@@ -54,12 +54,12 @@ export default class OverviewRoutes {
         : false
 
     const anyThingsToDo = Object.values(serviceDefinitions.services).some(it => it.thingsToDo.count > 0)
-    const latestRecall = hasRasAccess
+    const latestRecall: Recall & { locationName?: string } = hasRasAccess
       ? await this.remandAndSentencingService.getMostRecentRecall(prisoner.prisonerNumber, token)
       : null
 
-    if (latestRecall) {
-      latestRecall.location = await this.prisonService.getPrisonName(latestRecall.location, username)
+    if (latestRecall && latestRecall.location) {
+      latestRecall.locationName = await this.prisonService.getPrisonName(latestRecall.location, username)
     }
 
     const latestImmigrationRecord = hasImmigrationDetentionAccess
@@ -96,7 +96,7 @@ export default class OverviewRoutes {
   }
 
   private getImmigrationDetentionMessage(latestRecord: ImmigrationDetention) {
-    let message = ''
+    let message: string
     if (latestRecord) {
       const formattedRecordDate = dayjs(latestRecord.recordDate).format('D MMMM YYYY')
       const recordedStr = `dated ${formattedRecordDate}`

@@ -3,6 +3,7 @@ import RestClient from './restClient'
 import {
   ApiRecall,
   ImmigrationDetention,
+  PrisonerRecallsResponse,
   RasPrisonerDocuments,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
@@ -18,9 +19,10 @@ export default class RemandAndSentencingApiClient {
   }
 
   async getAllRecalls(prisonerId: string): Promise<ApiRecall[]> {
-    return this.restClient.get({
-      path: `/recall/person/${prisonerId}`,
-    }) as Promise<ApiRecall[]>
+    const response = await this.restClient.get<PrisonerRecallsResponse>({
+      path: `/recall/person/${prisonerId}/search`,
+    })
+    return response.recalls
   }
 
   async findLatestImmigrationDetentionRecordByPerson(person: string): Promise<ImmigrationDetention> {
