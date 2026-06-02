@@ -166,6 +166,14 @@ describe('Route Handlers - Overview', () => {
         expect(fourthRasDocumentLink).toContain(
           'http://localhost:3000/person/A12345B/view-court-case/9916c639-b188-47fe-842f-451d1f598cab/details',
         )
+
+        const fifthCommonPlatformDocument = $('[data-qa=document-8980c409-465c-41a4-969d-affe0d9b9df7]')
+        const fifthCommonPlatformDocumentText = fifthCommonPlatformDocument.text()
+        expect(fifthCommonPlatformDocumentText).toContain('Sentencing warrant')
+
+        const sixthCommonPlatformDocument = $('[data-qa=document-bdee9909-ba50-48d6-ad80-e8ecf6ffa912]')
+        const sxithCommonPlatformDocumentText = sixthCommonPlatformDocument.text()
+        expect(sxithCommonPlatformDocumentText).toContain('Common platform document')
       })
   })
 })
@@ -305,8 +313,42 @@ const documents = {
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
       metadata: {},
     },
+    {
+      documentUuid: '8980c409-465c-41a4-969d-affe0d9b9df7',
+      documentType: 'HMCTS_WARRANT',
+      documentFilename: 'CommonPlatformfile.pdf',
+      filename: 'CommonPlatformfile',
+      fileExtension: 'pdf',
+      fileSize: 2233,
+      fileHash: '',
+      mimeType: 'application/pdf',
+      createdTime: '2026-03-10T14:22:30',
+      createdByServiceName: 'Remand and Sentencing',
+      createdByUsername: 'REMAND_SENTENCING_TEST_USER',
+      metadata: {
+        source: 'court-data-ingestion-api',
+        prisonerId: 'A12345B',
+      },
+    },
+    {
+      documentUuid: 'bdee9909-ba50-48d6-ad80-e8ecf6ffa912',
+      documentType: 'HMCTS_WARRANT',
+      documentFilename: 'CommonPlatformfile.pdf',
+      filename: 'CommonPlatformfile',
+      fileExtension: 'pdf',
+      fileSize: 2233,
+      fileHash: '',
+      mimeType: 'application/pdf',
+      createdTime: '2026-03-09T14:22:30',
+      createdByServiceName: 'Remand and Sentencing',
+      createdByUsername: 'REMAND_SENTENCING_TEST_USER',
+      metadata: {
+        source: 'court-data-ingestion-api',
+        prisonerId: 'A12345B',
+      },
+    },
   ],
-  totalResultsCount: 4,
+  totalResultsCount: 6,
 } as DocumentSearchResult
 
 const cpDocuments = [
@@ -314,6 +356,19 @@ const cpDocuments = [
     caseReferences: ['CommonPlatformCase123'],
     prisonDocumentId: '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
     isUnread: true,
+    documentType: 'PRISON_COURT_REGISTER',
+  },
+  {
+    caseReferences: ['CommonPlatformCase123'],
+    prisonDocumentId: '8980c409-465c-41a4-969d-affe0d9b9df7',
+    isUnread: true,
+    documentType: 'SENTENCING_WARRANT',
+  },
+  {
+    caseReferences: ['CommonPlatformCase123'],
+    prisonDocumentId: 'bdee9909-ba50-48d6-ad80-e8ecf6ffa912',
+    isUnread: true,
+    documentType: 'COMMON_PLATFORM_DOCUMENT',
   },
 ] as CourtDocument[]
 

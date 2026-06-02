@@ -6,7 +6,6 @@ import DocumentManagementService from '../../../services/documentManagementServi
 import logger from '../../../../logger'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import CourtRegisterService from '../../../services/courtRegisterService'
-import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import { getAsStringOrDefault } from '../../../utils/utils'
 import { Document, DocumentManagementMapper, DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
@@ -14,6 +13,7 @@ import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
+import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
 
 export default class DocumentRoutes {
   constructor(
@@ -69,11 +69,9 @@ export default class DocumentRoutes {
       } as Partial<DocumentViewModel>
       if (it.metadata.source === 'court-data-ingestion-api') {
         // From CP
-        document.type = it.documentType
-        document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
-          type => type.type === it.documentType,
-        ).name
         const cpDocument = cpDocuments.find(itCpDocument => itCpDocument.prisonDocumentId === it.documentUuid)
+        document.type = it.documentType
+        document.typeDescription = commonPlatformDocumentTypes.find(type => cpDocument.documentType === type.type).name
         document.isNew = cpDocument ? cpDocument.isUnread : false
       } else {
         // From RaS
