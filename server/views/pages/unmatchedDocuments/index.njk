@@ -11,6 +11,10 @@
 
   {% if not documents.length %}
     <p class="govuk-body">No documents have been received.</p>
+
+    {% if pagination and totalResults > 0 %}
+        {{ govukPagination(pagination) }}
+    {% endif %}
   {% else %}
     <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2">
       <div class="govuk-grid-column-two-thirds">
