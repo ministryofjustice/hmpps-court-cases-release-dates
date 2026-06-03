@@ -52,7 +52,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/court-document/{courtDocumentId}/view': {
+  '/court-document/{prisonDocumentId}/view': {
     parameters: {
       query?: never
       header?: never
@@ -162,11 +162,11 @@ export interface components {
     }
     CourtDocument: {
       /** Format: uuid */
-      courtDocumentId: string
-      /** Format: uuid */
       prisonDocumentId: string
       caseReferences: string[]
       isUnread: boolean
+      /** @enum {string} */
+      documentType: 'PRISON_COURT_REGISTER' | 'SENTENCING_WARRANT' | 'REMAND_WARRANT' | 'COMMON_PLATFORM_DOCUMENT'
     }
   }
   responses: never
@@ -246,7 +246,7 @@ export interface operations {
       query?: never
       header?: never
       path: {
-        courtDocumentId: string
+        prisonDocumentId: string
       }
       cookie?: never
     }

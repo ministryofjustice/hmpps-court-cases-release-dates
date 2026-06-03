@@ -6,7 +6,6 @@ import DocumentManagementService from '../../../services/documentManagementServi
 import logger from '../../../../logger'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import CourtRegisterService from '../../../services/courtRegisterService'
-import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import { getAsStringOrDefault } from '../../../utils/utils'
 import { Document, DocumentManagementMapper, DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
@@ -14,6 +13,8 @@ import config from '../../../config'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
+import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
+import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 
 export default class DocumentRoutes {
   constructor(
@@ -69,11 +70,16 @@ export default class DocumentRoutes {
       } as Partial<DocumentViewModel>
       if (it.metadata.source === 'court-data-ingestion-api') {
         // From CP
-        document.type = it.documentType
-        document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
-          type => type.type === it.documentType,
-        ).name
         const cpDocument = cpDocuments.find(itCpDocument => itCpDocument.prisonDocumentId === it.documentUuid)
+        // cpDocument can be missing if data is out of sync between CDIA and document management api.
+        if (cpDocument) {
+          document.typeDescription = commonPlatformDocumentTypes[cpDocument.documentType]?.name
+        } else {
+          document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
+            type => type.type === it.documentType,
+          ).name
+        }
+        document.type = it.documentType
         document.isNew = cpDocument ? cpDocument.isUnread : false
       } else {
         // From RaS

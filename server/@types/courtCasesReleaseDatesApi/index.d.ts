@@ -4,19 +4,47 @@
  */
 
 export interface paths {
-  '/things-to-do/prisoner/{prisonerId}': {
+  '/queue-admin/retry-dlq/{dlqName}': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    /**
-     * Retrieve things-to-do for a prisoner
-     * @description Provides a list of things-to-do for a specified prisoner based on their ID.
-     */
-    get: operations['getThingsToDo']
-    put?: never
+    get?: never
+    put: operations['retryDlq']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/retry-all-dlqs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['retryAllDlqs']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/purge-queue/{queueName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['purgeQueue']
     post?: never
     delete?: never
     options?: never
@@ -44,49 +72,96 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/queue-admin/get-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getDlqMessages']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/things-to-do/prisoner/{prisonerId}/evict': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Evict the cached things to do
+     * @description Evict the cached things to do when underlying data has changed.
+     */
+    delete: operations['evictThingsToDo']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
-    AdaIntercept: {
-      /** @enum {string} */
-      type: 'NONE' | 'FIRST_TIME' | 'UPDATE' | 'PADA' | 'PADAS' | 'FIRST_TIME_WITH_NO_ADJUDICATION'
+    RetryDlqResult: {
       /** Format: int32 */
-      number: number
-      anyProspective: boolean
-      messageArguments: string[]
-      message: string
+      messagesFoundCount: number
     }
-    AdjustmentThingsToDo: {
-      prisonerId: string
-      thingsToDo: 'ADA_INTERCEPT'[]
-      adaIntercept?: components['schemas']['AdaIntercept']
-    }
-    ThingsToDo: {
-      prisonerId: string
-      calculationThingsToDo: 'CALCULATION_REQUIRED'[]
-      adjustmentThingsToDo?: components['schemas']['AdjustmentThingsToDo']
-      hasAdjustmentThingsToDo: boolean
-      hasCalculationThingsToDo: boolean
-    }
-    AdjustmentThingToDo: WithRequired<components['schemas']['ThingToDo'], 'count'> & {
-      types: 'ADA_INTERCEPT'[]
-      adaIntercept?: components['schemas']['AdaIntercept']
+    PurgeQueueResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
     }
     CcrdServiceDefinition: {
       href: string
       text: string
-      thingsToDo: components['schemas']['AdjustmentThingToDo'] | components['schemas']['EmptyThingToDo']
+      thingsToDo: components['schemas']['ThingsToDo']
     }
     CcrdServiceDefinitions: {
       services: {
         [key: string]: components['schemas']['CcrdServiceDefinition']
       }
     }
-    EmptyThingToDo: WithRequired<components['schemas']['ThingToDo'], 'count'>
     ThingToDo: {
-      /** Format: int64 */
+      title: string
+      message: string
+      buttonText: string
+      buttonHref: string
+      /** @enum {string} */
+      type:
+        | 'CALCULATION_REQUIRED'
+        | 'ADA_INTERCEPT'
+        | 'REVIEW_IDENTIFIED_REMAND'
+        | 'PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW'
+        | 'HMCTS_API_DOCUMENT_RECEIVED'
+    }
+    ThingsToDo: {
+      things: components['schemas']['ThingToDo'][]
+      /** Format: int32 */
       count: number
+      /** @enum {string|null} */
+      severity?: 'NOTIFICATION' | 'REQUIRED_BEFORE_CALCULATION' | null
+    }
+    DlqMessage: {
+      body: {
+        [key: string]: unknown
+      }
+      messageId: string
+    }
+    GetDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesReturnedCount: number
+      messages: components['schemas']['DlqMessage'][]
     }
   }
   responses: never
@@ -97,46 +172,66 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
-  getThingsToDo: {
+  retryDlq: {
     parameters: {
       query?: never
       header?: never
       path: {
-        /**
-         * @description Prisoner's ID (also known as nomsId)
-         * @example A1234AB
-         */
-        prisonerId: string
+        dlqName: string
       }
       cookie?: never
     }
     requestBody?: never
     responses: {
-      /** @description Successfully returns the things-to-do list */
+      /** @description OK */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ThingsToDo']
+          '*/*': components['schemas']['RetryDlqResult']
         }
       }
-      /** @description Unauthorized - valid Oauth2 token required */
-      401: {
+    }
+  }
+  retryAllDlqs: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ThingsToDo']
+          '*/*': components['schemas']['RetryDlqResult'][]
         }
       }
-      /** @description Forbidden - requires appropriate role */
-      403: {
+    }
+  }
+  purgeQueue: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        queueName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ThingsToDo']
+          '*/*': components['schemas']['PurgeQueueResult']
         }
       }
     }
@@ -185,7 +280,66 @@ export interface operations {
       }
     }
   }
-}
-type WithRequired<T, K extends keyof T> = T & {
-  [P in K]-?: T[P]
+  getDlqMessages: {
+    parameters: {
+      query?: {
+        maxMessages?: number
+      }
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+    }
+  }
+  evictThingsToDo: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /**
+         * @description Prisoner's ID (also known as nomsId)
+         * @example A1234AB
+         */
+        prisonerId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfuly evicted cache. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
 }

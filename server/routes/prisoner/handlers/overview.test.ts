@@ -2,6 +2,7 @@ import { Express } from 'express'
 
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+import { LatestCalculationCardConfig } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
 import PrisonerService from '../../../services/prisonerService'
 import { appWithAllRoutes, user } from '../../testutils/appSetup'
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
@@ -125,6 +126,69 @@ describe('Route Handlers - Overview', () => {
           expect(res.text).toContain('Overview')
           expect(res.text).toContain('Adjustments')
           expect(res.text).toContain('Release dates and calculations')
+        })
+    })
+
+    it('should show latest calc if no things to do', () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.hasActiveSentences.mockResolvedValue(true)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
+      calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue(latestCalculation)
+
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Calculation reason: Transfer check')
+          expect(res.text).toContain('01 June 2024 at HMP Kirkham')
+        })
+    })
+
+    it('should show things to do and hide latest calc', () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.hasActiveSentences.mockResolvedValue(true)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsWithThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
+      calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue(latestCalculation)
+
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).not.toContain('Calculation reason: Transfer check')
+          expect(res.text).toContain('Important ADA intercept message')
+        })
+    })
+
+    it('should show latest calc if only things to do are notifications', () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.hasActiveSentences.mockResolvedValue(true)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsThingsToDoNotifications)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
+      calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue(latestCalculation)
+
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Calculation reason: Transfer check')
+          expect(res.text).toContain('01 June 2024 at HMP Kirkham')
         })
     })
 
@@ -672,24 +736,7 @@ describe('Route Handlers - Overview', () => {
       } as Prisoner)
       prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
       adjustmentsService.getAdjustments.mockResolvedValue([])
-      calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue({
-        calculatedAt: '2024-06-01T10:30:45',
-        establishment: 'HMP Kirkham',
-        reason: 'Transfer check',
-        source: 'CRDS',
-        dates: [
-          {
-            type: 'CRD',
-            description: 'Conditional release date',
-            date: '2034-02-19',
-            hints: [
-              {
-                text: 'Friday, 17 February 2034 when adjusted to a working day',
-              },
-            ],
-          },
-        ],
-      })
+      calculateReleaseDatesService.getLatestCalculationForPrisoner.mockResolvedValue(latestCalculation)
       prisonerService.hasActiveSentences.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
       remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
@@ -1160,3 +1207,105 @@ const serviceDefinitionsNoThingsToDo = {
     },
   },
 } as CcrdServiceDefinitions
+
+const serviceDefinitionsWithThingsToDo = {
+  services: {
+    overview: {
+      href: 'http://localhost:8000/prisoner/AB1234AB/overview',
+      text: 'Overview',
+      thingsToDo: {
+        things: [],
+        count: 0,
+      },
+    },
+    adjustments: {
+      href: 'http://localhost:8002/AB1234AB',
+      text: 'Adjustments',
+      thingsToDo: {
+        things: [
+          {
+            title: 'adjustments-title',
+            message: 'Important ADA intercept message',
+            buttonHref: '/adjustments-link',
+            buttonText: 'adjustments-button',
+            type: 'ADA_INTERCEPT',
+          },
+        ],
+        severity: 'REQUIRED_BEFORE_CALCULATION',
+        count: 1,
+      },
+    },
+    releaseDates: {
+      href: 'http://localhost:8004?prisonId=AB1234AB',
+      text: 'Release dates and calculations',
+      thingsToDo: {
+        things: [],
+        count: 0,
+      },
+    },
+  },
+} as CcrdServiceDefinitions
+
+const serviceDefinitionsThingsToDoNotifications = {
+  services: {
+    overview: {
+      href: 'http://localhost:8000/prisoner/AB1234AB/overview',
+      text: 'Overview',
+      thingsToDo: {
+        things: [],
+        count: 0,
+      },
+    },
+    adjustments: {
+      href: 'http://localhost:8002/AB1234AB',
+      text: 'Adjustments',
+      thingsToDo: {
+        things: [],
+        count: 0,
+      },
+    },
+    releaseDates: {
+      href: 'http://localhost:8004?prisonId=AB1234AB',
+      text: 'Release dates and calculations',
+      thingsToDo: {
+        things: [],
+        count: 0,
+      },
+    },
+    documents: {
+      href: 'http://localhost:8004?prisonId=AB1234AB',
+      text: 'Release dates and calculations',
+      thingsToDo: {
+        severity: 'NOTIFICATION',
+        things: [
+          {
+            buttonHref: '',
+            buttonText: '',
+            message: '',
+            title: '',
+            type: 'HMCTS_API_DOCUMENT_RECEIVED',
+          },
+        ],
+        count: 1,
+      },
+    },
+  },
+} as CcrdServiceDefinitions
+const latestCalculation = {
+  calculatedAt: '2024-06-01T10:30:45',
+  establishment: 'HMP Kirkham',
+  reason: 'Transfer check',
+  source: 'CRDS',
+  dates: [
+    {
+      type: 'CRD',
+      description: 'Conditional release date',
+      date: '2034-02-19',
+      hints: [
+        {
+          text: 'Friday, 17 February 2034 when adjusted to a working day',
+        },
+      ],
+    },
+  ],
+} as LatestCalculationCardConfig
