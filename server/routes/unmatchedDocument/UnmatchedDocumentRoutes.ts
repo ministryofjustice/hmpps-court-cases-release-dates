@@ -54,7 +54,7 @@ export default class UnmatchedDocumentRoutes {
 
     const pagedDataResponse = getPagedDataResponse(documents)
 
-    res.render('pages/prisoner/documents', {
+    res.render('pages/unmatchedDocuments/index', {
       prisoner,
       documents: viewModelDocuments,
       sortByQuery,
