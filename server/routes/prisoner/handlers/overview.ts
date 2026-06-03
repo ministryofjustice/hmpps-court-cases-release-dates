@@ -53,7 +53,9 @@ export default class OverviewRoutes {
         ? await this.calculateReleaseDatesService.hasIndeterminateSentences(bookingId, token)
         : false
 
-    const anyThingsToDo = Object.values(serviceDefinitions.services).some(it => it.thingsToDo.count > 0)
+    const anyThingsToDo = Object.values(serviceDefinitions.services).some(
+      it => it.thingsToDo.count > 0 && it.thingsToDo.severity !== 'NOTIFICATION',
+    )
     const latestRecall: Recall & { locationName?: string } = hasRasAccess
       ? await this.remandAndSentencingService.getMostRecentRecall(prisoner.prisonerNumber, token)
       : null
