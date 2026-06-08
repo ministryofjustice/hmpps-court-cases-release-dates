@@ -208,6 +208,7 @@ const defaultSearchParams = {
   ],
   orderBy: 'CREATED_TIME',
   pageSize: 10,
+  canonical: true,
 } as DocumentSearchRequest
 
 type DocumentViewModel = {
