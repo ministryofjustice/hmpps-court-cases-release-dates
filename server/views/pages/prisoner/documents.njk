@@ -58,11 +58,13 @@
             {% if document.hearingDate %}
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing date</h3>
                 <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-date">{{document.hearingDate | date}}</p>
-            {% else %}
-            {% if document.warrantDate %}
+            {% elif document.warrantDate %}
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Warrant date</h3>
                 <p class="govuk-body govuk-!-margin-bottom-2" data-qa="warrant-date">{{document.warrantDate | date}}</p>
             {% endif %}
+            {% if document.hearingType %}
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing type</h3>
+                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-type">{{document.hearingType}}</p>
             {% endif %}
           </div>
         </div>
