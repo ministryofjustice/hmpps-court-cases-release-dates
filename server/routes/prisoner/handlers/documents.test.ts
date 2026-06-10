@@ -94,7 +94,8 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('Prison court register')
         expect(firstCommonPlatformDocumentText).toContain('PDF 2.18 KB')
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
-        expect(firstCommonPlatformDocumentText).not.toContain('Case reference')
+        expect(firstCommonPlatformDocumentText).toContain('Case reference')
+        expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123, CommonPlatformCase456')
         expect(firstCommonPlatformDocumentText).not.toContain('Hearing date')
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
@@ -392,7 +393,7 @@ const documents = {
 
 const cpDocuments = [
   {
-    caseReferences: ['CommonPlatformCase123'],
+    caseReferences: ['CommonPlatformCase123', 'CommonPlatformCase456'],
     prisonDocumentId: '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
     isUnread: true,
     documentType: 'PRISON_COURT_REGISTER',
