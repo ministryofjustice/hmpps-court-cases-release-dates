@@ -74,6 +74,8 @@ export default class DocumentRoutes {
         // cpDocument can be missing if data is out of sync between CDIA and document management api.
         if (cpDocument) {
           document.typeDescription = commonPlatformDocumentTypes[cpDocument.documentType]?.name
+          document.hearingType = cpDocument.courtHearing?.hearingType
+          document.courtName = cpDocument.courtHearing?.courtName
         } else {
           document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
             type => type.type === it.documentType,
@@ -226,4 +228,5 @@ type DocumentViewModel = {
   hearingDate: string
   warrantDate: string
   isNew: boolean
+  hearingType: string
 }

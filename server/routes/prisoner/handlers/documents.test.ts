@@ -95,7 +95,6 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('PDF 2.18 KB')
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
         expect(firstCommonPlatformDocumentText).not.toContain('Case reference')
-        expect(firstCommonPlatformDocumentText).not.toContain('Court name')
         expect(firstCommonPlatformDocumentText).not.toContain('Hearing date')
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
@@ -170,14 +169,32 @@ describe('Route Handlers - Overview', () => {
         const fifthCommonPlatformDocument = $('[data-qa=document-8980c409-465c-41a4-969d-affe0d9b9df7]')
         const fifthCommonPlatformDocumentText = fifthCommonPlatformDocument.text()
         expect(fifthCommonPlatformDocumentText).toContain('Sentencing warrant')
+        const fifthCommonPlatformDocumentHearingTypeText = fifthCommonPlatformDocument
+          .find('[data-qa=hearing-type]')
+          .text()
+        expect(fifthCommonPlatformDocumentHearingTypeText).toContain('First hearing')
+        const fifthCommonPlatformDocumentCourtName = fifthCommonPlatformDocument.find('[data-qa=court-name]').text()
+        expect(fifthCommonPlatformDocumentCourtName).toContain('Court 345')
 
         const sixthCommonPlatformDocument = $('[data-qa=document-bdee9909-ba50-48d6-ad80-e8ecf6ffa912]')
         const sxithCommonPlatformDocumentText = sixthCommonPlatformDocument.text()
         expect(sxithCommonPlatformDocumentText).toContain('Common platform document')
+        const sixthCommonPlatformDocumentHearingTypeText = sixthCommonPlatformDocument
+          .find('[data-qa=hearing-type]')
+          .text()
+        expect(sixthCommonPlatformDocumentHearingTypeText).toContain('Remand')
+        const sixthCommonPlatformDocumentCourtName = sixthCommonPlatformDocument.find('[data-qa=court-name]').text()
+        expect(sixthCommonPlatformDocumentCourtName).toContain('Court 678')
 
         const seventhCommonPlatformDocument = $('[data-qa=document-9612b032-383b-4a83-9765-30484182c7fa]')
         const seventhCommonPlatformDocumentText = seventhCommonPlatformDocument.text()
         expect(seventhCommonPlatformDocumentText).toContain('Remand warrant')
+        const seventhCommonPlatformDocumentHearingTypeText = seventhCommonPlatformDocument
+          .find('[data-qa=hearing-type]')
+          .text()
+        expect(seventhCommonPlatformDocumentHearingTypeText).toBe('')
+        const seventhCommonPlatformDocumentCourtName = seventhCommonPlatformDocument.find('[data-qa=court-name]').text()
+        expect(seventhCommonPlatformDocumentCourtName).toBe('')
       })
   })
 })
@@ -379,18 +396,30 @@ const cpDocuments = [
     prisonDocumentId: '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
     isUnread: true,
     documentType: 'PRISON_COURT_REGISTER',
+    courtHearing: {
+      courtName: 'Court 123',
+      hearingType: 'Sentencing',
+    },
   },
   {
     caseReferences: ['CommonPlatformCase123'],
     prisonDocumentId: '8980c409-465c-41a4-969d-affe0d9b9df7',
     isUnread: true,
     documentType: 'SENTENCING_WARRANT',
+    courtHearing: {
+      courtName: 'Court 345',
+      hearingType: 'First hearing',
+    },
   },
   {
     caseReferences: ['CommonPlatformCase123'],
     prisonDocumentId: 'bdee9909-ba50-48d6-ad80-e8ecf6ffa912',
     isUnread: true,
     documentType: 'COMMON_PLATFORM_DOCUMENT',
+    courtHearing: {
+      courtName: 'Court 678',
+      hearingType: 'Remand',
+    },
   },
 ] as CourtDocument[]
 
