@@ -100,6 +100,8 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
         expect(firstCommonPlatformDocumentText).toContain('New')
+        expect(firstCommonPlatformDocumentText).toContain('Date added')
+        expect(firstCommonPlatformDocumentText).toContain('27 March 2026 at 14:22')
 
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
         const secondRasDocumentText = secondRasDocument.text()
