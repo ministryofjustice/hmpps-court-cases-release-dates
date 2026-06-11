@@ -167,6 +167,11 @@ export interface components {
       isUnread: boolean
       /** @enum {string} */
       documentType: 'PRISON_COURT_REGISTER' | 'SENTENCING_WARRANT' | 'REMAND_WARRANT' | 'COMMON_PLATFORM_DOCUMENT'
+      courtHearing?: components['schemas']['CourtHearing'] | null
+    }
+    CourtHearing: {
+      courtName: string
+      hearingType: string
     }
   }
   responses: never
