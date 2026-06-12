@@ -76,6 +76,7 @@ export default class DocumentRoutes {
           document.typeDescription = commonPlatformDocumentTypes[cpDocument.documentType]?.name
           document.hearingType = cpDocument.courtHearing?.hearingType
           document.courtName = cpDocument.courtHearing?.courtName
+          document.hearingDate = cpDocument.courtHearing?.hearingDate
           document.caseReference = cpDocument.caseReferences.join(', ')
         } else {
           document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(

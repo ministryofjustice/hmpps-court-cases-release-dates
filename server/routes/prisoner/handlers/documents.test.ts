@@ -96,7 +96,7 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
         expect(firstCommonPlatformDocumentText).toContain('Case reference')
         expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123, CommonPlatformCase456')
-        expect(firstCommonPlatformDocumentText).not.toContain('Hearing date')
+        expect(firstCommonPlatformDocumentText).toContain('Hearing date')
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
         expect(firstCommonPlatformDocumentText).toContain('New')
@@ -178,6 +178,8 @@ describe('Route Handlers - Overview', () => {
         expect(fifthCommonPlatformDocumentHearingTypeText).toContain('First hearing')
         const fifthCommonPlatformDocumentCourtName = fifthCommonPlatformDocument.find('[data-qa=court-name]').text()
         expect(fifthCommonPlatformDocumentCourtName).toContain('Court 345')
+        const fifthCommonPlatformDocumentHearingDate = fifthCommonPlatformDocument.find('[data-qa=hearing-date]').text()
+        expect(fifthCommonPlatformDocumentHearingDate).toBe('01 January 2026')
 
         const sixthCommonPlatformDocument = $('[data-qa=document-bdee9909-ba50-48d6-ad80-e8ecf6ffa912]')
         const sxithCommonPlatformDocumentText = sixthCommonPlatformDocument.text()
@@ -188,6 +190,8 @@ describe('Route Handlers - Overview', () => {
         expect(sixthCommonPlatformDocumentHearingTypeText).toContain('Remand')
         const sixthCommonPlatformDocumentCourtName = sixthCommonPlatformDocument.find('[data-qa=court-name]').text()
         expect(sixthCommonPlatformDocumentCourtName).toContain('Court 678')
+        const sixthCommonPlatformDocumentHearingDate = sixthCommonPlatformDocument.find('[data-qa=hearing-date]').text()
+        expect(sixthCommonPlatformDocumentHearingDate).toBe('01 January 2025')
 
         const seventhCommonPlatformDocument = $('[data-qa=document-9612b032-383b-4a83-9765-30484182c7fa]')
         const seventhCommonPlatformDocumentText = seventhCommonPlatformDocument.text()
@@ -198,6 +202,10 @@ describe('Route Handlers - Overview', () => {
         expect(seventhCommonPlatformDocumentHearingTypeText).toBe('')
         const seventhCommonPlatformDocumentCourtName = seventhCommonPlatformDocument.find('[data-qa=court-name]').text()
         expect(seventhCommonPlatformDocumentCourtName).toBe('')
+        const seventhCommonPlatformDocumentHearingDate = seventhCommonPlatformDocument
+          .find('[data-qa=hearing-date]')
+          .text()
+        expect(seventhCommonPlatformDocumentHearingDate).toBe('')
       })
   })
 })
@@ -402,6 +410,7 @@ const cpDocuments = [
     courtHearing: {
       courtName: 'Court 123',
       hearingType: 'Sentencing',
+      hearingDate: '2024-01-01T12:34',
     },
   },
   {
@@ -412,6 +421,7 @@ const cpDocuments = [
     courtHearing: {
       courtName: 'Court 345',
       hearingType: 'First hearing',
+      hearingDate: '2026-01-01T12:34',
     },
   },
   {
@@ -422,6 +432,7 @@ const cpDocuments = [
     courtHearing: {
       courtName: 'Court 678',
       hearingType: 'Remand',
+      hearingDate: '2025-01-01T12:34',
     },
   },
 ] as CourtDocument[]
