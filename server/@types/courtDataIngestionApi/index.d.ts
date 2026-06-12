@@ -172,6 +172,8 @@ export interface components {
     CourtHearing: {
       courtName: string
       hearingType: string
+      /** Format: date-time */
+      hearingDate: string
     }
   }
   responses: never
