@@ -71,18 +71,18 @@
             <p class="govuk-body govuk-!-margin-bottom-2">{{document.createdTime | dateTimeShort }}</p>
           </div>
           <div class="govuk-grid-column-one-third">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Source</h3>
-            {% if document.courtCaseUuid %}
-              <p class="govuk-body govuk-!-margin-bottom-2"><a data-qa="court-case-link" href="{{applications.remandAndSentencing.url}}/person/{{prisoner.prisonerNumber}}/view-court-case/{{document.courtCaseUuid}}/details">Court cases</a></p>
-            {% else %}
-              <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
-            {% endif %}
+              <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Source</h3>
+              {% if document.courtCaseUuid %}
+                <p class="govuk-body govuk-!-margin-bottom-2"><a data-qa="court-case-link" href="{{applications.remandAndSentencing.url}}/person/{{prisoner.prisonerNumber}}/view-court-case/{{document.courtCaseUuid}}/details">Court cases</a></p>
+              {% else %}
+                <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
+              {% endif %}
           </div>
           <div class="govuk-grid-column-one-third">
-            {% if document.hearingType %}
-              <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing type</h3>
-              <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-type">{{document.hearingType}}</p>
-            {% endif %}
+              {% if document.hearingType %}
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing type</h3>
+                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-type">{{document.hearingType}}</p>
+              {% endif %}
           </div>
         </div>
       </div>
