@@ -223,7 +223,7 @@ describe('Route Handlers - Overview', () => {
         }
       }
     prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsMaintenanceEnabled)
-    documentManagementService.searchDocument.mockResolvedValue({request: {}, results: []})
+    documentManagementService.searchDocument.mockResolvedValue({request: { documentTypes: [], metadata: null, page: 0, pageSize: 0, orderBy: 'CREATED_TIME', orderByDirection: 'ASC'}, results: [], totalResultsCount: 0,})
     remandAndSentencingService.getDocuments.mockResolvedValue({courtCaseDocuments: []})
     courtDataIngestionService.getDocuments.mockResolvedValue([])
     return request(app)
