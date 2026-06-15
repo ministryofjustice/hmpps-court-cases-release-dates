@@ -94,6 +94,7 @@ export default class OverviewRoutes {
       addImmigrationDetentionUrl,
       overviewImmigrationDetentionUrl,
       immigrationDetentionUser: res.locals.user.hasImmigrationDetentionAccess,
+      displayMaintenanceAlert: true,
     })
   }
 

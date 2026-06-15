@@ -131,6 +131,7 @@ export default class DocumentRoutes {
       pagination: govukPagination(pagedDataResponse, new URL(req.originalUrl, config.domain)),
       paginationResults: getPaginationResults(pagedDataResponse),
       totalResults: documents.totalResultsCount,
+      displayMaintenanceAlert: true,
     })
   }
 

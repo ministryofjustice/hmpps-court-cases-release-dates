@@ -15,6 +15,7 @@ import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
+import { it } from 'node:test'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
@@ -206,6 +207,32 @@ describe('Route Handlers - Overview', () => {
           .find('[data-qa=hearing-date]')
           .text()
         expect(seventhCommonPlatformDocumentHearingDate).toBe('')
+      })
+  })
+
+  it('should display maintenance banner', () => {
+    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+      prisonerNumber: 'A12345B',
+      imprisonmentStatusDescription: 'Life imprisonment',
+      prisonId: 'MDI',
+    } as Prisoner)
+    const serviceDefinitionsMaintenanceEnabled = {
+        ...serviceDefinitionsNoThingsToDo,
+        maintenanceAlert: {
+          enabled: true,
+          message: 'There is due to be an outage in the future',
+        }
+      }
+    prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsMaintenanceEnabled)
+    documentManagementService.searchDocument.mockResolvedValue({request: {}, results: []})
+    remandAndSentencingService.getDocuments.mockResolvedValue({courtCaseDocuments: []})
+    courtDataIngestionService.getDocuments.mockResolvedValue([])
+    return request(app)
+      .get('/prisoner/A12345B/documents')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.status).toBe(200)
+        expect(res.text).toContain(serviceDefinitionsMaintenanceEnabled.maintenanceAlert.message)
       })
   })
 })
