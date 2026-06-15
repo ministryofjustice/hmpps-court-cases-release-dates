@@ -216,15 +216,26 @@ describe('Route Handlers - Overview', () => {
       prisonId: 'MDI',
     } as Prisoner)
     const serviceDefinitionsMaintenanceEnabled = {
-        ...serviceDefinitionsNoThingsToDo,
-        maintenanceAlert: {
-          enabled: true,
-          message: 'There is due to be an outage in the future',
-        }
-      }
+      ...serviceDefinitionsNoThingsToDo,
+      maintenanceAlert: {
+        enabled: true,
+        message: 'There is due to be an outage in the future',
+      },
+    }
     prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsMaintenanceEnabled)
-    documentManagementService.searchDocument.mockResolvedValue({request: { documentTypes: [], metadata: null, page: 0, pageSize: 0, orderBy: 'CREATED_TIME', orderByDirection: 'ASC'}, results: [], totalResultsCount: 0,})
-    remandAndSentencingService.getDocuments.mockResolvedValue({courtCaseDocuments: []})
+    documentManagementService.searchDocument.mockResolvedValue({
+      request: {
+        documentTypes: [],
+        metadata: null,
+        page: 0,
+        pageSize: 0,
+        orderBy: 'CREATED_TIME',
+        orderByDirection: 'ASC',
+      },
+      results: [],
+      totalResultsCount: 0,
+    })
+    remandAndSentencingService.getDocuments.mockResolvedValue({ courtCaseDocuments: [] })
     courtDataIngestionService.getDocuments.mockResolvedValue([])
     return request(app)
       .get('/prisoner/A12345B/documents')

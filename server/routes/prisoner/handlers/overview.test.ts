@@ -484,7 +484,7 @@ describe('Route Handlers - Overview', () => {
         maintenanceAlert: {
           enabled: true,
           message: 'There is due to be an outage in the future',
-        }
+        },
       }
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsMaintenanceEnabled)
       return request(app)
