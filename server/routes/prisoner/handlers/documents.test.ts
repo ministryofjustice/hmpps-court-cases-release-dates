@@ -15,7 +15,6 @@ import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
-import { it } from 'node:test'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
