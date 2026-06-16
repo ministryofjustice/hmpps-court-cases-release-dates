@@ -468,6 +468,32 @@ describe('Route Handlers - Overview', () => {
           expect(res.text).toContain('The details for this person cannot be found')
         })
     })
+
+    it('display maintenance banner', () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        imprisonmentStatusDescription: 'Life imprisonment',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getStartOfSentenceEnvelope.mockResolvedValue(new Date())
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.hasActiveSentences.mockResolvedValue(false)
+      const serviceDefinitionsMaintenanceEnabled = {
+        ...serviceDefinitionsNoThingsToDo,
+        maintenanceAlert: {
+          enabled: true,
+          message: 'There is due to be an outage in the future',
+        },
+      }
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsMaintenanceEnabled)
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain(serviceDefinitionsMaintenanceEnabled.maintenanceAlert.message)
+        })
+    })
   })
 
   describe('Next Court Hearing tests', () => {

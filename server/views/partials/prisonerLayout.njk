@@ -3,6 +3,7 @@
 {% from "hmpps/components/mini-profile/macro.njk" import miniProfile %}
 {% from "hmpps/components/court-cases-release-dates/sub-navigation/macro.njk" import subNavigation %}
 {% from "hmpps/components/court-cases-release-dates/profile-banner/macro.njk" import profileBanner %}
+{% from "hmpps/components/outage-banner/macro.njk" import outageBanner %}
 
 {% block beforeContent %}
     {% set banners = {
@@ -21,6 +22,11 @@
     {% set profileBannerParams = banners[prisoner.prisonId] %}
 
     <aside role="complementary">
+        {% if displayMaintenanceAlert and serviceDefinitions.maintenanceAlert.enabled %}
+            <div class="govuk-!-margin-top-7">
+                {{ outageBanner({ text: serviceDefinitions.maintenanceAlert.message}) }}
+            </div>
+        {% endif %}
         {% block banner %}
             {% if profileBannerParams %}
                 {{ profileBanner(profileBannerParams) }}
