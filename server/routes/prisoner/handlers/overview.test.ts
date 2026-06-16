@@ -1214,6 +1214,10 @@ const serviceDefinitionsNoThingsToDo = {
         things: [],
         count: 0,
       },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
+      },
     },
     adjustments: {
       href: 'http://localhost:8002/AB1234AB',
@@ -1221,6 +1225,10 @@ const serviceDefinitionsNoThingsToDo = {
       thingsToDo: {
         things: [],
         count: 0,
+      },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
       },
     },
     releaseDates: {
@@ -1230,7 +1238,15 @@ const serviceDefinitionsNoThingsToDo = {
         things: [],
         count: 0,
       },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
+      },
     },
+  },
+  maintenanceAlert: {
+    enabled: false,
+    message: 'placeholder',
   },
 } as CcrdServiceDefinitions
 
@@ -1242,6 +1258,10 @@ const serviceDefinitionsWithThingsToDo = {
       thingsToDo: {
         things: [],
         count: 0,
+      },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
       },
     },
     adjustments: {
@@ -1260,6 +1280,10 @@ const serviceDefinitionsWithThingsToDo = {
         severity: 'REQUIRED_BEFORE_CALCULATION',
         count: 1,
       },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
+      },
     },
     releaseDates: {
       href: 'http://localhost:8004?prisonId=AB1234AB',
@@ -1268,7 +1292,15 @@ const serviceDefinitionsWithThingsToDo = {
         things: [],
         count: 0,
       },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
+      },
     },
+  },
+  maintenanceAlert: {
+    enabled: false,
+    message: 'placeholder',
   },
 } as CcrdServiceDefinitions
 
@@ -1281,6 +1313,10 @@ const serviceDefinitionsThingsToDoNotifications = {
         things: [],
         count: 0,
       },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
+      },
     },
     adjustments: {
       href: 'http://localhost:8002/AB1234AB',
@@ -1289,6 +1325,10 @@ const serviceDefinitionsThingsToDoNotifications = {
         things: [],
         count: 0,
       },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
+      },
     },
     releaseDates: {
       href: 'http://localhost:8004?prisonId=AB1234AB',
@@ -1296,6 +1336,10 @@ const serviceDefinitionsThingsToDoNotifications = {
       thingsToDo: {
         things: [],
         count: 0,
+      },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
       },
     },
     documents: {
@@ -1314,7 +1358,15 @@ const serviceDefinitionsThingsToDoNotifications = {
         ],
         count: 1,
       },
+      maintenanceAlert: {
+        enabled: false,
+        message: 'placeholder',
+      },
     },
+  },
+  maintenanceAlert: {
+    enabled: false,
+    message: 'placeholder',
   },
 } as CcrdServiceDefinitions
 const latestCalculation = {
