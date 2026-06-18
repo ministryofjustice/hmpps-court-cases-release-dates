@@ -1,4 +1,50 @@
 .prisoner-doc-link {
-  @include govuk-font($size: 24, $weight: 'bold');
+  @include govuk-font($size: 19, $weight: 'bold');
   @include govuk-responsive-margin(1, 'right');
+}
+
+.document {
+  margin-bottom: 0;
+}
+
+.document__header p {
+  margin-bottom: 0;
+}
+
+.document__inner {
+  padding-top: govuk-spacing(3);
+  padding-bottom: govuk-spacing(3);
+}
+
+.document--new .document__inner {
+  border-left: 4px solid govuk-colour("blue");
+  padding-left: govuk-spacing(3);
+}
+
+.document__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: govuk-spacing(3);
+  margin-bottom: govuk-spacing(2);
+}
+
+.document__main {
+  min-width: 0;
+}
+
+.document__tag {
+  flex-shrink: 0;
+}
+
+.document__row {
+  margin-bottom: govuk-spacing(1);
+}
+
+.document__row:last-child {
+  margin-bottom: 0;
+}
+
+.document__meta {
+  color: govuk-colour("dark-grey");
 }

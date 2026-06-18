@@ -7,103 +7,120 @@
 
 {% block content %}
 
-  <h1 class="govuk-heading-xl">Documents</h1>                   
+    <h1 class="govuk-heading-xl">Documents</h1>
 
-  {% if not documents.length %}
-    <p class="govuk-body">No documents have been received.</p>
-  {% else %}
-    <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2" data-qa="documents-sort-bar">
-      <div class="govuk-grid-column-two-thirds">
-        Sort by:
-        <a
-          class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1"
-          href="/prisoner/{{prisoner.prisonerNumber}}/documents?sortBy=MOST_RECENT"
-          {% if sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
-          data-qa="sort-most-recent"
-        >Most recent</a>
-        <span class="govuk-hint govuk-!-margin-right-1">|</span>
-        <a
-          class="govuk-link govuk-link--no-visited-state"
-          href="/prisoner/{{prisoner.prisonerNumber}}/documents?sortBy=EARLIEST"
-          {% if sortBy == "EARLIEST" %}aria-current="true"{% endif %}
-          data-qa="sort-oldest"
-        >Oldest</a>
-      </div>           
-      <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-        <div class="govuk-body-s govuk-!-margin-bottom-0" data-qa="documents-count">
-          Showing {% if paginationResults.count %}<strong>{{ paginationResults.from }}</strong> to <strong>{{ paginationResults.to }}</strong>{% else %}<strong>0</strong>{% endif %} of <strong>{{ totalResults }}</strong> documents
+    {% if not documents.length %}
+        <p class="govuk-body">No documents have been received.</p>
+    {% else %}
+        <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2" data-qa="documents-sort-bar">
+            <div class="govuk-grid-column-two-thirds">
+                Sort by:
+                <a
+                        class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1"
+                        href="/prisoner/{{ prisoner.prisonerNumber }}/documents?sortBy=MOST_RECENT"
+                        {% if sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
+                        data-qa="sort-most-recent"
+                >Most recent</a>
+                <span class="govuk-hint govuk-!-margin-right-1">|</span>
+                <a
+                        class="govuk-link govuk-link--no-visited-state"
+                        href="/prisoner/{{ prisoner.prisonerNumber }}/documents?sortBy=EARLIEST"
+                        {% if sortBy == "EARLIEST" %}aria-current="true"{% endif %}
+                        data-qa="sort-oldest"
+                >Oldest</a>
+            </div>
+            <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+                <div class="govuk-body-s govuk-!-margin-bottom-0" data-qa="documents-count">
+                    Showing {% if paginationResults.count %}<strong>{{ paginationResults.from }}</strong> to
+                        <strong>{{ paginationResults.to }}</strong>{% else %}<strong>0</strong>{% endif %} of
+                    <strong>{{ totalResults }}</strong> documents
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <hr class="govuk-section-break govuk-section-break--visible">
-    {% for document in documents %}
-      <div data-qa="document-{{document.documentUuid}}" class="document {{'new' if document.isNew else ''}}"> 
-        <div class="govuk-grid-row govuk-!-padding-bottom-0 govuk-!-margin-top-2">
-          <div class="govuk-grid-column-two-thirds">
-              <p class="govuk-body govuk-!-margin-bottom-1">
-                  <a class="govuk-link govuk-link--no-visited-state prisoner-doc-link"
-                      target="_blank"
-                      href="/prisoner/{{prisoner.prisonerNumber}}/documents/{{document.documentUuid}}/download">{{document.typeDescription}}</a>
-                    {{document.fileExtension | uppercase}} {{document.fileSize | humanReadableFileSize}}
-              </p>
-          </div>
-          <div class="govuk-grid-column-one-third">
-              {% if document.isNew %}
-                {{govukTag({ text: "New" })}}
-              {% endif %}
-          </div>
-        </div>
+        <hr class="govuk-section-break govuk-section-break--visible">
+        {% for document in documents %}
+            <div
+                    data-qa="document-{{ document.documentUuid }}"
+                    class="document{% if document.isNew %} document--new{% endif %}"
+            >
+                <div class="document__inner">
+                    <div class="document__header" data-qa="document-header">
+                        <div class="document__main">
+                            <p class="govuk-body govuk-!-margin-bottom-1">
+                                <a class="govuk-link govuk-link--no-visited-state prisoner-doc-link"
+                                   target="_blank"
+                                   rel="noreferrer noopener"
+                                   href="/prisoner/{{ prisoner.prisonerNumber }}/documents/{{ document.documentUuid }}/download">{{ document.typeDescription }}</a>
+                            </p>
+                            <p class="govuk-body-s document__meta govuk-!-margin-bottom-0">
+                                {{ document.fileExtension | uppercase }} {{ document.fileSize | humanReadableFileSize }}
+                            </p>
+                        </div>
+                        <div class="document__tag govuk-!-text-align-right">
+                            {% if document.isNew %}
+                                {{ govukTag({ text: "New" }) }}
+                            {% endif %}
+                        </div>
+                    </div>
 
-        <div class="govuk-grid-row govuk-!-padding-bottom-2">
-          <div class="govuk-grid-column-one-third">
-            {% if document.caseReference %}
-                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Case reference</h3>
-                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="case-reference">{{document.caseReference}}</p>
-            {% endif %}
-          </div>
-          <div class="govuk-grid-column-one-third">
-            {% if document.courtName %}
-                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Court name</h3>
-                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="court-name">{{document.courtName}}</p>
-            {% endif %}
-          </div>
-          <div class="govuk-grid-column-one-third">
-            {% if document.hearingDate %}
-                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing date</h3>
-                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-date">{{document.hearingDate | date}}</p>
-            {% elif document.warrantDate %}
-                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Warrant date</h3>
-                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="warrant-date">{{document.warrantDate | date}}</p>
-            {% endif %}
-          </div>
-        </div>
+                    <div class="govuk-grid-row document__row">
+                        <div class="govuk-grid-column-one-third">
+                            {% if document.caseReference %}
+                                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Case reference</h3>
+                                <p class="govuk-body govuk-!-margin-bottom-2"
+                                   data-qa="case-reference">{{ document.caseReference }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            {% if document.courtName %}
+                                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Court name</h3>
+                                <p class="govuk-body govuk-!-margin-bottom-2"
+                                   data-qa="court-name">{{ document.courtName }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            {% if document.hearingDate %}
+                                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing date</h3>
+                                <p class="govuk-body govuk-!-margin-bottom-2"
+                                   data-qa="hearing-date">{{ document.hearingDate | date }}</p>
+                                {% elif document.warrantDate %}
+                                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Warrant date</h3>
+                                <p class="govuk-body govuk-!-margin-bottom-2"
+                                   data-qa="warrant-date">{{ document.warrantDate | date }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
 
-        <div class="govuk-grid-row govuk-!-padding-bottom-2">
-          <div class="govuk-grid-column-one-third">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date added</h3>
-            <p class="govuk-body govuk-!-margin-bottom-2">{{document.createdTime | dateTimeShort }}</p>
-          </div>
-          <div class="govuk-grid-column-one-third">
-              <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Source</h3>
-              {% if document.courtCaseUuid %}
-                <p class="govuk-body govuk-!-margin-bottom-2"><a data-qa="court-case-link" href="{{applications.remandAndSentencing.url}}/person/{{prisoner.prisonerNumber}}/view-court-case/{{document.courtCaseUuid}}/details">Court cases</a></p>
-              {% else %}
-                <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
-              {% endif %}
-          </div>
-          <div class="govuk-grid-column-one-third">
-              {% if document.hearingType %}
-                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing type</h3>
-                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-type">{{document.hearingType}}</p>
-              {% endif %}
-          </div>
-        </div>
-      </div>
-      <hr class="govuk-section-break govuk-section-break--visible">
-    {% endfor %}
-    {% if pagination %}
-        {{ govukPagination(pagination) }}
+                    <div class="govuk-grid-row document__row">
+                        <div class="govuk-grid-column-one-third">
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date added</h3>
+                            <p class="govuk-body govuk-!-margin-bottom-2">{{ document.createdTime | dateTimeShort }}</p>
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Source</h3>
+                            {% if document.courtCaseUuid %}
+                                <p class="govuk-body govuk-!-margin-bottom-2"><a data-qa="court-case-link"
+                                                                                 href="{{ applications.remandAndSentencing.url }}/person/{{ prisoner.prisonerNumber }}/view-court-case/{{ document.courtCaseUuid }}/details">Court
+                                        cases</a></p>
+                            {% else %}
+                                <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
+                            {% endif %}
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            {% if document.hearingType %}
+                                <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Hearing type</h3>
+                                <p class="govuk-body govuk-!-margin-bottom-2"
+                                   data-qa="hearing-type">{{ document.hearingType }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="govuk-section-break govuk-section-break--visible">
+        {% endfor %}
+        {% if pagination %}
+            {{ govukPagination(pagination) }}
+        {% endif %}
     {% endif %}
-  {% endif %}
 {% endblock %}
 
