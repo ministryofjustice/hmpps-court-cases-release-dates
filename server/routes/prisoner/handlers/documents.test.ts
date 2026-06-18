@@ -2,6 +2,7 @@ import { Express } from 'express'
 
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+import type { AnyNode } from 'domhandler'
 import { constants } from 'node:http2'
 import PrisonerService from '../../../services/prisonerService'
 import { appWithAllRoutes, user } from '../../testutils/appSetup'
@@ -58,6 +59,10 @@ afterEach(() => {
 
 const normaliseText = (value: string) => {
   return value.replace(/\s+/g, ' ').trim()
+}
+
+const textOf = (root: cheerio.Cheerio<AnyNode>, selector: string) => {
+  return normaliseText(root.find(selector).text())
 }
 
 describe('Route Handlers - Overview', () => {
@@ -120,13 +125,13 @@ describe('Route Handlers - Overview', () => {
         expect(secondRasDocumentText).toContain('PDF 119.41 MB')
         expect(secondRasDocumentText).toContain('Court cases')
         expect(secondRasDocumentText).toContain('Case reference')
-        const secondRasDocumentCaseRef = normaliseText(secondRasDocument.find('[data-qa=case-reference]').text())
+        const secondRasDocumentCaseRef = textOf(secondRasDocument, '[data-qa=case-reference]')
         expect(secondRasDocumentCaseRef).toContain('BC23456789B')
         expect(secondRasDocumentText).toContain('Court name')
-        const secondRasDocumentCourtName = normaliseText(secondRasDocument.find('[data-qa=court-name]').text())
+        const secondRasDocumentCourtName = textOf(secondRasDocument, '[data-qa=court-name]')
         expect(secondRasDocumentCourtName).toContain('LV Liverpool Court')
         expect(secondRasDocumentText).toContain('Hearing date')
-        const secondRasDocumentHearingDate = normaliseText(secondRasDocument.find('[data-qa=hearing-date]').text())
+        const secondRasDocumentHearingDate = textOf(secondRasDocument, '[data-qa=hearing-date]')
         expect(secondRasDocumentHearingDate).toContain('05 October 2025')
         expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
@@ -142,10 +147,10 @@ describe('Route Handlers - Overview', () => {
         expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
         expect(thirdRasDocumentText).toContain('Case reference')
-        const thirdRasDocumentCaseRef = normaliseText(thirdRasDocument.find('[data-qa=case-reference]').text())
+        const thirdRasDocumentCaseRef = textOf(thirdRasDocument, '[data-qa=case-reference]')
         expect(thirdRasDocumentCaseRef).toContain('AB12345678A')
         expect(thirdRasDocumentText).toContain('Court name')
-        const thirdRasDocumentTextCourtName = normaliseText(thirdRasDocument.find('[data-qa=court-name]').text())
+        const thirdRasDocumentTextCourtName = textOf(thirdRasDocument, '[data-qa=court-name]')
         expect(thirdRasDocumentTextCourtName).toContain('MN Manchester Court')
         expect(thirdRasDocumentText).not.toContain('Hearing date')
         expect(thirdRasDocumentText).toContain('Warrant date')
@@ -164,7 +169,7 @@ describe('Route Handlers - Overview', () => {
         expect(fourthRasDocumentText).toContain('PDF 11.47 GB')
         expect(fourthRasDocumentText).toContain('Court cases')
         expect(fourthRasDocumentText).toContain('Case reference')
-        const fourthRasDocumentCaseRef = normaliseText(fourthRasDocument.find('[data-qa=case-reference]').text())
+        const fourthRasDocumentCaseRef = textOf(fourthRasDocument, '[data-qa=case-reference]')
         expect(fourthRasDocumentCaseRef).toContain(RaSDocumentMapper.CASE_REFERENCE_NOT_ENTERED)
         expect(fourthRasDocumentText).toContain('Court name')
         const fourthRasDocumentTextCourtName = normaliseText(fourthRasDocument.find('[data-qa=court-name]').text())
