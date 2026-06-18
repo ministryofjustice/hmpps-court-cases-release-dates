@@ -45,6 +45,9 @@ export default class DocumentManagementApiClient extends RestClient {
     return this.get(
       {
         path: `/documents/${documentId}/file`,
+        query: {
+          inline: true,
+        },
         headers: {
           'Service-Name': 'Court Case and Release Dates',
           Username: username,

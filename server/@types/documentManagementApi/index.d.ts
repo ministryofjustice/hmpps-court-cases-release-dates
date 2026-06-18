@@ -87,7 +87,7 @@ export interface paths {
     put?: never
     /**
      * Search for documents with matching document type and/or metadata criteria
-     * @description Uses the supplied document type and metadata criteria to filter and return documents. Documents will match if they are of the supplied type and/or their metadata contains all the supplied properties and their values e.g. prisonCode = "KMI" AND prisonNumber = "A1234BC". Value matching is partial and case insensitive so court = "ham magis" will match "Birmingham Magistrates". Document type or metadata criteria must be supplied. Note that documents with types that require additional roles will be filtered out of the search results if the client does not have the required roles.
+     * @description Uses the supplied document type and metadata criteria to filter and return documents. Documents will match if they are of the supplied type and/or their metadata contains all the supplied properties and their values e.g. prisonCode = 'KMI' AND prisonNumber = 'A1234BC'. Value matching is partial and case insensitive so court = 'ham magis' will match 'Birmingham Magistrates'. Document type or metadata criteria must be supplied. Note that documents with types that require additional roles will be filtered out of the search results if the client does not have the required roles.
      *
      *     Requires one of the following roles:
      *     * ROLE_DOCUMENT_READER
@@ -252,10 +252,10 @@ export interface components {
       /**
        * @description JSON structured metadata associated with the document. May contain prison codes, prison numbers, dates, tags etc. and the properties available will be defined by the document's type.
        * @example {
-       *       "prisonCode": "KMI",
-       *       "prisonNumber": "C3456DE",
-       *       "court": "Birmingham Magistrates",
-       *       "warrantDate": "2023-11-14"
+       *       'prisonCode': 'KMI',
+       *       'prisonNumber': 'C3456DE',
+       *       'court': 'Birmingham Magistrates',
+       *       'warrantDate': '2023-11-14'
        *     }
        */
       metadata: {
@@ -328,10 +328,10 @@ export interface components {
           )[]
         | null
       /**
-       * @description JSON structured metadata to match with document metadata. Documents will match if their metadata contains all the supplied properties and their values e.g. prisonCode = "KMI" AND prisonNumber = "A1234BC". Value matching is partial and case insensitive so court = "ham magis" will match "Birmingham Magistrates". Property values must be strings and cannot be null or empty.
+       * @description JSON structured metadata to match with document metadata. Documents will match if their metadata contains all the supplied properties and their values e.g. prisonCode = 'KMI' AND prisonNumber = 'A1234BC'. Value matching is partial and case insensitive so court = 'ham magis' will match 'Birmingham Magistrates'. Property values must be strings and cannot be null or empty.
        * @example {
-       *       "prisonCode": "KMI",
-       *       "prisonNumber": "C3456DE"
+       *       'prisonCode': 'KMI',
+       *       'prisonNumber': 'C3456DE'
        *     }
        */
       metadata?: {
@@ -879,7 +879,10 @@ export interface operations {
   }
   downloadDocumentFile: {
     parameters: {
-      query?: never
+      query?: {
+        /** @description When true, serves the file with Content-Disposition: inline so it renders in the browser instead of downloading. Only honoured for PDFs any other type falls back to attachment. Defaults to false. */
+        inline?: boolean
+      }
       header: {
         /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
         'Service-Name': string
