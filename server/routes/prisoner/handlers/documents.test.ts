@@ -234,7 +234,7 @@ describe('Route Handlers - Overview', () => {
         )
         expect(seventhCommonPlatformDocumentCourtName).toContain('Not entered')
         const seventhCommonPlatformDocumentHearingDate = normaliseText(
-          seventhCommonPlatformDocument.find('[data-qa=hearing-date]').text(),
+          seventhCommonPlatformDocument.find('[data-qa=hearing-or-warrant-date]').text(),
         )
         expect(seventhCommonPlatformDocumentHearingDate).toContain('Not entered')
       })
