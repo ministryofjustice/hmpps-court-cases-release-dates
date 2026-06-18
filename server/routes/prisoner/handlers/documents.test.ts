@@ -57,11 +57,12 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
+
 const normaliseText = (value: string) => {
   return value.replace(/\s+/g, ' ').trim()
 }
 
-const textOf = (root: cheerio.Cheerio<AnyNode>, selector: string) => {
+const textOf = (root: cheerio.Cheerio<any>, selector: string) => {
   return normaliseText(root.find(selector).text())
 }
 
@@ -114,17 +115,20 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026 at 14:22')
 
         const firstDocumentLink = firstCommonPlatformDocument.find('.prisoner-doc-link')
+
         const firstDocumentMeta = firstCommonPlatformDocument.find('[data-qa=document-file-meta]')
         expect(firstDocumentLink.attr('target')).toBe('_blank')
         expect(firstDocumentLink.attr('rel')).toBe('noreferrer noopener')
         expect(normaliseText(firstDocumentLink.text())).toContain('Prison court register')
         expect(normaliseText(firstDocumentMeta.text())).toContain('PDF 2.18 KB')
+
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
         const secondRasDocumentText = normaliseText(secondRasDocument.text())
         expect(secondRasDocumentText).toContain('Prison court register')
         expect(secondRasDocumentText).toContain('PDF 119.41 MB')
         expect(secondRasDocumentText).toContain('Court cases')
         expect(secondRasDocumentText).toContain('Case reference')
+
         const secondRasDocumentCaseRef = textOf(secondRasDocument, '[data-qa=case-reference]')
         expect(secondRasDocumentCaseRef).toContain('BC23456789B')
         expect(secondRasDocumentText).toContain('Court name')
@@ -132,6 +136,7 @@ describe('Route Handlers - Overview', () => {
         expect(secondRasDocumentCourtName).toContain('LV Liverpool Court')
         expect(secondRasDocumentText).toContain('Hearing date')
         const secondRasDocumentHearingDate = textOf(secondRasDocument, '[data-qa=hearing-date]')
+
         expect(secondRasDocumentHearingDate).toContain('05 October 2025')
         expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
@@ -147,6 +152,7 @@ describe('Route Handlers - Overview', () => {
         expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
         expect(thirdRasDocumentText).toContain('Case reference')
+
         const thirdRasDocumentCaseRef = textOf(thirdRasDocument, '[data-qa=case-reference]')
         expect(thirdRasDocumentCaseRef).toContain('AB12345678A')
         expect(thirdRasDocumentText).toContain('Court name')
