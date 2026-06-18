@@ -1,6 +1,7 @@
 {% extends "govuk/template.njk" %}
 {% from "hmpps/components/court-cases-release-dates/service-header/macro.njk" import serviceHeader %}
 {% from "hmpps/components/court-cases-release-dates/footer/macro.njk" import footer %}
+{% from "hmpps/components/outage-banner/macro.njk" import outageBanner %}
 
 {% block head %}
   <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
@@ -66,6 +67,9 @@
       prisonNumber: prisoner.prisonerNumber
     })
   }}
+  {% if displayMaintenanceAlert and serviceDefinitions.maintenanceAlert.enabled %}
+    {{ outageBanner({ text: serviceDefinitions.maintenanceAlert.message}) }}
+  {% endif %}
 {% endblock %}
 
 {% block bodyStart %}
