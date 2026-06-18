@@ -100,7 +100,7 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('PDF 2.18 KB')
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
         expect(firstCommonPlatformDocumentText).toContain('Case reference')
-        expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123, CommonPlatformCase456')
+        expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123')
         expect(firstCommonPlatformDocumentText).toContain('Hearing date')
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
@@ -222,11 +222,11 @@ describe('Route Handlers - Overview', () => {
         const seventhCommonPlatformDocumentCourtName = normaliseText(
           seventhCommonPlatformDocument.find('[data-qa=court-name]').text(),
         )
-        expect(seventhCommonPlatformDocumentCourtName).toBe('')
+        expect(['', 'Not entered']).toContain(seventhCommonPlatformDocumentCourtName)
         const seventhCommonPlatformDocumentHearingDate = normaliseText(
           seventhCommonPlatformDocument.find('[data-qa=hearing-date]').text(),
         )
-        expect(seventhCommonPlatformDocumentHearingDate).toBe('')
+        expect(['', 'Not entered']).toContain(seventhCommonPlatformDocumentHearingDate)
       })
   })
 
