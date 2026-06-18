@@ -2,6 +2,7 @@ import { Express } from 'express'
 
 import request from 'supertest'
 import * as cheerio from 'cheerio'
+import type { AnyNode } from 'domhandler'
 import { constants } from 'node:http2'
 import PrisonerService from '../../../services/prisonerService'
 import { appWithAllRoutes, user } from '../../testutils/appSetup'
@@ -60,6 +61,10 @@ const normaliseText = (value: string) => {
   return value.replace(/\s+/g, ' ').trim()
 }
 
+const textOf = (root: cheerio.Cheerio<AnyNode>, selector: string) => {
+  return normaliseText(root.find(selector).text())
+}
+
 describe('Route Handlers - Overview', () => {
   it('should render prisoner details', () => {
     prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
@@ -100,7 +105,7 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('PDF 2.18 KB')
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
         expect(firstCommonPlatformDocumentText).toContain('Case reference')
-        expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123, CommonPlatformCase456')
+        expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123')
         expect(firstCommonPlatformDocumentText).toContain('Hearing date')
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
@@ -109,9 +114,12 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026 at 14:22')
 
         const firstDocumentLink = firstCommonPlatformDocument.find('.prisoner-doc-link')
+
+        const firstDocumentMeta = firstCommonPlatformDocument.find('[data-qa=document-file-meta]')
         expect(firstDocumentLink.attr('target')).toBe('_blank')
         expect(firstDocumentLink.attr('rel')).toBe('noreferrer noopener')
         expect(normaliseText(firstDocumentLink.text())).toContain('Prison court register')
+        expect(normaliseText(firstDocumentMeta.text())).toContain('PDF 2.18 KB')
 
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
         const secondRasDocumentText = normaliseText(secondRasDocument.text())
@@ -119,13 +127,15 @@ describe('Route Handlers - Overview', () => {
         expect(secondRasDocumentText).toContain('PDF 119.41 MB')
         expect(secondRasDocumentText).toContain('Court cases')
         expect(secondRasDocumentText).toContain('Case reference')
-        const secondRasDocumentCaseRef = normaliseText(secondRasDocument.find('[data-qa=case-reference]').text())
+
+        const secondRasDocumentCaseRef = textOf(secondRasDocument, '[data-qa=case-reference]')
         expect(secondRasDocumentCaseRef).toContain('BC23456789B')
         expect(secondRasDocumentText).toContain('Court name')
-        const secondRasDocumentCourtName = normaliseText(secondRasDocument.find('[data-qa=court-name]').text())
+        const secondRasDocumentCourtName = textOf(secondRasDocument, '[data-qa=court-name]')
         expect(secondRasDocumentCourtName).toContain('LV Liverpool Court')
         expect(secondRasDocumentText).toContain('Hearing date')
-        const secondRasDocumentHearingDate = normaliseText(secondRasDocument.find('[data-qa=hearing-date]').text())
+        const secondRasDocumentHearingDate = textOf(secondRasDocument, '[data-qa=hearing-date]')
+
         expect(secondRasDocumentHearingDate).toContain('05 October 2025')
         expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
@@ -141,14 +151,15 @@ describe('Route Handlers - Overview', () => {
         expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
         expect(thirdRasDocumentText).toContain('Case reference')
-        const thirdRasDocumentCaseRef = normaliseText(thirdRasDocument.find('[data-qa=case-reference]').text())
+
+        const thirdRasDocumentCaseRef = textOf(thirdRasDocument, '[data-qa=case-reference]')
         expect(thirdRasDocumentCaseRef).toContain('AB12345678A')
         expect(thirdRasDocumentText).toContain('Court name')
-        const thirdRasDocumentTextCourtName = normaliseText(thirdRasDocument.find('[data-qa=court-name]').text())
+        const thirdRasDocumentTextCourtName = textOf(thirdRasDocument, '[data-qa=court-name]')
         expect(thirdRasDocumentTextCourtName).toContain('MN Manchester Court')
         expect(thirdRasDocumentText).not.toContain('Hearing date')
         expect(thirdRasDocumentText).toContain('Warrant date')
-        const thirdRasDocumentWarrantDate = thirdRasDocument.find('[data-qa=warrant-date]').text()
+        const thirdRasDocumentWarrantDate = normaliseText(thirdRasDocument.find('[data-qa=warrant-date]').text())
         expect(thirdRasDocumentWarrantDate).toContain('04 November 2025')
         expect(thirdRasDocumentText).toContain('29 March 2026')
         expect(thirdRasDocumentText).not.toContain('New')
@@ -163,7 +174,7 @@ describe('Route Handlers - Overview', () => {
         expect(fourthRasDocumentText).toContain('PDF 11.47 GB')
         expect(fourthRasDocumentText).toContain('Court cases')
         expect(fourthRasDocumentText).toContain('Case reference')
-        const fourthRasDocumentCaseRef = normaliseText(fourthRasDocument.find('[data-qa=case-reference]').text())
+        const fourthRasDocumentCaseRef = textOf(fourthRasDocument, '[data-qa=case-reference]')
         expect(fourthRasDocumentCaseRef).toContain(RaSDocumentMapper.CASE_REFERENCE_NOT_ENTERED)
         expect(fourthRasDocumentText).toContain('Court name')
         const fourthRasDocumentTextCourtName = normaliseText(fourthRasDocument.find('[data-qa=court-name]').text())
@@ -217,13 +228,15 @@ describe('Route Handlers - Overview', () => {
         const seventhCommonPlatformDocumentHearingTypeText = normaliseText(
           seventhCommonPlatformDocument.find('[data-qa=hearing-type]').text(),
         )
-        expect(seventhCommonPlatformDocumentHearingTypeText).toBe('')
-        const seventhCommonPlatformDocumentCourtName = seventhCommonPlatformDocument.find('[data-qa=court-name]').text()
-        expect(seventhCommonPlatformDocumentCourtName).toBe('')
-        const seventhCommonPlatformDocumentHearingDate = seventhCommonPlatformDocument
-          .find('[data-qa=hearing-date]')
-          .text()
-        expect(seventhCommonPlatformDocumentHearingDate).toBe('')
+        expect(seventhCommonPlatformDocumentHearingTypeText).toBe('Not entered')
+        const seventhCommonPlatformDocumentCourtName = normaliseText(
+          seventhCommonPlatformDocument.find('[data-qa=court-name]').text(),
+        )
+        expect(seventhCommonPlatformDocumentCourtName).toContain('Not entered')
+        const seventhCommonPlatformDocumentHearingDate = normaliseText(
+          seventhCommonPlatformDocument.find('[data-qa=hearing-or-warrant-date]').text(),
+        )
+        expect(seventhCommonPlatformDocumentHearingDate).toContain('Not entered')
       })
   })
 
