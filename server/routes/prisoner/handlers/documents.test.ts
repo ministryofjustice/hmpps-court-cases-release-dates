@@ -57,12 +57,11 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-
 const normaliseText = (value: string) => {
   return value.replace(/\s+/g, ' ').trim()
 }
 
-const textOf = (root: cheerio.Cheerio<any>, selector: string) => {
+const textOf = (root: cheerio.Cheerio<AnyNode>, selector: string) => {
   return normaliseText(root.find(selector).text())
 }
 
