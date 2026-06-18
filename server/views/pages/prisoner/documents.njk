@@ -12,14 +12,27 @@
   {% if not documents.length %}
     <p class="govuk-body">No documents have been received.</p>
   {% else %}
-    <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2">
+    <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2" data-qa="documents-sort-bar">
       <div class="govuk-grid-column-two-thirds">
-        Sort by: <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" href="/prisoner/{{prisoner.prisonerNumber}}/documents?sortBy=MOST_RECENT">Most recent</a>
+        Sort by:
+        <a
+          class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1"
+          href="/prisoner/{{prisoner.prisonerNumber}}/documents?sortBy=MOST_RECENT"
+          {% if sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
+          data-qa="sort-most-recent"
+        >Most recent</a>
         <span class="govuk-hint govuk-!-margin-right-1">|</span>
-        <a class="govuk-link govuk-link--no-visited-state" href="/prisoner/{{prisoner.prisonerNumber}}/documents?sortBy=EARLIEST">Earliest<a>
+        <a
+          class="govuk-link govuk-link--no-visited-state"
+          href="/prisoner/{{prisoner.prisonerNumber}}/documents?sortBy=EARLIEST"
+          {% if sortBy == "EARLIEST" %}aria-current="true"{% endif %}
+          data-qa="sort-oldest"
+        >Oldest</a>
       </div>           
-      <div class="govuk-grid-column-one-third">
-        <div class="gouk-body">Showing {% if paginationResults.count %}<strong>{{ paginationResults.from }}</strong> to <strong>{{ paginationResults.to }}</strong>{% else %}<strong>0</strong>{% endif %} of <strong>{{ totalResults }}</strong> documents</div>
+      <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+        <div class="govuk-body-s govuk-!-margin-bottom-0" data-qa="documents-count">
+          Showing {% if paginationResults.count %}<strong>{{ paginationResults.from }}</strong> to <strong>{{ paginationResults.to }}</strong>{% else %}<strong>0</strong>{% endif %} of <strong>{{ totalResults }}</strong> documents
+        </div>
       </div>
     </div>
     <hr class="govuk-section-break govuk-section-break--visible">
