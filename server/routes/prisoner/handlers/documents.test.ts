@@ -228,15 +228,15 @@ describe('Route Handlers - Overview', () => {
         const seventhCommonPlatformDocumentHearingTypeText = normaliseText(
           seventhCommonPlatformDocument.find('[data-qa=hearing-type]').text(),
         )
-        expect(seventhCommonPlatformDocumentHearingTypeText).toBe('')
+        expect(seventhCommonPlatformDocumentHearingTypeText).toBe('Not entered')
         const seventhCommonPlatformDocumentCourtName = normaliseText(
           seventhCommonPlatformDocument.find('[data-qa=court-name]').text(),
         )
-        expect(['', 'Not entered']).toContain(seventhCommonPlatformDocumentCourtName)
+        expect(seventhCommonPlatformDocumentCourtName).toContain('Not entered')
         const seventhCommonPlatformDocumentHearingDate = normaliseText(
           seventhCommonPlatformDocument.find('[data-qa=hearing-date]').text(),
         )
-        expect(['', 'Not entered']).toContain(seventhCommonPlatformDocumentHearingDate)
+        expect(seventhCommonPlatformDocumentHearingDate).toContain('Not entered')
       })
   })
 
