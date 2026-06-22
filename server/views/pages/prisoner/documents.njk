@@ -75,36 +75,36 @@
 
                     <div class="govuk-grid-row document__row">
                         <div class="govuk-grid-column-one-third">
-                            <p class="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0">Case reference</p>
-                            <p class="govuk-body-s govuk-!-margin-bottom-2" data-qa="case-reference">
+                            <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Case reference</p>
+                            <p class="govuk-body govuk-!-margin-bottom-2" data-qa="case-reference">
                                 {{ document.caseReference or "Not entered" }}
                             </p>
                         </div>
 
                         <div class="govuk-grid-column-one-third">
-                            <p class="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0">Court name</p>
-                            <p class="govuk-body-s govuk-!-margin-bottom-2" data-qa="court-name">
+                            <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Court name</p>
+                            <p class="govuk-body govuk-!-margin-bottom-2" data-qa="court-name">
                                 {{ document.courtName or "Not entered" }}
                             </p>
                         </div>
 
                         <div class="govuk-grid-column-one-third">
                             {% if document.hearingDate %}
-                                <p class="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing
+                                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing
                                     date</p>
-                                <p class="govuk-body-s govuk-!-margin-bottom-2" data-qa="hearing-date">
+                                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-date">
                                     {{ document.hearingDate | date }}
                                 </p>
                                 {% elif document.warrantDate %}
-                                <p class="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0">Warrant
+                                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Warrant
                                     date</p>
-                                <p class="govuk-body-s govuk-!-margin-bottom-2" data-qa="warrant-date">
+                                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="warrant-date">
                                     {{ document.warrantDate | date }}
                                 </p>
                             {% else %}
-                                <p class="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing or
+                                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing or
                                     warrant date</p>
-                                <p class="govuk-body-s govuk-!-margin-bottom-2" data-qa="hearing-or-warrant-date">Not
+                                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-or-warrant-date">Not
                                     entered</p>
                             {% endif %}
                         </div>
@@ -112,29 +112,29 @@
 
                     <div class="govuk-grid-row document__row">
                         <div class="govuk-grid-column-one-third">
-                            <p class="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0">Date added</p>
-                            <p class="govuk-body-s govuk-!-margin-bottom-2">
+                            <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Date added</p>
+                            <p class="govuk-body govuk-!-margin-bottom-2">
                                 {{ document.createdTime | dateTimeShort }}
                             </p>
                         </div>
 
                         <div class="govuk-grid-column-one-third">
-                            <p class="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0">Source</p>
+                            <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Source</p>
                             {% if document.courtCaseUuid %}
-                                <p class="govuk-body-s govuk-!-margin-bottom-2">
+                                <p class="govuk-body govuk-!-margin-bottom-2">
                                     <a data-qa="court-case-link"
                                        href="{{ applications.remandAndSentencing.url }}/person/{{ prisoner.prisonerNumber }}/view-court-case/{{ document.courtCaseUuid }}/details">
                                         Court cases
                                     </a>
                                 </p>
                             {% else %}
-                                <p class="govuk-body-s govuk-!-margin-bottom-2">Common Platform</p>
+                                <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
                             {% endif %}
                         </div>
 
                         <div class="govuk-grid-column-one-third">
-                            <p class="govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing type</p>
-                            <p class="govuk-body-s govuk-!-margin-bottom-2" data-qa="hearing-type">
+                            <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing type</p>
+                            <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-type">
                                 {{ document.hearingType or "Not entered" }}
                             </p>
                         </div>
