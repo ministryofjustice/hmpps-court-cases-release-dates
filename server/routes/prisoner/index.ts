@@ -49,7 +49,7 @@ export default function Index({
     ).documents,
   )
   get(
-    '/:prisonerNumber/documents/:documentId/download',
+    ['/:prisonerNumber/documents/:documentId/download/:filename', '/:prisonerNumber/documents/:documentId/download'],
     new DocumentRoutes(
       prisonerService,
       documentManagementService,
