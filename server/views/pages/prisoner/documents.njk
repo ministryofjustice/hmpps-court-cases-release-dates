@@ -60,9 +60,10 @@
                                     {{ document.typeDescription }}
                                     <span class="govuk-visually-hidden">(opens in new tab)</span>
                                 </a>
-                            </p>
-                            <p class="govuk-body-s document__meta govuk-!-margin-bottom-0" data-qa="document-file-meta">
-                                {{ document.fileExtension | uppercase }} {{ document.fileSize | humanReadableFileSize }}
+                                <span class="document__meta govuk-!-margin-bottom-0  govuk-!-margin-left-2"
+                                      data-qa="document-file-meta">
+                                    {{ document.fileExtension | uppercase }} {{ document.fileSize | humanReadableFileSize }}
+                                </span>
                             </p>
                         </div>
 
