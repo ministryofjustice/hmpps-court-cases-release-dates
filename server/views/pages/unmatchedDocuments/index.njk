@@ -20,7 +20,7 @@
       <div class="govuk-grid-column-two-thirds">
         Sort by: <a class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1" href="/unmatched-documents?sortBy=MOST_RECENT">Most recent</a>
         <span class="govuk-hint govuk-!-margin-right-1">|</span>
-        <a class="govuk-link govuk-link--no-visited-state" href="/unmatched-documents?sortBy=EARLIEST">Earliest<a>
+        <a class="govuk-link govuk-link--no-visited-state" href="/unmatched-documents?sortBy=EARLIEST">Earliest</a>
       </div>           
       <div class="govuk-grid-column-one-third">
         <div class="gouk-body">Showing {% if paginationResults.count %}<strong>{{ paginationResults.from }}</strong> to <strong>{{ paginationResults.to }}</strong>{% else %}<strong>0</strong>{% endif %} of <strong>{{ totalResults }}</strong> documents</div>
@@ -34,7 +34,7 @@
               <p class="govuk-body govuk-!-margin-bottom-1">
                   <a class="govuk-link govuk-link--no-visited-state prisoner-doc-link"
                       target="_blank"
-                      href="/unmatched-documents/{{document.documentUuid}}/download">{{document.typeDescription}}</a>
+                      href="/unmatched-documents/{{document.documentUuid}}/download/{{ (document.filename + '.' + document.fileExtension) | urlencode }}">{{document.typeDescription}}</a>
                     {{document.fileExtension | uppercase}} {{document.fileSize | humanReadableFileSize}}
               </p>
           </div>
