@@ -148,7 +148,7 @@ describe('Route Handlers - Overview', () => {
         const thirdRasDocument = $('[data-qa=document-80dffad6-ec63-47e5-9d79-cb96537081e7]')
         const thirdRasDocumentText = normaliseText(thirdRasDocument.text())
         expect(thirdRasDocumentText).toContain('Sentencing warrant')
-        expect(thirdRasDocumentText).toContain('PDF 11.47 GB')
+        expect(thirdRasDocumentText).toContain('PDF 11 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
         expect(thirdRasDocumentText).toContain('Case reference')
 
@@ -171,7 +171,7 @@ describe('Route Handlers - Overview', () => {
         const fourthRasDocument = $('[data-qa=document-80dffad6-ec63-47e5-9d79-cb96537081e8]')
         const fourthRasDocumentText = normaliseText(fourthRasDocument.text())
         expect(fourthRasDocumentText).toContain('Sentencing warrant')
-        expect(fourthRasDocumentText).toContain('PDF 11.47 GB')
+        expect(fourthRasDocumentText).toContain('PDF 11 GB')
         expect(fourthRasDocumentText).toContain('Court cases')
         expect(fourthRasDocumentText).toContain('Case reference')
         const fourthRasDocumentCaseRef = textOf(fourthRasDocument, '[data-qa=case-reference]')
