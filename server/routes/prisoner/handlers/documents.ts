@@ -15,6 +15,7 @@ import CourtDataIngestionService from '../../../services/courtDataIngestionServi
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
 
 export default class DocumentRoutes {
   constructor(
@@ -153,6 +154,20 @@ export default class DocumentRoutes {
         .on('end', async (): Promise<void> => {
           logger.info(`Successfully streamed document ${documentId} to client.`)
           try {
+            let audit = {
+              action: 'DOWNLOAD_DOCUMENT',
+              who: username,
+              subjectId: prisonerNumber,
+              subjectType: 'PRISONER_ID',
+              // service: 'hmpps-court-cases-release-dates',
+              correlationId: req.id,
+              details: JSON.stringify({
+                documentUuid: documentId,
+              }),
+            }
+           await auditService.sendAuditMessage(audit)
+            console.log('TANQ --> audit=[%s] ', audit)
+
             await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
           } catch (error: unknown) {
             // Allow 404 errors for documents not in CDIA
