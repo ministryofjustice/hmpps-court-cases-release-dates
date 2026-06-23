@@ -99,7 +99,15 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('pluralise', (word, number, appender) => (number === 1 ? word : `${word}${appender || 's'}`))
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
   njkEnv.addFilter('uppercase', text => text.toUpperCase())
-  njkEnv.addFilter('humanReadableFileSize', (numberOfBytes: number) =>
-    filesize(numberOfBytes || 0, { base: 2, standard: 'jedec' }),
-  )
+  njkEnv.addFilter('humanReadableFileSize', (numberOfBytes: number) => {
+    const bytes = numberOfBytes || 0
+
+    if (bytes < 1024) return '<1 KB'
+
+    return filesize(bytes, {
+      base: 2,
+      standard: 'jedec',
+      round: 0,
+    })
+  })
 }
