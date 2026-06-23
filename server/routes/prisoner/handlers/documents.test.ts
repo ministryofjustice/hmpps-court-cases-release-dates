@@ -102,7 +102,7 @@ describe('Route Handlers - Overview', () => {
         const firstCommonPlatformDocument = $('[data-qa=document-4fd5f7b0-eebf-4b69-9489-0cc48550e03b]')
         const firstCommonPlatformDocumentText = normaliseText(firstCommonPlatformDocument.text())
         expect(firstCommonPlatformDocumentText).toContain('Prison court register')
-        expect(firstCommonPlatformDocumentText).toContain('PDF 2.18 KB')
+        expect(firstCommonPlatformDocumentText).toContain('PDF 2 KB')
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
         expect(firstCommonPlatformDocumentText).toContain('Case reference')
         expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123')
@@ -119,12 +119,12 @@ describe('Route Handlers - Overview', () => {
         expect(firstDocumentLink.attr('target')).toBe('_blank')
         expect(firstDocumentLink.attr('rel')).toBe('noreferrer noopener')
         expect(normaliseText(firstDocumentLink.text())).toContain('Prison court register')
-        expect(normaliseText(firstDocumentMeta.text())).toContain('PDF 2.18 KB')
+        expect(normaliseText(firstDocumentMeta.text())).toContain('PDF 2 KB')
 
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
         const secondRasDocumentText = normaliseText(secondRasDocument.text())
         expect(secondRasDocumentText).toContain('Prison court register')
-        expect(secondRasDocumentText).toContain('PDF 119.41 MB')
+        expect(secondRasDocumentText).toContain('PDF 119 MB')
         expect(secondRasDocumentText).toContain('Court cases')
         expect(secondRasDocumentText).toContain('Case reference')
 
