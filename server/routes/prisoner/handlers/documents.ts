@@ -154,7 +154,7 @@ export default class DocumentRoutes {
         .on('end', async (): Promise<void> => {
           logger.info(`Successfully streamed document ${documentId} to client.`)
           try {
-            await this.sendAudit(req)
+            await this.sendAuditEvent(req)
             await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
           } catch (error: unknown) {
             // Allow 404 errors for documents not in CDIA
@@ -201,12 +201,12 @@ export default class DocumentRoutes {
     }
   }
 
-  sendAudit = async (req: Request) => {
+  sendAuditEvent = async (req: Request) => {
     try {
       const { prisonerNumber, documentId } = req.params
       const { username } = req.user
 
-      const audit = {
+      const auditMessage = {
         action: 'DOWNLOAD_DOCUMENT',
         who: username,
         subjectId: prisonerNumber,
@@ -218,11 +218,11 @@ export default class DocumentRoutes {
         }),
         logErrors: true,
       }
-      console.log('TANQ --> Sending audit event [%s] ', audit)
-      await auditService.sendAuditMessage(audit)
-      console.log('TANQ --> Audit event sent successfully')
+      logger.debug(`Sending audit event [${auditMessage}]`)
+      await auditService.sendAuditMessage(auditMessage)
+      logger.debug(`TANQ --> Audit event sent successfully`)
     } catch (error) {
-      console.error('Error sending audit event [%s] ::', error)
+      logger.error(`Error sending audit event [${error}]`)
     }
   }
 }
