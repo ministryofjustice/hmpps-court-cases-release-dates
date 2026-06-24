@@ -220,7 +220,7 @@ export default class DocumentRoutes {
       }
       logger.debug(`Sending audit event [${auditMessage}]`)
       await auditService.sendAuditMessage(auditMessage)
-      logger.debug(`TANQ --> Audit event sent successfully`)
+      logger.debug(`Audit event sent successfully`)
     } catch (error) {
       logger.error(`Error sending audit event [${error}]`)
     }
