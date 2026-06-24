@@ -162,7 +162,6 @@ export default class DocumentRoutes {
               throw error
             }
           }
-          // TODO audit & update notification endpoint document has been downloaded.
         })
         .on('error', async (err: Error): Promise<void> => {
           const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
