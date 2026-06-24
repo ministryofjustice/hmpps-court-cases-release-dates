@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Readable } from 'stream'
 import { constants } from 'node:http2'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
 import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
@@ -153,6 +154,7 @@ export default class DocumentRoutes {
         .on('end', async (): Promise<void> => {
           logger.info(`Successfully streamed document ${documentId} to client.`)
           try {
+            await this.sendAuditEvent(req)
             await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
           } catch (error: unknown) {
             // Allow 404 errors for documents not in CDIA
@@ -160,7 +162,6 @@ export default class DocumentRoutes {
               throw error
             }
           }
-          // TODO audit & update notification endpoint document has been downloaded.
         })
         .on('error', async (err: Error): Promise<void> => {
           const errorMessage: string = `Stream error during document download ${documentId}: ${err.message}`
@@ -196,6 +197,31 @@ export default class DocumentRoutes {
       throw new Error(`Requested document is not linked to prisoner ${prisonerNumber}`, {
         cause: constants.HTTP_STATUS_FORBIDDEN,
       })
+    }
+  }
+
+  sendAuditEvent = async (req: Request) => {
+    try {
+      const { prisonerNumber, documentId } = req.params
+      const { username } = req.user
+
+      const auditMessage = {
+        action: 'DOWNLOAD_DOCUMENT',
+        who: username,
+        subjectId: prisonerNumber,
+        subjectType: 'PRISONER_ID',
+        service: 'hmpps-court-cases-release-dates',
+        correlationId: req.id,
+        details: JSON.stringify({
+          documentUuid: documentId,
+        }),
+        logErrors: true,
+      }
+      logger.debug(`Sending audit event [${auditMessage}]`)
+      await auditService.sendAuditMessage(auditMessage)
+      logger.debug(`Audit event sent successfully`)
+    } catch (error) {
+      logger.error(`Error sending audit event [${error}]`)
     }
   }
 }
