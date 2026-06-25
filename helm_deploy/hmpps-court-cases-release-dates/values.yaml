@@ -1,7 +1,7 @@
 generic-service:
   nameOverride: hmpps-court-cases-release-dates
   productId: "DPS014" # productId for the product that this belongs too, i.e. DPS001, see README.md for details
-  serviceAccountName: hmpps-court-cases-release-dates
+  serviceAccountName: hmpps-court-cases-release-dates-service-account
 
   replicaCount: 4
 
