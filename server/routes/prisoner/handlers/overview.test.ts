@@ -129,6 +129,29 @@ describe('Route Handlers - Overview', () => {
         })
     })
 
+    it('should render feedback prompt', () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getNextCourtEvent.mockResolvedValue({} as CourtEventDetails)
+      adjustmentsService.getAdjustments.mockResolvedValue([])
+      prisonerService.hasActiveSentences.mockResolvedValue(false)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
+
+      return request(app)
+        .get('/prisoner/A12345B/overview')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain('Did you find what you need?')
+          expect(res.text).toContain(
+            'This is a new service. To make it the best it can be, your feedback is essential.',
+          )
+          expect(res.text).toContain('Give feedback')
+        })
+    })
+
     it('should show latest calc if no things to do', () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
@@ -145,6 +168,10 @@ describe('Route Handlers - Overview', () => {
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
         .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=release-date-definitions-link]').first().attr('href')).toStrictEqual(
+            'https://justiceuk.sharepoint.com/sites/Courtcaseandreleasedates/SitePages/Release-date-types-and-definitions.aspx',
+          )
           expect(res.text).toContain('Calculation reason: Transfer check')
           expect(res.text).toContain('01 June 2024 at HMP Kirkham')
         })
@@ -187,6 +214,10 @@ describe('Route Handlers - Overview', () => {
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
         .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=release-date-definitions-link]').first().attr('href')).toStrictEqual(
+            'https://justiceuk.sharepoint.com/sites/Courtcaseandreleasedates/SitePages/Release-date-types-and-definitions.aspx',
+          )
           expect(res.text).toContain('Calculation reason: Transfer check')
           expect(res.text).toContain('01 June 2024 at HMP Kirkham')
         })
@@ -591,7 +622,7 @@ describe('Route Handlers - Overview', () => {
         .expect(res => {
           expect(res.text).toContain('<h2 class="govuk-heading-l">Adjustments</h2>')
           expect(res.text).toContain('There are no active adjustments for Jane Doe')
-          expect(res.text).toContain('<h1 class="govuk-heading-xl">Overview</h1>')
+          expect(res.text).toContain('<h1 class="govuk-heading-xl">Court case and release dates</h1>')
         })
     })
 
@@ -718,7 +749,7 @@ describe('Route Handlers - Overview', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('<h2 class="govuk-heading-l">Release dates</h2>')
-          expect(res.text).toContain('<h1 class="govuk-heading-xl">Overview</h1>')
+          expect(res.text).toContain('<h1 class="govuk-heading-xl">Court case and release dates</h1>')
           expect(res.text).not.toContain('<div class="govuk-summary-card latest-calculation-card">')
           expect(res.text).toContain('This person has no active sentences.')
           const $ = cheerio.load(res.text)
@@ -747,7 +778,7 @@ describe('Route Handlers - Overview', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('<h2 class="govuk-heading-l">Release dates</h2>')
-          expect(res.text).toContain('<h1 class="govuk-heading-xl">Overview</h1>')
+          expect(res.text).toContain('<h1 class="govuk-heading-xl">Court case and release dates</h1>')
           expect(res.text).not.toContain('<div class="govuk-summary-card latest-calculation-card">')
           expect(res.text).not.toContain('This person has no active sentences.')
         })
@@ -771,8 +802,12 @@ describe('Route Handlers - Overview', () => {
         .get('/prisoner/A12345B/overview')
         .expect('Content-Type', /html/)
         .expect(res => {
+          const $ = cheerio.load(res.text)
+          expect($('[data-qa=release-date-definitions-link]').first().attr('href')).toStrictEqual(
+            'https://justiceuk.sharepoint.com/sites/Courtcaseandreleasedates/SitePages/Release-date-types-and-definitions.aspx',
+          )
           expect(res.text).toContain('<h2 class="govuk-heading-l">Release dates</h2>')
-          expect(res.text).toContain('<h1 class="govuk-heading-xl">Overview</h1>')
+          expect(res.text).toContain('<h1 class="govuk-heading-xl">Court case and release dates</h1>')
           expect(res.text).toContain('<div class="govuk-summary-card latest-calculation-card">')
           expect(res.text).not.toContain('This person has no active sentences.')
         })
@@ -815,7 +850,7 @@ describe('Route Handlers - Overview', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('<h2 class="govuk-heading-l">Release dates</h2>')
-          expect(res.text).toContain('<h1 class="govuk-heading-xl">Overview</h1>')
+          expect(res.text).toContain('<h1 class="govuk-heading-xl">Court case and release dates</h1>')
           expect(res.text).toContain('<div class="govuk-summary-card latest-calculation-card">')
           expect(res.text).not.toContain(
             'This person is serving an indeterminate sentence and has no calculated dates.',
@@ -847,7 +882,7 @@ describe('Route Handlers - Overview', () => {
 
           expect(manualCalcLink.attr('href')).toStrictEqual('http://127.0.0.1:3000/crds/calculation/A12345B/reason')
           expect(res.text).toContain('<h2 class="govuk-heading-l">Release dates</h2>')
-          expect(res.text).toContain('<h1 class="govuk-heading-xl">Overview</h1>')
+          expect(res.text).toContain('<h1 class="govuk-heading-xl">Court case and release dates</h1>')
           expect(res.text).not.toContain('<div class="govuk-summary-card latest-calculation-card">')
           expect(res.text).toContain('This person is serving an indeterminate sentence and has no calculated dates.')
         })
@@ -872,7 +907,7 @@ describe('Route Handlers - Overview', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('<h2 class="govuk-heading-l">Release dates</h2>')
-          expect(res.text).toContain('<h1 class="govuk-heading-xl">Overview</h1>')
+          expect(res.text).toContain('<h1 class="govuk-heading-xl">Court case and release dates</h1>')
           expect(res.text).not.toContain('<div class="govuk-summary-card latest-calculation-card">')
           expect(res.text).not.toContain(
             'This person is serving an indeterminate sentence and has no calculated dates.',
