@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import dayjs from 'dayjs'
+import { ThingToDo } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
 import PrisonerService from '../../../services/prisonerService'
 import AdjustmentsService from '../../../services/adjustmentsService'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
@@ -8,6 +9,7 @@ import RemandAndSentencingService from '../../../services/remandAndSentencingSer
 import PrisonService from '../../../services/prisonService'
 import { ImmigrationDetention, Recall } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import config from '../../../config'
+import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesApi/types'
 
 export default class OverviewRoutes {
   constructor(
@@ -75,6 +77,12 @@ export default class OverviewRoutes {
     if (latestImmigrationRecord) {
       overviewImmigrationDetentionUrl = `${config.applications.immigrationDetention.url}/${prisoner.prisonerNumber}/immigration-detention/overview`
     }
+    const feedbackPrompt: ThingToDo = {
+      title: 'Did you find what you need?',
+      message: 'This is a new service. To make it the best it can be, your feedback is essential.',
+      buttonText: 'Give feedback',
+      buttonHref: config.externalUrls.feedbackSurvey.url,
+    } as ThingToDo
 
     return res.render('pages/prisoner/overview', {
       prisoner,
@@ -95,6 +103,8 @@ export default class OverviewRoutes {
       overviewImmigrationDetentionUrl,
       immigrationDetentionUser: res.locals.user.hasImmigrationDetentionAccess,
       displayMaintenanceAlert: true,
+      feedbackPromptServiceDefinition: this.getFeedbackPromptServiceDefinition(feedbackPrompt),
+      releaseDateDefinitionsUrl: config.externalUrls.releaseDateDefinitions.url,
     })
   }
 
@@ -154,5 +164,31 @@ export default class OverviewRoutes {
     })
 
     return result
+  }
+
+  private getFeedbackPromptServiceDefinition(feedback: ThingToDo): CcrdServiceDefinitions {
+    const feedbackPromptServiceDefinition = {
+      services: {
+        feedbackPrompt: {
+          thingsToDo: {
+            severity: 'REQUIRED_BEFORE_CALCULATION',
+            things: [feedback],
+            count: 1,
+          },
+          maintenanceAlert: {
+            enabled: false,
+            message: '',
+          },
+          href: '',
+          text: '',
+        },
+      },
+      maintenanceAlert: {
+        enabled: false,
+        message: '',
+      },
+    } as CcrdServiceDefinitions
+
+    return feedbackPromptServiceDefinition
   }
 }

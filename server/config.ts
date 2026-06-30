@@ -213,6 +213,17 @@ export default {
       url: get('REMAND_AND_SENTENCING_UI_URL', 'http://localhost:3000', requiredInProduction),
     },
   },
+  externalUrls: {
+    releaseDateDefinitions: {
+      url: get(
+        'EXT_URL_RELEASE_DATE_DEFINITIONS',
+        'https://justiceuk.sharepoint.com/sites/Courtcaseandreleasedates/SitePages/Release-date-types-and-definitions.aspx',
+      ),
+    },
+    feedbackSurvey: {
+      url: get('EXT_URL_FEEDBACK_SURVEY', 'https://www.smartsurvey.co.uk/s/5P6B4U/'),
+    },
+  },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   appInsightsConnectionString: get('APPLICATIONINSIGHTS_CONNECTION_STRING', '', requiredInProduction),
