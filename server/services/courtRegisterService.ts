@@ -36,4 +36,16 @@ export default class CourtRegisterService {
       if (!this.courtNamesCache.has(court.courtId)) this.courtNamesCache.set(court.courtId, court.courtName)
     })
   }
+
+  async getCourtMap(courtIds: string[], username: string): Promise<{ [key: string]: string }> {
+    let courtMap = {}
+    const toSearchIds = courtIds.filter(courtId => courtId)
+    if (toSearchIds.length) {
+      const courts = await new CourtRegisterApiClient(await this.getSystemClientToken(username)).findCourtsByIds(
+        Array.from(new Set(toSearchIds)),
+      )
+      courtMap = Object.fromEntries(courts.map(court => [court.courtId, court.courtName]))
+    }
+    return courtMap
+  }
 }

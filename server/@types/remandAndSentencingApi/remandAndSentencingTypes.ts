@@ -61,3 +61,21 @@ function getRecallType(code: string): RecallType {
 
 export { RecallTypes, getRecallType }
 export type { RecallType }
+
+export type SearchCourtCasesPage = components['schemas']['SearchCourtCasesPage']
+export type SentenceConsecutiveToDetailsResponse = components['schemas']['SentenceConsecutiveToDetailsResponse']
+
+export type Charge = components['schemas']['Charge']
+export type PagedCourtCase = components['schemas']['PagedCourtCase']
+export type PagedLatestCourtAppearance = components['schemas']['PagedLatestCourtAppearance']
+export type PagedMergedFromCase = components['schemas']['PagedMergedFromCase']
+export type PagedMergedToCase = components['schemas']['PagedMergedToCase']
+export type PeriodLength = components['schemas']['PeriodLength']
+export type SentenceLegacyData = components['schemas']['SentenceLegacyData']
+export type PagedCharge = components['schemas']['PagedCharge']
+export type PagedSentence = components['schemas']['PagedSentence']
+export type PagedSentencePeriodLength = components['schemas']['PagedSentencePeriodLength']
+export type SentenceConsecutiveToDetails = components['schemas']['SentenceConsecutiveToDetails']
+
+// Client Types
+export type PagedAppearancePeriodLength = components['schemas']['PagedAppearancePeriodLength']

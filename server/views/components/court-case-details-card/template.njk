@@ -1,0 +1,104 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "hmpps/components/court-cases-release-dates/offence-card/macro.njk" import offenceCard %}
+
+{% for courtCaseDetails in courtCaseDetailModels %}
+    {% set courtCaseSummary %}
+
+        {% set courtCaseSummaryRows = [
+            {
+                key: { text: "Overall case outcome"},
+                value: { text: courtCaseDetails.overallCaseOutcome }
+            }
+        ] %}
+        {% if courtCaseDetails.warrantType === 'SENTENCING' %}
+            {% set courtCaseSummaryRows = (courtCaseSummaryRows.concat([{
+                key: { text: "Overall sentence length"},
+                value: { text: courtCaseDetails.overallSentenceLength | formatLengths if courtCaseDetails.overallSentenceLength else 'Not entered' }
+            }
+            ]))%}
+        {% endif %}
+
+        {{
+            govukSummaryList({
+                rows: courtCaseSummaryRows,
+                attributes: {
+                    "data-qa": "courtCaseSummary-" + courtCaseDetails.courtCaseUuid
+                }
+            })
+        }}
+
+        <hr class="govuk-section-break govuk-section-break--visible">
+        <div class="govuk-grid-row govuk-!-padding-bottom-2 govuk-!-margin-top-2">
+            <div class="govuk-grid-column-full govuk-!-margin-top-2">
+                {% set offenceDetailsHtml %}
+                    {% for offence in courtCaseDetails.offences %}
+                        {{
+                        offenceCard({
+                            offenceCode: offence.offenceCode,
+                            offenceName: offenceMap[offence.offenceCode],
+                            offenceStartDate: offence.offenceStartDate | formatDate if offence.offenceStartDate else 'Not entered',
+                            offenceEndDate: offence.offenceEndDate | formatDate,
+                            outcome: offenceOutcomeMap[offence.outcomeUuid] | outcomeValueOrLegacy(offence.legacyData),
+                            countNumber: offence.sentence.countNumber if offence.sentence,
+                            lineNumber: offence.sentence.legacyData.nomisLineReference if offence.sentence and offence.sentence.legacyData,
+                            convictionDate: (offence.sentence.convictionDate | formatDate) if offence.sentence,
+                            aggravatingFactors: offence | getAggravatingFactors,
+                            isSentenced: offence.sentence,
+                            periodLengths: offence.sentence.periodLengths if offence.sentence,
+                            sentenceServeType: offence.sentence.sentenceServeType if offence.sentence,
+                            consecutiveTo: (consecutiveToSentenceDetailsMap[offence.sentence.consecutiveToSentenceUuid] | checkConsecutiveToSameCase(courtCaseDetails.offences, offence.sentence.consecutiveToSentenceUuid))  if offence.sentence,
+                            sentenceType: (courtCaseDetails.sentenceTypeMap[offence.sentence.sentenceTypeId] | sentenceTypeValueOrLegacy(offence.sentence.legacyData))  if offence.sentence,
+                            fineAmount: offence.sentence.fineAmount  if offence.sentence,
+                            detailsClasses: 'govuk-!-padding-4',
+                            mergedFromCase: offence.mergedFromCase,
+                            courtDetails: courtMap
+                        })
+                        }}
+                    {% endfor %}
+                {% endset %}
+
+                {{ govukDetails({
+                    summaryText: "offences and sentence details (" + (courtCaseDetails.showingChargeTotal + " of " if courtCaseDetails.showingChargeTotal else "") + courtCaseDetails.chargeTotal + ")",
+                    html: offenceDetailsHtml,
+                    classes: "filter show-toggle govuk-!-margin-bottom-0",
+                    attributes: {
+                        "data-qa": "courtCaseDetailsComponent-" + courtCaseDetails.courtCaseUuid
+                    }
+                })
+                }}
+            </div>
+        </div>
+
+    {% endset %}
+
+    {{
+    govukSummaryList({
+        card: {
+            title: {
+                text: courtCaseDetails.title
+            },
+            actions: {
+                items: actions
+            },
+            attributes: {
+                "data-qa": "courtCaseCard-" + courtCaseDetails.courtCaseUuid
+            }
+        },
+        rows: [
+            {
+                key: { text: "", classes: 'govuk-!-display-none' },
+                value: { html: courtCaseSummary }
+            }]
+    })
+    }}
+{% else %}
+    {% if bookingCourtCaseCount and bookingDetails and bookingDetails.activeFlag and bookingCourtCaseCount.otherBookingCount > 0 %}
+        <p class="govuk-body">There are no court cases recorded for this period of custody for {{ prisoner | firstNameSpaceLastName }}.</p>
+        <p class="govuk-body">You can use the filters to show court cases from previous periods of custody.</p>
+    {% else %}
+        <p class="govuk-body">There are no court cases recorded for {{ prisoner | firstNameSpaceLastName }}.</p>
+    {% endif %}
+{% endfor %}
