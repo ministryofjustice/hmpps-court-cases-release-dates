@@ -1,11 +1,8 @@
 import { SentenceLength } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
-import {
-  PagedCourtCase,
-  PagedMergedFromCase,
-  SentenceLegacyData,
-} from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import { PagedCourtCase } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import { pagedAppearancePeriodLengthToSentenceLength, pagedChargeToOffence } from '../utils/mappingUtils'
 import { orderOffences, sortByDateDesc } from '../utils/utils'
+import { Offence } from './CourtCaseTypes'
 
 export default class CourtCasesDetailsModel {
   courtCaseUuid: string
@@ -51,39 +48,4 @@ export default class CourtCasesDetailsModel {
       this.showingChargeTotal = 6
     }
   }
-}
-
-export interface Offence {
-  offenceStartDate?: Date
-  offenceEndDate?: Date
-  offenceCode?: string
-  outcomeUuid?: string
-  chargeUuid: string
-  sentence?: Sentence
-  terrorRelated?: boolean
-  foreignPowerRelated?: boolean
-  legacyData?: Record<string, never>
-  updatedOutcome?: boolean
-  mergedFromCase?: PagedMergedFromCase
-  onFinishGoToEdit?: boolean
-  replacesOffenceUuid?: string
-  createChargeOrder?: number
-  replicatedFromUuid?: string
-  offenceDateIsSame?: string
-}
-
-export interface Sentence {
-  sentenceUuid: string
-  countNumber?: string
-  hasCountNumber?: string
-  periodLengths?: SentenceLength[]
-  sentenceServeType?: string
-  sentenceTypeId?: string
-  sentenceTypeClassification?: string
-  convictionDate?: Date
-  fineAmount?: number
-  legacyData?: SentenceLegacyData
-  isSentenceConsecutiveToAnotherCase?: string
-  consecutiveToSentenceUuid?: string
-  returnUrlKey?: string
 }

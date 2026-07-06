@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { SentenceLength } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types/@types'
+import { SentenceLength } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
 import periodLengthTypeHeadings from '../resources/PeriodLengthTypeHeadings'
 import {
   PagedAppearancePeriodLength,
@@ -7,7 +7,7 @@ import {
   PagedSentence,
   PagedSentencePeriodLength,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
-import { Offence, Sentence } from '../model/CourtCaseDetailsModel'
+import { Offence, Sentence } from '../model/CourtCaseTypes'
 
 export const pagedAppearancePeriodLengthToSentenceLength = (
   pagedAppearancePeriodLength: PagedAppearancePeriodLength,

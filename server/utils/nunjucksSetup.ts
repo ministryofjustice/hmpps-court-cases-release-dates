@@ -16,7 +16,7 @@ import {
 } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/utils/utils'
 import dayjs from 'dayjs'
 import fs from 'fs'
-import { ConsecutiveToDetails } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types/@types'
+import { ConsecutiveToDetails } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
 import {
   formatDate,
   getAggravatingFactors,
@@ -27,7 +27,7 @@ import {
 import { ApplicationInfo } from '../applicationInfo'
 import config from '../config'
 import logger from '../../logger'
-import { Offence } from '../model/CourtCaseDetailsModel'
+import { Offence } from '../model/CourtCaseTypes'
 
 const production = process.env.NODE_ENV === 'production'
 

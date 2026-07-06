@@ -14,6 +14,10 @@ import RemandAndSentencingService from '../../../services/remandAndSentencingSer
 import PrisonService from '../../../services/prisonService'
 import CourtRegisterService from '../../../services/courtRegisterService'
 import ManageOffencesService from '../../../services/manageOffencesService'
+import {
+  SearchCourtCasesPage,
+  SentenceConsecutiveToDetailsResponse,
+} from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/prisonerSearchService')
@@ -68,7 +72,7 @@ const defaultCourtCasesPage = {
       },
     },
   ],
-} as any
+} as SearchCourtCasesPage
 
 beforeEach(() => {
   app = appWithAllRoutes({
@@ -78,7 +82,7 @@ beforeEach(() => {
     },
   })
 
-  remandAndSentencingService.searchCourtCases.mockResolvedValue(defaultCourtCasesPage as any)
+  remandAndSentencingService.searchCourtCases.mockResolvedValue(defaultCourtCasesPage as SearchCourtCasesPage)
   remandAndSentencingService.getConsecutiveToDetails.mockResolvedValue({
     sentences: [
       {
@@ -87,13 +91,15 @@ beforeEach(() => {
         chargeLegacyData: { offenceDescription: 'Possess knife blade or sharp pointed article' },
       },
     ],
-  } as any)
+  } as SentenceConsecutiveToDetailsResponse)
 
-  courtRegisterService.getCourtMap.mockResolvedValue({ B10JQ: 'Cambridge Magistrates Court' } as any)
+  courtRegisterService.getCourtMap.mockResolvedValue({ B10JQ: 'Cambridge Magistrates Court' } as {
+    [p: string]: string
+  })
   manageOffencesService.getOffenceMap.mockResolvedValue({
     CJ88001: 'CJ88001 Common assault',
     CJ88117: 'CJ88117 Possess knife blade or sharp pointed article',
-  } as any)
+  } as { [p: string]: string })
 })
 
 afterEach(() => {
@@ -368,72 +374,6 @@ const serviceDefinitionsNoThingsToDo = {
       thingsToDo: {
         things: [],
         count: 0,
-      },
-      maintenanceAlert: {
-        enabled: false,
-        message: 'placeholder',
-      },
-    },
-  },
-  maintenanceAlert: {
-    enabled: false,
-    message: 'placeholder',
-  },
-} as CcrdServiceDefinitions
-
-const serviceDefinitionsThingsToDoNotifications = {
-  services: {
-    overview: {
-      href: 'http://localhost:8000/prisoner/AB1234AB/readonly-overview',
-      text: 'Overview',
-      thingsToDo: {
-        things: [],
-        count: 0,
-      },
-      maintenanceAlert: {
-        enabled: false,
-        message: 'placeholder',
-      },
-    },
-    adjustments: {
-      href: 'http://localhost:8002/AB1234AB',
-      text: 'Adjustments',
-      thingsToDo: {
-        things: [],
-        count: 0,
-      },
-      maintenanceAlert: {
-        enabled: false,
-        message: 'placeholder',
-      },
-    },
-    releaseDates: {
-      href: 'http://localhost:8004?prisonId=AB1234AB',
-      text: 'Release dates and calculations',
-      thingsToDo: {
-        things: [],
-        count: 0,
-      },
-      maintenanceAlert: {
-        enabled: false,
-        message: 'placeholder',
-      },
-    },
-    documents: {
-      href: 'http://localhost:8004?prisonId=AB1234AB',
-      text: 'Release dates and calculations',
-      thingsToDo: {
-        severity: 'NOTIFICATION',
-        things: [
-          {
-            buttonHref: '',
-            buttonText: '',
-            message: '',
-            title: '',
-            type: 'HMCTS_API_DOCUMENT_RECEIVED',
-          },
-        ],
-        count: 1,
       },
       maintenanceAlert: {
         enabled: false,

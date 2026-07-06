@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
-import { Offence } from '../model/CourtCaseDetailsModel'
-import { Charge, SentenceConsecutiveToDetails } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import { Offence } from '../model/CourtCaseTypes'
+import { SentenceConsecutiveToDetails } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import config from '../config'
 
 const properCase = (word: string): string =>
@@ -82,7 +82,6 @@ const nomisLineNumberFromOffence = (o: Offence) => {
 const offenceDate = (o: Offence) => dateToTime(o.offenceEndDate ?? o.offenceStartDate)
 const isNomisOffence = (o: Offence) => !!o.sentence && (getOffenceCount(o) == null || getOffenceCount(o) === '')
 const isOffenceRasMinusOne = (o: Offence) => !!o.sentence && getOffenceCount(o) === '-1'
-const getChargeCount = (c: Charge) => c.sentence?.chargeNumber
 const getOffenceCount = (o: Offence) => o.sentence?.countNumber
 const offenceCreateChargeOrder = (o: Offence) => o.createChargeOrder ?? 0
 const isRasWithCountOffence = (o: Offence) => {
