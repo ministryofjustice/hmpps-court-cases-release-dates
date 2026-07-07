@@ -239,7 +239,7 @@ describe('Route Handlers - Readonly Overview', () => {
       })
     })
 
-    describe('Did you find what you need?', () => {
+    describe('Did you find what you need panel', () => {
       it('should render feedback prompt', () => {
         prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
           prisonerNumber: 'A12345B',
@@ -264,7 +264,7 @@ describe('Route Handlers - Readonly Overview', () => {
       })
     })
 
-    describe('Release date summary overview box', () => {
+    describe('Release date summary overview box section', () => {
       it('should show latest calc with release date definition', () => {
         prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
           prisonerNumber: 'A12345B',
@@ -328,7 +328,7 @@ describe('Route Handlers - Readonly Overview', () => {
       })
     })
 
-    describe('Court cases summary card', () => {
+    describe('Court cases summary card section', () => {
       it('should pass zero-based page index when pageNumber query param is provided', async () => {
         prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
           prisonerNumber: 'A12345B',
