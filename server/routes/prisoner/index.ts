@@ -5,7 +5,7 @@ import AdjustmentsRoutes from './handlers/adjustments'
 import CourtCasesRoutes from './handlers/courtCases'
 import ImageRoutes from './handlers/image'
 import OverviewRoutes from './handlers/overview'
-import ReadonlyOverviewRoutes from './handlers/readonly-overview'
+import ReadonlyOverviewRoutes from './handlers/readonlyOverview'
 import ReleaseDatesRoutes from './handlers/releaseDates'
 import ConfigRoutes from '../config/ConfigRoutes'
 import DocumentRoutes from './handlers/documents'
@@ -20,6 +20,7 @@ export default function Index({
   courtDataIngestionService,
   courtRegisterService,
   manageOffencesService,
+  immigrationDetentionService,
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
@@ -36,6 +37,7 @@ export default function Index({
       calculateReleaseDatesService,
       remandAndSentencingService,
       prisonService,
+      immigrationDetentionService,
     ).GET,
   )
   get(
@@ -46,6 +48,7 @@ export default function Index({
       remandAndSentencingService,
       courtRegisterService,
       manageOffencesService,
+      immigrationDetentionService,
     ).GET,
   )
   get('/:prisonerNumber/release-dates', new ReleaseDatesRoutes().GET)

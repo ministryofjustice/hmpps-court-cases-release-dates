@@ -76,6 +76,8 @@ export type PagedCharge = components['schemas']['PagedCharge']
 export type PagedSentence = components['schemas']['PagedSentence']
 export type PagedSentencePeriodLength = components['schemas']['PagedSentencePeriodLength']
 export type SentenceConsecutiveToDetails = components['schemas']['SentenceConsecutiveToDetails']
+export type AggravatingFactor = components['schemas']['AggravatingFactor']
+export type PeriodLengthLegacyData = components['schemas']['PeriodLengthLegacyData']
 
 // Client Types
 export type PagedAppearancePeriodLength = components['schemas']['PagedAppearancePeriodLength']

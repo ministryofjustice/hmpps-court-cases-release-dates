@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import { SentenceLength } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
 import periodLengthTypeHeadings from '../resources/PeriodLengthTypeHeadings'
 import {
   PagedAppearancePeriodLength,
@@ -8,6 +7,7 @@ import {
   PagedSentencePeriodLength,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import { Offence, Sentence } from '../model/CourtCaseTypes'
+import { SentenceLength } from '../@types/remandAndSentencingApi/model'
 
 export const pagedAppearancePeriodLengthToSentenceLength = (
   pagedAppearancePeriodLength: PagedAppearancePeriodLength,
@@ -38,8 +38,7 @@ export const pagedChargeToOffence = (pagedCharge: PagedCharge, createChargeOrder
   return {
     offenceCode: pagedCharge.offenceCode,
     outcomeUuid: pagedCharge.outcome?.outcomeUuid,
-    terrorRelated: pagedCharge.terrorRelated,
-    foreignPowerRelated: pagedCharge.foreignPowerRelated,
+    aggravatingFactors: pagedCharge.aggravatingFactors,
     createChargeOrder,
     ...(pagedCharge.offenceStartDate && { offenceStartDate: dayjs(pagedCharge.offenceStartDate).toDate() }),
     ...(pagedCharge.offenceEndDate && { offenceEndDate: dayjs(pagedCharge.offenceEndDate).toDate() }),

@@ -1,5 +1,9 @@
 import { SentenceLength } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
-import { PagedMergedFromCase, SentenceLegacyData } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import {
+  AggravatingFactor,
+  PagedMergedFromCase,
+  SentenceLegacyData,
+} from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 export interface Offence {
   offenceStartDate?: Date
@@ -8,8 +12,7 @@ export interface Offence {
   outcomeUuid?: string
   chargeUuid: string
   sentence?: Sentence
-  terrorRelated?: boolean
-  foreignPowerRelated?: boolean
+  aggravatingFactors?: AggravatingFactor[]
   legacyData?: Record<string, never>
   updatedOutcome?: boolean
   mergedFromCase?: PagedMergedFromCase

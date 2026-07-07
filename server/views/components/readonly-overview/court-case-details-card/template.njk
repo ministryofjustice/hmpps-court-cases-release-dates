@@ -74,6 +74,16 @@
 
     {% endset %}
 
+    {% set actions = [] %}
+
+    {% if courtCaseDetails.overallCaseStatus == "INACTIVE" or courtCaseDetails.overallCaseStatus == "MERGED" %}
+        {% set _ = actions.push({
+            href: null,
+            html: govukTag({ text: "Inactive" }),
+            visuallyHiddenText: "Inactive"
+        }) %}
+    {% endif %}
+
     {{
     govukSummaryList({
         card: {
@@ -97,7 +107,6 @@
 {% else %}
     {% if bookingCourtCaseCount and bookingDetails and bookingDetails.activeFlag and bookingCourtCaseCount.otherBookingCount > 0 %}
         <p class="govuk-body">There are no court cases recorded for this period of custody for {{ prisoner | firstNameSpaceLastName }}.</p>
-        <p class="govuk-body">You can use the filters to show court cases from previous periods of custody.</p>
     {% else %}
         <p class="govuk-body">There are no court cases recorded for {{ prisoner | firstNameSpaceLastName }}.</p>
     {% endif %}

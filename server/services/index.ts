@@ -12,6 +12,7 @@ import CourtDataIngestionService from './courtDataIngestionService'
 import CourtRegisterService from './courtRegisterService'
 import ManageOffencesService from './manageOffencesService'
 import ManageOffencesApiClient from '../data/manageOffencesApiClient'
+import ImmigrationDetentionService from './ImmigrationDetentionService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuthClient, hmppsAuthenticationClient, manageUsersApiClient, feComponentsClient } =
@@ -41,6 +42,8 @@ export const services = () => {
 
   const manageOffencesService = new ManageOffencesService(new ManageOffencesApiClient(hmppsAuthenticationClient))
 
+  const immigrationDetentionService = new ImmigrationDetentionService()
+
   return {
     applicationInfo,
     userService,
@@ -55,6 +58,7 @@ export const services = () => {
     courtDataIngestionService,
     courtRegisterService,
     manageOffencesService,
+    immigrationDetentionService,
   }
 }
 

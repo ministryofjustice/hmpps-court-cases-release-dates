@@ -136,22 +136,8 @@ export const outcomeValueOrLegacy = (outcomeValue: string, legacyData: Record<st
   return 'Not entered'
 }
 
-// TODO DM replace with Hassan's changes when ready
-export const getAggravatingFactors = (offence: Offence) => {
-  // If offence is null or undefined, return an empty list immediately
-  if (!offence) {
-    return []
-  }
-
-  const factors: string[] = []
-  if (offence.terrorRelated) {
-    factors.push('Offences aggravated by a terrorist connection')
-  }
-  if (offence.foreignPowerRelated) {
-    factors.push('Offences aggravated by foreign power condition being met')
-  }
-  return factors
-}
+export const getAggravatingFactors = (offence: Offence): string[] =>
+  offence?.aggravatingFactors?.map(f => f.title) || []
 
 export const sentenceTypeValueOrLegacy = (sentenceTypeValue: string, legacyData: Record<string, never>) => {
   if (sentenceTypeValue) {

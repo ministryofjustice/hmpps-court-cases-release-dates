@@ -6,27 +6,21 @@ import { Offence } from './CourtCaseTypes'
 
 export default class CourtCasesDetailsModel {
   courtCaseUuid: string
-
   warrantType: string
-
   overallCaseOutcome: string
-
   overallSentenceLength: SentenceLength
-
   title: string
-
   offences: Offence[]
-
   sentenceTypeMap: { [key: string]: string }
-
   chargeTotal: number
-
   showingChargeTotal?: number
+  overallCaseStatus: string
 
   constructor(pagedCourtCase: PagedCourtCase, courtMap: { [key: string]: string }) {
     this.courtCaseUuid = pagedCourtCase.courtCaseUuid
     this.warrantType = pagedCourtCase.latestCourtAppearance?.warrantType
     this.overallCaseOutcome = pagedCourtCase.latestCourtAppearance.outcome ?? 'Not entered'
+    this.overallCaseStatus = pagedCourtCase.courtCaseStatus
     this.title = courtMap[pagedCourtCase.latestCourtAppearance?.courtCode]
     if (pagedCourtCase.latestCourtAppearance?.caseReference) {
       this.title = `${pagedCourtCase.latestCourtAppearance.caseReference} at ${this.title}`

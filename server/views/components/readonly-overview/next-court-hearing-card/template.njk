@@ -1,0 +1,42 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% if not (nextCourtEvent | length) %}
+    <p class="govuk-body">There are no upcoming court hearings</p>
+{% else %}
+    {{ govukSummaryList({
+        rows: [
+            {
+                key: {
+                text: "Case reference"
+            },
+                value: {
+                text: nextCourtEvent.caseReference or 'Not entered'
+            }
+            },
+            {
+                key: {
+                text: "Location"
+            },
+                value: {
+                text: nextCourtEvent.courtLocation
+            }
+            },
+            {
+                key: {
+                text: "Hearing type"
+            },
+                value: {
+                html: nextCourtEvent.courtEventType
+            }
+            },
+            {
+                key: {
+                text: "Date"
+            },
+                value: {
+                text: nextCourtEvent.startTime | dateTime
+            }
+            }
+        ]
+    }) }}
+{% endif %}

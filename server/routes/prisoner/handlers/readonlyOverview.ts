@@ -10,6 +10,8 @@ import { consecutiveToSentenceDetailsToOffenceDescriptions, getAsStringOrDefault
 import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtCasesDetailsModel from '../../../model/CourtCaseDetailsModel'
 import ManageOffencesService from '../../../services/manageOffencesService'
+import { ImmigrationDetention } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import ImmigrationDetentionService from '../../../services/ImmigrationDetentionService'
 
 export default class ReadonlyOverviewRoutes {
   constructor(
@@ -18,14 +20,35 @@ export default class ReadonlyOverviewRoutes {
     private readonly remandAndSentencingService: RemandAndSentencingService,
     private readonly courtRegisterService: CourtRegisterService,
     private readonly manageOffencesService: ManageOffencesService,
+    private readonly immigrationDetentionService: ImmigrationDetentionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { prisoner } = req
-    const { token, username } = res.locals.user
+    const { token, username, hasImmigrationDetentionAccess } = res.locals.user
     const bookingId = prisoner.bookingId as unknown as number
 
-    const hasActiveSentences = await this.prisonerService.hasActiveSentences(bookingId, token)
+    const latestImmigrationRecordPromise: Promise<ImmigrationDetention | undefined> = hasImmigrationDetentionAccess
+      ? this.remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner(
+          prisoner.prisonerNumber,
+          username,
+        )
+      : Promise.resolve(undefined)
+
+    const [
+      hasActiveSentences,
+      nextCourtEvent,
+      latestRecall,
+      latestImmigrationRecord,
+      [courtCaseDetailModels, offenceMap, offenceOutcomeMap],
+    ] = await Promise.all([
+      this.prisonerService.hasActiveSentences(bookingId, token),
+      this.prisonerService.getNextCourtEvent(bookingId, token),
+      this.remandAndSentencingService.getMostRecentRecall(prisoner.prisonerNumber, token),
+      latestImmigrationRecordPromise,
+      this.getCourtCases(req, prisoner, username),
+    ])
+
     const latestCalculationConfig = hasActiveSentences
       ? await this.calculateReleaseDatesService.getLatestCalculationForPrisoner(prisoner.prisonerNumber, token)
       : null
@@ -37,9 +60,7 @@ export default class ReadonlyOverviewRoutes {
       buttonHref: config.externalUrls.feedbackSurvey.url,
     } as ThingToDo
 
-    const [courtCaseDetailModels, offenceMap, offenceOutcomeMap] = await this.getCourtCases(req, prisoner, username)
-
-    return res.render('pages/prisoner/readonly-overview', {
+    return res.render('pages/prisoner/readonlyOverview', {
       prisoner,
       latestCalculationConfig,
       displayMaintenanceAlert: true,
@@ -48,6 +69,11 @@ export default class ReadonlyOverviewRoutes {
       courtCaseDetailModels,
       offenceMap,
       offenceOutcomeMap,
+      latestRecall,
+      nextCourtEvent,
+      hasImmigrationDetentionAccess,
+      immigrationDetentionMessage:
+        this.immigrationDetentionService.getImmigrationDetentionMessage(latestImmigrationRecord),
     })
   }
 
