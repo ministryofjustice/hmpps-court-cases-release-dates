@@ -42,6 +42,7 @@ export default {
   production,
   https: production,
   staticResourceCacheDuration: '1h',
+  dateFormat: 'DD/MM/YYYY',
   redis: {
     enabled: get('REDIS_ENABLED', 'false', requiredInProduction) === 'true',
     host: get('REDIS_HOST', 'localhost', requiredInProduction),
@@ -188,6 +189,15 @@ export default {
       },
       agent: new AgentConfig(Number(get('DOCUMENT_MANAGEMENT_API_TIMEOUT_RESPONSE', 10000))),
     },
+    manageOffencesApi: {
+      url: get('MANAGE_OFFENCES_API_URL', 'http://127.0.0.1:8080', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('MANAGE_OFFENCES_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('MANAGE_OFFENCES_API_TIMEOUT_RESPONSE', 10000))),
+    },
   },
   applications: {
     recordARecall: {
@@ -211,6 +221,17 @@ export default {
     },
     remandAndSentencing: {
       url: get('REMAND_AND_SENTENCING_UI_URL', 'http://localhost:3000', requiredInProduction),
+    },
+  },
+  externalUrls: {
+    releaseDateDefinitions: {
+      url: get(
+        'EXT_URL_RELEASE_DATE_DEFINITIONS',
+        'https://justiceuk.sharepoint.com/sites/Courtcaseandreleasedates/SitePages/Release-date-types-and-definitions.aspx',
+      ),
+    },
+    feedbackSurvey: {
+      url: get('EXT_URL_FEEDBACK_SURVEY', 'https://www.smartsurvey.co.uk/s/5P6B4U/'),
     },
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),

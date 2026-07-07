@@ -47,6 +47,7 @@ describe('Remand and sentencing service', () => {
             sentencingAppearanceDate: '2024-12-01',
             sentences: [
               {
+                aggravatingFactors: [],
                 sentenceUuid: 'sentence-uuid-1',
                 offenceCode: 'OFF123',
                 offenceStartDate: '2024-01-01',
@@ -90,6 +91,7 @@ describe('Remand and sentencing service', () => {
             sentencingAppearanceDate: '2024-12-01',
             sentences: [
               {
+                aggravatingFactors: [],
                 sentenceUuid: 'sentence-uuid-1',
                 offenceCode: 'OFF123',
                 offenceStartDate: '2024-01-01',

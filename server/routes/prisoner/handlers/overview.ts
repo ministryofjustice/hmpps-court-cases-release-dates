@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
-import dayjs from 'dayjs'
 import PrisonerService from '../../../services/prisonerService'
 import AdjustmentsService from '../../../services/adjustmentsService'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import PrisonService from '../../../services/prisonService'
-import { ImmigrationDetention, Recall } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import { Recall } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import config from '../../../config'
+import ImmigrationDetentionService from '../../../services/ImmigrationDetentionService'
 
 export default class OverviewRoutes {
   constructor(
@@ -16,6 +16,7 @@ export default class OverviewRoutes {
     private readonly calculateReleaseDatesService: CalculateReleaseDatesService,
     private readonly remandAndSentencingService: RemandAndSentencingService,
     private readonly prisonService: PrisonService,
+    private readonly immigrationDetentionService: ImmigrationDetentionService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -90,33 +91,13 @@ export default class OverviewRoutes {
       showRecallsLink: res.locals.user.hasRecallsAccess,
       latestRecall,
       anyThingsToDo,
-      immigrationDetentionMessage: this.getImmigrationDetentionMessage(latestImmigrationRecord),
+      immigrationDetentionMessage:
+        this.immigrationDetentionService.getImmigrationDetentionMessage(latestImmigrationRecord),
       addImmigrationDetentionUrl,
       overviewImmigrationDetentionUrl,
       immigrationDetentionUser: res.locals.user.hasImmigrationDetentionAccess,
       displayMaintenanceAlert: true,
     })
-  }
-
-  private getImmigrationDetentionMessage(latestRecord: ImmigrationDetention) {
-    let message: string
-    if (latestRecord) {
-      const formattedRecordDate = dayjs(latestRecord.recordDate).format('D MMMM YYYY')
-      const recordedStr = `dated ${formattedRecordDate}`
-
-      if (latestRecord.immigrationDetentionRecordType === 'IS91') {
-        message = `IS91 Detention Authority ${recordedStr}`
-      } else if (latestRecord.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
-        message = `Deportation order ${recordedStr}`
-      } else if (latestRecord.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
-        message = `Immigration bail ${recordedStr}`
-      } else {
-        message = `No longer of interest to Home Office ${recordedStr}`
-      }
-    } else {
-      message = `There are no immigration documents recorded.`
-    }
-    return message
   }
 
   private async getAggregatedAdjustments(prisoner: Prisoner, startOfSentenceEnvelope: Date, username: string) {

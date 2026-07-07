@@ -10,13 +10,24 @@ import {
   firstNameSpaceLastName,
   hmppsFormatDate,
   createSupportLink,
+  formatLengths,
+  formatCountNumber,
+  groupAndSortPeriodLengths,
 } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/utils/utils'
 import dayjs from 'dayjs'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { ConsecutiveToDetails } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
+import {
+  formatDate,
+  getAggravatingFactors,
+  initialiseName,
+  outcomeValueOrLegacy,
+  sentenceTypeValueOrLegacy,
+} from './utils'
 import { ApplicationInfo } from '../applicationInfo'
 import config from '../config'
 import logger from '../../logger'
+import { Offence } from '../model/CourtCaseTypes'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -86,7 +97,10 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
 
   njkEnv.addGlobal('createSupportLink', createSupportLink)
   njkEnv.addGlobal('applications', config.applications)
-
+  njkEnv.addFilter('formatLengths', formatLengths)
+  njkEnv.addFilter('formatDate', formatDate)
+  njkEnv.addFilter('outcomeValueOrLegacy', outcomeValueOrLegacy)
+  njkEnv.addFilter('getAggravatingFactors', getAggravatingFactors)
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('personProfileName', personProfileName)
   njkEnv.addFilter('personDateOfBirth', personDateOfBirth)
@@ -110,4 +124,27 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       round: 0,
     })
   })
+  njkEnv.addFilter(
+    'checkConsecutiveToSameCase',
+    (consecutiveToDetails: ConsecutiveToDetails, offences: Offence[], consecutiveToSentenceUuid: string) => {
+      let consecutiveToDetailsResponse = consecutiveToDetails
+      if (
+        consecutiveToSentenceUuid &&
+        offences.find(offence => offence.sentence?.sentenceUuid === consecutiveToSentenceUuid) &&
+        consecutiveToDetails
+      ) {
+        consecutiveToDetailsResponse = {
+          countNumber: consecutiveToDetails.countNumber,
+          offenceCode: consecutiveToDetails.offenceCode,
+          offenceDescription: consecutiveToDetails.offenceDescription,
+          offenceStartDate: consecutiveToDetails.offenceStartDate,
+          offenceEndDate: consecutiveToDetails.offenceEndDate,
+        }
+      }
+      return consecutiveToDetailsResponse
+    },
+  )
+  njkEnv.addFilter('sentenceTypeValueOrLegacy', sentenceTypeValueOrLegacy)
+  njkEnv.addFilter('formatCountNumber', formatCountNumber)
+  njkEnv.addFilter('groupAndSortPeriodLengths', groupAndSortPeriodLengths)
 }
