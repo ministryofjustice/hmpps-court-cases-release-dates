@@ -30,6 +30,7 @@ generic-service:
     PRISON_REGISTER_API_URL: "https://prison-register.hmpps.service.justice.gov.uk"
     DOCUMENT_MANAGEMENT_API_URL: "https://document-api.hmpps.service.justice.gov.uk"
     COURT_DATA_INGESTION_API_URL: "https://court-data-ingestion-api.hmpps.service.justice.gov.uk"
+    MANAGE_OFFENCES_API_URL: "https://manage-offences-api.hmpps.service.justice.gov.uk"
 
 
 generic-prometheus-alerts:
