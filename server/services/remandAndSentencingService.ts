@@ -6,6 +6,8 @@ import {
   ImmigrationDetention,
   RasPrisonerDocuments,
   Recall,
+  SearchCourtCasesPage,
+  SentenceConsecutiveToDetailsResponse,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import { HmppsAuthClient } from '../data'
 import logger from '../../logger'
@@ -63,5 +65,36 @@ export default class RemandAndSentencingService {
 
   public async getDocuments(prisonerId: string, username: string): Promise<RasPrisonerDocuments> {
     return new RemandAndSentencingApiClient(await this.getSystemClientToken(username)).getDocuments(prisonerId)
+  }
+
+  public async getConsecutiveToDetails(
+    sentenceUuids: string[],
+    username: string,
+  ): Promise<SentenceConsecutiveToDetailsResponse> {
+    return sentenceUuids.filter(sentenceUuid => sentenceUuid).length
+      ? new RemandAndSentencingApiClient(await this.getSystemClientToken(username)).consecutiveToDetails(sentenceUuids)
+      : { sentences: [] }
+  }
+
+  public async searchCourtCases(
+    prisonerId: string,
+    username: string,
+    sortBy: string,
+    page: number,
+    size?: number,
+  ): Promise<SearchCourtCasesPage> {
+    const client = new RemandAndSentencingApiClient(await this.getSystemClientToken(username))
+    try {
+      return await client.searchCourtCases(prisonerId, sortBy, page, size)
+    } catch (error: unknown) {
+      if (typeof error === 'object' && error !== null && 'status' in error) {
+        const { status } = error as { status: number }
+        if (status === 404) {
+          logger.info('No Court Cases found for prisonerId %s', prisonerId)
+          return undefined
+        }
+      }
+      throw error
+    }
   }
 }

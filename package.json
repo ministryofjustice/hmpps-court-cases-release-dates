@@ -25,6 +25,7 @@
     "setup": "npm ci && hmpps-npm-script-run-allowlist",
     "generate-prisoner-search-api-types": "openapi-typescript https://prisoner-search-dev.prison.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonerSearchApi/index.d.ts",
     "generate-document-management-api-types": "openapi-typescript https://document-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/documentManagementApi/index.d.ts",
+    "generate-manage-offences-types": "openapi-typescript https://manage-offences-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/manageOffencesApi/index.d.ts",
     "generate-adjustments-api-types": "openapi-typescript https://adjustments-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/adjustmentsApi/index.d.ts",
     "generate-calculate-release-dates-api-types": "openapi-typescript https://calculate-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/calculateReleaseDatesApi/index.d.ts",
     "generate-court-cases-release-dates-api-types": "openapi-typescript https://court-cases-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > server/@types/courtCasesReleaseDatesApi/index.d.ts",

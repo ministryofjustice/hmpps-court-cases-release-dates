@@ -1,0 +1,50 @@
+{% from "./card-info/macro.njk" import cardInfo %}
+
+{% set isNomisRecall = recall.source === 'NOMIS' %}
+
+<div class="govuk-summary-card govuk-!-margin-bottom-6">
+    <div class="govuk-summary-card__title-wrapper">
+        <ul class="govuk-summary-card__actions">
+            {% if isNomisRecall %}
+                <li class="govuk-summary-card__action">
+                    <span class="moj-badge moj-badge--grey govuk-!-margin-bottom-1 govuk-!-margin-left-1" data-qa="nomis-badge">NOMIS</span>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="govuk-summary-card__content" id="recall-summary">
+        <div class="govuk-grid-row govuk-!-padding-bottom-2 govuk-!-margin-top-2">
+            <div class="govuk-grid-column-one-half">
+                {{ cardInfo('Recall type', recall.recallType.description) }}
+                {% set arrestDateDisplay %}
+                    {% if recall.inPrisonOnRevocationDate === true %}
+                        In prison at recall
+                    {% elseif recall.returnToCustodyDate %}
+                        {{ recall.returnToCustodyDate | date }}
+                    {% else %}
+                        Not entered
+                    {% endif %}
+                {% endset %}
+                {{ cardInfo('Arrest date', arrestDateDisplay, 'arrest-date') }}
+            </div>
+            <div class="govuk-grid-column-one-half">
+                {% if isNomisRecall %}
+                    {{ cardInfo('Start date', 'Not entered') }}
+                {% else %}
+                    {{ cardInfo('Start date', recall.createdAt | date) }}
+                {% endif %}
+
+                {% if isNomisRecall %}
+                    {{ cardInfo('Revocation date', 'Not entered') }}
+                {% else %}
+                    {{ cardInfo('Revocation date', recall.revocationDate | date) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% macro cardInfo(field, value, dataQa = '') %}
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{ field }}</h3>
+    <p class="govuk-body govuk-!-margin-bottom-2" {% if dataQa %}data-qa="{{ dataQa }}"{% endif %}>{{ value | safe }}</p>
+{% endmacro %}

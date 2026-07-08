@@ -6,6 +6,8 @@ import {
   ImmigrationDetention,
   Recall,
   RecallTypes,
+  SearchCourtCasesPage,
+  SentenceConsecutiveToDetailsResponse,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 
@@ -47,6 +49,7 @@ describe('Remand and sentencing service', () => {
             sentencingAppearanceDate: '2024-12-01',
             sentences: [
               {
+                aggravatingFactors: [],
                 sentenceUuid: 'sentence-uuid-1',
                 offenceCode: 'OFF123',
                 offenceStartDate: '2024-01-01',
@@ -90,6 +93,7 @@ describe('Remand and sentencing service', () => {
             sentencingAppearanceDate: '2024-12-01',
             sentences: [
               {
+                aggravatingFactors: [],
                 sentenceUuid: 'sentence-uuid-1',
                 offenceCode: 'OFF123',
                 offenceStartDate: '2024-01-01',
@@ -162,6 +166,97 @@ describe('Remand and sentencing service', () => {
       )
 
       expect(result).toEqual(IMMIGRATION_DETENTION_NLI_OBJECT)
+    })
+
+    describe('getConsecutiveToDetails', () => {
+      it('Should return consecutive to details for the given sentence UUIDs', async () => {
+        const sentenceUuids = ['sentence-uuid-1', 'sentence-uuid-2']
+        const response: SentenceConsecutiveToDetailsResponse = {
+          sentences: [
+            {
+              courtCaseReference: 'case-123',
+              courtCode: 'CROWN123',
+              appearanceDate: '2024-12-01',
+              offenceCode: 'OFF123',
+              offenceStartDate: '2024-01-01',
+              offenceEndDate: '2024-01-15',
+              sentenceUuid: 'sentence-uuid-1',
+              countNumber: '1',
+            },
+          ],
+        }
+
+        fakeApi
+          .get('/sentence/consecutive-to-details')
+          .query({ sentenceUuids: sentenceUuids.join(',') })
+          .reply(200, response)
+
+        const result = await remandAndSentencingService.getConsecutiveToDetails(sentenceUuids, 'test-username')
+
+        expect(result).toStrictEqual(response)
+      })
+
+      it('Should return empty sentences without calling the API when no sentence UUIDs are provided', async () => {
+        const result = await remandAndSentencingService.getConsecutiveToDetails([], 'test-username')
+
+        expect(result).toStrictEqual({ sentences: [] })
+      })
+    })
+
+    describe('searchCourtCases', () => {
+      it('Should return the court cases page for the given prisoner', async () => {
+        const sortBy = 'DESC'
+        const page = 0
+        const size = 10
+        const response: SearchCourtCasesPage = {
+          content: [],
+          prisonerCourtCaseTotal: 0,
+          totalElements: 0,
+          totalPages: 0,
+          size,
+          number: page,
+          first: true,
+          last: true,
+          empty: true,
+        }
+
+        fakeApi
+          .get('/court-case/paged/search')
+          .query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page, size })
+          .reply(200, response)
+
+        const result = await remandAndSentencingService.searchCourtCases(
+          prisonerId,
+          'test-username',
+          sortBy,
+          page,
+          size,
+        )
+
+        expect(result).toStrictEqual(response)
+      })
+
+      it('Should return undefined when the API responds with a 404', async () => {
+        const sortBy = 'DESC'
+        const page = 0
+
+        fakeApi.get('/court-case/paged/search').query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page }).reply(404)
+
+        const result = await remandAndSentencingService.searchCourtCases(prisonerId, 'test-username', sortBy, page)
+
+        expect(result).toBeUndefined()
+      })
+
+      it('Should rethrow when the API responds with a non-404 error', async () => {
+        const sortBy = 'DESC'
+        const page = 0
+
+        fakeApi.get('/court-case/paged/search').query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page }).reply(400)
+
+        await expect(
+          remandAndSentencingService.searchCourtCases(prisonerId, 'test-username', sortBy, page),
+        ).rejects.toThrow()
+      })
     })
   })
 })

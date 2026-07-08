@@ -5,6 +5,8 @@ import {
   ImmigrationDetention,
   PrisonerRecallsResponse,
   RasPrisonerDocuments,
+  SearchCourtCasesPage,
+  SentenceConsecutiveToDetailsResponse,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 export default class RemandAndSentencingApiClient {
@@ -35,5 +37,31 @@ export default class RemandAndSentencingApiClient {
     return this.restClient.get({
       path: `/person/${person}/documents`,
     }) as Promise<RasPrisonerDocuments>
+  }
+
+  async consecutiveToDetails(sentenceUuids: string[]): Promise<SentenceConsecutiveToDetailsResponse> {
+    return (await this.restClient.get({
+      path: '/sentence/consecutive-to-details',
+      query: {
+        sentenceUuids: sentenceUuids.join(','),
+      },
+    })) as unknown as Promise<SentenceConsecutiveToDetailsResponse>
+  }
+
+  async searchCourtCases(
+    prisonerId: string,
+    sortBy: string,
+    page: number,
+    size?: number,
+  ): Promise<SearchCourtCasesPage> {
+    return this.restClient.get({
+      path: `/court-case/paged/search`,
+      query: {
+        prisonerId,
+        pagedCourtCaseOrderBy: sortBy,
+        page,
+        size,
+      },
+    })
   }
 }

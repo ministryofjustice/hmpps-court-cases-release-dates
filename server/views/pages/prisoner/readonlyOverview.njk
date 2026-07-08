@@ -1,0 +1,66 @@
+{% extends "../../partials/layoutWithoutSubNav.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "hmpps/components/court-cases-release-dates/service-header/macro.njk" import serviceHeader %}
+{% from "hmpps/components/court-cases-release-dates/latest-calculation-card/macro.njk" import latestCalculationCard %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "hmpps/components/court-cases-release-dates/things-to-do/macro.njk" import thingsToDo %}
+{% from "../../components/readonly-overview/court-case-details-card/macro.njk" import courtCaseDetailsCard %}
+{% from "../../components/readonly-overview/recall-card/macro.njk" import recallCard %}
+{% from "../../components/readonly-overview/next-court-hearing-card/macro.njk" import nextCourtHearingCard %}
+
+{% set pageTitle = "Court cases and release dates - overview" %}
+{% set enableSectionBreak = false %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ thingsToDo(feedbackPromptServiceDefinition, 'feedbackPrompt') }}
+            <h1 class="govuk-heading-xl">Court case and release dates</h1>
+            {% if latestCalculationConfig %}
+                <h2 class="govuk-heading-l">Release dates</h2>
+                {{ latestCalculationCard(latestCalculationConfig) }}
+                <p class="govuk-body govuk-!-margin-top-4">
+                    <a data-qa="release-date-definitions-link" href="{{ releaseDateDefinitionsUrl }}" target="_blank" rel="noreferrer noopener">What do these release dates mean?</a>
+                </p>
+                {% set enableSectionBreak = true %}
+            {% endif %}
+
+            {% if courtCaseDetailModels | length %}
+                {% if enableSectionBreak %}
+                    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                {% endif %}
+                <h2 class="govuk-heading-l">Court cases</h2>
+                {{  courtCaseDetailsCard(courtCaseDetailModels, offenceMap, offenceOutcomeMap) }}
+                {% set enableSectionBreak = true %}
+            {% endif %}
+
+            {% if latestRecall %}
+                {% if enableSectionBreak %}
+                    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                {% endif %}
+                <h2 class="govuk-heading-l">Recalls</h2>
+                {{ recallCard(latestRecall) }}
+                {% set enableSectionBreak = true %}
+            {% endif %}
+
+            {% if enableSectionBreak %}
+                <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+            {% endif %}
+            <h2 class="govuk-heading-l">Next court hearing</h2>
+            {{ nextCourtHearingCard(nextCourtEvent) }}
+            {% set enableSectionBreak = true %}
+
+            {% if hasImmigrationDetentionAccess %}
+                {% if enableSectionBreak %}
+                    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+                {% endif %}
+                <h2 class="govuk-heading-l" data-qa="immigration-detention-header">Immigration documents</h2>
+                <br />
+                <p data-qa="immigration-detention-message">{{ immigrationDetentionMessage }}</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

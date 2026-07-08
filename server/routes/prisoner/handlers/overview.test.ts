@@ -20,6 +20,7 @@ import {
   RecallTypes,
 } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import PrisonService from '../../../services/prisonService'
+import ImmigrationDetentionService from '../../../services/ImmigrationDetentionService'
 
 jest.mock('../../../services/prisonService')
 jest.mock('../../../services/prisonerService')
@@ -34,6 +35,7 @@ const adjustmentsService = new AdjustmentsService(null) as jest.Mocked<Adjustmen
 const calculateReleaseDatesService = new CalculateReleaseDatesService() as jest.Mocked<CalculateReleaseDatesService>
 const remandAndSentencingService = new RemandAndSentencingService(null) as jest.Mocked<RemandAndSentencingService>
 const prisonService = new PrisonService(null) as jest.Mocked<PrisonService>
+const immigrationDetentionService = new ImmigrationDetentionService() as jest.Mocked<ImmigrationDetentionService>
 
 let app: Express
 
@@ -44,6 +46,7 @@ const defaultServices = {
   adjustmentsService,
   calculateReleaseDatesService,
   remandAndSentencingService,
+  immigrationDetentionService,
 }
 
 const defaultUser = { ...user, hasAdjustmentsAccess: true, hasRasAccess: true, hasRecallsAccess: true }
@@ -412,6 +415,7 @@ describe('Route Handlers - Overview', () => {
           adjustmentsService,
           calculateReleaseDatesService,
           remandAndSentencingService,
+          immigrationDetentionService,
         },
         userSupplier: () => {
           return { ...user, hasInactiveBookingAccess: true, hasAdjustmentsAccess: true }
