@@ -479,6 +479,7 @@ describe('Route Handlers - Readonly Overview', () => {
         defaultUser.username,
         'STATUS_APPEARANCE_DATE_DESC',
         1,
+        0
       )
     })
 
@@ -496,6 +497,7 @@ describe('Route Handlers - Readonly Overview', () => {
         defaultUser.username,
         'STATUS_APPEARANCE_DATE_DESC',
         0,
+        0
       )
     })
 
