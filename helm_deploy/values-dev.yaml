@@ -33,6 +33,7 @@ generic-service:
     PRISON_REGISTER_API_URL: "https://prison-register-dev.hmpps.service.justice.gov.uk"
     DOCUMENT_MANAGEMENT_API_URL: "https://document-api-dev.hmpps.service.justice.gov.uk"
     COURT_DATA_INGESTION_API_URL: "https://court-data-ingestion-api-dev.hmpps.service.justice.gov.uk"
+    MANAGE_OFFENCES_API_URL: "https://manage-offences-api-dev.hmpps.service.justice.gov.uk"
 
   # Switches off the allow list in the DEV env only.
   allowlist: null
