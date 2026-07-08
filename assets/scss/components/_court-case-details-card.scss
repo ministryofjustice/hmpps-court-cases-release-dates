@@ -1,38 +1,40 @@
-/* base style for chevron (arrow) */
-.filter.govuk-details > .govuk-details__summary::before {
-  content: "";
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 5px;
-  position: relative;
-  vertical-align: middle;
-  border: 2px solid;
-  border-width: 2px 2px 0 0;
-  border-color: initial;
-  clip-path: unset;
-}
+.court-case-details-card__details {
+  /* base style for chevron (arrow) */
+  &.filter.govuk-details > .govuk-details__summary::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    position: relative;
+    vertical-align: middle;
+    border: 2px solid;
+    border-width: 2px 2px 0 0;
+    border-color: initial;
+    clip-path: unset;
+  }
 
-/* Chevron direction when closed */
-.filter.govuk-details > .govuk-details__summary::before {
-  transform: translateY(-25%) rotate(135deg);
-}
+  /* Chevron direction when closed */
+  &.filter.govuk-details > .govuk-details__summary::before {
+    transform: translateY(-25%) rotate(135deg);
+  }
 
-/* Chevron direction when open */
-.filter.govuk-details[open] > .govuk-details__summary::before {
-  transform: translateY(30%) rotate(-45deg);
-}
+  /* Chevron direction when open */
+  &.filter.govuk-details[open] > .govuk-details__summary::before {
+    transform: translateY(30%) rotate(-45deg);
+  }
 
-.filter.govuk-details > .govuk-details__summary {
-  padding-left: 0;
-}
+  &.filter.govuk-details > .govuk-details__summary {
+    padding-left: 0;
+  }
 
-/* Toggle text when closed */
-.show-toggle.govuk-details > .govuk-details__summary > .govuk-details__summary-text::before {
-  content: "Show ";
-}
+  /* Toggle text when closed */
+  &.show-toggle.govuk-details > .govuk-details__summary > .govuk-details__summary-text::before {
+    content: "Show ";
+  }
 
-/* Toggle text when open */
-.show-toggle.govuk-details[open] > .govuk-details__summary > .govuk-details__summary-text::before {
-  content: "Hide ";
+  /* Toggle text when open */
+  &.show-toggle.govuk-details[open] > .govuk-details__summary > .govuk-details__summary-text::before {
+    content: "Hide ";
+  }
 }

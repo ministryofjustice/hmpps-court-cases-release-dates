@@ -63,7 +63,7 @@
                 {{ govukDetails({
                     summaryText: "offences and sentence details (" + (courtCaseDetails.showingChargeTotal + " of " if courtCaseDetails.showingChargeTotal else "") + courtCaseDetails.chargeTotal + ")",
                     html: offenceDetailsHtml,
-                    classes: "filter show-toggle govuk-!-margin-bottom-0",
+                    classes: "court-case-details-card__details filter show-toggle govuk-!-margin-bottom-0",
                     attributes: {
                         "data-qa": "courtCaseDetailsComponent-" + courtCaseDetails.courtCaseUuid
                     }
