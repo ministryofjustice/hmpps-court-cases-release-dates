@@ -81,10 +81,11 @@ export default class RemandAndSentencingService {
     username: string,
     sortBy: string,
     page: number,
+    size?: number,
   ): Promise<SearchCourtCasesPage> {
     const client = new RemandAndSentencingApiClient(await this.getSystemClientToken(username))
     try {
-      return await client.searchCourtCases(prisonerId, sortBy, page)
+      return await client.searchCourtCases(prisonerId, sortBy, page, size)
     } catch (error: unknown) {
       if (typeof error === 'object' && error !== null && 'status' in error) {
         const { status } = error as { status: number }

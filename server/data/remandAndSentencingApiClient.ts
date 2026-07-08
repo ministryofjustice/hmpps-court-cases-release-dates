@@ -48,13 +48,14 @@ export default class RemandAndSentencingApiClient {
     })) as unknown as Promise<SentenceConsecutiveToDetailsResponse>
   }
 
-  async searchCourtCases(prisonerId: string, sortBy: string, page: number): Promise<SearchCourtCasesPage> {
+  async searchCourtCases(prisonerId: string, sortBy: string, page: number, size?: number): Promise<SearchCourtCasesPage> {
     return this.restClient.get({
       path: `/court-case/paged/search`,
       query: {
         prisonerId,
         pagedCourtCaseOrderBy: sortBy,
         page,
+        size,
       },
     })
   }

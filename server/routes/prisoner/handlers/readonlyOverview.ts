@@ -84,6 +84,7 @@ export default class ReadonlyOverviewRoutes {
       username,
       'STATUS_APPEARANCE_DATE_DESC',
       pageNumber,
+      config.courtCasesPageSize,
     )
     const courtIds = courtCases.content
       .flatMap(courtCase => courtCase.latestCourtAppearance.courtCode)

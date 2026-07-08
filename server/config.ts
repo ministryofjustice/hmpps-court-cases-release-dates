@@ -238,4 +238,5 @@ export default {
   environmentName: get('ENVIRONMENT_NAME', ''),
   appInsightsConnectionString: get('APPLICATIONINSIGHTS_CONNECTION_STRING', '', requiredInProduction),
   maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
+  courtCasesPageSize: Number(get('COURT_CASES_PAGE_SIZE', null)),
 }
