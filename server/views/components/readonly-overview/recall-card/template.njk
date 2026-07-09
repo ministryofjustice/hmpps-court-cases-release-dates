@@ -25,14 +25,15 @@
                         Not entered
                     {% endif %}
                 {% endset %}
-                {{ cardInfo('Arrest date', arrestDateDisplay, 'arrest-date') }}
-            </div>
-            <div class="govuk-grid-column-one-half">
+
                 {% if isNomisRecall %}
                     {{ cardInfo('Revocation date', 'Not entered') }}
                 {% else %}
                     {{ cardInfo('Revocation date', recall.revocationDate | date) }}
                 {% endif %}
+            </div>
+            <div class="govuk-grid-column-one-half">
+                {{ cardInfo('Arrest date', arrestDateDisplay, 'arrest-date') }}
             </div>
         </div>
     </div>
