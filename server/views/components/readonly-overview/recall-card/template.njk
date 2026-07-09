@@ -29,12 +29,6 @@
             </div>
             <div class="govuk-grid-column-one-half">
                 {% if isNomisRecall %}
-                    {{ cardInfo('Start date', 'Not entered') }}
-                {% else %}
-                    {{ cardInfo('Start date', recall.createdAt | date) }}
-                {% endif %}
-
-                {% if isNomisRecall %}
                     {{ cardInfo('Revocation date', 'Not entered') }}
                 {% else %}
                     {{ cardInfo('Revocation date', recall.revocationDate | date) }}

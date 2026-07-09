@@ -720,7 +720,6 @@ describe('Route Handlers - Readonly Overview', () => {
       const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
 
       // 'date' filter formats as DD MMMM YYYY
-      expect(res.text).toContain('01 January 2024') // start date (createdAt)
       expect(res.text).toContain('05 January 2024') // revocation date
       expect(res.text).toContain('10 January 2024') // arrest date (returnToCustodyDate)
       expect(res.text).not.toContain('Not entered')
