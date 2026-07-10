@@ -3,6 +3,7 @@ import expectedTypes from './documentTypes'
 import { RasPrisonerDocuments } from './remandAndSentencingTypes'
 
 export type AppearanceDocument = components['schemas']['AppearanceDocument']
+export type RaSCourtCaseDocument = components['schemas']['CourtCaseDocuments']
 
 export class RaSDocumentMapper {
   public static CASE_REFERENCE_NOT_ENTERED: string = 'Not entered'

@@ -121,6 +121,12 @@ describe('Route Handlers - Overview', () => {
         expect(normaliseText(firstDocumentLink.text())).toContain('Prison court register')
         expect(normaliseText(firstDocumentMeta.text())).toContain('PDF 2 KB')
 
+        const commonPlatformDocumentWithRaSLink = firstCommonPlatformDocument.find('[data-qa=court-case-link]')
+        expect(normaliseText(commonPlatformDocumentWithRaSLink.text())).toContain('CommonPlatformCase123')
+        expect(normaliseText(commonPlatformDocumentWithRaSLink.attr('href'))).toContain(
+          'http://localhost:3000/person/A12345B/view-court-case/9916c639-b188-47fe-842f-451d1f598cab/details',
+        )
+
         const secondRasDocument = $('[data-qa=document-c43f547c-35e9-4c9a-b7dc-c166223056cb]')
         const secondRasDocumentText = normaliseText(secondRasDocument.text())
         expect(secondRasDocumentText).toContain('Prison court register')
@@ -555,6 +561,17 @@ const rasDocuments = {
             caseReference: 'AB12345678A',
             courtCode: 'MNCHMC',
             warrantType: 'SENTENCING',
+          },
+        ],
+        PRISON_COURT_REGISTER: [
+          {
+            documentUUID: '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
+            documentType: 'PRISON_COURT_REGISTER',
+            fileName: '[devpcr] Manchester City Magistrates Court, Taylor TINKER; yy-mm-dd; BC23456789B.pdf',
+            warrantDate: '2025-10-05',
+            caseReference: 'BC23456789B',
+            courtCode: 'LVRPCC',
+            warrantType: 'NON_SENTENCING',
           },
         ],
       },
