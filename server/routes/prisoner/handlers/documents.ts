@@ -11,7 +11,11 @@ import { getAsStringOrDefault } from '../../../utils/utils'
 import { Document, DocumentManagementMapper, DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
-import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
+import {
+  AppearanceDocument,
+  RaSCourtCaseDocument,
+  RaSDocumentMapper,
+} from '../../../@types/remandAndSentencingApi/types'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
@@ -60,65 +64,79 @@ export default class DocumentRoutes {
 
     await this.courtRegisterService.getCourtNames(RaSDocumentMapper.collectCourtCodes(rasDocuments), username)
 
-    let rasDocumentPromises: Promise<void>[] = []
-    const viewModelDocuments = documents.results.map(it => {
-      const document = {
-        documentUuid: it.documentUuid,
-        createdTime: it.createdTime,
-        filename: it.filename,
-        fileExtension: it.fileExtension,
-        fileSize: it.fileSize,
-      } as Partial<DocumentViewModel>
-      if (it.metadata.source === 'court-data-ingestion-api') {
-        // From CP
-        const cpDocument = cpDocuments.find(itCpDocument => itCpDocument.prisonDocumentId === it.documentUuid)
-        // cpDocument can be missing if data is out of sync between CDIA and document management api.
-        if (cpDocument) {
-          document.typeDescription = commonPlatformDocumentTypes[cpDocument.documentType]?.name
-          document.hearingType = cpDocument.courtHearing?.hearingType
-          document.courtName = cpDocument.courtHearing?.courtName
-          document.hearingDate = cpDocument.courtHearing?.hearingDate
-          document.caseReference = cpDocument.caseReferences.join(', ')
-        } else {
-          document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
-            type => type.type === it.documentType,
-          ).name
-        }
-        document.type = it.documentType
-        document.isNew = cpDocument ? cpDocument.isUnread : false
-      } else {
-        // From RaS
-        rasDocuments.courtCaseDocuments.forEach(caseDocument =>
-          Object.entries(caseDocument.appearanceDocumentsByType).forEach(appearanceAndType => {
-            rasDocumentPromises = [
-              ...rasDocumentPromises,
-              ...appearanceAndType[1].map(async appearanceDocument => {
+    const viewModelDocuments = await Promise.all(
+      documents.results
+        .map(async it => {
+          const document = {
+            documentUuid: it.documentUuid,
+            createdTime: it.createdTime,
+            filename: it.filename,
+            fileExtension: it.fileExtension,
+            fileSize: it.fileSize,
+          } as Partial<DocumentViewModel>
+
+          let rasDocument: {
+            caseDocument: RaSCourtCaseDocument
+            appearanceDocument: AppearanceDocument
+            documentType: string
+          } = null
+          rasDocuments.courtCaseDocuments.forEach(caseDocument =>
+            Object.entries(caseDocument.appearanceDocumentsByType).forEach(appearanceAndType => {
+              appearanceAndType[1].forEach(appearanceDocument => {
                 if (appearanceDocument.documentUUID === it.documentUuid) {
-                  ;[document.type] = appearanceAndType
-                  document.typeDescription = RaSDocumentMapper.getDocumentTypeDescription(
+                  rasDocument = {
+                    caseDocument,
                     appearanceDocument,
-                    document.type,
-                  )
-                  document.courtCaseUuid = caseDocument.courtCaseUuid
-                  document.caseReference = RaSDocumentMapper.getCaseReference(appearanceDocument)
-                  document.hearingDate = RaSDocumentMapper.getHearingDate(appearanceDocument)
-                  document.warrantDate = RaSDocumentMapper.getWarrantDate(appearanceDocument)
-                  document.courtCode = appearanceDocument.courtCode
-                  document.courtName = await this.courtRegisterService.getCourtName(
-                    appearanceDocument.courtCode,
-                    username,
-                  )
+                    documentType: appearanceAndType[0],
+                  }
                 }
-              }),
-            ]
-          }),
-        )
-      }
+              })
+            }),
+          )
 
-      return document
-    })
+          if (it.metadata.source === 'court-data-ingestion-api') {
+            document.source = it.metadata.source
+            // From CP
+            const cpDocument = cpDocuments.find(itCpDocument => itCpDocument.prisonDocumentId === it.documentUuid)
+            // cpDocument can be missing if data is out of sync between CDIA and document management api.
+            if (cpDocument) {
+              document.typeDescription = commonPlatformDocumentTypes[cpDocument.documentType]?.name
+              document.hearingType = cpDocument.courtHearing?.hearingType
+              document.courtName = cpDocument.courtHearing?.courtName
+              document.hearingDate = cpDocument.courtHearing?.hearingDate
+              document.caseReference = cpDocument.caseReferences.join(', ')
+              document.courtCaseUuid = rasDocument?.caseDocument?.courtCaseUuid
+            } else {
+              document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
+                type => type.type === it.documentType,
+              ).name
+            }
+            document.type = it.documentType
+            document.isNew = cpDocument ? cpDocument.isUnread : false
+          } else if (rasDocument) {
+            document.source = 'remand-and-sentencing-api'
+            // From RaS
+            document.type = rasDocument.documentType
+            document.typeDescription = RaSDocumentMapper.getDocumentTypeDescription(
+              rasDocument.appearanceDocument,
+              document.type,
+            )
+            document.courtCaseUuid = rasDocument.caseDocument.courtCaseUuid
+            document.caseReference = RaSDocumentMapper.getCaseReference(rasDocument.appearanceDocument)
+            document.hearingDate = RaSDocumentMapper.getHearingDate(rasDocument.appearanceDocument)
+            document.warrantDate = RaSDocumentMapper.getWarrantDate(rasDocument.appearanceDocument)
+            document.courtCode = rasDocument.appearanceDocument.courtCode
+            document.courtName = await this.courtRegisterService.getCourtName(
+              rasDocument.appearanceDocument.courtCode,
+              username,
+            )
+          }
 
-    await Promise.all(rasDocumentPromises) // Seems necessary to make all request before rendering, still now waiting for response
+          return document
+          // Filter documents with no links to the RaS or CDIA databases
+        })
+        .filter(it => !!it),
+    )
 
     const pagedDataResponse = getPagedDataResponse(documents)
 
@@ -258,4 +276,5 @@ type DocumentViewModel = {
   warrantDate: string
   isNew: boolean
   hearingType: string
+  source: 'remand-and-sentencing-api' | 'court-data-ingestion-api'
 }
