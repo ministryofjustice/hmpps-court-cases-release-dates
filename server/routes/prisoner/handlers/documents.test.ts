@@ -146,8 +146,9 @@ describe('Route Handlers - Overview', () => {
         expect(secondRasDocumentText).not.toContain('Warrant date')
         expect(secondRasDocumentText).toContain('28 March 2026')
         expect(secondRasDocumentText).not.toContain('New')
-        const secondRasDocumentLink = secondRasDocument.find('a[data-qa=court-case-link]').attr('href')
-        expect(secondRasDocumentLink).toContain(
+        const secondRasDocumentLink = secondRasDocument.find('a[data-qa=court-case-link]')
+        expect(normaliseText(secondRasDocumentLink.text())).toContain('BC23456789B')
+        expect(secondRasDocumentLink.attr('href')).toContain(
           'http://localhost:3000/person/A12345B/view-court-case/c6bbb5bb-1086-473f-8eff-1d25ee305750/details',
         )
 

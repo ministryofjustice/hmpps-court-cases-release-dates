@@ -79,11 +79,10 @@
                             <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Case reference</p>
                             <p class="govuk-body govuk-!-margin-bottom-2" data-qa="case-reference">
                                 
-                            {% if document.source == 'court-data-ingestion-api' and document.courtCaseUuid %}
+                            {% if document.courtCaseUuid %}
                                 <a data-qa="court-case-link"
                                     href="{{ applications.remandAndSentencing.url }}/person/{{ prisoner.prisonerNumber }}/view-court-case/{{ document.courtCaseUuid }}/details">
                                     {{ document.caseReference or "Not entered" }}
-
                                 </a>
                             {% else %}
                                 {{ document.caseReference or "Not entered" }}
@@ -130,12 +129,7 @@
                         <div class="govuk-grid-column-one-third">
                             <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Source</p>
                             {% if document.source == 'remand-and-sentencing-api' %}
-                                <p class="govuk-body govuk-!-margin-bottom-2">
-                                    <a data-qa="court-case-link"
-                                       href="{{ applications.remandAndSentencing.url }}/person/{{ prisoner.prisonerNumber }}/view-court-case/{{ document.courtCaseUuid }}/details">
-                                        Court cases
-                                    </a>
-                                </p>
+                                <p class="govuk-body govuk-!-margin-bottom-2">Court cases</p>
                             {% else %}
                                 <p class="govuk-body govuk-!-margin-bottom-2">Common Platform</p>
                             {% endif %}
