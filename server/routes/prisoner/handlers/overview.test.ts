@@ -32,7 +32,7 @@ jest.mock('../../../services/remandAndSentencingService')
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 const prisonerSearchService = new PrisonerSearchService(null) as jest.Mocked<PrisonerSearchService>
 const adjustmentsService = new AdjustmentsService(null) as jest.Mocked<AdjustmentsService>
-const calculateReleaseDatesService = new CalculateReleaseDatesService() as jest.Mocked<CalculateReleaseDatesService>
+const calculateReleaseDatesService = new CalculateReleaseDatesService(null) as jest.Mocked<CalculateReleaseDatesService>
 const remandAndSentencingService = new RemandAndSentencingService(null) as jest.Mocked<RemandAndSentencingService>
 const prisonService = new PrisonService(null) as jest.Mocked<PrisonService>
 const immigrationDetentionService = new ImmigrationDetentionService() as jest.Mocked<ImmigrationDetentionService>

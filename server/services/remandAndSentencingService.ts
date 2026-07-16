@@ -38,6 +38,10 @@ export default class RemandAndSentencingService {
     return this.hmppsAuthClient.getSystemClientToken(username)
   }
 
+  async getMostRecentRecallAsSystem(nomsId: string, username: string): Promise<Recall> {
+    return this.getMostRecentRecall(nomsId, await this.getSystemClientToken(username))
+  }
+
   async getMostRecentRecall(nomsId: string, token: string): Promise<Recall> {
     const client = new RemandAndSentencingApiClient(token)
     const allApiRecalls = await client.getAllRecalls(nomsId)

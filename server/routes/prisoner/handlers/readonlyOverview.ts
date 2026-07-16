@@ -25,7 +25,7 @@ export default class ReadonlyOverviewRoutes {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { prisoner } = req
-    const { token, username, hasImmigrationDetentionAccess } = res.locals.user
+    const { username, hasImmigrationDetentionAccess } = res.locals.user
     const bookingId = prisoner.bookingId as unknown as number
 
     const latestImmigrationRecordPromise: Promise<ImmigrationDetention | undefined> = hasImmigrationDetentionAccess
@@ -42,15 +42,17 @@ export default class ReadonlyOverviewRoutes {
       latestImmigrationRecord,
       [courtCaseDetailModels, offenceMap, offenceOutcomeMap],
     ] = await Promise.all([
-      this.prisonerService.hasActiveSentences(bookingId, token),
-      this.prisonerService.getNextCourtEvent(bookingId, token),
-      this.remandAndSentencingService.getMostRecentRecall(prisoner.prisonerNumber, token),
+      this.prisonerService.hasActiveSentencesAsSystem(bookingId, username),
+      this.prisonerService.getNextCourtEventAsSystem(bookingId, username),
+      this.remandAndSentencingService.getMostRecentRecallAsSystem(prisoner.prisonerNumber, username),
       latestImmigrationRecordPromise,
       this.getCourtCases(req, prisoner, username),
     ])
-
     const latestCalculationConfig = hasActiveSentences
-      ? await this.calculateReleaseDatesService.getLatestCalculationForPrisoner(prisoner.prisonerNumber, token)
+      ? await this.calculateReleaseDatesService.getLatestCalculationForPrisonerAsSystem(
+          prisoner.prisonerNumber,
+          username,
+        )
       : null
 
     const feedbackPrompt: ThingToDo = {

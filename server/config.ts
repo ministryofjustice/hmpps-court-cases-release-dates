@@ -72,6 +72,7 @@ export default {
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
+      authPathExclusionsEnabled: get('AUTH_PATH_EXCLUSIONS_ENABLED', 'false') === 'true',
     },
     manageUsersApi: {
       url: get('MANAGE_USERS_API_URL', 'http://localhost:9091', requiredInProduction),

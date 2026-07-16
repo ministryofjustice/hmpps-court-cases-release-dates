@@ -53,6 +53,36 @@ describe('authorisationMiddleware', () => {
     expect(res.redirect).toHaveBeenCalledWith('/authError')
   })
 
+  it('should return next when user has no authorised roles but accesses excluded path', () => {
+    const res = createResWithToken({ authorities: [] })
+
+    const reqWithPath = { path: '/prisoner/ABC123/readonly-overview' } as Request
+    authorisationMiddleware(['NON_RELEVANT_ROLE'], ['^/prisoner/[^/]+/readonly-overview$'])(reqWithPath, res, next)
+
+    expect(next).toHaveBeenCalled()
+    expect(res.redirect).not.toHaveBeenCalled()
+  })
+
+  it('should redirect when user has no authorised roles and accesses a non excluded path', () => {
+    const res = createResWithToken({ authorities: [] })
+
+    const reqWithPath = { path: '/prisoner/ABC123/overview' } as Request
+    authorisationMiddleware(['NON_RELEVANT_ROLE'], ['^/prisoner/[^/]+/readonly-overview$'])(reqWithPath, res, next)
+
+    expect(next).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+  })
+
+  it('should redirect when user has no authorised roles and accesses a path with no exclusions specified', () => {
+    const res = createResWithToken({ authorities: [] })
+
+    const reqWithPath = { path: '/' } as Request
+    authorisationMiddleware(['NON_RELEVANT_ROLE'], [])(reqWithPath, res, next)
+
+    expect(next).not.toHaveBeenCalled()
+    expect(res.redirect).toHaveBeenCalledWith('/authError')
+  })
+
   it('should return next when user has authorised role', () => {
     const res = createResWithToken({ authorities: ['ROLE_SOME_REQUIRED_ROLE'] })
 

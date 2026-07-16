@@ -6,8 +6,18 @@ import {
 import { LatestCalculation } from '../@types/calculateReleaseDatesApi/types'
 import CalculateReleaseDatesApiClient from '../data/calculateReleaseDatesApiClient'
 import logger from '../../logger'
+import { HmppsAuthClient } from '../data'
 
 export default class CalculateReleaseDatesService {
+  constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+
+  async getLatestCalculationForPrisonerAsSystem(
+    prisonerNumber: string,
+    username: string,
+  ): Promise<LatestCalculationCardConfig> {
+    return this.getLatestCalculationForPrisoner(prisonerNumber, await this.getSystemClientToken(username))
+  }
+
   async getLatestCalculationForPrisoner(prisonerNumber: string, token: string): Promise<LatestCalculationCardConfig> {
     try {
       const latestCalculation = await new CalculateReleaseDatesApiClient(token).getLatestCalculationForPrisoner(
@@ -22,6 +32,10 @@ export default class CalculateReleaseDatesService {
 
   async hasIndeterminateSentences(bookingId: number, token: string): Promise<boolean> {
     return new CalculateReleaseDatesApiClient(token).hasIndeterminateSentences(bookingId)
+  }
+
+  private async getSystemClientToken(username: string): Promise<string> {
+    return this.hmppsAuthClient.getSystemClientToken(username)
   }
 
   private latestCalculationComponentConfig(latestCalculation: LatestCalculation): LatestCalculationCardConfig {

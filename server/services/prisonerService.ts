@@ -18,6 +18,10 @@ export default class PrisonerService {
     return new PrisonApiClient(await this.getSystemClientToken(username)).getPrisonerImage(prisonerNumber)
   }
 
+  async getNextCourtEventAsSystem(bookingId: number, username: string): Promise<CourtEventDetails> {
+    return this.getNextCourtEvent(bookingId, await this.getSystemClientToken(username))
+  }
+
   async getNextCourtEvent(bookingId: number, token: string): Promise<CourtEventDetails> {
     return new PrisonApiClient(token).getNextCourtEvent(bookingId)
   }
@@ -46,6 +50,10 @@ export default class PrisonerService {
       )
     }
     return null
+  }
+
+  async hasActiveSentencesAsSystem(bookingId: number, username: string): Promise<boolean> {
+    return this.hasActiveSentences(bookingId, await this.getSystemClientToken(username))
   }
 
   async hasActiveSentences(bookingId: number, token: string): Promise<boolean> {
