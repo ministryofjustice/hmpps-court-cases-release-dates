@@ -3,6 +3,7 @@ import nock from 'nock'
 import { LatestCalculation } from '../@types/calculateReleaseDatesApi/types'
 import CalculateReleaseDatesService from './calculateReleaseDatesService'
 import config from '../config'
+import { HmppsAuthClient } from '../data'
 
 const prisonerId = 'A1234AB'
 
@@ -12,7 +13,8 @@ describe('Calculate release dates service', () => {
   beforeEach(() => {
     config.apis.calculateReleaseDatesApi.url = 'http://localhost:8100'
     fakeApi = nock(config.apis.calculateReleaseDatesApi.url)
-    calculateReleaseDatesService = new CalculateReleaseDatesService()
+    const hmppsAuthClient = {} as jest.Mocked<HmppsAuthClient>
+    calculateReleaseDatesService = new CalculateReleaseDatesService(hmppsAuthClient)
   })
   afterEach(() => {
     nock.cleanAll()

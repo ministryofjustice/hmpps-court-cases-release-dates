@@ -28,7 +28,7 @@ export const services = () => {
 
   const adjustmentsService = new AdjustmentsService(hmppsAuthClient)
 
-  const calculateReleaseDatesService = new CalculateReleaseDatesService()
+  const calculateReleaseDatesService = new CalculateReleaseDatesService(hmppsAuthClient)
 
   const remandAndSentencingService = new RemandAndSentencingService(hmppsAuthClient)
 
