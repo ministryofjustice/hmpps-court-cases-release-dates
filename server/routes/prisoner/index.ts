@@ -24,6 +24,7 @@ export default function Index({
 }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
 
   router.get('/:prisonerNumber/image', new ImageRoutes(prisonerService).GET)
 
@@ -72,6 +73,17 @@ export default function Index({
       courtDataIngestionService,
       courtRegisterService,
     ).downloadDocument,
+  )
+
+  post(
+    '/:prisonerNumber/documents/:documentId/mark-as-new',
+    new DocumentRoutes(
+      prisonerService,
+      documentManagementService,
+      remandAndSentencingService,
+      courtDataIngestionService,
+      courtRegisterService,
+    ).markAsNew,
   )
 
   router.get('/config', new ConfigRoutes(prisonerService).getConfig)

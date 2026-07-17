@@ -2,3 +2,45 @@
   min-height: 600px;
   padding-top: 0;
 }
+
+.ccrd-button--link {
+  &,
+  &:link,
+  &:visited,
+  &:hover,
+  &:active,
+  &:focus {
+    @include govuk-font($size: 19);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    width: auto;
+    cursor: pointer;
+  }
+
+  &,
+  &:link,
+  &:visited {
+    color: $govuk-link-colour;
+    text-decoration: underline;
+  }
+
+  &:hover {
+    color: $govuk-link-hover-colour;
+    text-decoration-thickness: max(3px, .1875rem, .12em);
+  }
+
+  &:focus {
+    @include govuk-focused-text;
+  }
+
+  &::before {
+    display: none;
+  }
+
+  &:active {
+    top: auto;
+  }
+}

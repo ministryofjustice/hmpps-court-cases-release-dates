@@ -16,6 +16,13 @@ export default class CourtDataIngestionService {
     )
   }
 
+  public async markAsNew(documentId: string, courtDocumentView: CourtDocumentView, username: string): Promise<void> {
+    return new CourtDataIngestionApiClient(await this.getSystemClientToken(username)).markAsNew(
+      documentId,
+      courtDocumentView,
+    )
+  }
+
   public async getDocuments(
     prisonerId: string,
     documentIdsFromCp: string[],

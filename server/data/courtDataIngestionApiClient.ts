@@ -16,6 +16,13 @@ export default class CourtDataIngestionApiClient {
     }) as Promise<void>
   }
 
+  async markAsNew(documentId: string, courtDocumentView: CourtDocumentView): Promise<void> {
+    return this.restClient.post({
+      path: `/court-document/${documentId}/mark-as-new`,
+      data: courtDocumentView,
+    }) as Promise<void>
+  }
+
   async getDocuments(prisonerId: string, documentIdsFromCp: string[]): Promise<CourtDocument[]> {
     return this.restClient.get({
       path: `/court-document/person/${prisonerId}?prisonDocumentIds=${documentIdsFromCp.join(',')}`,
