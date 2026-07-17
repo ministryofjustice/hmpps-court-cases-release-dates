@@ -64,12 +64,6 @@ while read -r name url out; do
     | sed "s/;//g" \
     > "$out"
 
-  # server/@types is listed in .prettierignore (kept that way deliberately, to
-  # stop routine linting/formatting churning on huge generated files like
-  # prisonApi). eslint --fix therefore silently skips these files and reports
-  # success without reformatting. Bypass the ignore file just for this write
-  # so the output still matches the project's .prettierrc (2-space, no semi,
-  # single quote) rather than openapi-typescript's raw 4-space default.
   if ! npx prettier --write --ignore-path /dev/null "$out"; then
     echo "    ! prettier --write failed on $out, formatting may be wrong" >&2
     failed="$failed $name"
