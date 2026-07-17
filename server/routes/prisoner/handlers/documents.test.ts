@@ -321,6 +321,66 @@ describe('Route Handlers - Download Document', () => {
   })
 })
 
+describe('Route Handlers - Mark Document As New', () => {
+  it('Valid CP document - should record mark-as-new and redirect to the documents list', () => {
+    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+      prisonerNumber: 'A12345B',
+      imprisonmentStatusDescription: 'Life imprisonment',
+      prisonId: 'MDI',
+    } as Prisoner)
+    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+    courtDataIngestionService.markAsNew.mockResolvedValue()
+
+    return request(app)
+      .post('/prisoner/A12345B/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/mark-as-new')
+      .send({ sortBy: 'MOST_RECENT', pageNumber: '1' })
+      .expect(res => {
+        expect(res.status).toBe(constants.HTTP_STATUS_FOUND)
+        expect(res.headers.location).toBe('/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1')
+        expect(courtDataIngestionService.markAsNew).toHaveBeenCalledWith(
+          '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
+          { username: 'user1' },
+          'user1',
+        )
+      })
+  })
+
+  it('Document missing in CDIA (404) - should swallow and redirect', () => {
+    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+      prisonerNumber: 'A12345B',
+      imprisonmentStatusDescription: 'Life imprisonment',
+      prisonId: 'MDI',
+    } as Prisoner)
+    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+    courtDataIngestionService.markAsNew.mockRejectedValue({ status: constants.HTTP_STATUS_NOT_FOUND })
+
+    return request(app)
+      .post('/prisoner/A12345B/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/mark-as-new')
+      .send({ sortBy: 'MOST_RECENT', pageNumber: '1' })
+      .expect(res => {
+        expect(res.status).toBe(constants.HTTP_STATUS_FOUND)
+        expect(res.headers.location).toBe('/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1')
+      })
+  })
+
+  it('Document not matching prisonerId - should return 403 and not call CDIA', () => {
+    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+      prisonerNumber: 'A12345C',
+      imprisonmentStatusDescription: 'Life imprisonment',
+      prisonId: 'MDI',
+    } as Prisoner)
+    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+
+    return request(app)
+      .post('/prisoner/A12345C/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/mark-as-new')
+      .send({})
+      .expect(res => {
+        expect(res.status).toBe(constants.HTTP_STATUS_FORBIDDEN)
+        expect(courtDataIngestionService.markAsNew).not.toHaveBeenCalled()
+      })
+  })
+})
+
 const serviceDefinitionsNoThingsToDo = {
   services: {
     overview: {

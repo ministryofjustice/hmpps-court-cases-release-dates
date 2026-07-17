@@ -207,6 +207,31 @@ export default class DocumentRoutes {
     }
   }
 
+  markAsNew = async (req: Request, res: Response): Promise<void> => {
+    const { prisonerNumber, documentId } = req.params
+    const { username } = req.user
+
+    const sortByQuery = getAsStringOrDefault(req.body.sortBy, 'MOST_RECENT')
+    const pageNumber = getAsStringOrDefault(req.body.pageNumber, '1')
+    const redirectUrl = `/prisoner/${prisonerNumber}/documents?sortBy=${sortByQuery}&pageNumber=${pageNumber}`
+
+    try {
+      await this.validateDocumentForDownload(documentId, prisonerNumber, username)
+      await this.courtDataIngestionService.markAsNew(documentId, { username }, username)
+      await this.sendAuditEvent(req, 'MARK_DOCUMENT_AS_NEW')
+    } catch (err) {
+      if (err.cause === constants.HTTP_STATUS_FORBIDDEN) {
+        res.status(constants.HTTP_STATUS_FORBIDDEN).end()
+        return
+      }
+      logger.error(`Error marking document ${documentId} as new: ${err.message}`)
+      res.redirect(redirectUrl)
+      return
+    }
+
+    res.redirect(redirectUrl)
+  }
+
   validateDocumentForDownload = async (documentId: string, prisonerNumber: string, username: string): Promise<void> => {
     const document: Document = await this.documentManagementService.getDocument(documentId, username)
     const documentPrisonerId: string = DocumentManagementMapper.getPrisonerId(document)
@@ -218,13 +243,13 @@ export default class DocumentRoutes {
     }
   }
 
-  sendAuditEvent = async (req: Request) => {
+  sendAuditEvent = async (req: Request, action = 'DOWNLOAD_DOCUMENT') => {
     try {
       const { prisonerNumber, documentId } = req.params
       const { username } = req.user
 
       const auditMessage = {
-        action: 'DOWNLOAD_DOCUMENT',
+        action,
         who: username,
         subjectId: prisonerNumber,
         subjectType: 'PRISONER_ID',

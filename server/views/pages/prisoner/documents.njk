@@ -1,6 +1,7 @@
 {% extends "../../partials/prisonerLayout.njk" %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = "Court cases and release dates - documents" %}
 {% set activeSubNav = 'documents' %}
@@ -70,6 +71,19 @@
                         <div class="document__tag">
                             {% if document.isNew %}
                                 {{ govukTag({ text: "New" }) }}
+                            {% elif document.source == 'court-data-ingestion-api' %}
+                                <form method="post"
+                                      class="govuk-!-margin-bottom-0"
+                                      action="/prisoner/{{ prisoner.prisonerNumber }}/documents/{{ document.documentUuid }}/mark-as-new">
+                                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                                    <input type="hidden" name="sortBy" value="{{ sortByQuery }}">
+                                    <input type="hidden" name="pageNumber" value="{{ pageNumber + 1 }}">
+                                    {{ govukButton({
+                                        html: 'Mark as new<span class="govuk-visually-hidden"> ' + document.typeDescription + '</span>',
+                                        classes: "ccrd-button--link",
+                                        attributes: { "data-qa": "mark-as-new-" + document.documentUuid }
+                                    }) }}
+                                </form>
                             {% endif %}
                         </div>
                     </div>

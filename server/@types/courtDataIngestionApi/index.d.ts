@@ -72,6 +72,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/court-document/{prisonDocumentId}/mark-as-new': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Reset a court document to appear as new
+     * @description Records that a given user has reset a court document so it is surfaced as new again.
+     */
+    post: operations['markAsNew']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/things-to-do/prisoner/{prisonerId}': {
     parameters: {
       query?: never
@@ -100,6 +120,46 @@ export interface paths {
       cookie?: never
     }
     get: operations['getDlqMessages']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/court-hearings/{courtHearingId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get court hearing info
+     * @description Gets court hearing data ingested from CP.
+     */
+    get: operations['getCourtHearings']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/court-hearings/prisoner/{prisonerNumber}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all court hearing info for a prisoner
+     * @description Gets all court hearing data ingested from CP for a prisoner.
+     */
+    get: operations['getCourtHearingsByPrisoner']
     put?: never
     post?: never
     delete?: never
@@ -160,6 +220,26 @@ export interface components {
       messagesReturnedCount: number
       messages: components['schemas']['DlqMessage'][]
     }
+    CourtHearing: {
+      /** Format: uuid */
+      hearingId: string
+      courtName: string
+      /** Format: uuid */
+      courtId: string
+      /** Format: date-time */
+      hearingDate: string
+      caseReferences: string[]
+      hearingType: string
+      documents: components['schemas']['CourtHearingDocument'][]
+    }
+    CourtHearingDocument: {
+      /** @enum {string} */
+      documentType: 'PRISON_COURT_REGISTER' | 'SENTENCING_WARRANT' | 'REMAND_WARRANT' | 'COMMON_PLATFORM_DOCUMENT'
+      /** Format: uuid */
+      documentId: string
+      /** Format: date-time */
+      ingestionAt: string
+    }
     CourtDocument: {
       /** Format: uuid */
       prisonDocumentId: string
@@ -167,9 +247,9 @@ export interface components {
       isUnread: boolean
       /** @enum {string} */
       documentType: 'PRISON_COURT_REGISTER' | 'SENTENCING_WARRANT' | 'REMAND_WARRANT' | 'COMMON_PLATFORM_DOCUMENT'
-      courtHearing?: components['schemas']['CourtHearing'] | null
+      courtHearing?: components['schemas']['CourtDocumentHearing'] | null
     }
-    CourtHearing: {
+    CourtDocumentHearing: {
       courtName: string
       hearingType: string
       /** Format: date-time */
@@ -292,6 +372,50 @@ export interface operations {
       }
     }
   }
+  markAsNew: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonDocumentId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CourtDocumentView']
+      }
+    }
+    responses: {
+      /** @description Successfully reset the court document to new. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+    }
+  }
   getThingsToDo: {
     parameters: {
       query?: never
@@ -356,6 +480,86 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+    }
+  }
+  getCourtHearings: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        courtHearingId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully gets court hearing. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing']
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing']
+        }
+      }
+    }
+  }
+  getCourtHearingsByPrisoner: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonerNumber: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully gets court hearing. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing'][]
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing'][]
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing'][]
         }
       }
     }
