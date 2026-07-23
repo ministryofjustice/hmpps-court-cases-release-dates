@@ -13,7 +13,6 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
-    AUTH_PATH_EXCLUSIONS_ENABLED: true
     COMMON_COMPONENTS_ENABLED: true
     IMMIGRATION_DETENTION_ENABLED: true
     IMMIGRATION_DETENTION_URL: "https://immigration-detention-dev.hmpps.service.justice.gov.uk"
