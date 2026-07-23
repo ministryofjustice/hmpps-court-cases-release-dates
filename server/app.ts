@@ -30,10 +30,6 @@ export default function createApp(services: Services): express.Application {
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
-  function getAuthPathExclusions() {
-    return ['^/prisoner/[^/]+/readonly-overview$']
-  }
-
   app.use(metricsMiddleware)
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
@@ -43,10 +39,7 @@ export default function createApp(services: Services): express.Application {
   nunjucksSetup(app, services.applicationInfo)
   app.use(setUpAuthentication())
   app.use(
-    authorisationMiddleware(
-      ['ROLE_RELEASE_DATES_CALCULATOR'],
-      config.apis.hmppsAuth.authPathExclusionsEnabled ? getAuthPathExclusions() : [],
-    ),
+    authorisationMiddleware(['ROLE_RELEASE_DATES_CALCULATOR'], ['^/prisoner/[^/]+/readonly-overview$']),
   )
   app.use(setUpCsrf())
   app.use(setUpCurrentUser(services))
