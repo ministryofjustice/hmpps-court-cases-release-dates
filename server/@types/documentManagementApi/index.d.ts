@@ -4,937 +4,1046 @@
  */
 
 export interface paths {
-  '/documents/{documentUuid}/metadata': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Replace the metadata associated with a document
-     * @description Accepts JSON based metadata to associate with the document identified by the supplied unique identifier. Applies authorisation and validation rules based on the type of document. If valid, the previous metadata will be stored and the metadata associated with the document will be replaced with the supplied metadata.
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_DOCUMENT_WRITER
-     *     * ROLE_DOCUMENT_ADMIN
-     */
-    put: operations['replaceDocumentMetadata']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/documents/{documentUuid}/file-content-hash': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * Set the extracted-content hash of a document after upload
-     * @description Sets the SHA-256 of the document's extracted content for the document identified by the supplied unique identifier. Intended for the owning service to populate or correct the value after upload, for example during a backfill or after an extraction library change. Only supported for document types configured for content hashing.
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_DOCUMENT_WRITER
-     *     * ROLE_DOCUMENT_ADMIN
-     */
-    put: operations['setDocumentFileContentHash']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/documents/{documentType}/{documentUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Upload a document file and associated metadata and store against a unique identifier
-     * @description Accepts a document file binary and associated metadata. Uses the supplied document type to apply any validation rules and extra security then stores the file, creates and populates a document object with file properties and supplied metadata and saves that document object. The document is associated with the client supplied unique identifier. This identifier is used as an idempotency key and therefore cannot be reused once the upload operation is successful.
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_DOCUMENT_WRITER
-     *     * ROLE_DOCUMENT_ADMIN
-     */
-    post: operations['uploadDocument']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/documents/search': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Search for documents with matching document type and/or metadata criteria
-     * @description Uses the supplied document type and metadata criteria to filter and return documents. Documents will match if they are of the supplied type and/or their metadata contains all the supplied properties and their values e.g. prisonCode = 'KMI' AND prisonNumber = 'A1234BC'. Value matching is partial and case insensitive so court = 'ham magis' will match 'Birmingham Magistrates'. Document type or metadata criteria must be supplied. Note that documents with types that require additional roles will be filtered out of the search results if the client does not have the required roles.
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_DOCUMENT_READER
-     *     * ROLE_DOCUMENT_ADMIN
-     */
-    post: operations['searchDocuments']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/documents/scan': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Performs a virus check on the uploaded file.
-     * @description This endpoint performs a virus scan on the uploaded file and returns the scan results. This can be run on any document type and the file will not be persisted.
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_DOCUMENT_WRITER
-     *     * ROLE_DOCUMENT_ADMIN
-     */
-    post: operations['scanDocument']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/documents/{documentUuid}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get a document by its unique identifier
-     * @description Returns document properties and metadata associated with the document. The document file must be downloaded separately using the GET /documents/{documentUuid}/file endpoint.
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_DOCUMENT_READER
-     *     * ROLE_DOCUMENT_ADMIN
-     */
-    get: operations['getDocument']
-    put?: never
-    post?: never
-    /**
-     * Delete a document by its unique identifier
-     * @description Requires one of the following roles:
-     *     * ROLE_DOCUMENT_WRITER
-     *     * ROLE_DOCUMENT_ADMIN
-     */
-    delete: operations['deleteDocument']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/documents/{documentUuid}/file': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Download a document file by its unique identifier
-     * @description Returns document file binary with Content-Type and Content-Disposition headers.
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_DOCUMENT_READER
-     *     * ROLE_DOCUMENT_ADMIN
-     */
-    get: operations['downloadDocumentFile']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    "/documents/{documentUuid}/metadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Replace the metadata associated with a document
+         * @description Accepts JSON based metadata to associate with the document identified by the supplied unique identifier. Applies authorisation and validation rules based on the type of document. If valid, the previous metadata will be stored and the metadata associated with the document will be replaced with the supplied metadata.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_WRITER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        put: operations["replaceDocumentMetadata"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Merge the metadata associated with a document
+         * @description Accepts JSON based metadata to associate with the document identified by the supplied unique identifier. Applies authorisation and validation rules based on the type of document. If valid, the previous metadata will be stored and the metadata associated with the document will be updated and overwritten by any fields in the supplied metadata.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_WRITER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        patch: operations["mergeDocumentMetadata"];
+        trace?: never;
+    };
+    "/documents/{documentUuid}/file-content-hash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set the extracted-content hash of a document after upload
+         * @description Sets the SHA-256 of the document's extracted content for the document identified by the supplied unique identifier. Intended for the owning service to populate or correct the value after upload, for example during a backfill or after an extraction library change. Only supported for document types configured for content hashing.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_WRITER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        put: operations["setDocumentFileContentHash"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Search for documents contained in the given document UUID list
+         * @description Uses the supplied document UUID list to filter and return documents.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_READER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        post: operations["findByDocumentUuids"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/documents/{documentType}/{documentUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Upload a document file and associated metadata and store against a unique identifier
+         * @description Accepts a document file binary and associated metadata. Uses the supplied document type to apply any validation rules and extra security then stores the file, creates and populates a document object with file properties and supplied metadata and saves that document object. The document is associated with the client supplied unique identifier. This identifier is used as an idempotency key and therefore cannot be reused once the upload operation is successful.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_WRITER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        post: operations["uploadDocument"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/documents/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Search for documents with matching document type and/or metadata criteria
+         * @description Uses the supplied document type and metadata criteria to filter and return documents. Documents will match if they are of the supplied type and/or their metadata contains all the supplied properties and their values e.g. prisonCode = "KMI" AND prisonNumber = "A1234BC". Value matching is partial and case insensitive so court = "ham magis" will match "Birmingham Magistrates". Document type or metadata criteria must be supplied. Note that documents with types that require additional roles will be filtered out of the search results if the client does not have the required roles.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_READER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        post: operations["searchDocuments"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/documents/scan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Performs a virus check on the uploaded file.
+         * @description This endpoint performs a virus scan on the uploaded file and returns the scan results. This can be run on any document type and the file will not be persisted.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_WRITER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        post: operations["scanDocument"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/documents/{documentUuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get a document by its unique identifier
+         * @description Returns document properties and metadata associated with the document. The document file must be downloaded separately using the GET /documents/{documentUuid}/file endpoint.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_READER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        get: operations["getDocument"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete a document by its unique identifier
+         * @description Requires one of the following roles:
+         *     * ROLE_DOCUMENT_WRITER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        delete: operations["deleteDocument"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/documents/{documentUuid}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download a document file by its unique identifier
+         * @description Returns document file binary with Content-Type and Content-Disposition headers.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_READER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        get: operations["downloadDocumentFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    /** @description Document properties and metadata associated with the document. The document file must be downloaded separately using the GET /documents/{documentUuid}/file endpoint. */
-    Document: {
-      /**
-       * Format: uuid
-       * @description The unique identifier assigned to the document
-       * @example 8cdadcf3-b003-4116-9956-c99bd8df6a00
-       */
-      documentUuid: string
-      /**
-       * @description The type or category of the document within HMPPS
-       * @example HMCTS_WARRANT
-       * @enum {string}
-       */
-      documentType:
-        | 'HMCTS_WARRANT'
-        | 'SUBJECT_ACCESS_REQUEST_REPORT'
-        | 'EXCLUSION_ZONE_MAP'
-        | 'PIC_CASE_DOCUMENTS'
-        | 'PPUD_RECALL'
-        | 'PRISONER_PROFILE_PICTURE'
-        | 'CEMO_ATTACHMENT'
-        | 'TRIAL_RECORD_SHEET'
-        | 'INDICTMENT'
-        | 'PRISON_COURT_REGISTER'
-        | 'BAIL_ORDER'
-        | 'SUSPENDED_IMPRISONMENT_ORDER'
-        | 'NOTICE_OF_DISCONTINUANCE'
-        | 'COMMUNITY_ORDER'
-        | 'PRISONER_APPLICATION'
-        | 'DOCUMENT_GENERATION_TEMPLATES'
-        | 'APPEAL_ORDER'
-      /**
-       * @description The generated filename the document file will be given when downloaded. The format of this filename can be document type specific and may include type information. the filename of the document file when it was uploaded as well as relevant metadata e.g. case reference or prison number
-       * @example warrant_for_remand
-       */
-      documentFilename: string
-      /**
-       * @description The filename of the document file when it was uploaded with the file extension removed
-       * @example warrant_for_remand
-       */
-      filename: string
-      /**
-       * @description The file extension of the document file
-       * @example pdf
-       */
-      fileExtension: string
-      /**
-       * Format: int64
-       * @description The file size in bytes of the document file
-       * @example 48243
-       */
-      fileSize: number
-      /**
-       * @description The SHA-256 hash of the document file as stored, as lowercase hex
-       * @example e930ef8c3af7860ff15b34a174078f1152f1554e65f6ed0883b35f08af6b0a64
-       */
-      fileHash: string
-      /**
-       * @description Optional SHA-256 hash of the document's extracted content, as lowercase hex. Supplied by a consuming service, since the store does not derive content itself. Null when not provided.
-       * @example 9b5338484b3ed7b9a89666b6fa71a30d8186b67a4c0933c5f11b2d1f67998ba5
-       */
-      fileContentHash?: string | null
-      /**
-       * @description The application/pdf of the document file
-       * @example pdf
-       */
-      mimeType: string
-      /**
-       * @description JSON structured metadata associated with the document. May contain prison codes, prison numbers, dates, tags etc. and the properties available will be defined by the document's type.
-       * @example {
-       *       'prisonCode': 'KMI',
-       *       'prisonNumber': 'C3456DE',
-       *       'court': 'Birmingham Magistrates',
-       *       'warrantDate': '2023-11-14'
-       *     }
-       */
-      metadata: {
-        [key: string]: unknown
-      }
-      /**
-       * Format: date-time
-       * @description The date and time this document was uploaded and created in the service
-       */
-      createdTime: string
-      /**
-       * @description The name of the service that was used to upload the document file
-       * @example Remand and Sentencing
-       */
-      createdByServiceName: string
-      /**
-       * @description The username of the user that uploaded the document file
-       * @example AAA01U
-       */
-      createdByUsername?: string | null
-      /**
-       * Format: uuid
-       * @description When the document is a duplicate of another, the unique identifier of the canonical document it points at. Null means this document is itself canonical.
-       * @example 8cdadcf3-b003-4116-9956-c99bd8df6a00
-       */
-      duplicateOf?: string | null
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status: number
-      /** Format: int32 */
-      errorCode?: number | null
-      userMessage?: string | null
-      developerMessage?: string | null
-      moreInfo?: string | null
-    }
-    /** @description The extracted-content hash to associate with the document */
-    SetDocumentFileContentHashRequest: {
-      /**
-       * @description SHA-256 of the document's extracted content, as 64 character hex
-       * @example 58ed0c987864be01771eb171a24f369a664e0c5440c97b0c8f917ed5e5d63dae
-       */
-      fileContentHash: string
-    }
-    /** @description Describes the search parameters to use to filter documents. Document type or metadata criteria must be supplied. */
-    DocumentSearchRequest: {
-      /**
-       * @description The types or categories of the document within HMPPS
-       * @example [HMCTS_WARRANT]
-       */
-      documentTypes?:
-        | (
-            | 'HMCTS_WARRANT'
-            | 'SUBJECT_ACCESS_REQUEST_REPORT'
-            | 'EXCLUSION_ZONE_MAP'
-            | 'PIC_CASE_DOCUMENTS'
-            | 'PPUD_RECALL'
-            | 'PRISONER_PROFILE_PICTURE'
-            | 'CEMO_ATTACHMENT'
-            | 'TRIAL_RECORD_SHEET'
-            | 'INDICTMENT'
-            | 'PRISON_COURT_REGISTER'
-            | 'BAIL_ORDER'
-            | 'SUSPENDED_IMPRISONMENT_ORDER'
-            | 'NOTICE_OF_DISCONTINUANCE'
-            | 'COMMUNITY_ORDER'
-            | 'PRISONER_APPLICATION'
-            | 'DOCUMENT_GENERATION_TEMPLATES'
-            | 'APPEAL_ORDER'
-          )[]
-        | null
-      /**
-       * @description JSON structured metadata to match with document metadata. Documents will match if their metadata contains all the supplied properties and their values e.g. prisonCode = 'KMI' AND prisonNumber = 'A1234BC'. Value matching is partial and case insensitive so court = 'ham magis' will match 'Birmingham Magistrates'. Property values must be strings and cannot be null or empty.
-       * @example {
-       *       'prisonCode': 'KMI',
-       *       'prisonNumber': 'C3456DE'
-       *     }
-       */
-      metadata?: {
-        [key: string]: unknown
-      } | null
-      /**
-       * Format: int32
-       * @description The requested page of search results. Starts from 0
-       * @default 0
-       * @example 5
-       */
-      page: number
-      /**
-       * Format: int32
-       * @description The number of results to return per page
-       * @default 10
-       * @example 25
-       */
-      pageSize: number
-      /**
-       * @description The property to order the search results by
-       * @default CREATED_TIME
-       * @example FILESIZE
-       * @enum {string}
-       */
-      orderBy: 'FILENAME' | 'FILE_EXTENSION' | 'FILESIZE' | 'CREATED_TIME'
-      /**
-       * @description The sort direction to use when ordering search results
-       * @default DESC
-       * @example ASC
-       * @enum {string}
-       */
-      orderByDirection: 'ASC' | 'DESC'
-      /**
-       * @description Exact match on the SHA-256 of the document's extracted content, as lowercase hex. Unlike metadata matching this is an exact, case insensitive equality check, intended for finding documents that share the same extracted content. Combine with documentTypes to keep the match scoped to a single source's documents.
-       * @example 58ed0c987864be01771eb171a24f369a664e0c5440c97b0c8f917ed5e5d63dae
-       */
-      fileContentHash?: string | null
-      /**
-       * @description Exact match on the SHA-256 of the stored file bytes, as lowercase hex. An exact, case insensitive equality check intended for finding byte-identical copies of a file. Combine with documentTypes to keep the match scoped to a single source's documents.
-       * @example fffac8f1a93fabc8ad1629d255527c6ae12abfc5cc0921def588bfa2ce00b024
-       */
-      fileHash?: string | null
-      /**
-       * @description Filter by canonical status. True returns only canonical documents (those that are not a duplicate of another), false returns only duplicates. Low selectivity on its own, so it refines a query rather than standing alone and must be combined with document types or metadata.
-       * @example true
-       */
-      canonical?: boolean | null
-    }
-    /** @description Describes the search parameters that were used to filter documents and the documents matching the supplied search parameters */
-    DocumentSearchResult: {
-      /** @description Describes the search parameters that were used to filter documents */
-      request: components['schemas']['DocumentSearchRequest']
-      /** @description The documents matching the supplied search parameters. Note that documents with types that require additional roles will have been filtered out of these results if the client does not have the required roles. */
-      results: components['schemas']['Document'][]
-      /**
-       * Format: int64
-       * @description The total number of available results not limited by page size
-       * @example 56
-       */
-      totalResultsCount: number
-    }
-    VirusScanResult: {
-      /** @enum {string} */
-      status: 'PASSED' | 'FAILED' | 'ERROR'
-      result?: string | null
-      signature?: string | null
-    }
-  }
-  responses: never
-  parameters: never
-  requestBodies: never
-  headers: never
-  pathItems: never
+    schemas: {
+        /** @description Document properties and metadata associated with the document. The document file must be downloaded separately using the GET /documents/{documentUuid}/file endpoint. */
+        Document: {
+            /**
+             * Format: uuid
+             * @description The unique identifier assigned to the document
+             * @example 8cdadcf3-b003-4116-9956-c99bd8df6a00
+             */
+            documentUuid: string;
+            /**
+             * @description The type or category of the document within HMPPS
+             * @example HMCTS_WARRANT
+             * @enum {string}
+             */
+            documentType: "HMCTS_WARRANT" | "SUBJECT_ACCESS_REQUEST_REPORT" | "EXCLUSION_ZONE_MAP" | "PIC_CASE_DOCUMENTS" | "PPUD_RECALL" | "PRISONER_PROFILE_PICTURE" | "CEMO_ATTACHMENT" | "TRIAL_RECORD_SHEET" | "INDICTMENT" | "PRISON_COURT_REGISTER" | "BAIL_ORDER" | "SUSPENDED_IMPRISONMENT_ORDER" | "NOTICE_OF_DISCONTINUANCE" | "COMMUNITY_ORDER" | "PRISONER_APPLICATION" | "DOCUMENT_GENERATION_TEMPLATES" | "APPEAL_ORDER" | "BREACH_ORDER";
+            /**
+             * @description The generated filename the document file will be given when downloaded. The format of this filename can be document type specific and may include type information. the filename of the document file when it was uploaded as well as relevant metadata e.g. case reference or prison number
+             * @example warrant_for_remand
+             */
+            documentFilename: string;
+            /**
+             * @description The filename of the document file when it was uploaded with the file extension removed
+             * @example warrant_for_remand
+             */
+            filename: string;
+            /**
+             * @description The file extension of the document file
+             * @example pdf
+             */
+            fileExtension: string;
+            /**
+             * Format: int64
+             * @description The file size in bytes of the document file
+             * @example 48243
+             */
+            fileSize: number;
+            /**
+             * @description The SHA-256 hash of the document file as stored, as lowercase hex
+             * @example e930ef8c3af7860ff15b34a174078f1152f1554e65f6ed0883b35f08af6b0a64
+             */
+            fileHash: string;
+            /**
+             * @description Optional SHA-256 hash of the document's extracted content, as lowercase hex. Supplied by a consuming service, since the store does not derive content itself. Null when not provided.
+             * @example 9b5338484b3ed7b9a89666b6fa71a30d8186b67a4c0933c5f11b2d1f67998ba5
+             */
+            fileContentHash?: string | null;
+            /**
+             * @description The application/pdf of the document file
+             * @example pdf
+             */
+            mimeType: string;
+            /**
+             * @description JSON structured metadata associated with the document. May contain prison codes, prison numbers, dates, tags etc. and the properties available will be defined by the document's type.
+             * @example {
+             *       "prisonCode": "KMI",
+             *       "prisonNumber": "C3456DE",
+             *       "court": "Birmingham Magistrates",
+             *       "warrantDate": "2023-11-14"
+             *     }
+             */
+            metadata: {
+                [key: string]: unknown;
+            };
+            /**
+             * Format: date-time
+             * @description The date and time this document was uploaded and created in the service
+             */
+            createdTime: string;
+            /**
+             * @description The name of the service that was used to upload the document file
+             * @example Remand and Sentencing
+             */
+            createdByServiceName: string;
+            /**
+             * @description The username of the user that uploaded the document file
+             * @example AAA01U
+             */
+            createdByUsername?: string | null;
+            /**
+             * Format: uuid
+             * @description When the document is a duplicate of another, the unique identifier of the canonical document it points at. Null means this document is itself canonical.
+             * @example 8cdadcf3-b003-4116-9956-c99bd8df6a00
+             */
+            duplicateOf?: string | null;
+        };
+        ErrorResponse: {
+            /** Format: int32 */
+            status: number;
+            /** Format: int32 */
+            errorCode?: number | null;
+            userMessage?: string | null;
+            developerMessage?: string | null;
+            moreInfo?: string | null;
+        };
+        /** @description The extracted-content hash to associate with the document */
+        SetDocumentFileContentHashRequest: {
+            /**
+             * @description SHA-256 of the document's extracted content, as 64 character hex
+             * @example 58ed0c987864be01771eb171a24f369a664e0c5440c97b0c8f917ed5e5d63dae
+             */
+            fileContentHash: string;
+        };
+        /** @description Describes the search parameters to use to filter documents. Document type or metadata criteria must be supplied. */
+        DocumentSearchRequest: {
+            /**
+             * @description The types or categories of the document within HMPPS
+             * @example [HMCTS_WARRANT]
+             */
+            documentTypes?: ("HMCTS_WARRANT" | "SUBJECT_ACCESS_REQUEST_REPORT" | "EXCLUSION_ZONE_MAP" | "PIC_CASE_DOCUMENTS" | "PPUD_RECALL" | "PRISONER_PROFILE_PICTURE" | "CEMO_ATTACHMENT" | "TRIAL_RECORD_SHEET" | "INDICTMENT" | "PRISON_COURT_REGISTER" | "BAIL_ORDER" | "SUSPENDED_IMPRISONMENT_ORDER" | "NOTICE_OF_DISCONTINUANCE" | "COMMUNITY_ORDER" | "PRISONER_APPLICATION" | "DOCUMENT_GENERATION_TEMPLATES" | "APPEAL_ORDER" | "BREACH_ORDER")[] | null;
+            /**
+             * @description JSON structured metadata to match with document metadata. Documents will match if their metadata contains all the supplied properties and their values e.g. prisonCode = "KMI" AND prisonNumber = "A1234BC". Value matching is partial and case insensitive so court = "ham magis" will match "Birmingham Magistrates". Property values must be strings and cannot be null or empty.
+             * @example {
+             *       "prisonCode": "KMI",
+             *       "prisonNumber": "C3456DE"
+             *     }
+             */
+            metadata?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Format: int32
+             * @description The requested page of search results. Starts from 0
+             * @default 0
+             * @example 5
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @description The number of results to return per page
+             * @default 10
+             * @example 25
+             */
+            pageSize: number;
+            /**
+             * @description The property to order the search results by
+             * @default CREATED_TIME
+             * @example FILESIZE
+             * @enum {string}
+             */
+            orderBy: "FILENAME" | "FILE_EXTENSION" | "FILESIZE" | "CREATED_TIME";
+            /**
+             * @description The sort direction to use when ordering search results
+             * @default DESC
+             * @example ASC
+             * @enum {string}
+             */
+            orderByDirection: "ASC" | "DESC";
+            /**
+             * @description Exact match on the SHA-256 of the document's extracted content, as lowercase hex. Unlike metadata matching this is an exact, case insensitive equality check, intended for finding documents that share the same extracted content. Combine with documentTypes to keep the match scoped to a single source's documents.
+             * @example 58ed0c987864be01771eb171a24f369a664e0c5440c97b0c8f917ed5e5d63dae
+             */
+            fileContentHash?: string | null;
+            /**
+             * @description Exact match on the SHA-256 of the stored file bytes, as lowercase hex. An exact, case insensitive equality check intended for finding byte-identical copies of a file. Combine with documentTypes to keep the match scoped to a single source's documents.
+             * @example fffac8f1a93fabc8ad1629d255527c6ae12abfc5cc0921def588bfa2ce00b024
+             */
+            fileHash?: string | null;
+            /**
+             * @description Filter by canonical status. True returns only canonical documents (those that are not a duplicate of another), false returns only duplicates. Low selectivity on its own, so it refines a query rather than standing alone and must be combined with document types or metadata.
+             * @example true
+             */
+            canonical?: boolean | null;
+            /**
+             * @description JSON structured metadata to match with document metadata. Documents will match if their metadata contains all the supplied properties and their values e.g. prisonCode = "KMI" AND documentSubType = "SENTENCING_WARRANT". Value matching is exact but case insensitive so prisonCode = "Kmi" will match "KMI". Property values must be strings and cannot be null or empty.
+             * @example {
+             *       "prisonCode": "KMI",
+             *       "documentSubType": "SENTENCING_WARRANT"
+             *     }
+             */
+            metadataExact?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /** @description Describes the search parameters that were used to filter documents and the documents matching the supplied search parameters */
+        DocumentSearchResult: {
+            /** @description Describes the search parameters that were used to filter documents */
+            request: components["schemas"]["DocumentSearchRequest"];
+            /** @description The documents matching the supplied search parameters. Note that documents with types that require additional roles will have been filtered out of these results if the client does not have the required roles. */
+            results: components["schemas"]["Document"][];
+            /**
+             * Format: int64
+             * @description The total number of available results not limited by page size
+             * @example 56
+             */
+            totalResultsCount: number;
+        };
+        VirusScanResult: {
+            /** @enum {string} */
+            status: "PASSED" | "FAILED" | "ERROR";
+            result?: string | null;
+            signature?: string | null;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
-  replaceDocumentMetadata: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
-        'Service-Name': string
-        /** @description The active case load id of the user interacting with the client service */
-        'Active-Case-Load-Id'?: string
-        /** @description The username of the user interacting with the client service */
-        Username?: string
-      }
-      path: {
-        /** @description Document unique identifier */
-        documentUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': {
-          [key: string]: unknown
-        }
-      }
-    }
-    responses: {
-      /** @description Document metadata replaced successfully */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Document']
-        }
-      }
-      /** @description Bad request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  setDocumentFileContentHash: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
-        'Service-Name': string
-        /** @description The active case load id of the user interacting with the client service */
-        'Active-Case-Load-Id'?: string
-        /** @description The username of the user interacting with the client service */
-        Username?: string
-      }
-      path: {
-        /** @description Document unique identifier */
-        documentUuid: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SetDocumentFileContentHashRequest']
-      }
-    }
-    responses: {
-      /** @description Document content hash set successfully */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Document']
-        }
-      }
-      /** @description Bad request, for example the document type does not support a content hash */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The document associated with this unique identifier was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  uploadDocument: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
-        'Service-Name': string
-        /** @description The active case load id of the user interacting with the client service */
-        'Active-Case-Load-Id'?: string
-        /** @description The username of the user interacting with the client service */
-        Username?: string
-      }
-      path: {
-        /** @description The type of document being uploaded. This categorises the document and may enforce additional authentication and validation rules */
-        documentType:
-          | 'HMCTS_WARRANT'
-          | 'SUBJECT_ACCESS_REQUEST_REPORT'
-          | 'EXCLUSION_ZONE_MAP'
-          | 'PIC_CASE_DOCUMENTS'
-          | 'PPUD_RECALL'
-          | 'PRISONER_PROFILE_PICTURE'
-          | 'CEMO_ATTACHMENT'
-          | 'TRIAL_RECORD_SHEET'
-          | 'INDICTMENT'
-          | 'PRISON_COURT_REGISTER'
-          | 'BAIL_ORDER'
-          | 'SUSPENDED_IMPRISONMENT_ORDER'
-          | 'NOTICE_OF_DISCONTINUANCE'
-          | 'COMMUNITY_ORDER'
-          | 'PRISONER_APPLICATION'
-          | 'DOCUMENT_GENERATION_TEMPLATES'
-          | 'APPEAL_ORDER'
-        /** @description Client supplied document unique identifier. A version 1 or version 4 (preferred) UUID. Used as an idempotency key preventing duplicate document uploads */
-        documentUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'application/json': {
-          /**
-           * Format: binary
-           * @description File part of the multipart request
-           */
-          file: string
-          /** @description The metadata describing the uploaded document. Should contain a person identifier e.g. prison number or case reference number along with any other pertinent metadata. The document type used will specify what metadata is required as a minimum */
-          metadata: string
-          /** @description Optional SHA-256 hash of the file, as lowercase hex. If omitted the service computes it from the uploaded file */
-          fileHash?: string
-          /** @description Optional SHA-256 hash of the document's extracted content, as lowercase hex. Supplied by the calling service */
-          fileContentHash?: string
-        }
-      }
-    }
-    responses: {
-      /** @description Document and associated metadata uploaded successfully */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Document']
-        }
-      }
-      /** @description Bad request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Conflict, the supplied document unique identifier is already present in the service */
-      409: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  searchDocuments: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
-        'Service-Name': string
-        /** @description The active case load id of the user interacting with the client service */
-        'Active-Case-Load-Id'?: string
-        /** @description The username of the user interacting with the client service */
-        Username?: string
-      }
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['DocumentSearchRequest']
-      }
-    }
-    responses: {
-      /** @description Search request accepted and results returned */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['DocumentSearchResult']
-        }
-      }
-      /** @description Bad request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  scanDocument: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
-        'Service-Name': string
-        /** @description The active case load id of the user interacting with the client service */
-        'Active-Case-Load-Id'?: string
-        /** @description The username of the user interacting with the client service */
-        Username?: string
-      }
-      path?: never
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'application/json': {
-          /**
-           * Format: binary
-           * @description File part of the multipart request
-           */
-          file: string
-        }
-      }
-    }
-    responses: {
-      /** @description Document scan successfully */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['VirusScanResult']
-        }
-      }
-      /** @description Bad request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role. */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getDocument: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
-        'Service-Name': string
-        /** @description The active case load id of the user interacting with the client service */
-        'Active-Case-Load-Id'?: string
-        /** @description The username of the user interacting with the client service */
-        Username?: string
-      }
-      path: {
-        /** @description Document unique identifier */
-        documentUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Document found */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Document']
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The document associated with this unique identifier was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  deleteDocument: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
-        'Service-Name': string
-        /** @description The active case load id of the user interacting with the client service */
-        'Active-Case-Load-Id'?: string
-        /** @description The username of the user interacting with the client service */
-        Username?: string
-      }
-      path: {
-        /** @description Document unique identifier */
-        documentUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Document deleted */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The document associated with this unique identifier was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  downloadDocumentFile: {
-    parameters: {
-      query?: {
-        /** @description When true, serves the file with Content-Disposition: inline so it renders in the browser instead of downloading. Only honoured for PDFs any other type falls back to attachment. Defaults to false. */
-        inline?: boolean
-      }
-      header: {
-        /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
-        'Service-Name': string
-        /** @description The active case load id of the user interacting with the client service */
-        'Active-Case-Load-Id'?: string
-        /** @description The username of the user interacting with the client service */
-        Username?: string
-      }
-      path: {
-        /** @description Document unique identifier */
-        documentUuid: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Document file found */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/pdf': string
-        }
-      }
-      /** @description Unauthorised, requires a valid Oauth2 token */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/pdf': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/pdf': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The document file associated with this unique identifier was not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/pdf': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+    replaceDocumentMetadata: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path: {
+                /** @description Document unique identifier */
+                documentUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Document metadata replaced successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description Bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    mergeDocumentMetadata: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path: {
+                /** @description Document unique identifier */
+                documentUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Document metadata merged successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description Bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    setDocumentFileContentHash: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path: {
+                /** @description Document unique identifier */
+                documentUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetDocumentFileContentHashRequest"];
+            };
+        };
+        responses: {
+            /** @description Document content hash set successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description Bad request, for example the document type does not support a content hash */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The document associated with this unique identifier was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    findByDocumentUuids: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string[];
+            };
+        };
+        responses: {
+            /** @description Search request accepted and results returned */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"][];
+                };
+            };
+            /** @description Bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    uploadDocument: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path: {
+                /** @description The type of document being uploaded. This categorises the document and may enforce additional authentication and validation rules */
+                documentType: "HMCTS_WARRANT" | "SUBJECT_ACCESS_REQUEST_REPORT" | "EXCLUSION_ZONE_MAP" | "PIC_CASE_DOCUMENTS" | "PPUD_RECALL" | "PRISONER_PROFILE_PICTURE" | "CEMO_ATTACHMENT" | "TRIAL_RECORD_SHEET" | "INDICTMENT" | "PRISON_COURT_REGISTER" | "BAIL_ORDER" | "SUSPENDED_IMPRISONMENT_ORDER" | "NOTICE_OF_DISCONTINUANCE" | "COMMUNITY_ORDER" | "PRISONER_APPLICATION" | "DOCUMENT_GENERATION_TEMPLATES" | "APPEAL_ORDER" | "BREACH_ORDER";
+                /** @description Client supplied document unique identifier. A version 1 or version 4 (preferred) UUID. Used as an idempotency key preventing duplicate document uploads */
+                documentUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: binary
+                     * @description File part of the multipart request
+                     */
+                    file: string;
+                    /** @description The metadata describing the uploaded document. Should contain a person identifier e.g. prison number or case reference number along with any other pertinent metadata. The document type used will specify what metadata is required as a minimum */
+                    metadata: string;
+                    /** @description Optional SHA-256 hash of the file, as lowercase hex. If omitted the service computes it from the uploaded file */
+                    fileHash?: string;
+                    /** @description Optional SHA-256 hash of the document's extracted content, as lowercase hex. Supplied by the calling service */
+                    fileContentHash?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Document and associated metadata uploaded successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description Bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict, the supplied document unique identifier is already present in the service */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    searchDocuments: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DocumentSearchRequest"];
+            };
+        };
+        responses: {
+            /** @description Search request accepted and results returned */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DocumentSearchResult"];
+                };
+            };
+            /** @description Bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    scanDocument: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: binary
+                     * @description File part of the multipart request
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Document scan successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VirusScanResult"];
+                };
+            };
+            /** @description Bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getDocument: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path: {
+                /** @description Document unique identifier */
+                documentUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Document found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The document associated with this unique identifier was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deleteDocument: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path: {
+                /** @description Document unique identifier */
+                documentUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Document deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The document associated with this unique identifier was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    downloadDocumentFile: {
+        parameters: {
+            query?: {
+                /** @description When true, serves the file with Content-Disposition: inline so it renders in the browser instead of downloading. Only honoured for PDFs; any other type falls back to attachment. Defaults to false. */
+                inline?: boolean;
+            };
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path: {
+                /** @description Document unique identifier */
+                documentUuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Document file found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The document file associated with this unique identifier was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
 }

@@ -19,6 +19,7 @@ import {
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
+import commonPlatformDocumentStatuses from '../../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 
 export default class DocumentRoutes {
@@ -43,6 +44,9 @@ export default class DocumentRoutes {
       page: pageNumber,
       metadata: {
         prisonerId: prisoner.prisonerNumber,
+      } as unknown as Record<string, never>,
+      metadataExact: {
+        status: commonPlatformDocumentStatuses.ACTIVE,
       } as unknown as Record<string, never>,
     } as DocumentSearchRequest
 
