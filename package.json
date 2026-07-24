@@ -107,7 +107,7 @@
     "@types/uuid": "^10.0.0",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
-    "concurrently": "^9.2.3",
+    "concurrently": "^10.0.3",
     "cookie-session": "^2.1.1",
     "cypress": "^15.18.1",
     "del": "8.0.1",
