@@ -33,8 +33,7 @@ export const user: Express.User = {
   active: true,
   activeCaseLoadId: 'MDI',
   authSource: 'NOMIS',
-  caseloads: ['MDI'],
-  caseLoads: [{ caseLoadId: 'MDI' }],
+  caseLoads: [{ caseLoadId: 'MDI', description: 'Moorland', type: 'INST', currentlyActive: true }],
   roles: [],
   userRoles: [],
 }
