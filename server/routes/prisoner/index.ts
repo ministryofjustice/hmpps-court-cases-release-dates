@@ -40,7 +40,7 @@ export default function Index({
     requestDependentOn: [PersonSentenceCalculationPermission.edit],
   })
 
-  get('/:prisonerNumber/image', requireEdit, new ImageRoutes(prisonerService).GET)
+  get('/:prisonerNumber/image', requireRead, new ImageRoutes(prisonerService).GET)
   get('/:prisonerNumber/adjustments', requireEdit, new AdjustmentsRoutes().GET)
   get('/:prisonerNumber/court-cases', requireEdit, new CourtCasesRoutes().GET)
   get(
