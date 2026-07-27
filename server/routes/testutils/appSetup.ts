@@ -1,7 +1,10 @@
 import express, { Express } from 'express'
 import cookieSession from 'cookie-session'
 import { NotFound } from 'http-errors'
-import { PermissionsService, PersonSentenceCalculationPermission } from '@ministryofjustice/hmpps-prison-permissions-lib'
+import {
+  PermissionsService,
+  PersonSentenceCalculationPermission,
+} from '@ministryofjustice/hmpps-prison-permissions-lib'
 
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
