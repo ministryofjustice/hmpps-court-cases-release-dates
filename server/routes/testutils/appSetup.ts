@@ -1,6 +1,7 @@
 import express, { Express } from 'express'
 import cookieSession from 'cookie-session'
 import { NotFound } from 'http-errors'
+import { PermissionsService, PersonSentenceCalculationPermission } from '@ministryofjustice/hmpps-prison-permissions-lib'
 
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
@@ -30,10 +31,26 @@ export const user: Express.User = {
   activeCaseLoadId: 'MDI',
   authSource: 'NOMIS',
   caseloads: ['MDI'],
+  caseLoads: [{ caseLoadId: 'MDI' }],
   roles: [],
+  userRoles: [],
 }
 
 export const flashProvider = jest.fn()
+
+const prisonPermissionsService = {
+  getPrisonerPermissions: () => ({
+    domainGroups: {
+      sentenceAndOffence: {
+        personSentenceCalculation: {
+          [PersonSentenceCalculationPermission.read]: true,
+          [PersonSentenceCalculationPermission.edit]: true,
+        },
+      },
+    },
+  }),
+  getPrisonerDetails: async () => ({ prisonerNumber: 'A1234AA', prisonId: 'MDI' }),
+} as unknown as PermissionsService
 
 function appSetup(services: Services, production: boolean, userSupplier: () => Express.User): Express {
   const app = express()
@@ -76,5 +93,5 @@ export function appWithAllRoutes({
   userSupplier?: () => Express.User
 }): Express {
   auth.default.authenticationMiddleware = () => (req, res, next) => next()
-  return appSetup(services as Services, production, userSupplier)
+  return appSetup({ prisonPermissionsService, ...services } as Services, production, userSupplier)
 }

@@ -7,12 +7,14 @@ import PrisonerService from './prisonerService'
 export interface UserDetails extends User {
   displayName: string
   roles: string[]
+  userRoles: string[]
   hasRasAccess: boolean
   hasRecallsAccess: boolean
   hasInactiveBookingAccess: boolean
   hasReadOnlyNomisConfigAccess: boolean
   hasImmigrationDetentionAccess: boolean
   caseloads: string[]
+  caseLoads: { caseLoadId: string }[]
   caseloadDescriptions: string[]
   caseloadMap: Map<string, string>
 }
@@ -32,6 +34,7 @@ export default class UserService {
     return {
       ...user,
       roles,
+      userRoles: roles.map(role => `ROLE_${role}`),
       displayName: convertToTitleCase(user.name),
       hasRasAccess: this.hasRasAccess(roles),
       hasRecallsAccess: this.hasRecallAccess(roles),
@@ -39,6 +42,7 @@ export default class UserService {
       hasReadOnlyNomisConfigAccess: this.hasReadOnlyNomisConfigAccess(roles),
       hasImmigrationDetentionAccess: this.hasImmigrationDetentionAccess(roles),
       caseloads: userCaseloads.map(uc => uc.caseLoadId),
+      caseLoads: userCaseloads,
       caseloadDescriptions: userCaseloads.map(uc => uc.description),
       caseloadMap: new Map(userCaseloads.map(uc => [uc.caseLoadId, uc.description])),
     }
