@@ -1,6 +1,17 @@
 import { Contracts, setup, defaultClient, TelemetryClient, DistributedTracingModes } from 'applicationinsights'
 import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
+import type { TelemetryClient as PermissionsTelemetryClient } from '@ministryofjustice/hmpps-prison-permissions-lib'
 import type { ApplicationInfo } from '../applicationInfo'
+
+export function buildPermissionsTelemetryClient(client: TelemetryClient): PermissionsTelemetryClient | undefined {
+  if (!client) {
+    return undefined
+  }
+
+  return {
+    trackEvent: (name, properties) => client.trackEvent({ name, properties }),
+  }
+}
 
 export type ContextObject = {
   /* eslint-disable  @typescript-eslint/no-explicit-any */

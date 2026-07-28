@@ -1,5 +1,5 @@
 import { PermissionsService } from '@ministryofjustice/hmpps-prison-permissions-lib'
-import { dataAccess } from '../data'
+import { dataAccess, telemetryClientPermissionsLibWrapper } from '../data'
 import UserService from './userService'
 import FeComponentsService from './feComponentsService'
 import PrisonerSearchService from './prisonerSearchService'
@@ -51,6 +51,7 @@ export const services = () => {
     prisonerSearchConfig: config.apis.prisonerSearchApi,
     authenticationClient: hmppsAuthenticationClient,
     logger,
+    telemetryClient: telemetryClientPermissionsLibWrapper,
   })
 
   return {
