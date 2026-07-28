@@ -4,18 +4,8 @@ import type { RequestHandler } from 'express'
 import logger from '../../logger'
 import asyncMiddleware from './asyncMiddleware'
 
-export default function authorisationMiddleware(
-  authorisedRoles: string[] = [],
-  excludedPaths: string[] = [],
-): RequestHandler {
-  const excludedPathRegExps = excludedPaths.map(p => new RegExp(p))
-
+export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {
   return asyncMiddleware((req, res, next) => {
-    // Skip authorisation for excluded paths
-    if (excludedPathRegExps.some(pattern => pattern.test(req.path))) {
-      return next()
-    }
-
     // authorities in the user token will always be prefixed by ROLE_.
     // Convert roles that are passed into this function without the prefix so that we match correctly.
     const authorisedAuthorities = authorisedRoles.map(role => (role.startsWith('ROLE_') ? role : `ROLE_${role}`))
