@@ -1,6 +1,7 @@
 import config, { ApiConfig } from '../config'
 import RestClient from './restClient'
 import { CourtDocument, CourtDocumentView } from '../@types/courtDataIngestionApi/types'
+import { BackfillListResponse, BackfillRunSummary, BackfillTriggerResponse } from '../model/backfill'
 
 export default class CourtDataIngestionApiClient {
   restClient: RestClient
@@ -27,5 +28,22 @@ export default class CourtDataIngestionApiClient {
     return this.restClient.get({
       path: `/court-document/person/${prisonerId}?prisonDocumentIds=${documentIdsFromCp.join(',')}`,
     }) as Promise<CourtDocument[]>
+  }
+
+  async listBackfills(): Promise<BackfillListResponse> {
+    return this.restClient.get({ path: '/admin/backfill' }) as Promise<BackfillListResponse>
+  }
+
+  async getBackfill(backfillId: string): Promise<BackfillRunSummary> {
+    return this.restClient.get({
+      path: `/admin/backfill/${encodeURIComponent(backfillId)}`,
+    }) as Promise<BackfillRunSummary>
+  }
+
+  async startBackfill(backfillId: string): Promise<BackfillTriggerResponse> {
+    return this.restClient.post({
+      path: `/admin/backfill/${encodeURIComponent(backfillId)}`,
+      data: {},
+    }) as Promise<BackfillTriggerResponse>
   }
 }

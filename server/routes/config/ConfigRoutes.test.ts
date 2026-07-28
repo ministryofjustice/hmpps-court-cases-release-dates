@@ -7,12 +7,15 @@ import { PrisonApiPrison } from '../../@types/prisonApi/types'
 jest.mock('../../services/prisonerService')
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 
+const supportUser = { ...user, roles: ['COURTCASE_RELEASEDATE_SUPPORT'] }
+const nonSupportUser = { ...user, roles: ['RELEASE_DATES_CALCULATOR'] }
+
 let app: Express
 
+const appAs = (as: Express.User) => appWithAllRoutes({ services: { prisonerService }, userSupplier: () => as })
+
 beforeEach(() => {
-  app = appWithAllRoutes({
-    services: { prisonerService },
-  })
+  app = appAs(supportUser)
 })
 
 afterEach(() => {
@@ -57,23 +60,48 @@ const allPrisons = [
   },
 ] as PrisonApiPrison[]
 
-describe('Compare routes tests', () => {
-  it('GET /config should return to the search if the user does not have the correct role', () => {
+describe('Config route authorisation', () => {
+  it('GET /config is refused when the user does not have the support role', () => {
     prisonerService.getActivePrisons.mockResolvedValue(allPrisons)
     prisonerService.getPrisonsWithServiceCode.mockResolvedValue([])
 
-    return request(app).get('/config').expect(302).expect('Location', '/')
+    return request(appAs(nonSupportUser)).get('/config').expect(302).expect('Location', '/authError')
   })
 
+  it('POST /config is refused when the user does not have the support role', () => {
+    prisonerService.getPrisonsWithServiceCode.mockResolvedValue([])
+
+    return request(appAs(nonSupportUser))
+      .post('/config')
+      .type('form')
+      .send({ apiId: 'ADJUSTMENTS', checkedBoxes: 'BFI' })
+      .expect(302)
+      .expect('Location', '/authError')
+      .expect(() => {
+        expect(prisonerService.postServiceCodeForPrison).not.toHaveBeenCalled()
+        expect(prisonerService.deleteServiceCodeForPrison).not.toHaveBeenCalled()
+      })
+  })
+
+  it('POST /config does not reach the prison API when the user has no roles at all', () => {
+    prisonerService.getPrisonsWithServiceCode.mockResolvedValue([])
+
+    return request(appAs({ ...user, roles: [] }))
+      .post('/config')
+      .type('form')
+      .send({ apiId: 'ADJUSTMENTS', checkedBoxes: 'BFI' })
+      .expect(302)
+      .expect('Location', '/authError')
+      .expect(() => {
+        expect(prisonerService.postServiceCodeForPrison).not.toHaveBeenCalled()
+      })
+  })
+})
+
+describe('Config routes tests', () => {
   it('GET /config should show the page with all the active prisons when the user has the correct role', () => {
     prisonerService.getActivePrisons.mockResolvedValue(allPrisons)
     prisonerService.getPrisonsWithServiceCode.mockResolvedValue([])
-    app = appWithAllRoutes({
-      services: { prisonerService },
-      userSupplier: () => {
-        return { ...user, hasReadOnlyNomisConfigAccess: true }
-      },
-    })
 
     return request(app)
       .get('/config')
@@ -98,7 +126,7 @@ describe('Compare routes tests', () => {
       .post('/config')
       .type('form')
       .send({ apiId: 'ADJUSTMENTS', checkedBoxes: 'BFI' })
-      .expect(res => {
+      .expect(() => {
         expect(prisonerService.postServiceCodeForPrison).toHaveBeenCalledTimes(1)
         expect(prisonerService.postServiceCodeForPrison).toHaveBeenCalledWith('ADJUSTMENTS', 'BFI')
         expect(prisonerService.deleteServiceCodeForPrison).toHaveBeenCalledTimes(0)
@@ -113,7 +141,7 @@ describe('Compare routes tests', () => {
       .post('/config')
       .type('form')
       .send({ apiId: 'ADJUSTMENTS' })
-      .expect(res => {
+      .expect(() => {
         expect(prisonerService.postServiceCodeForPrison).toHaveBeenCalledTimes(0)
         expect(prisonerService.deleteServiceCodeForPrison).toHaveBeenCalledTimes(1)
         expect(prisonerService.deleteServiceCodeForPrison).toHaveBeenCalledWith('ADJUSTMENTS', 'BFI')
@@ -135,12 +163,6 @@ describe('Compare routes tests', () => {
   it('GET /config should show the banner describing the changes', () => {
     prisonerService.getActivePrisons.mockResolvedValue(allPrisons)
     prisonerService.getPrisonsWithServiceCode.mockResolvedValue([])
-    app = appWithAllRoutes({
-      services: { prisonerService },
-      userSupplier: () => {
-        return { ...user, hasReadOnlyNomisConfigAccess: true }
-      },
-    })
 
     return request(app)
       .get('/config?id=adjustments&readonly=ALI,ACI&notreadonly=AYI,BFI')
@@ -155,12 +177,6 @@ describe('Compare routes tests', () => {
   it('GET /config should show the banner describing the changes (singular for one prison)', () => {
     prisonerService.getActivePrisons.mockResolvedValue(allPrisons)
     prisonerService.getPrisonsWithServiceCode.mockResolvedValue([])
-    app = appWithAllRoutes({
-      services: { prisonerService },
-      userSupplier: () => {
-        return { ...user, hasReadOnlyNomisConfigAccess: true }
-      },
-    })
 
     return request(app)
       .get('/config?id=adjustments&readonly=ALI&notreadonly=BFI')
@@ -179,12 +195,6 @@ describe('Compare routes tests', () => {
   `('GET $url should not show the banner if now parameters are passed', ({ url }) => {
     prisonerService.getActivePrisons.mockResolvedValue(allPrisons)
     prisonerService.getPrisonsWithServiceCode.mockResolvedValue([])
-    app = appWithAllRoutes({
-      services: { prisonerService },
-      userSupplier: () => {
-        return { ...user, hasReadOnlyNomisConfigAccess: true }
-      },
-    })
 
     return request(app)
       .get(url)
