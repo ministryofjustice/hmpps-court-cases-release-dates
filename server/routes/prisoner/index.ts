@@ -13,6 +13,8 @@ import ReadonlyOverviewRoutes from './handlers/readonlyOverview'
 import ReleaseDatesRoutes from './handlers/releaseDates'
 import ConfigRoutes from '../config/ConfigRoutes'
 import DocumentRoutes from './handlers/documents'
+import config from '../../config'
+import prisonsFilterMiddleware from '../../middleware/prisonsFilterMiddleware'
 
 export default function Index({
   prisonerService,
@@ -58,6 +60,7 @@ export default function Index({
   get(
     '/:prisonerNumber/readonly-overview',
     requireRead,
+    prisonsFilterMiddleware(config.readonlyOverviewAllowedPrisonIds),
     new ReadonlyOverviewRoutes(
       prisonerService,
       calculateReleaseDatesService,

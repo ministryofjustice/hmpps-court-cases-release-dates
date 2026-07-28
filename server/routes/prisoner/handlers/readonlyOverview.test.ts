@@ -54,7 +54,18 @@ const defaultServices = {
   immigrationDetentionService,
 }
 
-const defaultUser = { ...user, hasAdjustmentsAccess: true, hasRasAccess: true, hasRecallsAccess: true }
+const defaultUser = {
+  ...user,
+  activeCaseLoadId: 'HLI',
+  hasAdjustmentsAccess: true,
+  hasRasAccess: true,
+  hasRecallsAccess: true,
+  caseLoads: [
+    { caseLoadId: 'HLI', description: 'Hull', type: 'INST' as const, currentlyActive: true },
+    { caseLoadId: 'MDI', description: 'MDI', type: 'INST' as const, currentlyActive: false },
+  ],
+  caseloadFunction: 'GENERAL',
+}
 const userWithImmigrationDetentionAccess = { ...defaultUser, hasImmigrationDetentionAccess: true }
 
 const defaultCourtCasesPage: SearchCourtCasesPage = {
@@ -187,7 +198,7 @@ describe('Route Handlers - Readonly Overview', () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
         imprisonmentStatusDescription: 'Life imprisonment',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getStartOfSentenceEnvelope.mockResolvedValue(new Date())
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
@@ -205,7 +216,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render service header', () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
@@ -221,7 +232,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should not render sub nav', () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
@@ -242,7 +253,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render feedback prompt', () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
@@ -280,7 +291,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should display SLED, CRD, HDCED and TUSED when present in the latest calculation', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
@@ -296,11 +307,10 @@ describe('Route Handlers - Readonly Overview', () => {
       expect(res.text).toContain('Home detention curfew eligibility date')
       expect(res.text).toContain('Top-up supervision end date')
     })
-
     it('should not display a release date type that is not present in the latest calculation', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
@@ -314,11 +324,10 @@ describe('Route Handlers - Readonly Overview', () => {
       expect(res.text).not.toContain('Top-up supervision end date')
       expect(res.text).not.toContain('Home detention curfew eligibility date')
     })
-
     it('should show latest calc with release date definition', () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
@@ -341,7 +350,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render no release dates section when prisoner has no active sentences', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -353,7 +362,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should not fetch the latest calculation when there are no active sentences', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -364,7 +373,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should fetch the latest calculation when there are active sentences', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
       calculateReleaseDatesService.getLatestCalculationForPrisonerAsSystem.mockResolvedValue(latestCalculation)
@@ -376,11 +385,10 @@ describe('Route Handlers - Readonly Overview', () => {
         defaultUser.username,
       )
     })
-
     it('should open the release date definitions link in a new browser tab', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
@@ -398,7 +406,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should display the court case reference and court name in the card title', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.searchCourtCases.mockResolvedValue({
@@ -427,7 +435,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should display an "Inactive" status tag for an inactive court case', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.searchCourtCases.mockResolvedValue({
@@ -456,7 +464,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should not display an "Inactive" status tag for an active court case', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -470,7 +478,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should pass zero-based page index when pageNumber query param is provided', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -488,7 +496,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should default to page index 0 when no pageNumber query param is provided', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -506,7 +514,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should build offence lookup from charge and consecutive sentence offence codes', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -522,7 +530,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should call getConsecutiveToDetails with sentence uuids from charges', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -537,7 +545,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render court case card with court name from court register', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -550,7 +558,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should show offences and sentence details', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -577,7 +585,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should handle an empty court cases page and still render', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.searchCourtCases.mockResolvedValue({ content: [] } as SearchCourtCasesPage)
@@ -596,7 +604,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should de-duplicate court codes and offence codes across court cases', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.searchCourtCases.mockResolvedValue({
@@ -637,7 +645,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should not render immigration documents section when user lacks access', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
 
@@ -656,7 +664,7 @@ describe('Route Handlers - Readonly Overview', () => {
       })
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(undefined)
@@ -684,7 +692,7 @@ describe('Route Handlers - Readonly Overview', () => {
       })
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.getLatestImmigrationDetentionRecordForPrisoner.mockResolvedValue(
@@ -707,7 +715,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render the DPS recall start date and revocation date values', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.getMostRecentRecallAsSystem.mockResolvedValue({
@@ -730,7 +738,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should not render recalls section when there is no recall', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.getMostRecentRecallAsSystem.mockResolvedValue(undefined)
@@ -745,7 +753,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render a DPS recall without the NOMIS badge', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.getMostRecentRecallAsSystem.mockResolvedValue({
@@ -768,7 +776,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render a NOMIS recall with the NOMIS badge and "Not entered" dates', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.getMostRecentRecallAsSystem.mockResolvedValue({
@@ -790,7 +798,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should show "In prison at recall" when inPrisonOnRevocationDate is true', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       remandAndSentencingService.getMostRecentRecallAsSystem.mockResolvedValue({
@@ -813,7 +821,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render "no upcoming court hearings" when there is no next event', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
@@ -826,7 +834,7 @@ describe('Route Handlers - Readonly Overview', () => {
     it('should render next court hearing details when a next event exists', async () => {
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getNextCourtEventAsSystem.mockResolvedValue({
@@ -846,7 +854,7 @@ describe('Route Handlers - Readonly Overview', () => {
   })
 
   describe('Permissions', () => {
-    it('should display an error page when the prisoner is inactive and the user lacks access to view inactive bookings', () => {
+    it('should display an error page when the prisoner is inactive and the user lacks access to view inactive bookings', async () => {
       app = appWithAllRoutes({
         services: {
           prisonerService,
@@ -867,11 +875,30 @@ describe('Route Handlers - Readonly Overview', () => {
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
 
-      return request(app)
+      await request(app)
         .get('/prisoner/A12345B/readonly-overview')
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain('The details for this person cannot be found')
+        })
+    })
+
+    it("should display an error page when the prisoner's prison is not in the whitelisted prison filter", async () => {
+      app = appWithAllRoutes({
+        services: defaultServices,
+        userSupplier: () => ({ ...defaultUser, activeCaseLoadId: 'MDI' }),
+      })
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'HLI',
+      } as Prisoner)
+
+      await request(app)
+        .get('/prisoner/A12345B/readonly-overview')
+        .expect(404)
+        .expect(res => {
+          expect(res.text).toContain('The details for this person cannot be found')
+          expect(res.text).toContain('is in a prison not viewable by this user')
         })
     })
   })
