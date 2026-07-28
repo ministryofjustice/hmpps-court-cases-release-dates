@@ -35,8 +35,22 @@ export default class DocumentRoutes {
     const { prisoner } = req
     const { token, username } = req.user
 
+    const showing = getAsStringOrDefault(req.query.showing, 'all')
+    const byCaseReference = getAsStringOrDefault(req.query.byCaseReference, 'all')
+
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
     const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
+
+    const filters = {
+      showing,
+      byCaseReference,
+      // TODO (CDIA-????): Update this list with a list of actual case references from filter a endpoint (TBD)
+      caseReferences: ['APRIL2026', 'REMAND1234', 'HEARING5', 'CASE12345TEST'],
+      pagination: {
+        sortBy: sortByQuery,
+        pageNumber: pageNumber + 1,
+      },
+    } as DocumentFilters
 
     const documentSearchRequest = {
       ...defaultSearchParams,
@@ -148,6 +162,7 @@ export default class DocumentRoutes {
       prisoner,
       serviceDefinitions,
       documents: viewModelDocuments,
+      filters,
       sortByQuery,
       pageNumber,
       pageSize: documentSearchRequest.pageSize,
@@ -306,4 +321,14 @@ type DocumentViewModel = {
   isNew: boolean
   hearingType: string
   source: 'remand-and-sentencing-api' | 'court-data-ingestion-api'
+}
+
+type DocumentFilters = {
+  showing: string
+  byCaseReference: string
+  caseReferences: string[]
+  pagination: {
+    sortBy: string
+    pageNumber: number
+  }
 }
