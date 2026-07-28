@@ -16,7 +16,6 @@ const appAs = (as: Express.User) =>
 
 let app: Express
 
-/** CDIA serialises LocalDateTime with no zone, so mirror that shape here. */
 const localDateTime = (daysAgo: number) =>
   dayjs().subtract(daysAgo, 'day').subtract(2, 'hour').format('YYYY-MM-DDTHH:mm:ss.SSSSSS')
 
@@ -200,6 +199,29 @@ describe('GET /backfills', () => {
       .expect(res => {
         expect(res.text).toContain('data-qa="start-hash"')
         expect(res.text).not.toContain('data-qa="start-extraction"')
+      })
+  })
+
+  it('offers a refresh link while something is in flight', () => {
+    return request(app)
+      .get('/backfills')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('data-qa="refresh"')
+      })
+  })
+
+  it('hides the refresh link when nothing is running', () => {
+    courtDataIngestionService.listBackfills.mockResolvedValue({
+      registered: ['hash', 'mirror'],
+      recent: [cleanRun, completedWithErrorsRun],
+    })
+
+    return request(app)
+      .get('/backfills')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('data-qa="refresh"')
       })
   })
 

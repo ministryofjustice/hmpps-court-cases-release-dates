@@ -16,9 +16,11 @@ const LABELS: Record<BackfillEnvironment, string> = {
 }
 
 function environmentFor(host: string): BackfillEnvironment {
+  if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local')) return 'local'
+  if (host.startsWith('court-data-ingestion-api-dev.')) return 'development'
   if (host.startsWith('court-data-ingestion-api-preprod.')) return 'pre-production'
   if (host === 'court-data-ingestion-api.hmpps.service.justice.gov.uk') return 'production'
-  return 'development'
+  return 'unknown'
 }
 
 export default function describeBackfillTarget(apiUrl: string): BackfillTarget {
