@@ -3,8 +3,12 @@ import CourtDataIngestionService from '../../services/courtDataIngestionService'
 import BackfillOverviewViewModel from '../../model/BackfillOverviewViewModel'
 import BackfillDetailViewModel from '../../model/BackfillDetailViewModel'
 import { BackfillNotification } from '../../model/backfill'
+import describeBackfillTarget from '../../utils/backfillTarget'
+import config from '../../config'
 
 export default class BackfillRoutes {
+  private readonly target = describeBackfillTarget(config.apis.courtDataIngestionApi.url)
+
   constructor(private readonly courtDataIngestionService: CourtDataIngestionService) {}
 
   public overview: RequestHandler = async (req, res) => {
@@ -12,7 +16,7 @@ export default class BackfillRoutes {
     const list = await this.courtDataIngestionService.listBackfills(token)
 
     return res.render('pages/backfill/index', {
-      model: new BackfillOverviewViewModel(list, this.notificationFrom(req.query)),
+      model: new BackfillOverviewViewModel(list, this.target, this.notificationFrom(req.query)),
     })
   }
 
@@ -22,7 +26,7 @@ export default class BackfillRoutes {
     const run = await this.courtDataIngestionService.getBackfill(backfillId, token)
 
     return res.render('pages/backfill/detail', {
-      model: new BackfillDetailViewModel(backfillId, run),
+      model: new BackfillDetailViewModel(backfillId, this.target, run),
     })
   }
 

@@ -3,12 +3,15 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set pageTitle = applicationName + " - Court data backfills" %}
 {% set pageId = "backfills" %}
 
 {% block content %}
 
+  {# .govuk-main-wrapper padding-top is zeroed service wide in overrides/_local.scss #}
   <div class="govuk-grid-row govuk-!-padding-top-6">
     <div class="govuk-grid-column-full">
 
@@ -22,10 +25,17 @@
 
       <h1 class="govuk-heading-xl">Court data backfills</h1>
 
-      <p class="govuk-body-s govuk-hint">
-        These run against live production data. Starting one is not reversible and the run is
-        recorded against your username.
-      </p>
+      {% set targetHtml %}
+        These run against <strong>{{ model.target.label }}</strong> data, on
+        <span class="govuk-!-font-family-monospace">{{ model.target.host }}</span>.
+        Starting one is not reversible and the run is recorded against your username.
+      {% endset %}
+
+      {% if model.target.isProduction %}
+        {{ govukWarningText({ html: targetHtml, iconFallbackText: "Warning", attributes: { 'data-qa': 'target' } }) }}
+      {% else %}
+        {{ govukInsetText({ html: targetHtml, attributes: { 'data-qa': 'target' } }) }}
+      {% endif %}
 
       <table class="govuk-table govuk-table--small-text-until-10pt" data-qa="backfill-table">
         <caption class="govuk-table__caption govuk-visually-hidden">Registered backfills and their most recent run</caption>

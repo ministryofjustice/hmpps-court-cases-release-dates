@@ -163,6 +163,27 @@ describe('GET /backfills', () => {
       })
   })
 
+  it('states which environment the backfills will run against, from the configured API url', () => {
+    return request(app)
+      .get('/backfills')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('data-qa="target"')
+        expect(res.text).toContain('localhost')
+        expect(res.text).not.toContain('live production data')
+      })
+  })
+
+  it('does not show the production warning when the target is not production', () => {
+    return request(app)
+      .get('/backfills')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('govuk-inset-text')
+        expect(res.text).not.toContain('govuk-warning-text')
+      })
+  })
+
   it('passes the user token through to the service', () => {
     return request(app)
       .get('/backfills')
