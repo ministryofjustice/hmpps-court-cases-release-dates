@@ -247,6 +247,49 @@ describe('GET /backfills/:backfillId', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).not.toContain('data-qa="failure-reason"')
+        expect(res.text).not.toContain('Failure detail')
+      })
+  })
+
+  it('has no failure section when CDIA sends failureReason as null', () => {
+    courtDataIngestionService.getBackfill.mockResolvedValue({ ...cleanRun, failureReason: null })
+
+    return request(app)
+      .get('/backfills/hash')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('data-qa="failure-reason"')
+        expect(res.text).not.toContain('Failure detail')
+      })
+  })
+
+  it('has no failure section when failureReason is an empty string', () => {
+    courtDataIngestionService.getBackfill.mockResolvedValue({ ...cleanRun, failureReason: '' })
+
+    return request(app)
+      .get('/backfills/hash')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('data-qa="failure-reason"')
+        expect(res.text).not.toContain('Failure detail')
+      })
+  })
+
+  it('renders null optional fields as a dash rather than the word null', () => {
+    courtDataIngestionService.getBackfill.mockResolvedValue({
+      ...cleanRun,
+      cursor: null,
+      runId: null,
+      triggeredBy: null,
+      heartbeatAt: null,
+    })
+
+    return request(app)
+      .get('/backfills/hash')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('>null<')
+        expect(res.text).toContain('Not recorded')
       })
   })
 

@@ -65,23 +65,23 @@ export default class BackfillRow {
   }
 
   get runId(): string | undefined {
-    return this.run?.runId
+    return this.run?.runId ?? undefined
   }
 
   get cursor(): string | undefined {
-    return this.run?.cursor
+    return this.run?.cursor ?? undefined
   }
 
   get startedAt(): string | undefined {
-    return this.run?.startedAt
+    return this.run?.startedAt ?? undefined
   }
 
   get heartbeatAt(): string | undefined {
-    return this.run?.heartbeatAt
+    return this.run?.heartbeatAt ?? undefined
   }
 
   get completedAt(): string | undefined {
-    return this.run?.completedAt
+    return this.run?.completedAt ?? undefined
   }
 
   get triggeredBy(): string {
@@ -89,7 +89,8 @@ export default class BackfillRow {
   }
 
   get failureReason(): string | undefined {
-    return this.run?.failureReason
+    // null and empty string both mean "no failure", not "a failure with no detail"
+    return this.run?.failureReason || undefined
   }
 
   get lastRunAt(): string | undefined {

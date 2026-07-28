@@ -12,6 +12,6 @@ export default class BackfillDetailViewModel {
   }
 
   get hasFailureReason(): boolean {
-    return this.row.failureReason !== undefined
+    return Boolean(this.row.failureReason)
   }
 }
