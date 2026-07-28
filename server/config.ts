@@ -239,4 +239,5 @@ export default {
   appInsightsConnectionString: get('APPLICATIONINSIGHTS_CONNECTION_STRING', '', requiredInProduction),
   maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
   courtCasesPageSize: Number(get('COURT_CASES_PAGE_SIZE', null)),
+  readonlyOverviewAllowedPrisonIds: (process.env.READONLY_OVERVIEW_ALLOWED_PRISON_IDS ?? 'HLI').split(',').map(id => id.trim()).filter(Boolean),
 }

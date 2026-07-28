@@ -18,6 +18,13 @@ class FullPageError extends Error {
     error.status = 404
     return error
   }
+
+  static prisonerNotInPermittedPrisonError(): FullPageError {
+    const error = new FullPageError('Prisoner is not in an allowed prison')
+    error.errorKey = FullPageErrorType.PRISONER_NOT_IN_PERMITTED_PRISON
+    error.status = 404
+    return error
+  }
 }
 
 export default FullPageError
