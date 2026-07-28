@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken'
 import type { Request, Response } from 'express'
 
 import prisonsFilterMiddleware from './prisonsFilterMiddleware'
@@ -12,7 +11,7 @@ describe('prisonsFilterMiddleware', () => {
   function requestForPrison(prisonId: string): Request {
     return {
       originalUrl: '/prisoner/A1234AA/readonly-overview',
-      prisoner: ({ prisonId } as Prisoner),
+      prisoner: { prisonId } as Prisoner,
     } as Request
   }
   const res = { locals: { user: { username: 'user1' } } } as unknown as Response
@@ -59,7 +58,6 @@ describe('prisonsFilterMiddleware', () => {
     testForException([null])
   })
 
-
   it('should throw FullPageError when prison id is present but filter is undefined array', () => {
     req = requestForPrison('ABC')
 
@@ -79,5 +77,4 @@ describe('prisonsFilterMiddleware', () => {
     expect(thrown.status).toBe(404)
     expect(next).not.toHaveBeenCalled()
   }
-
 })

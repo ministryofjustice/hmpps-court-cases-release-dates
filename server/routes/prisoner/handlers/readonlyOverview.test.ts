@@ -853,7 +853,7 @@ describe('Route Handlers - Readonly Overview', () => {
   })
 
   describe('Permissions', () => {
-    it('should display an error page when the prisoner is inactive and the user lacks access to view inactive bookings', () => {
+    it('should display an error page when the prisoner is inactive and the user lacks access to view inactive bookings', async () => {
       app = appWithAllRoutes({
         services: {
           prisonerService,
@@ -874,7 +874,7 @@ describe('Route Handlers - Readonly Overview', () => {
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
 
-      return request(app)
+      await request(app)
         .get('/prisoner/A12345B/readonly-overview')
         .expect('Content-Type', /html/)
         .expect(res => {
@@ -888,7 +888,7 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonId: 'MDI',
       } as Prisoner)
 
-      const res = await request(app)
+      await request(app)
         .get('/prisoner/A12345B/readonly-overview')
         .expect(404)
         .expect(res => {
