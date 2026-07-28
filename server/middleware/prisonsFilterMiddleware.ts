@@ -3,13 +3,12 @@ import logger from '../../logger'
 import FullPageError from '../model/FullPageError'
 
 export default function prisonsFilterMiddleware(permittedPrisonIds: string[] = []): RequestHandler {
-  return (req, res, next) => {
-    const { prisoner } = req
-    if (prisoner && (permittedPrisonIds.includes(prisoner.prisonId) || permittedPrisonIds.includes('*'))) {
+  return (_req, res, next) => {
+    if (permittedPrisonIds.includes(res.locals?.user?.activeCaseLoadId) || permittedPrisonIds.includes('*')) {
       return next()
     }
 
-    logger.warn(`This prisoner is linked to a restricted prison on this path`)
-    throw FullPageError.prisonerNotInPermittedPrisonError()
+    logger.warn(`This user is linked to a restricted prison on this path`)
+    throw FullPageError.userNotInPermittedPrisonError()
   }
 }

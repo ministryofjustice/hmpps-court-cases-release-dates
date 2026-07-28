@@ -19,9 +19,9 @@ class FullPageError extends Error {
     return error
   }
 
-  static prisonerNotInPermittedPrisonError(): FullPageError {
-    const error = new FullPageError('Prisoner is not in an allowed prison')
-    error.errorKey = FullPageErrorType.PRISONER_NOT_IN_PERMITTED_PRISON
+  static userNotInPermittedPrisonError(): FullPageError {
+    const error = new FullPageError('User is not in an allowed prison')
+    error.errorKey = FullPageErrorType.USER_NOT_IN_PERMITTED_PRISON
     error.status = 404
     return error
   }

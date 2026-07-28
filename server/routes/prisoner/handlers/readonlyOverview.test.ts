@@ -56,6 +56,7 @@ const defaultServices = {
 
 const defaultUser = {
   ...user,
+  activeCaseLoadId: 'HLI',
   hasAdjustmentsAccess: true,
   hasRasAccess: true,
   hasRecallsAccess: true,
@@ -883,9 +884,13 @@ describe('Route Handlers - Readonly Overview', () => {
     })
 
     it("should display an error page when the prisoner's prison is not in the whitelisted prison filter", async () => {
+      app = appWithAllRoutes({
+        services: defaultServices,
+        userSupplier: () => ({ ...defaultUser, activeCaseLoadId: 'MDI' }),
+      })
       prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
         prisonerNumber: 'A12345B',
-        prisonId: 'MDI',
+        prisonId: 'HLI',
       } as Prisoner)
 
       await request(app)
@@ -893,7 +898,7 @@ describe('Route Handlers - Readonly Overview', () => {
         .expect(404)
         .expect(res => {
           expect(res.text).toContain('The details for this person cannot be found')
-          expect(res.text).toContain('is in a restricted prison for this page')
+          expect(res.text).toContain('is in a prison not viewable by this user')
         })
     })
   })
