@@ -2,16 +2,16 @@ export type BackfillRunStatus = 'RUNNING' | 'COMPLETED' | 'FAILED' | 'NO_RUNS'
 
 export interface BackfillRunSummary {
   backfillId: string
-  runId?: string
+  runId?: string | null
   status: BackfillRunStatus
-  cursor?: string
+  cursor?: string | null
   processed: number
   failed: number
-  startedAt?: string
-  heartbeatAt?: string
-  completedAt?: string
-  triggeredBy?: string
-  failureReason?: string
+  startedAt?: string | null
+  heartbeatAt?: string | null
+  completedAt?: string | null
+  triggeredBy?: string | null
+  failureReason?: string | null
 }
 
 export interface BackfillListResponse {
@@ -22,7 +22,7 @@ export interface BackfillListResponse {
 export type TriggerOutcome = 'started' | 'already-running' | 'unknown-backfill' | 'error'
 
 export interface BackfillTriggerResponse {
-  runId?: string
+  runId?: string | null
   message: string
 }
 

@@ -12,6 +12,7 @@ export default function Index(courtDataIngestionService: CourtDataIngestionServi
   const routes = new BackfillRoutes(courtDataIngestionService)
 
   router.get('/', asyncMiddleware(routes.overview))
+  router.get('/:backfillId', asyncMiddleware(routes.detail))
   router.post('/:backfillId/start', asyncMiddleware(routes.start))
 
   return router

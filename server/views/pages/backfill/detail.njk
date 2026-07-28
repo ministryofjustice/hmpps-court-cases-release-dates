@@ -1,0 +1,68 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% set pageTitle = applicationName + " - " + model.backfillId %}
+{% set pageId = "backfill-detail" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back to backfills", href: "/backfills", attributes: { 'data-qa': 'back' } }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-xl" data-qa="target">Court data backfill on {{ model.target.label }}</span>
+      <h1 class="govuk-heading-xl">{{ model.backfillId }}</h1>
+
+      {% if model.row.hasRun %}
+        {% set rows = [
+          { key: { text: "Status" }, value: { html: govukTag({ text: model.row.statusText, classes: model.row.statusClass }) } },
+          { key: { text: "Processed" }, value: { text: model.row.processed } },
+          { key: { text: "Failed" }, value: { text: model.row.failedDisplay } },
+          { key: { text: "Started" }, value: { text: model.row.startedAt | dateTimeShort if model.row.startedAt else "-" } },
+          { key: { text: "Last heartbeat" }, value: { text: model.row.heartbeatAt | dateTimeShort if model.row.heartbeatAt else "-" } },
+          { key: { text: "Completed" }, value: { text: model.row.completedAt | dateTimeShort if model.row.completedAt else "-" } },
+          { key: { text: "Triggered by" }, value: { text: model.row.triggeredBy } },
+          { key: { text: "Run id" }, value: { text: model.row.runId if model.row.runId else "-" } },
+          { key: { text: "Cursor" }, value: { text: model.row.cursor if model.row.cursor else "-" } }
+        ] %}
+
+        {{ govukSummaryList({ rows: rows, attributes: { 'data-qa': 'run-summary' } }) }}
+      {% else %}
+        <p class="govuk-body" data-qa="never-run">This backfill has never been run.</p>
+      {% endif %}
+
+      {% if model.row.isRunning %}
+        <p class="govuk-body">
+          <a class="govuk-link" href="/backfills/{{ model.backfillId }}" data-qa="refresh">Refresh</a>
+        </p>
+      {% else %}
+        <form method="post" action="/backfills/{{ model.backfillId }}/start">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {{ govukButton({
+            text: "Start this backfill",
+            preventDoubleClick: true,
+            attributes: { 'data-qa': 'start-' + model.backfillId }
+          }) }}
+        </form>
+      {% endif %}
+
+    </div>
+  </div>
+
+  {% if model.hasFailureReason %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">Failure detail</h2>
+        <pre class="govuk-body-s" data-qa="failure-reason" style="white-space: pre-wrap; word-break: break-word;">{{ model.row.failureReason }}</pre>
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock %}

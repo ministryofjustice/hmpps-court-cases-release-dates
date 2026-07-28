@@ -1,11 +1,13 @@
 import { BackfillListResponse, BackfillNotification } from './backfill'
 import BackfillRow from './BackfillRow'
+import { BackfillTarget } from '../utils/backfillTarget'
 
 export default class BackfillOverviewViewModel {
   readonly rows: BackfillRow[]
 
   constructor(
     list: BackfillListResponse,
+    readonly target: BackfillTarget,
     readonly notification?: BackfillNotification,
   ) {
     const byId = new Map(list.recent.map(run => [run.backfillId, run]))
