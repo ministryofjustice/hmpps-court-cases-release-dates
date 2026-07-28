@@ -11,7 +11,7 @@ export default class ConfigRoutes {
   }
 
   public getConfig: RequestHandler = async (req, res) => {
-    const { token, hasReadOnlyNomisConfigAccess } = res.locals.user
+    const { token } = res.locals.user
     const activePrisons = await this.prisonerService.getActivePrisons(token)
     const updateId = req.query.id as string
     const readOnly = (req.query.readonly as string)?.split(',')
@@ -39,18 +39,16 @@ export default class ConfigRoutes {
         )
       }),
     )
-    if (hasReadOnlyNomisConfigAccess) {
-      return res.render('pages/config/index', {
-        model: new ConfigurationViewModel(
-          activePrisons,
-          readOnlyPrisonResults,
-          readOnlyChanges,
-          notReadOnlyChanges,
-          updatedScreen,
-        ),
-      })
-    }
-    return res.redirect('/')
+
+    return res.render('pages/config/index', {
+      model: new ConfigurationViewModel(
+        activePrisons,
+        readOnlyPrisonResults,
+        readOnlyChanges,
+        notReadOnlyChanges,
+        updatedScreen,
+      ),
+    })
   }
 
   public postConfig: RequestHandler = async (req, res) => {

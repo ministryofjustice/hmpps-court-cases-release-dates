@@ -1,0 +1,105 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Court data backfills" %}
+{% set pageId = "backfills" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      {% if model.notification %}
+        {{ govukNotificationBanner({
+          text: model.notification.text,
+          type: model.notification.type,
+          attributes: { 'data-qa': 'backfill-outcome' },
+          classes: 'govuk-notification-banner__no-header'
+        }) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-l">Court data backfills</h1>
+
+      <p class="govuk-body">
+        These run against live production data. Starting one is not reversible and the run is recorded
+        against your username.
+      </p>
+
+      {% if model.anyRunning %}
+        {{ govukInsetText({
+          text: "A backfill is currently running. Reload this page to see updated progress.",
+          attributes: { 'data-qa': 'running-notice' }
+        }) }}
+      {% endif %}
+
+      <table class="govuk-table" data-qa="backfill-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">Registered backfills and their most recent run</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Backfill</th>
+            <th scope="col" class="govuk-table__header">Status</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Processed</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Failed</th>
+            <th scope="col" class="govuk-table__header">Last run</th>
+            <th scope="col" class="govuk-table__header">Triggered by</th>
+            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for row in model.rows %}
+            <tr class="govuk-table__row" data-qa="row-{{ row.backfillId }}">
+              <td class="govuk-table__cell">
+                <span class="govuk-!-font-weight-bold">{{ row.backfillId }}</span>
+                {% if row.failureReason %}
+                  <br>
+                  <span class="govuk-hint govuk-!-margin-bottom-0" data-qa="failure-{{ row.backfillId }}">{{ row.failureReason }}</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                {{ govukTag({ text: row.statusText, classes: row.statusClass }) }}
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">{{ row.processed }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">{{ row.failed }}</td>
+              <td class="govuk-table__cell">
+                {% if row.isRunning %}
+                  Started {{ row.startedAt }}<br>
+                  <span class="govuk-hint govuk-!-margin-bottom-0">Heartbeat {{ row.heartbeatAt }}</span>
+                {% elif row.completedAt %}
+                  {{ row.completedAt }}
+                {% else %}
+                  Never
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">{{ row.triggeredBy if row.triggeredBy else "-" }}</td>
+              <td class="govuk-table__cell">
+                {% if row.isRunning %}
+                  <span class="govuk-hint govuk-!-margin-bottom-0">In flight</span>
+                {% else %}
+                  <form method="post" action="/backfills/{{ row.backfillId }}/start">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    {{ govukButton({
+                      text: "Start",
+                      classes: "govuk-button--secondary govuk-!-margin-bottom-0",
+                      preventDoubleClick: true,
+                      attributes: { 'data-qa': 'start-' + row.backfillId }
+                    }) }}
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="/backfills" data-qa="refresh">Refresh</a>
+      </p>
+
+    </div>
+  </div>
+
+{% endblock %}
