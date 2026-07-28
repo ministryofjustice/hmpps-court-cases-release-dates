@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express'
 import CourtDataIngestionService from '../../services/courtDataIngestionService'
 import BackfillOverviewViewModel from '../../model/BackfillOverviewViewModel'
+import BackfillDetailViewModel from '../../model/BackfillDetailViewModel'
 import { BackfillNotification } from '../../model/backfill'
 
 export default class BackfillRoutes {
@@ -12,6 +13,16 @@ export default class BackfillRoutes {
 
     return res.render('pages/backfill/index', {
       model: new BackfillOverviewViewModel(list, this.notificationFrom(req.query)),
+    })
+  }
+
+  public detail: RequestHandler = async (req, res) => {
+    const { token } = res.locals.user
+    const { backfillId } = req.params
+    const run = await this.courtDataIngestionService.getBackfill(backfillId, token)
+
+    return res.render('pages/backfill/detail', {
+      model: new BackfillDetailViewModel(backfillId, run),
     })
   }
 
