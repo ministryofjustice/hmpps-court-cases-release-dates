@@ -39,30 +39,23 @@ export default class DocumentRoutes {
     const byCaseReference = getAsStringOrDefault(req.query.byCaseReference, 'all')
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
-    const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
+    const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
 
     const filters = {
       showing,
       byCaseReference,
       // TODO (CDIA-????): Update this list with a list of actual case references from filter a endpoint (TBD)
-      caseReferences: ['APRIL2026', 'REMAND1234', 'HEARING5', 'CASE12345TEST'],
+      caseReferences: ['28DI2114985', '28DI7505638', 'CW238512139', 'JF231267674', 'ZF231211952', 'TEST123'],
       pagination: {
         sortBy: sortByQuery,
-        pageNumber: pageNumber + 1,
+        pageNumber,
       },
     } as DocumentFilters
 
-    const documentSearchRequest = {
-      ...defaultSearchParams,
-      orderByDirection: sortByQuery === 'MOST_RECENT' ? 'DESC' : 'ASC',
-      page: pageNumber,
-      metadata: {
-        prisonerId: prisoner.prisonerNumber,
-      } as unknown as Record<string, never>,
-      metadataExact: {
-        status: commonPlatformDocumentStatuses.ACTIVE,
-      } as unknown as Record<string, never>,
-    } as DocumentSearchRequest
+    const documentSearchRequest: DocumentSearchRequest = this.buildDocumentSearchRequest(
+      prisoner.prisonerNumber,
+      filters,
+    )
 
     const serviceDefinitions = await this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token)
     const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
@@ -93,6 +86,11 @@ export default class DocumentRoutes {
             fileSize: it.fileSize,
           } as Partial<DocumentViewModel>
 
+          const caseReferences = it.metadata?.caseReferences
+          if (Array.isArray(caseReferences) && caseReferences.length > 0) {
+            document.caseReference = caseReferences.join(', ')
+          }
+
           let rasDocument: {
             caseDocument: RaSCourtCaseDocument
             appearanceDocument: AppearanceDocument
@@ -122,7 +120,6 @@ export default class DocumentRoutes {
               document.hearingType = cpDocument.courtHearing?.hearingType
               document.courtName = cpDocument.courtHearing?.courtName
               document.hearingDate = cpDocument.courtHearing?.hearingDate
-              document.caseReference = cpDocument.caseReferences.join(', ')
               document.courtCaseUuid = rasDocument?.caseDocument?.courtCaseUuid
             } else {
               document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
@@ -140,7 +137,6 @@ export default class DocumentRoutes {
               document.type,
             )
             document.courtCaseUuid = rasDocument.caseDocument.courtCaseUuid
-            document.caseReference = RaSDocumentMapper.getCaseReference(rasDocument.appearanceDocument)
             document.hearingDate = RaSDocumentMapper.getHearingDate(rasDocument.appearanceDocument)
             document.warrantDate = RaSDocumentMapper.getWarrantDate(rasDocument.appearanceDocument)
             document.courtCode = rasDocument.appearanceDocument.courtCode
@@ -285,6 +281,26 @@ export default class DocumentRoutes {
     } catch (error) {
       logger.error(`Error sending audit event [${error}]`)
     }
+  }
+
+  buildDocumentSearchRequest = (prisonerNumber: string, filters: DocumentFilters): DocumentSearchRequest => {
+    const documentSearchRequest = {
+      ...defaultSearchParams,
+      orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
+      page: filters.pagination.pageNumber - 1,
+      metadata: {
+        prisonerId: prisonerNumber,
+      } as unknown as Record<string, never>,
+      metadataExact: {
+        status: commonPlatformDocumentStatuses.ACTIVE,
+      } as unknown as Record<string, never>,
+    } as DocumentSearchRequest
+
+    if (filters.byCaseReference !== 'all' && filters.byCaseReference !== 'none') {
+      documentSearchRequest.metadataExact.caseReferences = [filters.byCaseReference]
+    }
+
+    return documentSearchRequest
   }
 }
 

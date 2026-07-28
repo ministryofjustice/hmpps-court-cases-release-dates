@@ -92,7 +92,6 @@
 
 <div class="moj-filter-layout__filter">
 <form id="documentFiltersForm" action="/prisoner/{{ prisoner.prisonerNumber }}/documents?test=tomas" method="GET">
-{# TODO (CDIA-????): Add hidden inputs for sortBy and pageNumber to preserve the current sort and page when applying filters #}
 {# TODO (CDIA-????): Uncomment selectedFilters when we can have multiple-selectino filters. For now all are radio buttons, so no need to show selected filters. #}
     {{ mojFilter({
     heading: {
