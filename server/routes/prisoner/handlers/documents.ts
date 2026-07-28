@@ -78,17 +78,13 @@ export default class DocumentRoutes {
     const viewModelDocuments = await Promise.all(
       documents.results
         .map(async it => {
-          const document = {
+          const document: Partial<DocumentViewModel> = {
             documentUuid: it.documentUuid,
             createdTime: it.createdTime,
             filename: it.filename,
             fileExtension: it.fileExtension,
             fileSize: it.fileSize,
-          } as Partial<DocumentViewModel>
-
-          const caseReferences = it.metadata?.caseReferences
-          if (Array.isArray(caseReferences) && caseReferences.length > 0) {
-            document.caseReference = caseReferences.join(', ')
+            caseReference: DocumentManagementMapper.getCaseReferences(it),
           }
 
           let rasDocument: {
