@@ -4,12 +4,20 @@
  * In particular, applicationinsights automatically collects bunyan logs
  */
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
-import { initialiseAppInsights, buildAppInsightsClient } from '../utils/azureAppInsights'
+import type { TelemetryClient } from 'applicationinsights'
+import type { TelemetryClient as PermissionsTelemetryClient } from '@ministryofjustice/hmpps-prison-permissions-lib'
+import {
+  initialiseAppInsights,
+  buildAppInsightsClient,
+  buildPermissionsTelemetryClient,
+} from '../utils/azureAppInsights'
 import applicationInfoSupplier from '../applicationInfo'
 
 const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
-buildAppInsightsClient(applicationInfo)
+const telemetryClient: TelemetryClient = buildAppInsightsClient(applicationInfo)
+export const telemetryClientPermissionsLibWrapper: PermissionsTelemetryClient =
+  buildPermissionsTelemetryClient(telemetryClient)
 
 import HmppsAuthClient from './hmppsAuthClient'
 import ManageUsersApiClient from './manageUsersApiClient'
