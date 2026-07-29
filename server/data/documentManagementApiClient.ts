@@ -59,7 +59,7 @@ export default class DocumentManagementApiClient extends RestClient {
     )
   }
 
-  // TODO (CDIA-????): This request will be made redundant once facets search endpoint is available
+  // TODO (CDIA-262): This request will be made redundant once facets search endpoint is available
   async getCaseReferences(prisonerId: string, username: string): Promise<string[]> {
     return this.get(
       {
