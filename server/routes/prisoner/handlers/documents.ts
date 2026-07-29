@@ -40,12 +40,14 @@ export default class DocumentRoutes {
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
     const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
+    // TODO (CDIA-????): This request will be made redundant once facets search endpoint is available
+    const caseReferences = await this.documentManagementService.getCaseReferences(prisoner.prisonerNumber, username)
 
     const filters = {
       showing,
       byCaseReference,
       // TODO (CDIA-????): Update this list with a list of actual case references from filter a endpoint (TBD)
-      caseReferences: ['28DI2114985', '28DI7505638', 'CW238512139', 'JF231267674', 'ZF231211952', 'TEST123'],
+      caseReferences,
       pagination: {
         sortBy: sortByQuery,
         pageNumber,

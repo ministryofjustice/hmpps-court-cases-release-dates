@@ -21,4 +21,9 @@ export default class DocumentManagementService {
   async downloadDocument(documentId: string, username: string): Promise<FileDownload> {
     return new DocumentManagementApiClient(this.hmppsAuthClient).downloadDocument(documentId, username)
   }
+
+  // TODO (CDIA-????): This request will be made redundant once facets search endpoint is available
+  async getCaseReferences(prisonerId: string, username: string): Promise<string[]> {
+    return new DocumentManagementApiClient(this.hmppsAuthClient).getCaseReferences(prisonerId, username)
+  }
 }
