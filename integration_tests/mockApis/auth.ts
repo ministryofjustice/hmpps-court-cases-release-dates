@@ -113,6 +113,7 @@ const token = (roles: string[] = ['ROLE_RELEASE_DATES_CALCULATOR']) =>
         access_token: createToken(roles),
         token_type: 'bearer',
         user_name: 'USER1',
+        auth_source: 'nomis',
         expires_in: 599,
         scope: 'read',
         internalUser: true,

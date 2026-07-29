@@ -5,7 +5,7 @@
 
 {% block content %}
 
-  {% if errorKey === 'NOT_IN_CASELOAD' or errorKey === 'PRISONER_OUT' %}
+  {% if errorKey === 'NOT_IN_CASELOAD' or errorKey === 'PRISONER_OUT' or errorKey === 'USER_NOT_IN_PERMITTED_PRISON' %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl" data-qa="error-heading">
@@ -20,6 +20,7 @@
           <ul class="govuk-list govuk-list--bullet">
               <li>is not in your case load</li>
               <li>has no bookings assigned to them</li>
+              <li>is in a prison not viewable by this user</li>
           </ul>
           <p class="gouk-body">Check the details in NOMIS and then <a class="govuk-link" href="{{ url }}">try again</a>.</p> 
       </div>

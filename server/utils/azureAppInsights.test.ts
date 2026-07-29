@@ -1,5 +1,5 @@
 import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
-import { addCustomDataToRequests, ContextObject } from './azureAppInsights'
+import { addCustomDataToRequests, ContextObject, buildPermissionsTelemetryClient } from './azureAppInsights'
 
 const user = {
   username: 'test-user',
@@ -76,6 +76,24 @@ describe('azureAppInsights', () => {
 
       expect(envelope.data.baseData.properties).toEqual({
         other: 'things',
+      })
+    })
+  })
+
+  describe('buildPermissionsTelemetryClient', () => {
+    it('returns undefined when no App Insights client is provided', () => {
+      expect(buildPermissionsTelemetryClient(null)).toBeUndefined()
+    })
+
+    it('Should wrap the trackEvent to the PermissionsTelemetryClient', () => {
+      const trackEvent = jest.fn()
+      const wrapper = buildPermissionsTelemetryClient({ trackEvent } as never)
+
+      wrapper.trackEvent('prisoner-permission-denied', { username: user.username, status: 'DENIED' })
+
+      expect(trackEvent).toHaveBeenCalledWith({
+        name: 'prisoner-permission-denied',
+        properties: { username: user.username, status: 'DENIED' },
       })
     })
   })

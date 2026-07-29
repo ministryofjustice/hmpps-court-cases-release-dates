@@ -12,7 +12,7 @@ export default function getPrisoner(prisonerSearchService: PrisonerSearchService
       try {
         const prisoner = await prisonerSearchService.getByPrisonerNumber(res.locals.user.username, prisonerNumber)
         req.prisoner = prisoner
-        const isInCaseload = user.caseloads.includes(prisoner.prisonId)
+        const isInCaseload = user.caseLoads?.some(caseLoad => caseLoad.caseLoadId === prisoner.prisonId)
         const isPrisonerOutside = prisoner.prisonId === 'OUT'
         const isPrisonerBeingTransferred = prisoner.prisonId === 'TRN'
         if (!isInCaseload && !(user.hasInactiveBookingAccess && (isPrisonerOutside || isPrisonerBeingTransferred))) {

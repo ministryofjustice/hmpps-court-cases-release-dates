@@ -1,0 +1,92 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Court data backfills" %}
+{% set pageId = "backfills" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-6">
+    <div class="govuk-grid-column-full">
+
+      {% if model.notification %}
+        {{ govukNotificationBanner({
+          text: model.notification.text,
+          type: model.notification.type,
+          attributes: { 'data-qa': 'backfill-outcome' }
+        }) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Court data backfills</h1>
+
+      {% set targetHtml %}
+        These run against <strong>{{ model.target.label }}</strong> data, on
+        <span class="govuk-!-font-family-monospace">{{ model.target.host }}</span>.
+        Starting one is not reversible and the run is recorded against your username.
+      {% endset %}
+
+      {% if model.target.isProduction %}
+        {{ govukWarningText({ html: targetHtml, iconFallbackText: "Warning", attributes: { 'data-qa': 'target' } }) }}
+      {% else %}
+        {{ govukInsetText({ html: targetHtml, attributes: { 'data-qa': 'target' } }) }}
+      {% endif %}
+
+      <table class="govuk-table govuk-table--small-text-until-10pt" data-qa="backfill-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">Registered backfills and their most recent run</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Backfill</th>
+            <th scope="col" class="govuk-table__header">Status</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Processed</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Failed</th>
+            <th scope="col" class="govuk-table__header">Last run</th>
+            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for row in model.rows %}
+            <tr class="govuk-table__row" data-qa="row-{{ row.backfillId }}">
+              <td class="govuk-table__cell">
+                <a class="govuk-link" href="/backfills/{{ row.backfillId }}" data-qa="detail-{{ row.backfillId }}">{{ row.backfillId }}</a>
+              </td>
+              <td class="govuk-table__cell">
+                {{ govukTag({ text: row.statusText, classes: row.statusClass }) }}
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">{{ row.processed }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">{{ row.failedDisplay }}</td>
+              <td class="govuk-table__cell">{{ row.lastRun }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                {% if row.isRunning %}
+                  <span class="govuk-hint govuk-!-margin-bottom-0">In flight</span>
+                {% else %}
+                  <form method="post" action="/backfills/{{ row.backfillId }}/start">
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+                    {{ govukButton({
+                      text: "Start",
+                      classes: "govuk-button--secondary govuk-!-margin-bottom-0",
+                      preventDoubleClick: true,
+                      attributes: { 'data-qa': 'start-' + row.backfillId }
+                    }) }}
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {% if model.anyRunning %}
+        <p class="govuk-body">
+          <a class="govuk-link" href="/backfills" data-qa="refresh">Refresh</a>
+        </p>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

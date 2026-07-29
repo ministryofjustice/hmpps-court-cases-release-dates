@@ -1,4 +1,8 @@
 import { RequestHandler, Router } from 'express'
+import {
+  PersonSentenceCalculationPermission,
+  prisonerPermissionsGuard,
+} from '@ministryofjustice/hmpps-prison-permissions-lib'
 import { Services } from '../../services'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
 import AdjustmentsRoutes from './handlers/adjustments'
@@ -9,6 +13,8 @@ import ReadonlyOverviewRoutes from './handlers/readonlyOverview'
 import ReleaseDatesRoutes from './handlers/releaseDates'
 import ConfigRoutes from '../config/ConfigRoutes'
 import DocumentRoutes from './handlers/documents'
+import config from '../../config'
+import prisonsFilterMiddleware from '../../middleware/prisonsFilterMiddleware'
 
 export default function Index({
   prisonerService,
@@ -21,17 +27,27 @@ export default function Index({
   courtRegisterService,
   manageOffencesService,
   immigrationDetentionService,
+  prisonPermissionsService,
 }: Services): Router {
   const router = Router()
-  const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string | string[], handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  const get = (path: string | string[], ...handlers: RequestHandler[]) =>
+    router.get(path, ...handlers.map(handler => asyncMiddleware(handler)))
+  const post = (path: string | string[], ...handlers: RequestHandler[]) =>
+    router.post(path, ...handlers.map(handler => asyncMiddleware(handler)))
 
-  router.get('/:prisonerNumber/image', new ImageRoutes(prisonerService).GET)
+  const requireRead = prisonerPermissionsGuard(prisonPermissionsService, {
+    requestDependentOn: [PersonSentenceCalculationPermission.read],
+  })
+  const requireEdit = prisonerPermissionsGuard(prisonPermissionsService, {
+    requestDependentOn: [PersonSentenceCalculationPermission.edit],
+  })
 
-  get('/:prisonerNumber/adjustments', new AdjustmentsRoutes().GET)
-  get('/:prisonerNumber/court-cases', new CourtCasesRoutes().GET)
+  get('/:prisonerNumber/image', requireRead, new ImageRoutes(prisonerService).GET)
+  get('/:prisonerNumber/adjustments', requireEdit, new AdjustmentsRoutes().GET)
+  get('/:prisonerNumber/court-cases', requireEdit, new CourtCasesRoutes().GET)
   get(
     '/:prisonerNumber/overview',
+    requireEdit,
     new OverviewRoutes(
       prisonerService,
       adjustmentsService,
@@ -43,6 +59,8 @@ export default function Index({
   )
   get(
     '/:prisonerNumber/readonly-overview',
+    requireRead,
+    prisonsFilterMiddleware(config.readonlyOverviewAllowedPrisonIds),
     new ReadonlyOverviewRoutes(
       prisonerService,
       calculateReleaseDatesService,
@@ -52,10 +70,11 @@ export default function Index({
       immigrationDetentionService,
     ).GET,
   )
-  get('/:prisonerNumber/release-dates', new ReleaseDatesRoutes().GET)
+  get('/:prisonerNumber/release-dates', requireEdit, new ReleaseDatesRoutes().GET)
 
   get(
     '/:prisonerNumber/documents',
+    requireEdit,
     new DocumentRoutes(
       prisonerService,
       documentManagementService,
@@ -66,6 +85,7 @@ export default function Index({
   )
   get(
     ['/:prisonerNumber/documents/:documentId/download/:filename', '/:prisonerNumber/documents/:documentId/download'],
+    requireEdit,
     new DocumentRoutes(
       prisonerService,
       documentManagementService,
@@ -77,6 +97,7 @@ export default function Index({
 
   post(
     '/:prisonerNumber/documents/:documentId/mark-as-new',
+    requireEdit,
     new DocumentRoutes(
       prisonerService,
       documentManagementService,
