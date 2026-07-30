@@ -33,6 +33,11 @@ export class DocumentManagementMapper {
     )
   }
 
+  public static getCaseReferences(it: Document): string {
+    const caseReferences = it.metadata?.caseReferences
+    return (Array.isArray(caseReferences) && caseReferences.length > 0) ? caseReferences.join(', ') : null
+  }
+
   public static getSource(it: Document): string {
     return this.asString(it.metadata?.source) === 'court-data-ingestion-api'
       ? this.SOURCE_COMMON_PLATFORM

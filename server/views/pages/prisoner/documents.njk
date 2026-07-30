@@ -7,8 +7,15 @@
 {% set activeSubNav = 'documents' %}
 
 {% block content %}
+    <div class="govuk-grid-row">
 
     <h1 class="govuk-heading-xl">Documents</h1>
+
+    <div id="document-filters" class="govuk-grid-column-one-quarter">
+        {% include "components/prisoner/documentFilters.njk" %}
+    </div>
+
+    <div id="document-search-results" class="govuk-grid-column-three-quarters">
 
     {% if not documents.length %}
         <p class="govuk-body">No documents have been received.</p>
@@ -92,7 +99,7 @@
                         <div class="govuk-grid-column-one-third">
                             <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Case reference</p>
                             <p class="govuk-body govuk-!-margin-bottom-2" data-qa="case-reference">
-                                
+
                             {% if document.courtCaseUuid %}
                                 <a data-qa="court-case-link"
                                     href="{{ applications.remandAndSentencing.url }}/person/{{ prisoner.prisonerNumber }}/view-court-case/{{ document.courtCaseUuid }}/details">
@@ -167,4 +174,11 @@
         {% endif %}
 
     {% endif %}
+    </div>
+    </div>
 {% endblock %}
+
+{# TODO (CDIA-????): We might need some scripts to handle checkboxes and multiple selection filters #}
+{# {% block pageScripts %}
+    <script src="/assets/documentFilters.js"></script>
+{% endblock %} #}

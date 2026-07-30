@@ -35,20 +35,28 @@ export default class DocumentRoutes {
     const { prisoner } = req
     const { token, username } = req.user
 
-    const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
-    const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
+    const showing = getAsStringOrDefault(req.query.showing, 'all')
+    const byCaseReference = getAsStringOrDefault(req.query.byCaseReference, 'all')
 
-    const documentSearchRequest = {
-      ...defaultSearchParams,
-      orderByDirection: sortByQuery === 'MOST_RECENT' ? 'DESC' : 'ASC',
-      page: pageNumber,
-      metadata: {
-        prisonerId: prisoner.prisonerNumber,
-      } as unknown as Record<string, never>,
-      metadataExact: {
-        status: commonPlatformDocumentStatuses.ACTIVE,
-      } as unknown as Record<string, never>,
-    } as DocumentSearchRequest
+    const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
+    const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
+    // TODO (CDIA-262): This request will be made redundant once facets search endpoint is available
+    const caseReferences = await this.documentManagementService.getCaseReferences(prisoner.prisonerNumber, username)
+
+    const filters = {
+      showing,
+      byCaseReference,
+      caseReferences,
+      pagination: {
+        sortBy: sortByQuery,
+        pageNumber,
+      },
+    } as DocumentFilters
+
+    const documentSearchRequest: DocumentSearchRequest = this.buildDocumentSearchRequest(
+      prisoner.prisonerNumber,
+      filters,
+    )
 
     const serviceDefinitions = await this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token)
     const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
@@ -71,13 +79,14 @@ export default class DocumentRoutes {
     const viewModelDocuments = await Promise.all(
       documents.results
         .map(async it => {
-          const document = {
+          const document: Partial<DocumentViewModel> = {
             documentUuid: it.documentUuid,
             createdTime: it.createdTime,
             filename: it.filename,
             fileExtension: it.fileExtension,
             fileSize: it.fileSize,
-          } as Partial<DocumentViewModel>
+            caseReference: DocumentManagementMapper.getCaseReferences(it),
+          }
 
           let rasDocument: {
             caseDocument: RaSCourtCaseDocument
@@ -108,7 +117,6 @@ export default class DocumentRoutes {
               document.hearingType = cpDocument.courtHearing?.hearingType
               document.courtName = cpDocument.courtHearing?.courtName
               document.hearingDate = cpDocument.courtHearing?.hearingDate
-              document.caseReference = cpDocument.caseReferences.join(', ')
               document.courtCaseUuid = rasDocument?.caseDocument?.courtCaseUuid
             } else {
               document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
@@ -126,7 +134,6 @@ export default class DocumentRoutes {
               document.type,
             )
             document.courtCaseUuid = rasDocument.caseDocument.courtCaseUuid
-            document.caseReference = RaSDocumentMapper.getCaseReference(rasDocument.appearanceDocument)
             document.hearingDate = RaSDocumentMapper.getHearingDate(rasDocument.appearanceDocument)
             document.warrantDate = RaSDocumentMapper.getWarrantDate(rasDocument.appearanceDocument)
             document.courtCode = rasDocument.appearanceDocument.courtCode
@@ -148,6 +155,7 @@ export default class DocumentRoutes {
       prisoner,
       serviceDefinitions,
       documents: viewModelDocuments,
+      filters,
       sortByQuery,
       pageNumber,
       pageSize: documentSearchRequest.pageSize,
@@ -271,6 +279,26 @@ export default class DocumentRoutes {
       logger.error(`Error sending audit event [${error}]`)
     }
   }
+
+  buildDocumentSearchRequest = (prisonerNumber: string, filters: DocumentFilters): DocumentSearchRequest => {
+    const documentSearchRequest = {
+      ...defaultSearchParams,
+      orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
+      page: filters.pagination.pageNumber - 1,
+      metadata: {
+        prisonerId: prisonerNumber,
+      } as unknown as Record<string, never>,
+      metadataExact: {
+        status: commonPlatformDocumentStatuses.ACTIVE,
+      } as unknown as Record<string, never>,
+    } as DocumentSearchRequest
+
+    if (filters.byCaseReference !== 'all' && filters.byCaseReference !== 'none') {
+      documentSearchRequest.metadataExact.caseReferences = [filters.byCaseReference]
+    }
+
+    return documentSearchRequest
+  }
 }
 
 const defaultSearchParams = {
@@ -306,4 +334,14 @@ type DocumentViewModel = {
   isNew: boolean
   hearingType: string
   source: 'remand-and-sentencing-api' | 'court-data-ingestion-api'
+}
+
+type DocumentFilters = {
+  showing: string
+  byCaseReference: string
+  caseReferences: string[]
+  pagination: {
+    sortBy: string
+    pageNumber: number
+  }
 }

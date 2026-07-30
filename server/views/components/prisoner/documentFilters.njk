@@ -1,0 +1,144 @@
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{%- from "govuk/components/radios/macro.njk" import govukRadios -%}
+{%- from "govuk/components/input/macro.njk" import govukInput -%}
+
+{%- set caseReferenceItems = [] -%}
+{%- for caseReference in filters.caseReferences -%}
+    {%- set caseReferenceItems = (caseReferenceItems.push({
+        value: caseReference,
+        text: caseReference,
+        checked: (filters.byCaseReference === caseReference)
+    }), caseReferenceItems) -%}
+{%- endfor -%}
+
+{%- set filterOptionsHtml %}
+    {# TODO (CDIA-????): Enable filter option "New documents" when DMA supports filtering by new documents #}
+    {{ govukRadios({
+        idPrefix: "showing",
+        name: "showing",
+        classes: "govuk-radios--small",
+        fieldset: {
+            legend: {
+                text: "Showing",
+                classes: "govuk-fieldset__legend--m"
+            }
+        },
+        items: [
+            {
+                text: "New documents",
+                value: "new",
+                checked: (filters.showing === "new"),
+                disabled: true
+            },
+            {
+                text: "All documents",
+                value: "all",
+                checked: (filters.showing === "all")
+            }
+        ]
+    }) }}
+
+    {# TODO (CDIA-????): When case references are changed to checkboxes, revisit the naming of these inputs  #}
+    {{ govukRadios({
+        idPrefix: "byCaseReference",
+        name: "byCaseReference",
+        classes: "govuk-radios--small",
+        fieldset: {
+            legend: {
+                text: "Case reference",
+                classes: "govuk-fieldset__legend--m"
+            }
+        },
+        items: [
+            {
+                value: "all",
+                text: "All case references",
+                checked: (filters.byCaseReference === "all")
+            },
+            {
+                value: "none",
+                text: "No case reference",
+                checked: (filters.byCaseReference === "none"),
+                disabled: true
+            }
+        ]
+    }) }}
+
+    {% if filters.caseReferences.length > 0 %}
+        {# TODO (CDIA-????): Change to checkboxes with multiselect options, from radio as currently DMA only accepts filtering by sending a single case reference  #}
+        {{ govukRadios({
+            idPrefix: "byCaseReference",
+            name: "byCaseReference",
+            classes: "govuk-radios--small",
+            fieldset: {
+                legend: {
+                    text: "or",
+                    classes: "govuk-fieldset__legend--m"
+                }
+            },
+            items: caseReferenceItems
+        }) }}
+    {% endif %}
+
+  {# {{ govukCheckboxes({
+    idPrefix: "...",
+    name: "...",
+    classes: "govuk-checkboxes--small",
+    fieldset: {
+      legend: {...}
+    },
+    items: [...]
+  }) }} #}
+{% endset -%}
+
+<div class="moj-filter-layout__filter">
+<form id="documentFiltersForm" action="/prisoner/{{ prisoner.prisonerNumber }}/documents?test=tomas" method="GET">
+{# TODO (CDIA-????): Uncomment selectedFilters when we can have multiple-selectino filters. For now all are radio buttons, so no need to show selected filters. #}
+    {{ mojFilter({
+    heading: {
+        text: "Filter"
+    },
+
+    submit: {
+        attributes: {
+            "data-test-id": "submit-button"
+        }
+    },
+    optionsHtml: filterOptionsHtml
+    }) }}
+    {# selectedFilters: {
+
+        heading: {
+        text: "Selected filters"
+        },
+
+        clearLink: {
+        text: "Clear filters"
+        },
+
+        categories: [
+        {
+            heading: {
+            text: "Showing"
+            },
+            items: [{
+            href: "#",
+            text: "All documents"
+            }]
+        },
+        {
+            heading: {
+            text: "Case reference"
+            },
+            items: [{
+            href: "#",
+            text: "All case references"
+            }]
+        }
+        ]
+    }, #}
+    <input type="hidden" name="sortBy" value="{{ filters.pagination.sortBy }}" />
+    <input type="hidden" name="pageNumber" value="{{ filters.pagination.pageNumber }}" />
+</form>
+</div>

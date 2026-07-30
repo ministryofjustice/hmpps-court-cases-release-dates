@@ -456,6 +456,7 @@ const documents = {
       metadata: {
         source: 'court-data-ingestion-api',
         prisonerId: 'A12345B',
+        caseReferences: ['CommonPlatformCase123', 'CommonPlatformCase456'],
       },
     },
     {
@@ -470,7 +471,9 @@ const documents = {
       createdTime: '2026-03-28T14:22:30',
       createdByServiceName: 'Remand and Sentencing',
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
-      metadata: {},
+      metadata: {
+        caseReferences: ['BC23456789B'],
+      },
     },
     {
       documentUuid: '80dffad6-ec63-47e5-9d79-cb96537081e7',
@@ -484,7 +487,9 @@ const documents = {
       createdTime: '2026-03-29T14:08:14',
       createdByServiceName: 'Remand and Sentencing',
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
-      metadata: {},
+      metadata: {
+        caseReferences: ['AB12345678A', 'BC23456789B'],
+      },
     },
     {
       documentUuid: '80dffad6-ec63-47e5-9d79-cb96537081e8',
