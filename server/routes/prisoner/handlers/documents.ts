@@ -7,7 +7,7 @@ import DocumentManagementService from '../../../services/documentManagementServi
 import logger from '../../../../logger'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import CourtRegisterService from '../../../services/courtRegisterService'
-import { getAsStringOrDefault } from '../../../utils/utils'
+import { getAsStringOrDefault, getAsArrayOrDefault } from '../../../utils/utils'
 import { Document, DocumentManagementMapper, DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
@@ -36,7 +36,7 @@ export default class DocumentRoutes {
     const { token, username } = req.user
 
     const showing = getAsStringOrDefault(req.query.showing, 'all')
-    const byCaseReference = getAsStringOrDefault(req.query.byCaseReference, 'all')
+    const byCaseReferences = getAsArrayOrDefault(req.query.byCaseReference, 'all')
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
     const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
@@ -45,7 +45,7 @@ export default class DocumentRoutes {
 
     const filters = {
       showing,
-      byCaseReference,
+      byCaseReferences,
       caseReferences,
       pagination: {
         sortBy: sortByQuery,
@@ -293,8 +293,9 @@ export default class DocumentRoutes {
       } as unknown as Record<string, never>,
     } as DocumentSearchRequest
 
-    if (filters.byCaseReference !== 'all' && filters.byCaseReference !== 'none') {
-      documentSearchRequest.metadataExact.caseReferences = [filters.byCaseReference]
+    if (!filters.byCaseReferences.find(it => it === 'all') && !filters.byCaseReferences.find(it => it === 'none')) {
+      // TODO (CDIA-195): Amend when updating to facets search request
+      documentSearchRequest.metadataExact.caseReferences = [filters.byCaseReferences[0]]
     }
 
     if (filters.showing === 'new') {
@@ -342,7 +343,7 @@ type DocumentViewModel = {
 
 type DocumentFilters = {
   showing: string
-  byCaseReference: string
+  byCaseReferences: string[]
   caseReferences: string[]
   pagination: {
     sortBy: string

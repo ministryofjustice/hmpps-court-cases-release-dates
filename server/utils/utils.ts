@@ -32,6 +32,14 @@ export const getAsStringOrDefault = (value: unknown, defaultValue: string): stri
   return defaultValue
 }
 
+export const getAsArrayOrDefault = (value: unknown, defaultValue: string, separator: string = ','): string[] => {
+  if (value == null) {
+    return [defaultValue]
+  }
+
+  return value.toString().split(separator)
+}
+
 export const minOf = (a: number, b: number): number => {
   if (a > b) return b
   return a
