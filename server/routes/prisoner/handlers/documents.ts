@@ -297,6 +297,10 @@ export default class DocumentRoutes {
       documentSearchRequest.metadataExact.caseReferences = [filters.byCaseReference]
     }
 
+    if (filters.showing === 'new') {
+      documentSearchRequest.metadataExact.isUnread = 'true'
+    }
+
     return documentSearchRequest
   }
 }
