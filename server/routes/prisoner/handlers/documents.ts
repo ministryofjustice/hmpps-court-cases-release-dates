@@ -13,7 +13,6 @@ import {
   DOCUMENT_SEARCH_DEFAULT_TYPES,
   DocumentManagementMapper,
   DocumentSearchRequest,
-  MetadataFilter,
 } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
@@ -28,11 +27,7 @@ import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/c
 import commonPlatformDocumentStatuses from '../../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import DocumentSearchOrderBy from '../../../@types/documentManagementApi/DocumentSearchOrderBy'
-import {
-  MetadataField,
-  MetadataFilterMapper,
-  MetadataFilterOperator,
-} from '../../../@types/documentManagementApi/MetadataFilter'
+import { MetadataFilterMapper } from '../../../@types/documentManagementApi/MetadataFilter'
 
 export default class DocumentRoutes {
   constructor(
@@ -298,16 +293,8 @@ export default class DocumentRoutes {
       canonical: true,
 
       metadataFilters: [
-        {
-          field: MetadataField.PRISONER_NUMBER,
-          operator: MetadataFilterOperator.EQUALS,
-          values: [prisonerNumber],
-        } as MetadataFilter,
-        {
-          field: MetadataField.STATUS,
-          operator: MetadataFilterOperator.EQUALS,
-          values: [commonPlatformDocumentStatuses.ACTIVE],
-        } as MetadataFilter,
+        MetadataFilterMapper.getPrisonerNumber(prisonerNumber),
+        MetadataFilterMapper.getStatus(commonPlatformDocumentStatuses.ACTIVE),
       ],
 
       page: filters.pagination.pageNumber - 1,

@@ -15,8 +15,6 @@ export enum MetadataField {
   STATUS = "status",
 }
 
-// export default MetadataField
-
 export class MetadataFilterMapper {
 
   static getShowing(filter: string): MetadataFilter | null {
@@ -43,5 +41,21 @@ export class MetadataFilterMapper {
         values: filters,
       } as MetadataFilter :
       null
+  }
+
+  static getPrisonerNumber(prisonerNumber: string): MetadataFilter {
+    return {
+        field: MetadataField.PRISONER_NUMBER,
+        operator: MetadataFilterOperator.EQUALS,
+        values: [prisonerNumber],
+      } as MetadataFilter
+  }
+
+  static getStatus(status: string): MetadataFilter {
+    return {
+        field: MetadataField.STATUS,
+        operator: MetadataFilterOperator.EQUALS,
+        values: [status],
+      } as MetadataFilter
   }
 }
