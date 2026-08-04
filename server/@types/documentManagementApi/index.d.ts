@@ -156,6 +156,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/documents/facet/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Search for documents with matching document type and metadata filters
+         * @description Uses the supplied document type and metadata criteria to filter and return documents. A list of facets can also be provided to give a list of available metadata filter values to display on a search UI
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_READER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        post: operations["facetSearchDocuments"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/documents/{documentUuid}": {
         parameters: {
             query?: never;
@@ -202,6 +226,30 @@ export interface paths {
          *     * ROLE_DOCUMENT_ADMIN
          */
         get: operations["downloadDocumentFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/court-documents/case-references/{prisonerId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get a list of case references from documents for a specific prisonerId
+         * @description Get a list of case references from documents for a specific prisonerId. Can be used for further filtering using the GET /documents/search endpoint.
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_DOCUMENT_READER
+         *     * ROLE_DOCUMENT_ADMIN
+         */
+        get: operations["getCaseReferences"];
         put?: never;
         post?: never;
         delete?: never;
@@ -404,6 +452,107 @@ export interface components {
             status: "PASSED" | "FAILED" | "ERROR";
             result?: string | null;
             signature?: string | null;
+        };
+        /** @description Describes the search parameters to use to filter documents along with a list of facets available for additional filtering. */
+        DocumentFacetSearchRequest: {
+            /**
+             * @description The types or categories of the document within HMPPS
+             * @example [HMCTS_WARRANT]
+             */
+            documentTypes: ("HMCTS_WARRANT" | "SUBJECT_ACCESS_REQUEST_REPORT" | "EXCLUSION_ZONE_MAP" | "PIC_CASE_DOCUMENTS" | "PPUD_RECALL" | "PRISONER_PROFILE_PICTURE" | "CEMO_ATTACHMENT" | "TRIAL_RECORD_SHEET" | "INDICTMENT" | "PRISON_COURT_REGISTER" | "BAIL_ORDER" | "SUSPENDED_IMPRISONMENT_ORDER" | "NOTICE_OF_DISCONTINUANCE" | "COMMUNITY_ORDER" | "PRISONER_APPLICATION" | "DOCUMENT_GENERATION_TEMPLATES" | "APPEAL_ORDER" | "BREACH_ORDER")[];
+            /**
+             * Format: int32
+             * @description The requested page of search results. Starts from 0
+             * @default 0
+             * @example 5
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @description The number of results to return per page
+             * @default 10
+             * @example 25
+             */
+            pageSize: number;
+            /**
+             * @description The property to order the search results by
+             * @default CREATED_TIME
+             * @example FILESIZE
+             * @enum {string}
+             */
+            orderBy: "FILENAME" | "FILE_EXTENSION" | "FILESIZE" | "CREATED_TIME";
+            /**
+             * @description The sort direction to use when ordering search results
+             * @default DESC
+             * @example ASC
+             * @enum {string}
+             */
+            orderByDirection: "ASC" | "DESC";
+            /**
+             * @description Filter by canonical status. True returns only canonical documents (those that are not a duplicate of another), false returns only duplicates. Low selectivity on its own, so it refines a query rather than standing alone and must be combined with document types or metadata.
+             * @example true
+             */
+            canonical?: boolean | null;
+            /** @description Filters that will be applied to the entire dataset, regardless of whicih facets are requested/filtered. Will also apply to the count of each facet */
+            metadataFilters: components["schemas"]["MetadataFilter"][];
+            /** @description A list of available searchable facets. A facet must be a field in the metadata */
+            facets: components["schemas"]["FacetRequest"][];
+        };
+        FacetRequest: {
+            /**
+             * @description The metadata field that will be a facet in the search UI
+             * @example ACTIVE
+             */
+            field: string;
+            /**
+             * @description Is the metadata field an array or plain string
+             * @example ACTIVE
+             * @enum {string}
+             */
+            type: "VALUE" | "ARRAY";
+            filter?: components["schemas"]["MetadataFilter"] | null;
+        };
+        MetadataFilter: {
+            /**
+             * @description The metadata field to filter on
+             * @example status
+             */
+            field: string;
+            /**
+             * @description The filter operation
+             * @example EQUALS
+             * @enum {string}
+             */
+            operator: "EQUALS" | "NOT_EQUALS" | "IN" | "JSON_ARRAY_CONTAINS" | "EXISTS" | "NOT_EXISTS";
+            /**
+             * @description The values to filter for. Not required for EXISTS/NOT_EXISTS filters, only one value required for EQUALS/NOT_EQUALS, a list provided for IN
+             * @example ACTIVE
+             */
+            values: string[];
+        };
+        /** @description Describes the search parameters that were used to filter documents and the documents matching the supplied search parameters */
+        DocumentFacetSearchResult: {
+            /** @description Describes the search parameters that were used to filter documents */
+            request: components["schemas"]["DocumentFacetSearchRequest"];
+            /** @description The documents matching the supplied search parameters. Note that documents with types that require additional roles will have been filtered out of these results if the client does not have the required roles. */
+            results: components["schemas"]["Document"][];
+            /**
+             * Format: int64
+             * @description The total number of available results not limited by page size
+             * @example 56
+             */
+            totalResultsCount: number;
+            facets: {
+                [key: string]: components["schemas"]["FacetResult"];
+            };
+        };
+        FacetResult: {
+            values: components["schemas"]["FacetValue"][];
+        };
+        FacetValue: {
+            value: string;
+            /** Format: int64 */
+            count: number;
         };
     };
     responses: never;
@@ -874,6 +1023,64 @@ export interface operations {
             };
         };
     };
+    facetSearchDocuments: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DocumentFacetSearchRequest"];
+            };
+        };
+        responses: {
+            /** @description Search request accepted and results returned */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DocumentFacetSearchResult"];
+                };
+            };
+            /** @description Bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     getDocument: {
         parameters: {
             query?: never;
@@ -1042,6 +1249,63 @@ export interface operations {
                 };
                 content: {
                     "application/pdf": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getCaseReferences: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Client supplied name of the calling service. This should be the product name of the service as listed in the developer portal */
+                "Service-Name": string;
+                /** @description The active case load id of the user interacting with the client service */
+                "Active-Case-Load-Id"?: string;
+                /** @description The username of the user interacting with the client service */
+                Username?: string;
+            };
+            path: {
+                /** @description prisoner unique identifier */
+                prisonerId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Document found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Document"];
+                };
+            };
+            /** @description Bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role. Note that the required role can be document type dependent */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };

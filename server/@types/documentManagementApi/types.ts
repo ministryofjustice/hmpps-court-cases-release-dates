@@ -9,9 +9,21 @@ export interface FileDownload {
   }
 }
 
-export type DocumentSearchRequest = components['schemas']['DocumentSearchRequest']
-export type DocumentSearchResult = components['schemas']['DocumentSearchResult']
+export type MetadataFilter = components['schemas']['MetadataFilter']
+export type DocumentSearchRequest = components['schemas']['DocumentFacetSearchRequest']
+export type DocumentSearchResult = components['schemas']['DocumentFacetSearchResult']
 export type Document = components['schemas']['Document']
+
+export const DOCUMENT_SEARCH_DEFAULT_TYPES = [
+  'HMCTS_WARRANT',
+  'TRIAL_RECORD_SHEET',
+  'INDICTMENT',
+  'PRISON_COURT_REGISTER',
+  'BAIL_ORDER',
+  'SUSPENDED_IMPRISONMENT_ORDER',
+  'NOTICE_OF_DISCONTINUANCE',
+  'COMMUNITY_ORDER',
+]
 
 export class DocumentManagementMapper {
   public static SOURCE_COMMON_PLATFORM: string = 'Common platform'

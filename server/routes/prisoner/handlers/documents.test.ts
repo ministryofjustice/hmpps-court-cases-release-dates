@@ -264,14 +264,16 @@ describe('Route Handlers - Overview', () => {
     documentManagementService.searchDocument.mockResolvedValue({
       request: {
         documentTypes: [],
-        metadata: null,
+        metadataFilters: null,
         page: 0,
         pageSize: 0,
         orderBy: 'CREATED_TIME',
         orderByDirection: 'ASC',
+        facets: null,
       },
       results: [],
       totalResultsCount: 0,
+      facets: null,
     })
     remandAndSentencingService.getDocuments.mockResolvedValue({ courtCaseDocuments: [] })
     courtDataIngestionService.getDocuments.mockResolvedValue([])
@@ -540,7 +542,7 @@ const documents = {
       },
     },
     {
-      // Has missing entry in CDIA
+      // It is missing entry in CDIA
       documentUuid: '9612b032-383b-4a83-9765-30484182c7fa',
       documentType: 'HMCTS_WARRANT',
       documentFilename: 'CommonPlatformfile.pdf',
