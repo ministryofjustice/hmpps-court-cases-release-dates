@@ -6,6 +6,7 @@ export enum MetadataFilterOperator {
   IN = "IN",
   EXISTS = "EXISTS",
   NOT_EXISTS = "NOT_EXISTS",
+  JSON_ARRAY_CONTAINS = "JSON_ARRAY_CONTAINS",
 }
 
 export enum MetadataField {
@@ -37,7 +38,7 @@ export class MetadataFilterMapper {
     return (!filters.find(it => it === 'all')) ?
       {
         field: MetadataField.CASE_REFERENCES,
-        operator: MetadataFilterOperator.IN,
+        operator: MetadataFilterOperator.JSON_ARRAY_CONTAINS,
         values: filters,
       } as MetadataFilter :
       null

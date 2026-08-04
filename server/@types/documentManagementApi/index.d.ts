@@ -523,7 +523,7 @@ export interface components {
              * @example EQUALS
              * @enum {string}
              */
-            operator: "EQUALS" | "NOT_EQUALS" | "IN" | "EXISTS" | "NOT_EXISTS";
+            operator: "EQUALS" | "NOT_EQUALS" | "IN" | "JSON_ARRAY_CONTAINS" | "EXISTS" | "NOT_EXISTS";
             /**
              * @description The values to filter for. Not required for EXISTS/NOT_EXISTS filters, only one value required for EQUALS/NOT_EQUALS, a list provided for IN
              * @example ACTIVE
