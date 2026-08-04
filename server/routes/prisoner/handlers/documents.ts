@@ -313,7 +313,6 @@ export default class DocumentRoutes {
       page: filters.pagination.pageNumber - 1,
       pageSize: 10,
       orderBy: DocumentSearchOrderBy.CREATED_TIME,
-      // TODO (CDIA-195): Make improvement, sortBy should only affect direction, criteria is the same CREATED_TIME
       orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
     } as DocumentSearchRequest
 
