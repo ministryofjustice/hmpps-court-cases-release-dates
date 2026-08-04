@@ -264,14 +264,16 @@ describe('Route Handlers - Overview', () => {
     documentManagementService.searchDocument.mockResolvedValue({
       request: {
         documentTypes: [],
-        metadata: null,
+        metadataFilters: null,
         page: 0,
         pageSize: 0,
         orderBy: 'CREATED_TIME',
         orderByDirection: 'ASC',
+        facets: null,
       },
       results: [],
       totalResultsCount: 0,
+      facets: null,
     })
     remandAndSentencingService.getDocuments.mockResolvedValue({ courtCaseDocuments: [] })
     courtDataIngestionService.getDocuments.mockResolvedValue([])

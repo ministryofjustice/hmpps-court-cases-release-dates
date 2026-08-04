@@ -453,7 +453,7 @@ export interface components {
             result?: string | null;
             signature?: string | null;
         };
-        /** @description The search parameters to use to filter documents */
+        /** @description Describes the search parameters to use to filter documents along with a list of facets available for additional filtering. */
         DocumentFacetSearchRequest: {
             /**
              * @description The types or categories of the document within HMPPS
@@ -529,6 +529,30 @@ export interface components {
              * @example ACTIVE
              */
             values: string[];
+        };
+        /** @description Describes the search parameters that were used to filter documents and the documents matching the supplied search parameters */
+        DocumentFacetSearchResult: {
+            /** @description Describes the search parameters that were used to filter documents */
+            request: components["schemas"]["DocumentFacetSearchRequest"];
+            /** @description The documents matching the supplied search parameters. Note that documents with types that require additional roles will have been filtered out of these results if the client does not have the required roles. */
+            results: components["schemas"]["Document"][];
+            /**
+             * Format: int64
+             * @description The total number of available results not limited by page size
+             * @example 56
+             */
+            totalResultsCount: number;
+            facets: {
+                [key: string]: components["schemas"]["FacetResult"];
+            };
+        };
+        FacetResult: {
+            values: components["schemas"]["FacetValue"][];
+        };
+        FacetValue: {
+            value: string;
+            /** Format: int64 */
+            count: number;
         };
     };
     responses: never;
@@ -1025,7 +1049,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DocumentSearchResult"];
+                    "application/json": components["schemas"]["DocumentFacetSearchResult"];
                 };
             };
             /** @description Bad request */
