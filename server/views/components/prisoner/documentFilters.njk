@@ -3,17 +3,37 @@
 {%- from "govuk/components/radios/macro.njk" import govukRadios -%}
 {%- from "govuk/components/input/macro.njk" import govukInput -%}
 
-{%- set caseReferenceItems = [] -%}
+{%- set caseReferenceItems = [
+    {
+        value: "all",
+        text: "All case references",
+        checked: ("all" in filters.byCaseReferences),
+        behaviour: "exclusive"
+    },
+    {
+        value: "none",
+        text: "No case reference",
+        checked: ("none" in filters.byCaseReferences),
+        disabled: true,
+        behaviour: "exclusive"
+    }
+] -%}
+
+{% if filters.caseReferences.length > 0 %}
+    {%- set caseReferenceItems = (caseReferenceItems.push({
+        divider: "or"
+    }), caseReferenceItems) -%}
+{% endif %}
+
 {%- for caseReference in filters.caseReferences -%}
     {%- set caseReferenceItems = (caseReferenceItems.push({
         value: caseReference,
         text: caseReference,
-        checked: (filters.byCaseReference === caseReference)
+        checked: (caseReference in filters.byCaseReferences)
     }), caseReferenceItems) -%}
 {%- endfor -%}
 
 {%- set filterOptionsHtml %}
-    {# TODO (CDIA-????): Enable filter option "New documents" when DMA supports filtering by new documents #}
     {{ govukRadios({
         idPrefix: "showing",
         name: "showing",
@@ -28,8 +48,7 @@
             {
                 text: "New documents",
                 value: "new",
-                checked: (filters.showing === "new"),
-                disabled: true
+                checked: (filters.showing === "new")
             },
             {
                 text: "All documents",
@@ -39,57 +58,17 @@
         ]
     }) }}
 
-    {# TODO (CDIA-????): When case references are changed to checkboxes, revisit the naming of these inputs  #}
-    {{ govukRadios({
-        idPrefix: "byCaseReference",
+    {{ govukCheckboxes({
         name: "byCaseReference",
-        classes: "govuk-radios--small",
+        classes: "govuk-checkboxes--small",
         fieldset: {
             legend: {
                 text: "Case reference",
                 classes: "govuk-fieldset__legend--m"
             }
         },
-        items: [
-            {
-                value: "all",
-                text: "All case references",
-                checked: (filters.byCaseReference === "all")
-            },
-            {
-                value: "none",
-                text: "No case reference",
-                checked: (filters.byCaseReference === "none"),
-                disabled: true
-            }
-        ]
+        items: caseReferenceItems
     }) }}
-
-    {% if filters.caseReferences.length > 0 %}
-        {# TODO (CDIA-????): Change to checkboxes with multiselect options, from radio as currently DMA only accepts filtering by sending a single case reference  #}
-        {{ govukRadios({
-            idPrefix: "byCaseReference",
-            name: "byCaseReference",
-            classes: "govuk-radios--small",
-            fieldset: {
-                legend: {
-                    text: "or",
-                    classes: "govuk-fieldset__legend--m"
-                }
-            },
-            items: caseReferenceItems
-        }) }}
-    {% endif %}
-
-  {# {{ govukCheckboxes({
-    idPrefix: "...",
-    name: "...",
-    classes: "govuk-checkboxes--small",
-    fieldset: {
-      legend: {...}
-    },
-    items: [...]
-  }) }} #}
 {% endset -%}
 
 <div class="moj-filter-layout__filter">
