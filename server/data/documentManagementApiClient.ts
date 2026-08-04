@@ -15,9 +15,10 @@ export default class DocumentManagementApiClient extends RestClient {
   }
 
   async searchDocuments(documentSearchRequest: DocumentSearchRequest, username: string): Promise<DocumentSearchResult> {
+    logger.info('documentSearchRequest:: %s ', JSON.stringify(documentSearchRequest, null, 2))
     return this.post(
       {
-        path: `/documents/search`,
+        path: `/documents/facet/search`,
         headers: {
           'Service-Name': 'Court Case and Release Dates',
           Username: username,

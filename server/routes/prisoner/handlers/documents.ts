@@ -8,7 +8,12 @@ import logger from '../../../../logger'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import CourtRegisterService from '../../../services/courtRegisterService'
 import { getAsStringOrDefault, getAsArrayOrDefault } from '../../../utils/utils'
-import { Document, DocumentManagementMapper, DocumentSearchRequest } from '../../../@types/documentManagementApi/types'
+import {
+  Document,
+  DocumentManagementMapper,
+  DocumentSearchRequest,
+  MetadataFilter,
+} from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
 import {
@@ -21,6 +26,8 @@ import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
 import commonPlatformDocumentStatuses from '../../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
+import DocumentSearchOrderBy from '../../../@types/documentManagementApi/DocumentSearchOrderBy'
+import MetadataFilterOperator from '../../../@types/documentManagementApi/MetadataFilterOperator'
 
 export default class DocumentRoutes {
   constructor(
@@ -282,45 +289,73 @@ export default class DocumentRoutes {
 
   buildDocumentSearchRequest = (prisonerNumber: string, filters: DocumentFilters): DocumentSearchRequest => {
     const documentSearchRequest = {
-      ...defaultSearchParams,
-      orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
+      documentTypes: DOCUMENT_SEARCH_DEFAULT_TYPES,
+      canonical: true,
+
+      metadataFilters: [
+        {
+          field: 'prisonerId',
+          operator: MetadataFilterOperator.EQUALS,
+          values: [prisonerNumber],
+        } as MetadataFilter,
+        {
+          field: 'status',
+          operator: MetadataFilterOperator.EQUALS,
+          values: [commonPlatformDocumentStatuses.ACTIVE],
+        } as MetadataFilter,
+      ],
+
       page: filters.pagination.pageNumber - 1,
-      metadata: {
-        prisonerId: prisonerNumber,
-      } as unknown as Record<string, never>,
-      metadataExact: {
-        status: commonPlatformDocumentStatuses.ACTIVE,
-      } as unknown as Record<string, never>,
+      pageSize: 10,
+      orderBy: DocumentSearchOrderBy.CREATED_TIME,
+      // TODO (CDIA-195): Make improvement, sortBy should only affect direction, criteria is the same CREATED_TIME
+      orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
     } as DocumentSearchRequest
 
-    if (!filters.byCaseReferences.find(it => it === 'all') && !filters.byCaseReferences.find(it => it === 'none')) {
-      // TODO (CDIA-195): Amend when updating to facets search request
-      documentSearchRequest.metadataExact.caseReferences = [filters.byCaseReferences[0]]
+    if (filters.showing === 'new') {
+      documentSearchRequest.metadataFilters.push({
+        field: 'isUnread',
+        operator: MetadataFilterOperator.EQUALS,
+        values: ['true'],
+      } as MetadataFilter)
     }
 
-    if (filters.showing === 'new') {
-      documentSearchRequest.metadataExact.isUnread = 'true'
+    if (filters.byCaseReferences.find(it => it === 'none')) {
+      documentSearchRequest.metadataFilters.push({
+        field: 'caseReferences',
+        operator: MetadataFilterOperator.NOT_EXISTS,
+      } as MetadataFilter)
+    } else if (!filters.byCaseReferences.find(it => it === 'all')) {
+      const testTomas = ['test001']
+      logger.info(`*******************************************************`)
+      logger.info('*********************** %o', testTomas)
+
+      logger.info(`*******************************************************`)
+      logger.info('*********************** %o', filters.byCaseReferences)
+      const typeOfCaseRefs = typeof filters.byCaseReferences
+      logger.info(`*********************** ${typeOfCaseRefs}`)
+      logger.info(`*******************************************************`)
+      documentSearchRequest.metadataFilters.push({
+        field: 'caseReferences',
+        operator: MetadataFilterOperator.IN,
+        values: filters.byCaseReferences,
+      } as MetadataFilter)
     }
 
     return documentSearchRequest
   }
 }
 
-const defaultSearchParams = {
-  documentTypes: [
-    'HMCTS_WARRANT',
-    'TRIAL_RECORD_SHEET',
-    'INDICTMENT',
-    'PRISON_COURT_REGISTER',
-    'BAIL_ORDER',
-    'SUSPENDED_IMPRISONMENT_ORDER',
-    'NOTICE_OF_DISCONTINUANCE',
-    'COMMUNITY_ORDER',
-  ],
-  orderBy: 'CREATED_TIME',
-  pageSize: 10,
-  canonical: true,
-} as DocumentSearchRequest
+const DOCUMENT_SEARCH_DEFAULT_TYPES = [
+  'HMCTS_WARRANT',
+  'TRIAL_RECORD_SHEET',
+  'INDICTMENT',
+  'PRISON_COURT_REGISTER',
+  'BAIL_ORDER',
+  'SUSPENDED_IMPRISONMENT_ORDER',
+  'NOTICE_OF_DISCONTINUANCE',
+  'COMMUNITY_ORDER',
+]
 
 type DocumentViewModel = {
   type: string

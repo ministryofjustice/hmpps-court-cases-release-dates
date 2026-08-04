@@ -540,7 +540,7 @@ const documents = {
       },
     },
     {
-      // Has missing entry in CDIA
+      // It is missing entry in CDIA
       documentUuid: '9612b032-383b-4a83-9765-30484182c7fa',
       documentType: 'HMCTS_WARRANT',
       documentFilename: 'CommonPlatformfile.pdf',

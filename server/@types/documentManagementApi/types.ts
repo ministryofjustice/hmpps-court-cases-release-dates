@@ -9,7 +9,9 @@ export interface FileDownload {
   }
 }
 
-export type DocumentSearchRequest = components['schemas']['DocumentSearchRequest']
+export type DocumentSearchRequest = components['schemas']['DocumentFacetSearchRequest']
+export type MetadataFilter = components['schemas']['MetadataFilter']
+// export type DocumentSearchResult = components['schemas']['DocumentFacetSearchResult']
 export type DocumentSearchResult = components['schemas']['DocumentSearchResult']
 export type Document = components['schemas']['Document']
 
