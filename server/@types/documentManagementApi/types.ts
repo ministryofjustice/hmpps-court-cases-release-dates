@@ -13,6 +13,9 @@ export type MetadataFilter = components['schemas']['MetadataFilter']
 export type DocumentSearchRequest = components['schemas']['DocumentFacetSearchRequest']
 export type DocumentSearchResult = components['schemas']['DocumentFacetSearchResult']
 export type Document = components['schemas']['Document']
+export type FacetRequest = components['schemas']['FacetRequest']
+export type FacetResult = components['schemas']['FacetResult']
+export type FacetValue = components['schemas']['FacetValue']
 
 export const DOCUMENT_SEARCH_DEFAULT_TYPES = [
   'HMCTS_WARRANT',

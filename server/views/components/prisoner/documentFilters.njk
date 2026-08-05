@@ -18,17 +18,17 @@
     }
 ] -%}
 
-{% if filters.caseReferences.length > 0 %}
+{% if filters.facets['caseReferences'].values.length > 0 %}
     {%- set caseReferenceItems = (caseReferenceItems.push({
         divider: "or"
     }), caseReferenceItems) -%}
 {% endif %}
 
-{%- for caseReference in filters.caseReferences -%}
+{%- for caseReference in filters.facets['caseReferences'].values -%}
     {%- set caseReferenceItems = (caseReferenceItems.push({
-        value: caseReference,
-        text: caseReference,
-        checked: (caseReference in filters.byCaseReferences)
+        value: caseReference.value,
+        text: caseReference.value + " (" + caseReference.count + ")",
+        checked: (caseReference.value in filters.byCaseReferences)
     }), caseReferenceItems) -%}
 {%- endfor -%}
 
@@ -45,7 +45,7 @@
         },
         items: [
             {
-                text: "New documents",
+                text: "New documents" + " (" + filters.facets['isUnread'].values[0].count + ")",
                 value: "new",
                 checked: (filters.showing === "new")
             },
