@@ -4,6 +4,7 @@ import type { User } from '../data/manageUsersApiClient'
 import ManageUsersApiClient from '../data/manageUsersApiClient'
 import PrisonerService from './prisonerService'
 import { PrisonApiUserCaseloads } from '../@types/prisonApi/types'
+import { Role, Roles } from '../@types/roles'
 
 export interface UserDetails extends User {
   displayName: string
@@ -53,22 +54,30 @@ export default class UserService {
   }
 
   hasRasAccess(roles: string[]): boolean {
-    return roles.includes('REMAND_AND_SENTENCING')
+    return [Roles.getRole(Role.REMAND_AND_SENTENCING), Roles.getRole(Role.COURT_CASES)].some((role: string) =>
+      roles.includes(role),
+    )
   }
 
   hasRecallAccess(roles: string[]): boolean {
-    return roles.includes('RECALL_MAINTAINER')
+    return [Roles.getRole(Role.RECALL_MAINTAINER), Roles.getRole(Role.COURT_CASES)].some((role: string) =>
+      roles.includes(role),
+    )
   }
 
   hasInactiveBookingAccess(roles: string[]): boolean {
-    return roles.includes('INACTIVE_BOOKINGS')
+    return roles.includes(Roles.getRole(Role.INACTIVE_BOOKINGS))
   }
 
   hasReadOnlyNomisConfigAccess(roles: string[]): boolean {
-    return roles.includes('COURTCASE_RELEASEDATE_SUPPORT')
+    return roles.includes(Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT))
   }
 
   hasImmigrationDetentionAccess(roles: string[]): boolean {
-    return roles.includes('IMMIGRATION_DETENTION_USER') || roles.includes('IMMIGRATION_DETENTION_ADMIN')
+    return [
+      Roles.getRole(Role.IMMIGRATION_DETENTION_USER),
+      Roles.getRole(Role.IMMIGRATION_DETENTION_ADMIN),
+      Roles.getRole(Role.COURT_CASES),
+    ].some((role: string) => roles.includes(role))
   }
 }

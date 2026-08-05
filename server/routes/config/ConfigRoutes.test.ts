@@ -3,12 +3,13 @@ import request from 'supertest'
 import { appWithAllRoutes, user } from '../testutils/appSetup'
 import PrisonerService from '../../services/prisonerService'
 import { PrisonApiPrison } from '../../@types/prisonApi/types'
+import { Role, Roles } from '../../@types/roles'
 
 jest.mock('../../services/prisonerService')
 const prisonerService = new PrisonerService(null) as jest.Mocked<PrisonerService>
 
-const supportUser = { ...user, roles: ['COURTCASE_RELEASEDATE_SUPPORT'] }
-const nonSupportUser = { ...user, roles: ['RELEASE_DATES_CALCULATOR'] }
+const supportUser = { ...user, roles: [Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)] }
+const nonSupportUser = { ...user, roles: [Roles.getRole(Role.RELEASE_DATES_CALCULATOR)] }
 
 let app: Express
 

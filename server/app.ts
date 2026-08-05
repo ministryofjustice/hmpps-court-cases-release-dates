@@ -22,6 +22,7 @@ import type { Services } from './services'
 import getPrisoner from './middleware/getPrisoner'
 import config from './config'
 import maintenanceMiddleware from './middleware/maintenanceMiddleware'
+import { Role, Roles } from './@types/roles'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -39,7 +40,10 @@ export default function createApp(services: Services): express.Application {
   nunjucksSetup(app, services.applicationInfo)
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware())
-  app.use(['/config', '/unmatched-documents'], authorisationMiddleware(['ROLE_RELEASE_DATES_CALCULATOR']))
+  app.use(
+    ['/config', '/unmatched-documents'],
+    authorisationMiddleware([Roles.getAuthority(Role.RELEASE_DATES_CALCULATOR)]),
+  )
   app.use(setUpCsrf())
   app.use(setUpCurrentUser(services))
 
