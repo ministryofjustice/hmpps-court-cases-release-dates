@@ -10,7 +10,13 @@ import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import PrisonerSearchService from '../../../services/prisonerSearchService'
 import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesApi/types'
 import DocumentManagementService from '../../../services/documentManagementService'
-import { Document, DocumentSearchResult, FileDownload } from '../../../@types/documentManagementApi/types'
+import {
+  Document,
+  DocumentSearchResult,
+  FacetResult,
+  FacetValue,
+  FileDownload,
+} from '../../../@types/documentManagementApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
@@ -273,7 +279,7 @@ describe('Route Handlers - Overview', () => {
       },
       results: [],
       totalResultsCount: 0,
-      facets: null,
+      facets,
     })
     remandAndSentencingService.getDocuments.mockResolvedValue({ courtCaseDocuments: [] })
     courtDataIngestionService.getDocuments.mockResolvedValue([])
@@ -440,6 +446,24 @@ const serviceDefinitionsNoThingsToDo = {
   },
 } as CcrdServiceDefinitions
 
+const facets = {
+  isUnread: {
+    values: [
+      { value: 'true', count: 1 } as FacetValue,
+      { value: null, count: 5 } as FacetValue,
+      { value: 'false', count: 1 } as FacetValue,
+    ],
+  } as FacetResult,
+  caseReferences: {
+    values: [
+      { value: 'AB12345678A', count: 1 } as FacetValue,
+      { value: 'BC23456789B', count: 2 } as FacetValue,
+      { value: 'CommonPlatformCase123', count: 1 } as FacetValue,
+      { value: 'CommonPlatformCase456', count: 1 } as FacetValue,
+    ],
+  } as FacetResult,
+}
+
 const documents = {
   request: {},
   results: [
@@ -539,6 +563,7 @@ const documents = {
       metadata: {
         source: 'court-data-ingestion-api',
         prisonerId: 'A12345B',
+        isUnread: 'false',
       },
     },
     {
@@ -557,11 +582,13 @@ const documents = {
       metadata: {
         source: 'court-data-ingestion-api',
         prisonerId: 'A12345B',
+        isUnread: 'true',
       },
     },
   ],
   totalResultsCount: 7,
-} as DocumentSearchResult
+  facets,
+} as unknown as DocumentSearchResult
 
 const cpDocuments = [
   {

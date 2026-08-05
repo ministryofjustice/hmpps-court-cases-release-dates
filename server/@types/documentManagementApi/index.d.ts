@@ -510,7 +510,8 @@ export interface components {
              * @enum {string}
              */
             type: "VALUE" | "ARRAY";
-            filter?: components["schemas"]["MetadataFilter"] | null;
+            /** @description Filters that will apply to the paged resultset and not to the faceted counts. */
+            filters?: components["schemas"]["MetadataFilter"][] | null;
         };
         MetadataFilter: {
             /**
@@ -550,7 +551,7 @@ export interface components {
             values: components["schemas"]["FacetValue"][];
         };
         FacetValue: {
-            value: string;
+            value?: string | null;
             /** Format: int64 */
             count: number;
         };

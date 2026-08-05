@@ -7,12 +7,15 @@ import DocumentManagementService from '../../../services/documentManagementServi
 import logger from '../../../../logger'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
 import CourtRegisterService from '../../../services/courtRegisterService'
-import { getAsStringOrDefault, getAsArrayOrDefault } from '../../../utils/utils'
+import { getAsArrayOrDefault, getAsStringOrDefault } from '../../../utils/utils'
 import {
   Document,
   DOCUMENT_SEARCH_DEFAULT_TYPES,
   DocumentManagementMapper,
   DocumentSearchRequest,
+  FacetRequest,
+  FacetResult,
+  FacetValue,
 } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
@@ -47,13 +50,10 @@ export default class DocumentRoutes {
 
     const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
     const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
-    // TODO (CDIA-262): This request will be made redundant once facets search endpoint is available
-    const caseReferences = await this.documentManagementService.getCaseReferences(prisoner.prisonerNumber, username)
 
     const filters = {
       showing,
       byCaseReferences,
-      caseReferences,
       pagination: {
         sortBy: sortByQuery,
         pageNumber,
@@ -81,6 +81,7 @@ export default class DocumentRoutes {
       )
     }
 
+    // TODO (CDIA-195): This call should request all court names (both RAS and DMA)
     await this.courtRegisterService.getCourtNames(RaSDocumentMapper.collectCourtCodes(rasDocuments), username)
 
     const viewModelDocuments = await Promise.all(
@@ -157,6 +158,7 @@ export default class DocumentRoutes {
     )
 
     const pagedDataResponse = getPagedDataResponse(documents)
+    filters.facets = this.parseFacetsForRendering(documents.facets)
 
     res.render('pages/prisoner/documents', {
       prisoner,
@@ -288,7 +290,7 @@ export default class DocumentRoutes {
   }
 
   buildDocumentSearchRequest = (prisonerNumber: string, filters: DocumentFilters): DocumentSearchRequest => {
-    const documentSearchRequest = {
+    return {
       documentTypes: DOCUMENT_SEARCH_DEFAULT_TYPES,
       canonical: true,
 
@@ -297,25 +299,45 @@ export default class DocumentRoutes {
         MetadataFilterMapper.getStatus(commonPlatformDocumentStatuses.ACTIVE),
       ],
 
+      facets: this.buildDocumentSearchFacetRequest(filters),
+
       page: filters.pagination.pageNumber - 1,
       pageSize: 10,
       orderBy: DocumentSearchOrderBy.CREATED_TIME,
       orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
     } as DocumentSearchRequest
+  }
 
-    const filterShowing = MetadataFilterMapper.getShowing(filters.showing)
+  private buildDocumentSearchFacetRequest = (filters: DocumentFilters): FacetRequest[] => {
+    const showingFacetRequest = {
+      field: 'isUnread',
+      type: 'VALUE',
+      filter: MetadataFilterMapper.getShowing(filters.showing),
+    } as FacetRequest
 
-    if (filterShowing !== null) {
-      documentSearchRequest.metadataFilters.push(filterShowing)
-    }
+    const caseReferencesFacetRequest = {
+      field: 'caseReferences',
+      type: 'ARRAY',
+      filter: MetadataFilterMapper.getByCaseReferences(filters.byCaseReferences),
+    } as FacetRequest
 
-    const filterByCaseReferences = MetadataFilterMapper.getByCaseReferences(filters.byCaseReferences)
+    return [showingFacetRequest, caseReferencesFacetRequest]
+  }
 
-    if (filterByCaseReferences !== null) {
-      documentSearchRequest.metadataFilters.push(filterByCaseReferences)
-    }
+  private parseFacetsForRendering = (facets: { [p: string]: FacetResult }) => {
+    const newFacets = facets
+    const isUnreadFacet = facets.isUnread.values.filter(it => it.value === 'true')
 
-    return documentSearchRequest
+    newFacets.isUnread.values =
+      isUnreadFacet.length > 0
+        ? isUnreadFacet
+        : [
+            {
+              value: 'true',
+              count: 0,
+            } as FacetValue,
+          ]
+    return newFacets
   }
 }
 
@@ -341,7 +363,7 @@ type DocumentViewModel = {
 type DocumentFilters = {
   showing: string
   byCaseReferences: string[]
-  caseReferences: string[]
+  facets: { [p: string]: FacetResult }
   pagination: {
     sortBy: string
     pageNumber: number
