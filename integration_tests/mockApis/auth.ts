@@ -3,6 +3,7 @@ import { Response } from 'superagent'
 
 import { stubFor, getMatchingRequests } from './wiremock'
 import tokenVerification from './tokenVerification'
+import { Roles, Role } from '../../server/@types/roles'
 
 const createToken = (roles: string[] = []) => {
   // authorities in the session are always prefixed by ROLE.
@@ -97,7 +98,7 @@ const manageDetails = () =>
     },
   })
 
-const token = (roles: string[] = ['ROLE_RELEASE_DATES_CALCULATOR']) =>
+const token = (roles: string[] = [Roles.getAuthority(Role.RELEASE_DATES_CALCULATOR)]) =>
   stubFor({
     request: {
       method: 'POST',

@@ -4,12 +4,13 @@ import dayjs from 'dayjs'
 import { appWithAllRoutes, user } from '../testutils/appSetup'
 import CourtDataIngestionService from '../../services/courtDataIngestionService'
 import { BackfillListResponse, BackfillRunSummary } from '../../model/backfill'
+import { Role, Roles } from '../../@types/roles'
 
 jest.mock('../../services/courtDataIngestionService')
 const courtDataIngestionService = new CourtDataIngestionService(null) as jest.Mocked<CourtDataIngestionService>
 
-const supportUser = { ...user, roles: ['COURTCASE_RELEASEDATE_SUPPORT'] }
-const nonSupportUser = { ...user, roles: ['RELEASE_DATES_CALCULATOR'] }
+const supportUser = { ...user, roles: [Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)] }
+const nonSupportUser = { ...user, roles: [Roles.getRole(Role.RELEASE_DATES_CALCULATOR)] }
 
 const appAs = (as: Express.User) =>
   appWithAllRoutes({ services: { courtDataIngestionService }, userSupplier: () => as })

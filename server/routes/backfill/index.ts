@@ -3,11 +3,12 @@ import BackfillRoutes from './BackfillRoutes'
 import CourtDataIngestionService from '../../services/courtDataIngestionService'
 import requireRole from '../../middleware/requireRole'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
+import { Role, Roles } from '../../@types/roles'
 
 export default function Index(courtDataIngestionService: CourtDataIngestionService): Router {
   const router = Router()
 
-  router.use(requireRole('COURTCASE_RELEASEDATE_SUPPORT'))
+  router.use(requireRole(Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)))
 
   const routes = new BackfillRoutes(courtDataIngestionService)
 
