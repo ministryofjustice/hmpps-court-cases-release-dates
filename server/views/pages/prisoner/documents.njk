@@ -84,7 +84,7 @@
                                       action="/prisoner/{{ prisoner.prisonerNumber }}/documents/{{ document.documentUuid }}/mark-as-new">
                                     <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                                     <input type="hidden" name="sortBy" value="{{ sortByQuery }}">
-                                    <input type="hidden" name="pageNumber" value="{{ pageNumber + 1 }}">
+                                    <input type="hidden" name="pageNumber" value="{{ pageNumber }}">
                                     {{ govukButton({
                                         html: 'Mark as new<span class="govuk-visually-hidden"> ' + document.typeDescription + '</span>',
                                         classes: "ccrd-button--link",
@@ -177,8 +177,3 @@
     </div>
     </div>
 {% endblock %}
-
-{# TODO (CDIA-????): We might need some scripts to handle checkboxes and multiple selection filters #}
-{# {% block pageScripts %}
-    <script src="/assets/documentFilters.js"></script>
-{% endblock %} #}
