@@ -483,6 +483,7 @@ const documents = {
         source: 'court-data-ingestion-api',
         prisonerId: 'A12345B',
         caseReferences: ['CommonPlatformCase123', 'CommonPlatformCase456'],
+        isUnread: true,
       },
     },
     {
