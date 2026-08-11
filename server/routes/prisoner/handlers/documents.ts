@@ -94,6 +94,7 @@ export default class DocumentRoutes {
             fileExtension: it.fileExtension,
             fileSize: it.fileSize,
             caseReference: DocumentManagementMapper.getCaseReferences(it),
+            isNew: DocumentManagementMapper.getIsNew(it),
           }
 
           let rasDocument: {
@@ -132,7 +133,6 @@ export default class DocumentRoutes {
               ).name
             }
             document.type = it.documentType
-            document.isNew = cpDocument ? cpDocument.isUnread : false
           } else if (rasDocument) {
             document.source = 'remand-and-sentencing-api'
             // From RaS

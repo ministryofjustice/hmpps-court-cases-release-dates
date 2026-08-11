@@ -48,7 +48,7 @@ export class DocumentManagementMapper {
     )
   }
 
-  public static getCaseReferences(it: Document): string {
+  public static getCaseReferences(it: Document): string|null {
     const caseReferences = it.metadata?.caseReferences
     return (Array.isArray(caseReferences) && caseReferences.length > 0) ? caseReferences.join(', ') : null
   }
@@ -57,6 +57,10 @@ export class DocumentManagementMapper {
     return this.asString(it.metadata?.source) === 'court-data-ingestion-api'
       ? this.SOURCE_COMMON_PLATFORM
       : this.SOURCE_COURT_CASE
+  }
+
+  public static getIsNew(it: Document): boolean {
+    return !!(it.metadata?.isUnread)
   }
 
   static getDownloadHeaders(file: FileDownload) {
