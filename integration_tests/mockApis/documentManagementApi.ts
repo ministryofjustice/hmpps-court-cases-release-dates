@@ -102,7 +102,9 @@ const documents = {
       createdTime: '2026-05-13T14:08:14',
       createdByServiceName: 'Remand and Sentencing',
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
-      metadata: {},
+      metadata: {
+        source: 'remand-and-sentencing-api',
+      },
     },
     {
       documentUuid: '8980c409-465c-41a4-969d-affe0d9b9df7',

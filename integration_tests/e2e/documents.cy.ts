@@ -1,3 +1,5 @@
+import { PageElement } from '../pages/page'
+
 context('Downloading/Viewing a document from Documents tab', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -23,41 +25,35 @@ context('Downloading/Viewing a document from Documents tab', () => {
     cy.task('stubVerifyToken', true)
   })
 
-  describe('Documents refresh after downloading a NEW document', () => {
-    it('sets refresh-pending key when clicking a NEW document download link', () => {
+  describe('Documents tab page loads after search is done', () => {
+    it('It renders properly all 3 types of possible documents: new CDIA, viewed CDIA, RAS', () => {
       cy.visit('/prisoner/A1234AB/documents')
 
-      cy.get('#document-search-results .document--new a[href*="/documents/"][href*="/download/"]')
-        .first()
-        .then($link => {
-          // Avoid real navigation in test
-          $link[0].addEventListener('click', e => e.preventDefault(), { once: true })
-        })
-        .click()
+      const searchResults = getSearchResults()
+      searchResults.should('not.contain', 'No documents have been received')
 
-      cy.window().then(win => {
-        expect(win.sessionStorage.getItem('ccrd:documents:refresh-pending')).to.eq('1')
-      })
+      const listHeader: PageElement = searchResults.get('[data-qa=documents-sort-bar]')
+      listHeader.should('contain', 'Sort by:')
+      listHeader.should('contain', 'Showing')
+
+      const newDocument = getDocument(searchResults, '4fd5f7b0-eebf-4b69-9489-0cc48550e03b')
+      newDocument.should('contain', 'New')
+      newDocument.should('contain', 'Case reference')
+
+      const viewedDocument = getDocument(searchResults, 'bdee9909-ba50-48d6-ad80-e8ecf6ffa912')
+      viewedDocument.should('not.contain', 'New')
+      viewedDocument.should('contain', 'Mark as new')
+      viewedDocument.should('contain', 'Case reference')
+
+      const rasDocument = getDocument(searchResults, '80dffad6-ec63-47e5-9d79-cb96537081e8')
+      rasDocument.should('not.contain', 'New')
+      rasDocument.should('not.contain', 'Mark as new')
+      rasDocument.should('contain', 'Case reference')
     })
   })
 
-  describe('Documents do not refresh after downloading an already VIEWED document', () => {
-    it('does not set refresh-pending key when clicking a non-new document link', () => {
-      cy.visit('/prisoner/A1234AB/documents')
+  let getSearchResults = (): PageElement => cy.get('#document-search-results')
 
-      cy.get(
-        '#document-search-results .document:not(.document--new) a.prisoner-doc-link[href*="/documents/"][href*="/download/"]',
-      )
-        .first()
-        .then($link => {
-          // Avoid real navigation in test
-          $link[0].addEventListener('click', e => e.preventDefault(), { once: true })
-        })
-        .click()
-
-      cy.window().then(win => {
-        expect(win.sessionStorage.getItem('ccrd:documents:refresh-pending')).to.eq(null)
-      })
-    })
-  })
+  let getDocument = (searchResults: PageElement, documentUuid: string): PageElement =>
+    searchResults.get(`[data-qa=document-${documentUuid}]`)
 })
