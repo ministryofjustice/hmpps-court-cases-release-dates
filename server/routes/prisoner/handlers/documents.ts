@@ -232,9 +232,11 @@ export default class DocumentRoutes {
     const { prisonerNumber, documentId } = req.params
     const { username } = req.user
 
+    const showing = getAsStringOrDefault(req.body.showing, 'all')
+    const byCaseReference = getAsArrayOrDefault(req.body.byCaseReference, 'all').join(',')
     const sortByQuery = getAsStringOrDefault(req.body.sortBy, 'MOST_RECENT')
     const pageNumber = getAsStringOrDefault(req.body.pageNumber, '1')
-    const redirectUrl = `/prisoner/${prisonerNumber}/documents?sortBy=${sortByQuery}&pageNumber=${pageNumber}`
+    const redirectUrl = `/prisoner/${prisonerNumber}/documents?sortBy=${sortByQuery}&pageNumber=${pageNumber}&showing=${showing}&byCaseReference=${byCaseReference}`
 
     try {
       await this.validateDocumentForDownload(documentId, prisonerNumber, username)
