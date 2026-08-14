@@ -1,7 +1,10 @@
 import { RequestHandler } from 'express'
+import { constants } from 'node:http2'
 import logger from '../../logger'
 
-export default function requireRole(...requiredRoles: string[]): RequestHandler {
+export type OnDenied = 'redirect' | 'forbidden'
+
+export function requireRoleWith(onDenied: OnDenied, ...requiredRoles: string[]): RequestHandler {
   const normalised = requiredRoles.map(role => (role.startsWith('ROLE_') ? role.substring('ROLE_'.length) : role))
 
   return (req, res, next) => {
@@ -14,6 +17,14 @@ export default function requireRole(...requiredRoles: string[]): RequestHandler 
     logger.warn(
       `User ${res.locals?.user?.username} denied ${req.method} ${req.originalUrl}: requires one of ${normalised.join(', ')}`,
     )
+
+    if (onDenied === 'forbidden') {
+      return res.status(constants.HTTP_STATUS_FORBIDDEN).end()
+    }
     return res.redirect('/authError')
   }
+}
+
+export default function requireRole(...requiredRoles: string[]): RequestHandler {
+  return requireRoleWith('redirect', ...requiredRoles)
 }

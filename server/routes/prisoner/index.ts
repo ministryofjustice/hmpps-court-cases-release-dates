@@ -15,6 +15,8 @@ import ConfigRoutes from '../config/ConfigRoutes'
 import DocumentRoutes from './handlers/documents'
 import config from '../../config'
 import prisonsFilterMiddleware from '../../middleware/prisonsFilterMiddleware'
+import requireRole, { requireRoleWith } from '../../middleware/requireRole'
+import { Role, Roles } from '../../@types/roles'
 
 export default function Index({
   prisonerService,
@@ -41,6 +43,9 @@ export default function Index({
   const requireEdit = prisonerPermissionsGuard(prisonPermissionsService, {
     requestDependentOn: [PersonSentenceCalculationPermission.edit],
   })
+
+  const requireDocuments = requireRole(Roles.getRole(Role.CCRD_DOCUMENTS))
+  const requireDocumentsApi = requireRoleWith('forbidden', Roles.getRole(Role.CCRD_DOCUMENTS))
 
   get('/:prisonerNumber/image', requireRead, new ImageRoutes(prisonerService).GET)
   get('/:prisonerNumber/adjustments', requireEdit, new AdjustmentsRoutes().GET)
@@ -74,6 +79,7 @@ export default function Index({
 
   get(
     '/:prisonerNumber/documents',
+    requireDocuments,
     requireEdit,
     new DocumentRoutes(
       prisonerService,
@@ -85,6 +91,7 @@ export default function Index({
   )
   get(
     ['/:prisonerNumber/documents/:documentId/download/:filename', '/:prisonerNumber/documents/:documentId/download'],
+    requireDocumentsApi,
     requireEdit,
     new DocumentRoutes(
       prisonerService,
@@ -97,6 +104,7 @@ export default function Index({
 
   post(
     '/:prisonerNumber/documents/:documentId/mark-as-new',
+    requireDocumentsApi,
     requireEdit,
     new DocumentRoutes(
       prisonerService,
