@@ -18,7 +18,13 @@
     <div id="document-search-results" class="govuk-grid-column-three-quarters">
 
     {% if not documents.length %}
-        <p class="govuk-body">No documents have been received.</p>
+        {%- set noFiltersApplied = ("all" in filters.byCaseReferences) and (filters.showing === "all") -%}
+
+        {% if noFiltersApplied %}
+            <p class="govuk-body">No documents have been received.</p>
+        {% else %}
+            <p class="govuk-body">No documents found - try changing filters to display documents.</p>
+        {% endif %}
     {% else %}
 
         <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2" data-qa="documents-sort-bar">
