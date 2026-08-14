@@ -317,9 +317,6 @@ describe('Route Handlers - Documents access control', () => {
 
   const allRoutes: DocumentRoute[] = [pageRoute, ...apiRoutes]
 
-  // mark-as-new reads req.body, so a POST with no body fails inside the handler for reasons that
-  // have nothing to do with authorisation. Always send a valid body so a passing test means the
-  // guard stopped the request, not that the handler happened to throw first.
   const call = (testApp: Express, { method, path }: DocumentRoute) =>
     method === 'post'
       ? request(testApp).post(path).send({ sortBy: 'MOST_RECENT', pageNumber: '1' })
@@ -358,9 +355,6 @@ describe('Route Handlers - Documents access control', () => {
     })
   })
 
-  // The guard has to run before the handler, not just change the final response. CCRD calls the
-  // document management API with system credentials, so a request that reaches the handler has
-  // already read the document whatever we then return to the browser.
   it.each(allRoutes)('$method $path does not reach any downstream service without the role', async route => {
     await call(appWithoutRole, route)
 
