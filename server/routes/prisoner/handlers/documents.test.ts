@@ -22,6 +22,7 @@ import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
+import { Role, Roles } from '../../../@types/roles'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
@@ -48,7 +49,15 @@ const defaultServices = {
   courtRegisterService,
 }
 
-const defaultUser = { ...user, hasAdjustmentsAccess: true, hasRasAccess: true, hasRecallsAccess: true }
+const defaultUser = {
+  ...user,
+  hasAdjustmentsAccess: true,
+  hasRasAccess: true,
+  hasRecallsAccess: true,
+  roles: [Roles.getRole(Role.CCRD_DOCUMENTS)],
+}
+
+const userWithoutDocumentsRole = { ...defaultUser, roles: [] as string[] }
 
 beforeEach(() => {
   app = appWithAllRoutes({
@@ -290,6 +299,77 @@ describe('Route Handlers - Overview', () => {
         expect(res.status).toBe(200)
         expect(res.text).toContain(serviceDefinitionsMaintenanceEnabled.maintenanceAlert.message)
       })
+  })
+})
+
+type DocumentRoute = { method: 'get' | 'post'; path: string }
+
+describe('Route Handlers - Documents access control', () => {
+  const documentId = '4fd5f7b0-eebf-4b69-9489-0cc48550e03b'
+
+  const pageRoute: DocumentRoute = { method: 'get', path: '/prisoner/A12345B/documents' }
+
+  const apiRoutes: DocumentRoute[] = [
+    { method: 'get', path: `/prisoner/A12345B/documents/${documentId}/download` },
+    { method: 'get', path: `/prisoner/A12345B/documents/${documentId}/download/warrant.pdf` },
+    { method: 'post', path: `/prisoner/A12345B/documents/${documentId}/mark-as-new` },
+  ]
+
+  const allRoutes: DocumentRoute[] = [pageRoute, ...apiRoutes]
+
+  const call = (testApp: Express, { method, path }: DocumentRoute) =>
+    method === 'post'
+      ? request(testApp).post(path).send({ sortBy: 'MOST_RECENT', pageNumber: '1' })
+      : request(testApp).get(path)
+
+  let appWithoutRole: Express
+
+  beforeEach(() => {
+    appWithoutRole = appWithAllRoutes({
+      services: defaultServices,
+      userSupplier: () => userWithoutDocumentsRole,
+    })
+
+    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+      prisonerNumber: 'A12345B',
+      imprisonmentStatusDescription: 'Life imprisonment',
+      prisonId: 'MDI',
+    } as Prisoner)
+    prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+    documentManagementService.searchDocument.mockResolvedValue(documents)
+    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+    documentManagementService.downloadDocument.mockReturnValue(fileDownload)
+    remandAndSentencingService.getDocuments.mockResolvedValue(rasDocuments)
+    courtDataIngestionService.getDocuments.mockResolvedValue(cpDocuments)
+    courtDataIngestionService.markAsNew.mockResolvedValue()
+    courtRegisterService.getCourtName.mockReturnValue('LV Liverpool Court' as unknown as Promise<string>)
+  })
+
+  it('the documents page redirects to the auth error page without the documents role', () => {
+    return call(appWithoutRole, pageRoute).expect(constants.HTTP_STATUS_FOUND).expect('Location', '/authError')
+  })
+
+  it.each(apiRoutes)('$method $path returns 403 without the documents role', route => {
+    return call(appWithoutRole, route).expect(res => {
+      expect(res.status).toBe(constants.HTTP_STATUS_FORBIDDEN)
+    })
+  })
+
+  it.each(allRoutes)('$method $path does not reach any downstream service without the role', async route => {
+    await call(appWithoutRole, route)
+
+    expect(documentManagementService.searchDocument).not.toHaveBeenCalled()
+    expect(documentManagementService.getDocument).not.toHaveBeenCalled()
+    expect(documentManagementService.downloadDocument).not.toHaveBeenCalled()
+    expect(courtDataIngestionService.getDocuments).not.toHaveBeenCalled()
+    expect(courtDataIngestionService.markAsNew).not.toHaveBeenCalled()
+  })
+
+  it.each(allRoutes)('$method $path is not denied when the user holds the documents role', async route => {
+    const res = await call(app, route)
+
+    expect(res.status).not.toBe(constants.HTTP_STATUS_FORBIDDEN)
+    expect(res.headers.location).not.toBe('/authError')
   })
 })
 
