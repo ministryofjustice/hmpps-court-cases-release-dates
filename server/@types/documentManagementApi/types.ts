@@ -50,7 +50,7 @@ export class DocumentManagementMapper {
 
   public static getCaseReferences(it: Document): string|null {
     const caseReferences = it.metadata?.caseReferences
-    return (Array.isArray(caseReferences) && caseReferences.length > 0) ? caseReferences.join(', ') : null
+    return (Array.isArray(caseReferences) && caseReferences.length > 0) ? [...new Set(caseReferences)].join(', ') : null
   }
 
   public static getSource(it: Document): string {
