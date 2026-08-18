@@ -304,7 +304,7 @@ export default class DocumentRoutes {
       facets: this.buildDocumentSearchFacetRequest(filters),
 
       page: filters.pagination.pageNumber - 1,
-      pageSize: 10,
+      pageSize: 20,
       orderBy: DocumentSearchOrderBy.CREATED_TIME,
       orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
     } as DocumentSearchRequest
