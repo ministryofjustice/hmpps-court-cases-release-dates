@@ -71,8 +71,7 @@
 {% endset -%}
 
 <div class="moj-filter-layout__filter">
-<form id="documentFiltersForm" action="/prisoner/{{ prisoner.prisonerNumber }}/documents?test=tomas" method="GET">
-{# TODO (CDIA-????): Uncomment selectedFilters when we can have multiple-selectino filters. For now all are radio buttons, so no need to show selected filters. #}
+<form id="documentFiltersForm" action="/prisoner/{{ prisoner.prisonerNumber }}/documents" method="GET">
     {{ mojFilter({
     heading: {
         text: "Filter"
@@ -83,16 +82,22 @@
             "data-test-id": "submit-button"
         }
     },
+
+    selectedFilters: {
+        clearLink: {
+        text: "Clear filters",
+        href: "/prisoner/" + prisoner.prisonerNumber + "/documents"
+        }
+    },
+
     optionsHtml: filterOptionsHtml
     }) }}
+
+    {# TODO (CDIA-280): Add selected filters to the filter component when the filter form is submitted. Need investigation on how the remove and add filters actions work pre-submit the form. #}
     {# selectedFilters: {
 
         heading: {
         text: "Selected filters"
-        },
-
-        clearLink: {
-        text: "Clear filters"
         },
 
         categories: [
@@ -116,6 +121,7 @@
         }
         ]
     }, #}
+
     <input type="hidden" name="sortBy" value="{{ filters.pagination.sortBy }}" />
 </form>
 </div>
