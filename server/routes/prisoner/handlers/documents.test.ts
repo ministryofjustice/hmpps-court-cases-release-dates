@@ -121,6 +121,7 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
         expect(firstCommonPlatformDocumentText).toContain('Case reference')
         expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123')
+        expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123, CommonPlatformCase456')
         expect(firstCommonPlatformDocumentText).toContain('Hearing date')
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
@@ -173,9 +174,11 @@ describe('Route Handlers - Overview', () => {
         expect(thirdRasDocumentText).toContain('PDF 11 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
         expect(thirdRasDocumentText).toContain('Case reference')
+        expect(thirdRasDocumentText).toContain('AB12345678A, BC23456789B, CD34567890C')
 
         const thirdRasDocumentCaseRef = textOf(thirdRasDocument, '[data-qa=case-reference]')
         expect(thirdRasDocumentCaseRef).toContain('AB12345678A')
+        expect(thirdRasDocumentCaseRef).toContain('AB12345678A, BC23456789B, CD34567890C')
         expect(thirdRasDocumentText).toContain('Court name')
         const thirdRasDocumentTextCourtName = textOf(thirdRasDocument, '[data-qa=court-name]')
         expect(thirdRasDocumentTextCourtName).toContain('MN Manchester Court')
@@ -599,7 +602,7 @@ const documents = {
       metadata: {
         source: 'court-data-ingestion-api',
         prisonerId: 'A12345B',
-        caseReferences: ['CommonPlatformCase123', 'CommonPlatformCase456'],
+        caseReferences: ['CommonPlatformCase123', 'CommonPlatformCase456', 'CommonPlatformCase123'],
         isUnread: true,
       },
     },
@@ -632,7 +635,7 @@ const documents = {
       createdByServiceName: 'Remand and Sentencing',
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
       metadata: {
-        caseReferences: ['AB12345678A', 'BC23456789B'],
+        caseReferences: ['AB12345678A', 'AB12345678A', 'BC23456789B', 'AB12345678A', 'CD34567890C'],
       },
     },
     {
