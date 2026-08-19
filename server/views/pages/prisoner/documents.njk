@@ -29,18 +29,18 @@
 
         <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2" data-qa="documents-sort-bar">
             <div class="govuk-grid-column-two-thirds">
-                Sort by:
+                <strong>Sort by:</strong>
                 <a
                         class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1"
-                        href="/prisoner/{{ prisoner.prisonerNumber }}/documents?sortBy=MOST_RECENT"
-                        {% if sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
+                        href="{{ filters.sortLink.mostRecent }}"
+                        {% if filters.pagination.sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
                         data-qa="sort-most-recent"
                 >Most recent</a>
                 <span class="govuk-hint govuk-!-margin-right-1">|</span>
                 <a
                         class="govuk-link govuk-link--no-visited-state"
-                        href="/prisoner/{{ prisoner.prisonerNumber }}/documents?sortBy=EARLIEST"
-                        {% if sortBy == "EARLIEST" %}aria-current="true"{% endif %}
+                        href="{{ filters.sortLink.earliest }}"
+                        {% if filters.pagination.sortBy == "EARLIEST" %}aria-current="true"{% endif %}
                         data-qa="sort-oldest"
                 >Oldest</a>
             </div>
@@ -52,7 +52,7 @@
                     {% else %}
                         <strong>0</strong>
                     {% endif %}
-                    of <strong>{{ totalResults }}</strong> documents
+                    of <strong>{{ paginationResults.count }}</strong> documents
                 </div>
             </div>
         </div>

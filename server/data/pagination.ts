@@ -135,3 +135,11 @@ function getNext(pagedDataResponse: PagedDataResponse, url: URL): PageLink | nul
     null
   )
 }
+
+// Builds a link to the current page with the given sortBy applied, preserving all other existing query params (e.g. filters)
+export function getSortLink(url: URL, sortBy: string): string {
+  const linkUrl = new URL(url)
+  linkUrl.searchParams.set('sortBy', sortBy)
+  linkUrl.searchParams.delete('pageNumber')
+  return linkUrl.href
+}
