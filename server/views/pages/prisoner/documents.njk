@@ -32,14 +32,14 @@
                 Sort by:
                 <a
                         class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1"
-                        href="{{ filters.sortLinks.mostRecent }}"
+                        href="{{ filters.sortLink.mostRecent }}"
                         {% if filters.pagination.sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
                         data-qa="sort-most-recent"
                 >Most recent</a>
                 <span class="govuk-hint govuk-!-margin-right-1">|</span>
                 <a
                         class="govuk-link govuk-link--no-visited-state"
-                        href="{{ filters.sortLinks.earliest }}"
+                        href="{{ filters.sortLink.earliest }}"
                         {% if filters.pagination.sortBy == "EARLIEST" %}aria-current="true"{% endif %}
                         data-qa="sort-oldest"
                 >Oldest</a>

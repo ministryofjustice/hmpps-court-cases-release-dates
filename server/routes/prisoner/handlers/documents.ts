@@ -354,7 +354,7 @@ type DocumentFilters = {
     sortBy: string
     pageNumber: number
   }
-  sortLinks: {
+  sortLink: {
     mostRecent: string
     earliest: string
   }
@@ -375,7 +375,7 @@ function buildDocumentFilters(req: Request): DocumentFilters {
       sortBy: sortByQuery,
       pageNumber,
     },
-    sortLinks: {
+    sortLink: {
       mostRecent: getSortLink(baseUrl, 'MOST_RECENT'),
       earliest: getSortLink(baseUrl, 'EARLIEST'),
     },
