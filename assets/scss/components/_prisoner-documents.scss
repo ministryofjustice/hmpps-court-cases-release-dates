@@ -2,6 +2,11 @@
   @include govuk-font($size: 19, $weight: 'bold');
 }
 
+[data-qa="documents-sort-bar"] a[aria-current="true"] {
+  @include govuk-link-style-text;
+  @include govuk-link-style-no-underline;
+}
+
 .document {
   margin-bottom: 0;
 }
