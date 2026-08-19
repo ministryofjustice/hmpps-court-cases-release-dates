@@ -140,6 +140,6 @@ function getNext(pagedDataResponse: PagedDataResponse, url: URL): PageLink | nul
 export function getSortLink(url: URL, sortBy: string): string {
   const linkUrl = new URL(url)
   linkUrl.searchParams.set('sortBy', sortBy)
-  linkUrl.searchParams.set('pageNumber', '1')
+  linkUrl.searchParams.delete('pageNumber')
   return linkUrl.href
 }
