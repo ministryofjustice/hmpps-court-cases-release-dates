@@ -10,8 +10,8 @@
         <input type="hidden" name="byCaseReference" value="{{ caseRef }}" />
     {% endfor %}
 
-    <input type="hidden" name="sortBy" value="{{ sortByQuery }}">
-    <input type="hidden" name="pageNumber" value="{{ pageNumber }}">
+    <input type="hidden" name="sortBy" value="{{ filters.pagination.sortBy }}">
+    <input type="hidden" name="pageNumber" value="{{ filters.pagination.pageNumber }}">
 
     {{ govukButton({
         html: 'Mark as new<span class="govuk-visually-hidden"> ' + document.typeDescription + '</span>',
