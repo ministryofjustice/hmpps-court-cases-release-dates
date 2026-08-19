@@ -17,7 +17,7 @@ import {
   FacetResult,
   FacetValue,
 } from '../../../@types/documentManagementApi/types'
-import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
+import { getPagedDataResponse, getPaginationResults, getSortLink, govukPagination } from '../../../data/pagination'
 import config from '../../../config'
 import {
   AppearanceDocument,
@@ -45,20 +45,7 @@ export default class DocumentRoutes {
     const { prisoner } = req
     const { token, username } = req.user
 
-    const showing = getAsStringOrDefault(req.query.showing, 'all')
-    const byCaseReferences = getAsArrayOrDefault(req.query.byCaseReference, 'all')
-
-    const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
-    const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
-
-    const filters = {
-      showing,
-      byCaseReferences,
-      pagination: {
-        sortBy: sortByQuery,
-        pageNumber,
-      },
-    } as DocumentFilters
+    const filters = buildDocumentFilters(req)
 
     const documentSearchRequest: DocumentSearchRequest = this.buildDocumentSearchRequest(
       prisoner.prisonerNumber,
@@ -165,12 +152,8 @@ export default class DocumentRoutes {
       serviceDefinitions,
       documents: viewModelDocuments,
       filters,
-      sortByQuery,
-      pageNumber,
-      pageSize: documentSearchRequest.pageSize,
-      pagination: govukPagination(pagedDataResponse, new URL(req.originalUrl, config.domain)),
+      pagination: govukPagination(pagedDataResponse, filters.baseUrl),
       paginationResults: getPaginationResults(pagedDataResponse),
-      totalResults: documents.totalResultsCount,
       displayMaintenanceAlert: true,
     })
   }
@@ -363,11 +346,38 @@ type DocumentViewModel = {
 }
 
 type DocumentFilters = {
+  baseUrl: URL
   showing: string
   byCaseReferences: string[]
-  facets: { [p: string]: FacetResult }
+  facets?: { [p: string]: FacetResult }
   pagination: {
     sortBy: string
     pageNumber: number
+  }
+  sortLinks: {
+    mostRecent: string
+    earliest: string
+  }
+}
+
+function buildDocumentFilters(req: Request): DocumentFilters {
+  const baseUrl = new URL(req.originalUrl, config.domain)
+  const showing = getAsStringOrDefault(req.query.showing, 'all')
+  const byCaseReferences = getAsArrayOrDefault(req.query.byCaseReference, 'all')
+  const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
+  const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
+
+  return {
+    baseUrl,
+    showing,
+    byCaseReferences,
+    pagination: {
+      sortBy: sortByQuery,
+      pageNumber,
+    },
+    sortLinks: {
+      mostRecent: getSortLink(baseUrl, 'MOST_RECENT'),
+      earliest: getSortLink(baseUrl, 'EARLIEST'),
+    },
   }
 }

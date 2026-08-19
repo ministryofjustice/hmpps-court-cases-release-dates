@@ -2,6 +2,10 @@
   @include govuk-font($size: 19, $weight: 'bold');
 }
 
+[data-qa="documents-sort-bar"] a[aria-current="true"] {
+  @include govuk-font($size: 19, $weight: 'bold');
+}
+
 .document {
   margin-bottom: 0;
 }
