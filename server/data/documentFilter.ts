@@ -83,7 +83,6 @@ function getCaseReferenceRemoveFilterLink(url: URL, caseReference: string): stri
     return linkUrl.href
   }
 
-  // The apply-filters checkboxes submit repeated byCaseReference params, so mirror that format here rather than a comma-joined value
   removedCaseReferences.forEach(value => linkUrl.searchParams.append('byCaseReference', value))
   return linkUrl.href
 }
