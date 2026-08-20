@@ -415,6 +415,95 @@ describe('Route Handlers - Download Document', () => {
 describe('Route Handlers - Mark Document As New', () => {
   it.each([
     {
+      name: 'explicit sortBy and pageNumber',
+      queryString: '?sortBy=EARLIEST&pageNumber=2',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['all'],
+    },
+    {
+      name: 'explicit pageNumber=1',
+      queryString: '?sortBy=EARLIEST&pageNumber=1',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '1',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['all'],
+    },
+    {
+      name: 'no query params - falls back to defaults',
+      queryString: '',
+      expectedSortBy: 'MOST_RECENT',
+      expectedPageNumber: '1',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['all'],
+    },
+    {
+      name: 'explicit showing filter',
+      queryString: '?sortBy=EARLIEST&pageNumber=2&showing=unread',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'unread',
+      expectedByCaseReferences: ['all'],
+    },
+    {
+      name: 'explicit single case reference filter',
+      queryString: '?sortBy=EARLIEST&pageNumber=2&byCaseReference=case1',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['case1'],
+    },
+    {
+      name: 'explicit multiple case reference filters',
+      queryString: '?sortBy=EARLIEST&pageNumber=2&byCaseReference=case1,case2',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['case1', 'case2'],
+    },
+    {
+      name: 'explicit multiple case reference filters',
+      queryString: '?sortBy=EARLIEST&pageNumber=2&byCaseReference=case1&byCaseReference=case2',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['case1', 'case2'],
+    },
+  ])(
+    'the documents page renders mark-as-new forms whose hidden inputs reflect the current filters - $name',
+    ({ queryString, expectedSortBy, expectedPageNumber, expectedShowing, expectedByCaseReferences }) => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        imprisonmentStatusDescription: 'Life imprisonment',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      documentManagementService.searchDocument.mockResolvedValue(documents)
+      remandAndSentencingService.getDocuments.mockResolvedValue(rasDocuments)
+      courtDataIngestionService.getDocuments.mockResolvedValue(cpDocuments)
+      courtRegisterService.getCourtName.mockReturnValue('LV Liverpool Court' as unknown as Promise<string>)
+
+      return request(app)
+        .get(`/prisoner/A12345B/documents${queryString}`)
+        .expect(res => {
+          expect(res.status).toBe(constants.HTTP_STATUS_OK)
+          const $ = cheerio.load(res.text)
+          const markAsNewForm = $('form[action*="mark-as-new"]').first()
+          expect(markAsNewForm.find('input[name="sortBy"]').attr('value')).toBe(expectedSortBy)
+          expect(markAsNewForm.find('input[name="pageNumber"]').attr('value')).toBe(expectedPageNumber)
+          expect(markAsNewForm.find('input[name="showing"]').attr('value')).toBe(expectedShowing)
+          const byCaseReferenceValues = markAsNewForm
+            .find('input[name="byCaseReference"]')
+            .map((_, el) => $(el).attr('value'))
+            .get()
+          expect(byCaseReferenceValues).toEqual(expectedByCaseReferences)
+        })
+    },
+  )
+
+  it.each([
+    {
       name: 'with default filters',
       body: { sortBy: 'MOST_RECENT', pageNumber: '1' },
       expectedLocation: '/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1&showing=all&byCaseReference=all',
