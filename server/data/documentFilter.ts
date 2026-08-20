@@ -69,20 +69,20 @@ export function getCaseReferencesRemoveFilterLinks(url: URL, caseReferences: str
 function getCaseReferenceRemoveFilterLink(url: URL, caseReference: string): string {
   const linkUrl = new URL(url)
 
+  const caseReferences = linkUrl.searchParams.getAll('byCaseReference')
   linkUrl.searchParams.delete('pageNumber')
+  linkUrl.searchParams.delete('byCaseReference')
 
   if (caseReference === 'all' || caseReference === 'none') {
-    linkUrl.searchParams.delete('byCaseReference')
     return linkUrl.href
   }
 
-  const caseReferences = linkUrl.searchParams.getAll('byCaseReference').filter(value => value !== caseReference)
+  const removedCaseReferences = caseReferences.filter(value => value !== caseReference)
 
-  if (caseReferences.length === 0) {
-    linkUrl.searchParams.delete('byCaseReference')
+  if (removedCaseReferences.length === 0) {
     return linkUrl.href
   }
 
-  linkUrl.searchParams.set('byCaseReference', caseReferences.join(','))
+  removedCaseReferences.forEach(value => linkUrl.searchParams.append('byCaseReference', value))
   return linkUrl.href
 }
