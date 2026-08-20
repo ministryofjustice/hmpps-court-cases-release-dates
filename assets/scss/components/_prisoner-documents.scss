@@ -1,12 +1,3 @@
-.prisoner-doc-link {
-  @include govuk-font($size: 19, $weight: 'bold');
-}
-
-[data-qa="documents-sort-bar"] a[aria-current="true"] {
-  @include govuk-link-style-text;
-  @include govuk-link-style-no-underline;
-}
-
 .document {
   margin-bottom: 0;
 }
@@ -52,4 +43,17 @@
 .document__meta {
   color: govuk-colour("dark-grey");
   font-size: 0.875rem;
+}
+
+.moj-filter__selected-heading {
+  text-align: justify;
+}
+
+.prisoner-doc-link {
+  @include govuk-font($size: 19, $weight: 'bold');
+}
+
+[data-qa="documents-sort-bar"] a[aria-current="true"] {
+  @include govuk-link-style-text;
+  @include govuk-link-style-no-underline;
 }
