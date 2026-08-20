@@ -70,7 +70,6 @@
     }) }}
 {% endset -%}
 
-
 {% set selectedFilterCategories = [] %}
 
 {%- set selectedFilterCategories = (selectedFilterCategories.push({
@@ -128,6 +127,7 @@
 
     optionsHtml: filterOptionsHtml
     }) }}
+
     <input type="hidden" name="sortBy" value="{{ filters.pagination.sortBy }}" />
 </form>
 </div>
