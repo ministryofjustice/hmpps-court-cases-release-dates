@@ -17,8 +17,7 @@ import {
   FacetResult,
   FacetValue,
 } from '../../../@types/documentManagementApi/types'
-import { getPagedDataResponse, getPaginationResults, getSortLink, govukPagination } from '../../../data/pagination'
-import config from '../../../config'
+import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import {
   AppearanceDocument,
   RaSCourtCaseDocument,
@@ -31,6 +30,7 @@ import commonPlatformDocumentStatuses from '../../../@types/courtDataIngestionAp
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import DocumentSearchOrderBy from '../../../@types/documentManagementApi/DocumentSearchOrderBy'
 import { MetadataFilterMapper } from '../../../@types/documentManagementApi/MetadataFilter'
+import { buildDocumentFilters, DocumentFilters } from '../../../data/documentFilter'
 
 export default class DocumentRoutes {
   constructor(
@@ -343,41 +343,4 @@ type DocumentViewModel = {
   isNew: boolean
   hearingType: string
   source: 'remand-and-sentencing-api' | 'court-data-ingestion-api'
-}
-
-type DocumentFilters = {
-  baseUrl: URL
-  showing: string
-  byCaseReferences: string[]
-  facets?: { [p: string]: FacetResult }
-  pagination: {
-    sortBy: string
-    pageNumber: number
-  }
-  sortLink: {
-    mostRecent: string
-    earliest: string
-  }
-}
-
-function buildDocumentFilters(req: Request): DocumentFilters {
-  const baseUrl = new URL(req.originalUrl, config.domain)
-  const showing = getAsStringOrDefault(req.query.showing, 'all')
-  const byCaseReferences = getAsArrayOrDefault(req.query.byCaseReference, 'all')
-  const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
-  const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
-
-  return {
-    baseUrl,
-    showing,
-    byCaseReferences,
-    pagination: {
-      sortBy: sortByQuery,
-      pageNumber,
-    },
-    sortLink: {
-      mostRecent: getSortLink(baseUrl, 'MOST_RECENT'),
-      earliest: getSortLink(baseUrl, 'EARLIEST'),
-    },
-  }
 }
