@@ -98,7 +98,9 @@ const manageDetails = () =>
     },
   })
 
-const token = (roles: string[] = [Roles.getAuthority(Role.RELEASE_DATES_CALCULATOR)]) =>
+const token = (
+  roles: string[] = [Roles.getAuthority(Role.RELEASE_DATES_CALCULATOR), Roles.getAuthority(Role.CCRD_DOCUMENTS)],
+) =>
   stubFor({
     request: {
       method: 'POST',

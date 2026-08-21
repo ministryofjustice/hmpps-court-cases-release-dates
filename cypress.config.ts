@@ -10,6 +10,8 @@ import calculateReleaseDatesApi from './integration_tests/mockApis/calculateRele
 import courtCasesReleaseDatesApi from './integration_tests/mockApis/courtCasesReleaseDatesApi'
 import remandAndSentencingApi from './integration_tests/mockApis/remandAndSentencingApi'
 import components from './integration_tests/mockApis/components'
+import documentManagementApi from './integration_tests/mockApis/documentManagementApi'
+import courtDataIngestionApi from './integration_tests/mockApis/courtDataIngestionApi'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -35,6 +37,8 @@ export default defineConfig({
         ...courtCasesReleaseDatesApi,
         ...remandAndSentencingApi,
         ...components,
+        ...documentManagementApi,
+        ...courtDataIngestionApi,
       })
     },
     baseUrl: 'http://localhost:3007',
