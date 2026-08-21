@@ -22,6 +22,7 @@ import CourtRegisterService from '../../../services/courtRegisterService'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import { RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
+import { Role, Roles } from '../../../@types/roles'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/documentManagementService')
@@ -48,7 +49,15 @@ const defaultServices = {
   courtRegisterService,
 }
 
-const defaultUser = { ...user, hasAdjustmentsAccess: true, hasRasAccess: true, hasRecallsAccess: true }
+const defaultUser = {
+  ...user,
+  hasAdjustmentsAccess: true,
+  hasRasAccess: true,
+  hasRecallsAccess: true,
+  roles: [Roles.getRole(Role.CCRD_DOCUMENTS)],
+}
+
+const userWithoutDocumentsRole = { ...defaultUser, roles: [] as string[] }
 
 beforeEach(() => {
   app = appWithAllRoutes({
@@ -112,6 +121,7 @@ describe('Route Handlers - Overview', () => {
         expect(firstCommonPlatformDocumentText).toContain('Common Platform')
         expect(firstCommonPlatformDocumentText).toContain('Case reference')
         expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123')
+        expect(firstCommonPlatformDocumentText).toContain('CommonPlatformCase123, CommonPlatformCase456')
         expect(firstCommonPlatformDocumentText).toContain('Hearing date')
         expect(firstCommonPlatformDocumentText).not.toContain('Warrant date')
         expect(firstCommonPlatformDocumentText).toContain('27 March 2026')
@@ -164,9 +174,11 @@ describe('Route Handlers - Overview', () => {
         expect(thirdRasDocumentText).toContain('PDF 11 GB')
         expect(thirdRasDocumentText).toContain('Court cases')
         expect(thirdRasDocumentText).toContain('Case reference')
+        expect(thirdRasDocumentText).toContain('AB12345678A, BC23456789B, CD34567890C')
 
         const thirdRasDocumentCaseRef = textOf(thirdRasDocument, '[data-qa=case-reference]')
         expect(thirdRasDocumentCaseRef).toContain('AB12345678A')
+        expect(thirdRasDocumentCaseRef).toContain('AB12345678A, BC23456789B, CD34567890C')
         expect(thirdRasDocumentText).toContain('Court name')
         const thirdRasDocumentTextCourtName = textOf(thirdRasDocument, '[data-qa=court-name]')
         expect(thirdRasDocumentTextCourtName).toContain('MN Manchester Court')
@@ -293,6 +305,77 @@ describe('Route Handlers - Overview', () => {
   })
 })
 
+type DocumentRoute = { method: 'get' | 'post'; path: string }
+
+describe('Route Handlers - Documents access control', () => {
+  const documentId = '4fd5f7b0-eebf-4b69-9489-0cc48550e03b'
+
+  const pageRoute: DocumentRoute = { method: 'get', path: '/prisoner/A12345B/documents' }
+
+  const apiRoutes: DocumentRoute[] = [
+    { method: 'get', path: `/prisoner/A12345B/documents/${documentId}/download` },
+    { method: 'get', path: `/prisoner/A12345B/documents/${documentId}/download/warrant.pdf` },
+    { method: 'post', path: `/prisoner/A12345B/documents/${documentId}/mark-as-new` },
+  ]
+
+  const allRoutes: DocumentRoute[] = [pageRoute, ...apiRoutes]
+
+  const call = (testApp: Express, { method, path }: DocumentRoute) =>
+    method === 'post'
+      ? request(testApp).post(path).send({ sortBy: 'MOST_RECENT', pageNumber: '1' })
+      : request(testApp).get(path)
+
+  let appWithoutRole: Express
+
+  beforeEach(() => {
+    appWithoutRole = appWithAllRoutes({
+      services: defaultServices,
+      userSupplier: () => userWithoutDocumentsRole,
+    })
+
+    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+      prisonerNumber: 'A12345B',
+      imprisonmentStatusDescription: 'Life imprisonment',
+      prisonId: 'MDI',
+    } as Prisoner)
+    prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+    documentManagementService.searchDocument.mockResolvedValue(documents)
+    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+    documentManagementService.downloadDocument.mockReturnValue(fileDownload)
+    remandAndSentencingService.getDocuments.mockResolvedValue(rasDocuments)
+    courtDataIngestionService.getDocuments.mockResolvedValue(cpDocuments)
+    courtDataIngestionService.markAsNew.mockResolvedValue()
+    courtRegisterService.getCourtName.mockReturnValue('LV Liverpool Court' as unknown as Promise<string>)
+  })
+
+  it('the documents page redirects to the auth error page without the documents role', () => {
+    return call(appWithoutRole, pageRoute).expect(constants.HTTP_STATUS_FOUND).expect('Location', '/authError')
+  })
+
+  it.each(apiRoutes)('$method $path returns 403 without the documents role', route => {
+    return call(appWithoutRole, route).expect(res => {
+      expect(res.status).toBe(constants.HTTP_STATUS_FORBIDDEN)
+    })
+  })
+
+  it.each(allRoutes)('$method $path does not reach any downstream service without the role', async route => {
+    await call(appWithoutRole, route)
+
+    expect(documentManagementService.searchDocument).not.toHaveBeenCalled()
+    expect(documentManagementService.getDocument).not.toHaveBeenCalled()
+    expect(documentManagementService.downloadDocument).not.toHaveBeenCalled()
+    expect(courtDataIngestionService.getDocuments).not.toHaveBeenCalled()
+    expect(courtDataIngestionService.markAsNew).not.toHaveBeenCalled()
+  })
+
+  it.each(allRoutes)('$method $path is not denied when the user holds the documents role', async route => {
+    const res = await call(app, route)
+
+    expect(res.status).not.toBe(constants.HTTP_STATUS_FORBIDDEN)
+    expect(res.headers.location).not.toBe('/authError')
+  })
+})
+
 describe('Route Handlers - Download Document', () => {
   it('Valid document - should return 200 on successful download', () => {
     prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
@@ -330,30 +413,156 @@ describe('Route Handlers - Download Document', () => {
 })
 
 describe('Route Handlers - Mark Document As New', () => {
-  it('Valid CP document - should record mark-as-new and redirect to the documents list', () => {
-    prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
-      prisonerNumber: 'A12345B',
-      imprisonmentStatusDescription: 'Life imprisonment',
-      prisonId: 'MDI',
-    } as Prisoner)
-    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
-    courtDataIngestionService.markAsNew.mockResolvedValue()
+  it.each([
+    {
+      name: 'explicit sortBy and pageNumber',
+      queryString: '?sortBy=EARLIEST&pageNumber=2',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['all'],
+    },
+    {
+      name: 'explicit pageNumber=1',
+      queryString: '?sortBy=EARLIEST&pageNumber=1',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '1',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['all'],
+    },
+    {
+      name: 'no query params - falls back to defaults',
+      queryString: '',
+      expectedSortBy: 'MOST_RECENT',
+      expectedPageNumber: '1',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['all'],
+    },
+    {
+      name: 'explicit showing filter',
+      queryString: '?sortBy=EARLIEST&pageNumber=2&showing=unread',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'unread',
+      expectedByCaseReferences: ['all'],
+    },
+    {
+      name: 'explicit single case reference filter',
+      queryString: '?sortBy=EARLIEST&pageNumber=2&byCaseReference=case1',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['case1'],
+    },
+    {
+      name: 'explicit multiple case reference filters',
+      queryString: '?sortBy=EARLIEST&pageNumber=2&byCaseReference=case1,case2',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['case1', 'case2'],
+    },
+    {
+      name: 'explicit multiple case reference filters',
+      queryString: '?sortBy=EARLIEST&pageNumber=2&byCaseReference=case1&byCaseReference=case2',
+      expectedSortBy: 'EARLIEST',
+      expectedPageNumber: '2',
+      expectedShowing: 'all',
+      expectedByCaseReferences: ['case1', 'case2'],
+    },
+  ])(
+    'the documents page renders mark-as-new forms whose hidden inputs reflect the current filters - $name',
+    ({ queryString, expectedSortBy, expectedPageNumber, expectedShowing, expectedByCaseReferences }) => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        imprisonmentStatusDescription: 'Life imprisonment',
+        prisonId: 'MDI',
+      } as Prisoner)
+      prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
+      documentManagementService.searchDocument.mockResolvedValue(documents)
+      remandAndSentencingService.getDocuments.mockResolvedValue(rasDocuments)
+      courtDataIngestionService.getDocuments.mockResolvedValue(cpDocuments)
+      courtRegisterService.getCourtName.mockReturnValue('LV Liverpool Court' as unknown as Promise<string>)
 
-    return request(app)
-      .post('/prisoner/A12345B/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/mark-as-new')
-      .send({ sortBy: 'MOST_RECENT', pageNumber: '1' })
-      .expect(res => {
-        expect(res.status).toBe(constants.HTTP_STATUS_FOUND)
-        expect(res.headers.location).toBe('/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1')
-        expect(courtDataIngestionService.markAsNew).toHaveBeenCalledWith(
-          '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
-          { username: 'user1' },
-          'user1',
-        )
-      })
-  })
+      return request(app)
+        .get(`/prisoner/A12345B/documents${queryString}`)
+        .expect(res => {
+          expect(res.status).toBe(constants.HTTP_STATUS_OK)
+          const $ = cheerio.load(res.text)
+          const markAsNewForm = $('form[action*="mark-as-new"]').first()
+          expect(markAsNewForm.find('input[name="sortBy"]').attr('value')).toBe(expectedSortBy)
+          expect(markAsNewForm.find('input[name="pageNumber"]').attr('value')).toBe(expectedPageNumber)
+          expect(markAsNewForm.find('input[name="showing"]').attr('value')).toBe(expectedShowing)
+          const byCaseReferenceValues = markAsNewForm
+            .find('input[name="byCaseReference"]')
+            .map((_, el) => $(el).attr('value'))
+            .get()
+          expect(byCaseReferenceValues).toEqual(expectedByCaseReferences)
+        })
+    },
+  )
 
-  it('Document missing in CDIA (404) - should swallow and redirect', () => {
+  it.each([
+    {
+      name: 'with default filters',
+      body: { sortBy: 'MOST_RECENT', pageNumber: '1' },
+      expectedLocation: '/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1&showing=all&byCaseReference=all',
+    },
+    {
+      name: 'whilst preserving selected case references',
+      body: { sortBy: 'MOST_RECENT', pageNumber: '1', byCaseReference: 'case1' },
+      expectedLocation: '/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1&showing=all&byCaseReference=case1',
+    },
+    {
+      name: 'whilst preserving selected case references',
+      body: { sortBy: 'MOST_RECENT', pageNumber: '1', byCaseReference: 'case1,case2' },
+      expectedLocation:
+        '/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1&showing=all&byCaseReference=case1,case2',
+    },
+    {
+      name: 'whilst preserving selected case references',
+      body: { sortBy: 'MOST_RECENT', pageNumber: '1', byCaseReference: ['case1', 'case2'] },
+      expectedLocation:
+        '/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1&showing=all&byCaseReference=case1,case2',
+    },
+  ])(
+    'Valid CP document - should record mark-as-new and redirect to the documents list $name',
+    ({ body, expectedLocation }) => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        imprisonmentStatusDescription: 'Life imprisonment',
+        prisonId: 'MDI',
+      } as Prisoner)
+      documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+      courtDataIngestionService.markAsNew.mockResolvedValue()
+
+      return request(app)
+        .post('/prisoner/A12345B/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/mark-as-new')
+        .send(body)
+        .expect(res => {
+          expect(res.status).toBe(constants.HTTP_STATUS_FOUND)
+          expect(res.headers.location).toBe(expectedLocation)
+          expect(courtDataIngestionService.markAsNew).toHaveBeenCalledWith(
+            '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
+            { username: 'user1' },
+            'user1',
+          )
+        })
+    },
+  )
+
+  it.each([
+    {
+      name: 'with default filters',
+      body: { sortBy: 'MOST_RECENT', pageNumber: '1' },
+      expectedLocation: '/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1&showing=all&byCaseReference=all',
+    },
+    {
+      name: 'whilst preserving selected case references',
+      body: { sortBy: 'MOST_RECENT', pageNumber: '1', byCaseReference: 'case1' },
+      expectedLocation: '/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1&showing=all&byCaseReference=case1',
+    },
+  ])('Document missing in CDIA (404) - should swallow and redirect $name', ({ body, expectedLocation }) => {
     prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
       prisonerNumber: 'A12345B',
       imprisonmentStatusDescription: 'Life imprisonment',
@@ -364,10 +573,10 @@ describe('Route Handlers - Mark Document As New', () => {
 
     return request(app)
       .post('/prisoner/A12345B/documents/4fd5f7b0-eebf-4b69-9489-0cc48550e03b/mark-as-new')
-      .send({ sortBy: 'MOST_RECENT', pageNumber: '1' })
+      .send(body)
       .expect(res => {
         expect(res.status).toBe(constants.HTTP_STATUS_FOUND)
-        expect(res.headers.location).toBe('/prisoner/A12345B/documents?sortBy=MOST_RECENT&pageNumber=1')
+        expect(res.headers.location).toBe(expectedLocation)
       })
   })
 
@@ -482,7 +691,7 @@ const documents = {
       metadata: {
         source: 'court-data-ingestion-api',
         prisonerId: 'A12345B',
-        caseReferences: ['CommonPlatformCase123', 'CommonPlatformCase456'],
+        caseReferences: ['CommonPlatformCase123', 'CommonPlatformCase456', 'CommonPlatformCase123'],
         isUnread: true,
       },
     },
@@ -515,7 +724,7 @@ const documents = {
       createdByServiceName: 'Remand and Sentencing',
       createdByUsername: 'REMAND_SENTENCING_TEST_USER',
       metadata: {
-        caseReferences: ['AB12345678A', 'BC23456789B'],
+        caseReferences: ['AB12345678A', 'AB12345678A', 'BC23456789B', 'AB12345678A', 'CD34567890C'],
       },
     },
     {

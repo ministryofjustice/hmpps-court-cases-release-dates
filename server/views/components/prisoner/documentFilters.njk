@@ -70,9 +70,38 @@
     }) }}
 {% endset -%}
 
+{% set selectedFilterCategories = [] %}
+
+{%- set selectedFilterCategories = (selectedFilterCategories.push({
+    heading: {
+        text: 'Showing'
+    },
+    items: [
+        {
+            text: "New documents" if (filters.showing === "new") else "All documents",
+            href: filters.removeFilterLink.showing
+        }
+    ]
+    }), selectedFilterCategories) %}
+
+{%- set caseReferenceRemoveFilters = [] %}
+
+{%- for caseReference in filters.byCaseReferences -%}
+    {%- set caseReferenceRemoveFilters = (caseReferenceRemoveFilters.push({
+        text: "All case references" if (caseReference === "all") else ("No case reference" if (caseReference === "none") else caseReference),
+        href: filters.removeFilterLink.caseReferences[caseReference]
+    }), caseReferenceRemoveFilters) -%}
+{%- endfor -%}
+
+{%- set selectedFilterCategories = (selectedFilterCategories.push({
+    heading: {
+        text: 'Case reference'
+    },
+    items: caseReferenceRemoveFilters
+}), selectedFilterCategories) -%}
+
 <div class="moj-filter-layout__filter">
-<form id="documentFiltersForm" action="/prisoner/{{ prisoner.prisonerNumber }}/documents?test=tomas" method="GET">
-{# TODO (CDIA-????): Uncomment selectedFilters when we can have multiple-selectino filters. For now all are radio buttons, so no need to show selected filters. #}
+<form id="documentFiltersForm" action="/prisoner/{{ prisoner.prisonerNumber }}/documents" method="GET">
     {{ mojFilter({
     heading: {
         text: "Filter"
@@ -83,40 +112,22 @@
             "data-test-id": "submit-button"
         }
     },
+
+    selectedFilters: {
+        heading: {
+            text: "Selected filters"
+        },
+        clearLink: {
+            text: "Clear filters",
+            href: "/prisoner/" + prisoner.prisonerNumber + "/documents"
+        },
+
+        categories: selectedFilterCategories
+    },
+
     optionsHtml: filterOptionsHtml
     }) }}
-    {# selectedFilters: {
 
-        heading: {
-        text: "Selected filters"
-        },
-
-        clearLink: {
-        text: "Clear filters"
-        },
-
-        categories: [
-        {
-            heading: {
-            text: "Showing"
-            },
-            items: [{
-            href: "#",
-            text: "All documents"
-            }]
-        },
-        {
-            heading: {
-            text: "Case reference"
-            },
-            items: [{
-            href: "#",
-            text: "All case references"
-            }]
-        }
-        ]
-    }, #}
     <input type="hidden" name="sortBy" value="{{ filters.pagination.sortBy }}" />
-    <input type="hidden" name="pageNumber" value="{{ filters.pagination.pageNumber }}" />
 </form>
 </div>

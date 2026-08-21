@@ -7,34 +7,39 @@
 {% set activeSubNav = 'documents' %}
 
 {% block content %}
+    <h1 class="govuk-heading-xl">Documents</h1>
     <div class="govuk-grid-row">
 
-    <h1 class="govuk-heading-xl">Documents</h1>
-
-    <div id="document-filters" class="govuk-grid-column-one-quarter">
+    <div id="document-filters" class="moj-filter-layout govuk-grid-column-one-quarter">
         {% include "components/prisoner/documentFilters.njk" %}
     </div>
 
     <div id="document-search-results" class="govuk-grid-column-three-quarters">
 
     {% if not documents.length %}
-        <p class="govuk-body">No documents have been received.</p>
+        {%- set noFiltersApplied = ("all" in filters.byCaseReferences) and (filters.showing === "all") -%}
+
+        {% if noFiltersApplied %}
+            <p class="govuk-body">No documents have been received.</p>
+        {% else %}
+            <p class="govuk-body">No documents found - try changing filters to display documents.</p>
+        {% endif %}
     {% else %}
 
         <div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2" data-qa="documents-sort-bar">
             <div class="govuk-grid-column-two-thirds">
-                Sort by:
+                <strong>Sort by:</strong>
                 <a
                         class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1"
-                        href="/prisoner/{{ prisoner.prisonerNumber }}/documents?sortBy=MOST_RECENT"
-                        {% if sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
+                        href="{{ filters.sortLink.mostRecent }}"
+                        {% if filters.pagination.sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
                         data-qa="sort-most-recent"
                 >Most recent</a>
                 <span class="govuk-hint govuk-!-margin-right-1">|</span>
                 <a
                         class="govuk-link govuk-link--no-visited-state"
-                        href="/prisoner/{{ prisoner.prisonerNumber }}/documents?sortBy=EARLIEST"
-                        {% if sortBy == "EARLIEST" %}aria-current="true"{% endif %}
+                        href="{{ filters.sortLink.earliest }}"
+                        {% if filters.pagination.sortBy == "EARLIEST" %}aria-current="true"{% endif %}
                         data-qa="sort-oldest"
                 >Oldest</a>
             </div>
@@ -46,7 +51,7 @@
                     {% else %}
                         <strong>0</strong>
                     {% endif %}
-                    of <strong>{{ totalResults }}</strong> documents
+                    of <strong>{{ paginationResults.count }}</strong> documents
                 </div>
             </div>
         </div>
@@ -79,18 +84,7 @@
                             {% if document.isNew %}
                                 {{ govukTag({ text: "New" }) }}
                             {% elif document.source == 'court-data-ingestion-api' %}
-                                <form method="post"
-                                      class="govuk-!-margin-bottom-0"
-                                      action="/prisoner/{{ prisoner.prisonerNumber }}/documents/{{ document.documentUuid }}/mark-as-new">
-                                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                                    <input type="hidden" name="sortBy" value="{{ sortByQuery }}">
-                                    <input type="hidden" name="pageNumber" value="{{ pageNumber }}">
-                                    {{ govukButton({
-                                        html: 'Mark as new<span class="govuk-visually-hidden"> ' + document.typeDescription + '</span>',
-                                        classes: "ccrd-button--link",
-                                        attributes: { "data-qa": "mark-as-new-" + document.documentUuid }
-                                    }) }}
-                                </form>
+                                {% include "components/prisoner/documentMarkAsNew.njk" %}
                             {% endif %}
                         </div>
                     </div>

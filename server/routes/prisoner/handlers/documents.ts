@@ -18,7 +18,6 @@ import {
   FacetValue,
 } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
-import config from '../../../config'
 import {
   AppearanceDocument,
   RaSCourtCaseDocument,
@@ -31,6 +30,7 @@ import commonPlatformDocumentStatuses from '../../../@types/courtDataIngestionAp
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import DocumentSearchOrderBy from '../../../@types/documentManagementApi/DocumentSearchOrderBy'
 import { MetadataFilterMapper } from '../../../@types/documentManagementApi/MetadataFilter'
+import { buildDocumentFilters, DocumentFilters } from '../../../data/documentFilter'
 
 export default class DocumentRoutes {
   constructor(
@@ -45,20 +45,7 @@ export default class DocumentRoutes {
     const { prisoner } = req
     const { token, username } = req.user
 
-    const showing = getAsStringOrDefault(req.query.showing, 'all')
-    const byCaseReferences = getAsArrayOrDefault(req.query.byCaseReference, 'all')
-
-    const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
-    const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
-
-    const filters = {
-      showing,
-      byCaseReferences,
-      pagination: {
-        sortBy: sortByQuery,
-        pageNumber,
-      },
-    } as DocumentFilters
+    const filters = buildDocumentFilters(req)
 
     const documentSearchRequest: DocumentSearchRequest = this.buildDocumentSearchRequest(
       prisoner.prisonerNumber,
@@ -165,12 +152,8 @@ export default class DocumentRoutes {
       serviceDefinitions,
       documents: viewModelDocuments,
       filters,
-      sortByQuery,
-      pageNumber,
-      pageSize: documentSearchRequest.pageSize,
-      pagination: govukPagination(pagedDataResponse, new URL(req.originalUrl, config.domain)),
+      pagination: govukPagination(pagedDataResponse, filters.baseUrl),
       paginationResults: getPaginationResults(pagedDataResponse),
-      totalResults: documents.totalResultsCount,
       displayMaintenanceAlert: true,
     })
   }
@@ -232,9 +215,11 @@ export default class DocumentRoutes {
     const { prisonerNumber, documentId } = req.params
     const { username } = req.user
 
+    const showing = getAsStringOrDefault(req.body.showing, 'all')
+    const byCaseReference = getAsArrayOrDefault(req.body.byCaseReference, 'all').join(',')
     const sortByQuery = getAsStringOrDefault(req.body.sortBy, 'MOST_RECENT')
     const pageNumber = getAsStringOrDefault(req.body.pageNumber, '1')
-    const redirectUrl = `/prisoner/${prisonerNumber}/documents?sortBy=${sortByQuery}&pageNumber=${pageNumber}`
+    const redirectUrl = `/prisoner/${prisonerNumber}/documents?sortBy=${sortByQuery}&pageNumber=${pageNumber}&showing=${showing}&byCaseReference=${byCaseReference}`
 
     try {
       await this.validateDocumentForDownload(documentId, prisonerNumber, username)
@@ -302,7 +287,7 @@ export default class DocumentRoutes {
       facets: this.buildDocumentSearchFacetRequest(filters),
 
       page: filters.pagination.pageNumber - 1,
-      pageSize: 10,
+      pageSize: 20,
       orderBy: DocumentSearchOrderBy.CREATED_TIME,
       orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
     } as DocumentSearchRequest
@@ -358,14 +343,4 @@ type DocumentViewModel = {
   isNew: boolean
   hearingType: string
   source: 'remand-and-sentencing-api' | 'court-data-ingestion-api'
-}
-
-type DocumentFilters = {
-  showing: string
-  byCaseReferences: string[]
-  facets: { [p: string]: FacetResult }
-  pagination: {
-    sortBy: string
-    pageNumber: number
-  }
 }
