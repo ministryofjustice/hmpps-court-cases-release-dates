@@ -59,7 +59,7 @@ export default class DocumentRoutes {
       username,
     )
 
-    await this.getCourtCodes(documents, rasDocuments, username)
+    await this.getCourtNames(documents, rasDocuments, username)
 
     const viewModelDocuments = await Promise.all(
       documents.results
@@ -302,7 +302,7 @@ export default class DocumentRoutes {
     return newFacets
   }
 
-  private async getCourtCodes(documents: DocumentSearchResult, rasDocuments: RasPrisonerDocuments, username: string) {
+  private async getCourtNames(documents: DocumentSearchResult, rasDocuments: RasPrisonerDocuments, username: string) {
     const courtCodes = [
       ...new Set([
         ...DocumentManagementMapper.getCourtCodes(documents.results),
