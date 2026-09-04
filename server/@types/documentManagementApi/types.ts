@@ -63,6 +63,23 @@ export class DocumentManagementMapper {
     return !!(it.metadata?.isUnread)
   }
 
+  public static getCommonPlatformDocumentIds(documents: Document[]): string[] {
+    return documents
+      .filter(it => it.metadata.source === 'court-data-ingestion-api')
+      .map(it => it.documentUuid)
+  }
+
+  public static getCourtCodes(documents: Document[]): string[] {
+    return [
+      ...new Set(
+        documents.filter(it => (it.metadata?.courtCode))
+          .map(it => {
+          return it.metadata.courtCode as string
+        }),
+      ),
+    ]
+  }
+
   static getDownloadHeaders(file: FileDownload) {
     const headers: Map<string, string> = new Map()
 
