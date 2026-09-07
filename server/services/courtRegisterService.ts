@@ -11,7 +11,7 @@ export default class CourtRegisterService {
     return this.hmppsAuthClient.getSystemClientToken(username)
   }
 
-  public async getCourtName(courtCode: string, username: string): Promise<string> {
+  public async getCourtName(courtCode: string, username: string): Promise<string | null> {
     if (!courtCode) return null
 
     if (!this.courtNamesCache.has(courtCode)) {
