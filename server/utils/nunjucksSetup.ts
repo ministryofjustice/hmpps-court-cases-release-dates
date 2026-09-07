@@ -13,6 +13,7 @@ import {
   formatLengths,
   formatCountNumber,
   groupAndSortPeriodLengths,
+  sentenceStatusTagText,
 } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/utils/utils'
 import dayjs from 'dayjs'
 import fs from 'fs'
@@ -147,4 +148,5 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('sentenceTypeValueOrLegacy', sentenceTypeValueOrLegacy)
   njkEnv.addFilter('formatCountNumber', formatCountNumber)
   njkEnv.addFilter('groupAndSortPeriodLengths', groupAndSortPeriodLengths)
+  njkEnv.addFilter('sentenceStatusTagText', sentenceStatusTagText)
 }
