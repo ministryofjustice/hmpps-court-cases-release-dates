@@ -93,6 +93,7 @@ describe('Route Handlers - Overview', () => {
     courtDataIngestionService.getDocuments.mockResolvedValue(cpDocuments)
     courtRegisterService.getCourtName
       .mockReturnValue('LVRPCC' as unknown as Promise<string>)
+      .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
       .mockReturnValueOnce('LV Liverpool Court' as unknown as Promise<string>)
       .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
       .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)

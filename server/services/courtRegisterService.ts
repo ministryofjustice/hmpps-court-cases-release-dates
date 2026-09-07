@@ -12,6 +12,8 @@ export default class CourtRegisterService {
   }
 
   public async getCourtName(courtCode: string, username: string): Promise<string> {
+    if (!courtCode) return null
+
     if (!this.courtNamesCache.has(courtCode)) {
       this.courtNamesCache.set(courtCode, (await this.findCourtById(courtCode, username)).courtName)
     }

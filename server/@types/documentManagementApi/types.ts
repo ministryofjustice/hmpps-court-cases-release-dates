@@ -69,6 +69,10 @@ export class DocumentManagementMapper {
       .map(it => it.documentUuid)
   }
 
+  public static getCourtCode(it: Document): string|null {
+    return it.metadata?.courtCode as string
+  }
+
   public static getCourtCodes(documents: Document[]): string[] {
     return [
       ...new Set(

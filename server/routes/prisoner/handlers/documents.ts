@@ -23,7 +23,6 @@ import { RasDocument, RaSDocumentMapper } from '../../../@types/remandAndSentenc
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
 import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
 import commonPlatformDocumentStatuses from '../../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
-import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import DocumentSearchOrderBy from '../../../@types/documentManagementApi/DocumentSearchOrderBy'
 import { MetadataFilterMapper } from '../../../@types/documentManagementApi/MetadataFilter'
 import { buildDocumentFilters, DocumentFilters } from '../../../data/documentFilter'
@@ -87,18 +86,12 @@ export default class DocumentRoutes {
             if (cpDocument) {
               document.typeDescription = commonPlatformDocumentTypes[cpDocument.documentType]?.name
               document.hearingType = cpDocument.courtHearing?.hearingType
-
-              if (it.metadata?.courtCode) {
-                document.courtCode = it.metadata.courtCode as string
-                document.courtName = await this.courtRegisterService.getCourtName(document.courtCode, username)
-              }
-
+              document.courtCode = DocumentManagementMapper.getCourtCode(it)
+              document.courtName = await this.courtRegisterService.getCourtName(document.courtCode, username)
               document.hearingDate = cpDocument.courtHearing?.hearingDate
               document.courtCaseUuid = rasDocument?.caseDocument?.courtCaseUuid
             } else {
-              document.typeDescription = [...expectedTypes.NON_SENTENCING, ...expectedTypes.SENTENCING].find(
-                type => type.type === it.documentType,
-              ).name
+              document.typeDescription = DocumentManagementMapper.getTypeDescription(it)
             }
             document.type = it.documentType
           } else if (rasDocument) {
