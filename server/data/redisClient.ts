@@ -1,9 +1,9 @@
-import { createClient } from 'redis'
+import { createClient, RedisClientType, RedisDefaultModules } from 'redis'
 
 import logger from '../../logger'
 import config from '../config'
 
-export type RedisClient = ReturnType<typeof createClient>
+export type RedisClient = RedisClientType<RedisDefaultModules>
 
 const url =
   config.redis.tls_enabled === 'true'
@@ -11,7 +11,7 @@ const url =
     : `redis://${config.redis.host}:${config.redis.port}`
 
 export const createRedisClient = (): RedisClient => {
-  const client = createClient({
+  const client: RedisClient = createClient<RedisDefaultModules>({
     url,
     password: config.redis.password,
     socket: {
