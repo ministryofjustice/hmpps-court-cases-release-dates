@@ -96,6 +96,8 @@ describe('Route Handlers - Overview', () => {
       .mockReturnValueOnce('LV Liverpool Court' as unknown as Promise<string>)
       .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
       .mockReturnValueOnce('MN Manchester Court' as unknown as Promise<string>)
+      .mockReturnValueOnce('Court 345' as unknown as Promise<string>)
+      .mockReturnValueOnce('Court 678' as unknown as Promise<string>)
 
     return request(app)
       .get('/prisoner/A12345B/documents')
@@ -756,6 +758,7 @@ const documents = {
       metadata: {
         source: 'court-data-ingestion-api',
         prisonerId: 'A12345B',
+        courtCode: 'C345',
       },
     },
     {
@@ -774,6 +777,7 @@ const documents = {
         source: 'court-data-ingestion-api',
         prisonerId: 'A12345B',
         isUnread: 'false',
+        courtCode: 'C678',
       },
     },
     {

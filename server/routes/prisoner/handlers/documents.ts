@@ -13,24 +13,21 @@ import {
   DOCUMENT_SEARCH_DEFAULT_TYPES,
   DocumentManagementMapper,
   DocumentSearchRequest,
+  DocumentSearchResult,
   FacetRequest,
   FacetResult,
   FacetValue,
 } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
-import {
-  AppearanceDocument,
-  RaSCourtCaseDocument,
-  RaSDocumentMapper,
-} from '../../../@types/remandAndSentencingApi/types'
+import { RasDocument, RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
 import CourtDataIngestionService from '../../../services/courtDataIngestionService'
-import { CourtDocument } from '../../../@types/courtDataIngestionApi/types'
 import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
 import commonPlatformDocumentStatuses from '../../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
 import expectedTypes from '../../../@types/remandAndSentencingApi/documentTypes'
 import DocumentSearchOrderBy from '../../../@types/documentManagementApi/DocumentSearchOrderBy'
 import { MetadataFilterMapper } from '../../../@types/documentManagementApi/MetadataFilter'
 import { buildDocumentFilters, DocumentFilters } from '../../../data/documentFilter'
+import { RasPrisonerDocuments } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 export default class DocumentRoutes {
   constructor(
@@ -53,23 +50,16 @@ export default class DocumentRoutes {
     )
 
     const serviceDefinitions = await this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token)
+
     const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
     const rasDocuments = await this.remandAndSentencingService.getDocuments(prisoner.prisonerNumber, username)
-    const documentIdsFromCp = documents.results
-      .filter(it => it.metadata.source === 'court-data-ingestion-api')
-      .map(it => it.documentUuid)
+    const cpDocuments = await this.courtDataIngestionService.getDocuments(
+      prisoner.prisonerNumber,
+      DocumentManagementMapper.getCommonPlatformDocumentIds(documents.results),
+      username,
+    )
 
-    let cpDocuments: CourtDocument[] = []
-    if (documentIdsFromCp.length) {
-      cpDocuments = await this.courtDataIngestionService.getDocuments(
-        prisoner.prisonerNumber,
-        documentIdsFromCp,
-        username,
-      )
-    }
-
-    // TODO (CDIA-195): This call should request all court names (both RAS and DMA)
-    await this.courtRegisterService.getCourtNames(RaSDocumentMapper.collectCourtCodes(rasDocuments), username)
+    await this.getCourtNames(documents, rasDocuments, username)
 
     const viewModelDocuments = await Promise.all(
       documents.results
@@ -84,23 +74,9 @@ export default class DocumentRoutes {
             isNew: DocumentManagementMapper.getIsNew(it),
           }
 
-          let rasDocument: {
-            caseDocument: RaSCourtCaseDocument
-            appearanceDocument: AppearanceDocument
-            documentType: string
-          } = null
-          rasDocuments.courtCaseDocuments.forEach(caseDocument =>
-            Object.entries(caseDocument.appearanceDocumentsByType).forEach(appearanceAndType => {
-              appearanceAndType[1].forEach(appearanceDocument => {
-                if (appearanceDocument.documentUUID === it.documentUuid) {
-                  rasDocument = {
-                    caseDocument,
-                    appearanceDocument,
-                    documentType: appearanceAndType[0],
-                  }
-                }
-              })
-            }),
+          const rasDocument: RasDocument = RaSDocumentMapper.getRasDocument(
+            rasDocuments.courtCaseDocuments,
+            it.documentUuid,
           )
 
           if (it.metadata.source === 'court-data-ingestion-api') {
@@ -111,7 +87,12 @@ export default class DocumentRoutes {
             if (cpDocument) {
               document.typeDescription = commonPlatformDocumentTypes[cpDocument.documentType]?.name
               document.hearingType = cpDocument.courtHearing?.hearingType
-              document.courtName = cpDocument.courtHearing?.courtName
+
+              if (it.metadata?.courtCode) {
+                document.courtCode = it.metadata.courtCode as string
+                document.courtName = await this.courtRegisterService.getCourtName(document.courtCode, username)
+              }
+
               document.hearingDate = cpDocument.courtHearing?.hearingDate
               document.courtCaseUuid = rasDocument?.caseDocument?.courtCaseUuid
             } else {
@@ -132,14 +113,10 @@ export default class DocumentRoutes {
             document.hearingDate = RaSDocumentMapper.getHearingDate(rasDocument.appearanceDocument)
             document.warrantDate = RaSDocumentMapper.getWarrantDate(rasDocument.appearanceDocument)
             document.courtCode = rasDocument.appearanceDocument.courtCode
-            document.courtName = await this.courtRegisterService.getCourtName(
-              rasDocument.appearanceDocument.courtCode,
-              username,
-            )
+            document.courtName = await this.courtRegisterService.getCourtName(document.courtCode, username)
           }
 
           return document
-          // Filter documents with no links to the RaS or CDIA databases
         })
         .filter(it => !!it),
     )
@@ -323,6 +300,16 @@ export default class DocumentRoutes {
             } as FacetValue,
           ]
     return newFacets
+  }
+
+  private async getCourtNames(documents: DocumentSearchResult, rasDocuments: RasPrisonerDocuments, username: string) {
+    const courtCodes = [
+      ...new Set([
+        ...DocumentManagementMapper.getCourtCodes(documents.results),
+        ...RaSDocumentMapper.collectCourtCodes(rasDocuments),
+      ]),
+    ]
+    await this.courtRegisterService.getCourtNames(courtCodes, username)
   }
 }
 

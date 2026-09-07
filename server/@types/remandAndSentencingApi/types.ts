@@ -5,6 +5,12 @@ import { RasPrisonerDocuments } from './remandAndSentencingTypes'
 export type AppearanceDocument = components['schemas']['AppearanceDocument']
 export type RaSCourtCaseDocument = components['schemas']['CourtCaseDocuments']
 
+export type RasDocument = {
+  caseDocument: RaSCourtCaseDocument
+  appearanceDocument: AppearanceDocument
+  documentType: string
+}
+
 export class RaSDocumentMapper {
   public static CASE_REFERENCE_NOT_ENTERED: string = 'Not entered'
 
@@ -40,5 +46,24 @@ export class RaSDocumentMapper {
         }),
       ),
     ]
+  }
+
+  static getRasDocument(rasCourtCaseDocuments: RaSCourtCaseDocument[], documentUuid: string): RasDocument {
+    let rasDocument: RasDocument = null
+
+    rasCourtCaseDocuments.forEach(caseDocument =>
+      Object.entries(caseDocument.appearanceDocumentsByType).forEach(appearanceAndType => {
+        appearanceAndType[1].forEach(appearanceDocument => {
+          if (appearanceDocument.documentUUID === documentUuid) {
+            rasDocument = {
+              caseDocument,
+              appearanceDocument,
+              documentType: appearanceAndType[0],
+            }
+          }
+        })
+      }),
+    )
+    return rasDocument
   }
 }
