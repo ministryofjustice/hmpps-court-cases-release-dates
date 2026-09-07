@@ -73,9 +73,7 @@ export class DocumentManagementMapper {
     return [
       ...new Set(
         documents.filter(it => (it.metadata?.courtCode))
-          .map(it => {
-          return it.metadata.courtCode as string
-        }),
+          .map(it => it.metadata.courtCode as string),
       ),
     ]
   }
