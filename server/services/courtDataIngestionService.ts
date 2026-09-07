@@ -36,10 +36,12 @@ export default class CourtDataIngestionService {
     documentIdsFromCp: string[],
     username: string,
   ): Promise<CourtDocument[]> {
-    return new CourtDataIngestionApiClient(await this.getSystemClientToken(username)).getDocuments(
-      prisonerId,
-      documentIdsFromCp,
-    )
+    return documentIdsFromCp.length > 0
+      ? new CourtDataIngestionApiClient(await this.getSystemClientToken(username)).getDocuments(
+          prisonerId,
+          documentIdsFromCp,
+        )
+      : []
   }
 
   /**
