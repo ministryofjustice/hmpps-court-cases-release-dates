@@ -101,7 +101,7 @@
 }), selectedFilterCategories) -%}
 
 <div class="moj-filter-layout__filter">
-<form id="documentFiltersForm" action="/prisoner/{{ prisoner.prisonerNumber }}/documents" method="GET">
+<form id="documentFiltersForm" action="{{filters.baseUrlLink}}" method="GET">
     {{ mojFilter({
     heading: {
         text: "Filter"
@@ -119,7 +119,7 @@
         },
         clearLink: {
             text: "Clear filters",
-            href: "/prisoner/" + prisoner.prisonerNumber + "/documents"
+            href: filters.baseUrlLink
         },
 
         categories: selectedFilterCategories

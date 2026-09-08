@@ -1,0 +1,29 @@
+<div class="govuk-grid-row govuk-body govuk-!-margin-bottom-2" data-qa="documents-sort-bar">
+    <div class="govuk-grid-column-two-thirds">
+        <strong>Sort by:</strong>
+        <a
+                class="govuk-link govuk-link--no-visited-state govuk-!-margin-right-1"
+                href="{{ filters.sortLink.mostRecent }}"
+                {% if filters.pagination.sortBy == "MOST_RECENT" %}aria-current="true"{% endif %}
+                data-qa="sort-most-recent"
+        >Most recent</a>
+        <span class="govuk-hint govuk-!-margin-right-1">|</span>
+        <a
+                class="govuk-link govuk-link--no-visited-state"
+                href="{{ filters.sortLink.earliest }}"
+                {% if filters.pagination.sortBy == "EARLIEST" %}aria-current="true"{% endif %}
+                data-qa="sort-oldest"
+        >Oldest</a>
+    </div>
+
+    <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+        <div class="govuk-body govuk-!-margin-bottom-0" data-qa="documents-count">
+            Showing {% if paginationResults.count %}
+                <strong>{{ paginationResults.from }}</strong> to <strong>{{ paginationResults.to }}</strong>
+            {% else %}
+                <strong>0</strong>
+            {% endif %}
+            of <strong>{{ paginationResults.count }}</strong> documents
+        </div>
+    </div>
+</div>

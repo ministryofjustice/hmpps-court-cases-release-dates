@@ -2,67 +2,70 @@ import { Request, Response } from 'express'
 import { Readable } from 'stream'
 import { constants } from 'node:http2'
 
-import { getAsStringOrDefault } from '../../utils/utils'
 import {
   Document,
+  DOCUMENT_SEARCH_DEFAULT_TYPES,
   DocumentManagementMapper,
   DocumentSearchRequest,
+  FacetRequest,
+  FacetResult,
+  FacetValue,
   FileDownload,
 } from '../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../data/pagination'
-import config from '../../config'
 import DocumentManagementService from '../../services/documentManagementService'
 import logger from '../../../logger'
+import { buildDocumentFilters, DocumentFilters } from '../../data/documentFilter'
+import { MetadataFilterMapper } from '../../@types/documentManagementApi/MetadataFilter'
+import commonPlatformDocumentStatuses from '../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
+import DocumentSearchOrderBy from '../../@types/documentManagementApi/DocumentSearchOrderBy'
+import CourtRegisterService from '../../services/courtRegisterService'
 
 export default class UnmatchedDocumentRoutes {
-  constructor(private readonly documentManagementService: DocumentManagementService) {}
+  constructor(
+    private readonly documentManagementService: DocumentManagementService,
+    private readonly courtRegisterService: CourtRegisterService,
+  ) {}
 
   documents = async (req: Request, res: Response): Promise<void> => {
-    const { prisoner } = req
     const { username } = req.user
 
-    const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
-    const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10) - 1
-
-    const documentSearchRequest = {
-      ...defaultSearchParams,
-      orderByDirection: sortByQuery === 'MOST_RECENT' ? 'DESC' : 'ASC',
-      page: pageNumber,
-      metadata: {
-        // prisonerId: '',
-      } as unknown as Record<string, never>,
-    } as DocumentSearchRequest
+    const filters = buildDocumentFilters(req)
+    const documentSearchRequest: DocumentSearchRequest = this.buildDocumentSearchRequest(filters)
 
     const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
 
-    const viewModelDocuments = documents.results
-      .filter((it: Document) => {
-        return !it.metadata.prisonerId
-      })
-      .map(it => {
+    await this.courtRegisterService.getCourtNames(DocumentManagementMapper.getCourtCodes(documents.results), username)
+
+    const viewModelDocuments = await Promise.all(
+      documents.results.map(async it => {
         return {
           documentUuid: it.documentUuid,
-          source: DocumentManagementMapper.getSource(it),
-          type: it.documentType,
-          typeDescription: DocumentManagementMapper.getTypeDescription(it),
           createdTime: it.createdTime,
           filename: it.filename,
           fileExtension: it.fileExtension,
           fileSize: it.fileSize,
+          caseReference: DocumentManagementMapper.getCaseReferences(it),
+          isNew: DocumentManagementMapper.getIsNew(it),
+
+          source: DocumentManagementMapper.getSource(it),
+          type: it.documentType,
+          typeDescription: DocumentManagementMapper.getTypeDescription(it),
+          courtCode: DocumentManagementMapper.getCourtCode(it),
+          courtName: await this.courtRegisterService.getCourtName(DocumentManagementMapper.getCourtCode(it), username),
         } as UnmatchedDocumentViewModel
-      })
+      }),
+    )
 
     const pagedDataResponse = getPagedDataResponse(documents)
+    filters.facets = this.parseFacetsForRendering(documents.facets)
 
     res.render('pages/unmatchedDocuments/index', {
-      prisoner,
       documents: viewModelDocuments,
-      sortByQuery,
-      pageNumber,
-      pageSize: documentSearchRequest.pageSize,
-      pagination: govukPagination(pagedDataResponse, new URL(req.originalUrl, config.domain)),
+      filters,
+      pagination: govukPagination(pagedDataResponse, filters.baseUrl),
       paginationResults: getPaginationResults(pagedDataResponse),
-      totalResults: documents.totalResultsCount,
+      displayMaintenanceAlert: true,
     })
   }
 
@@ -116,30 +119,70 @@ export default class UnmatchedDocumentRoutes {
       })
     }
   }
-}
 
-const defaultSearchParams = {
-  documentTypes: [
-    'HMCTS_WARRANT',
-    'TRIAL_RECORD_SHEET',
-    'INDICTMENT',
-    'PRISON_COURT_REGISTER',
-    'BAIL_ORDER',
-    'SUSPENDED_IMPRISONMENT_ORDER',
-    'NOTICE_OF_DISCONTINUANCE',
-    'COMMUNITY_ORDER',
-  ],
-  orderBy: 'CREATED_TIME',
-  pageSize: 10,
-} as DocumentSearchRequest
+  buildDocumentSearchRequest = (filters: DocumentFilters): DocumentSearchRequest => {
+    return {
+      documentTypes: DOCUMENT_SEARCH_DEFAULT_TYPES,
+      canonical: true,
+
+      metadataFilters: [
+        MetadataFilterMapper.getIsUnmatchedDocument(),
+        MetadataFilterMapper.getStatus(commonPlatformDocumentStatuses.ACTIVE),
+      ],
+
+      facets: this.buildDocumentSearchFacetRequest(filters),
+
+      page: filters.pagination.pageNumber - 1,
+      pageSize: 100,
+      orderBy: DocumentSearchOrderBy.CREATED_TIME,
+      orderByDirection: filters.pagination.sortBy === 'MOST_RECENT' ? 'DESC' : 'ASC',
+    } as DocumentSearchRequest
+  }
+
+  private buildDocumentSearchFacetRequest = (filters: DocumentFilters): FacetRequest[] => {
+    const showingFacetRequest = {
+      field: 'isUnread',
+      type: 'VALUE',
+      filter: MetadataFilterMapper.getShowing(filters.showing),
+    } as FacetRequest
+
+    const caseReferencesFacetRequest = {
+      field: 'caseReferences',
+      type: 'ARRAY',
+      filter: MetadataFilterMapper.getByCaseReferences(filters.byCaseReferences),
+    } as FacetRequest
+
+    return [showingFacetRequest, caseReferencesFacetRequest]
+  }
+
+  private parseFacetsForRendering = (facets: { [p: string]: FacetResult }) => {
+    const newFacets = facets
+    const isUnreadFacet = facets.isUnread.values.filter(it => it.value === 'true')
+
+    newFacets.isUnread.values =
+      isUnreadFacet.length > 0
+        ? isUnreadFacet
+        : [
+            {
+              value: 'true',
+              count: 0,
+            } as FacetValue,
+          ]
+    return newFacets
+  }
+}
 
 type UnmatchedDocumentViewModel = {
   documentUuid: string
-  source: string
-  type: string
-  typeDescription: string
   createdTime: string
   filename: string
   fileExtension: string
   fileSize: number
+  caseReference: string
+  isNew: boolean
+  source: string
+  type: string
+  typeDescription: string
+  courtCode: string
+  courtName: string
 }
