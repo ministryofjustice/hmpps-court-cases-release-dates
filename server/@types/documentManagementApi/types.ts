@@ -50,7 +50,11 @@ export class DocumentManagementMapper {
 
   public static getCaseReferences(it: Document): string|null {
     const caseReferences = it.metadata?.caseReferences
-    return (Array.isArray(caseReferences) && caseReferences.length > 0) ? [...new Set(caseReferences)].join(', ') : null
+
+    // TODO (CDIA-235): Revert change byt removing the splitting and flattening of case references once backend service handles the concatenated case references by itself
+    return (Array.isArray(caseReferences) && caseReferences.length > 0) ? [...new Set(caseReferences.map(cr => cr.split(',')).flat())].join(', ') : null
+    // TODO (CDIA-235): Uncomment line below and remove line above once service handles the concatenated case references by itself
+    // return (Array.isArray(caseReferences) && caseReferences.length > 0) ? [...new Set(caseReferences)].join(', ') : null
   }
 
   public static getSource(it: Document): string {
