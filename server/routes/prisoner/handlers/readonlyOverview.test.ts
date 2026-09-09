@@ -23,6 +23,7 @@ import {
 } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import ImmigrationDetentionService from '../../../services/ImmigrationDetentionService'
 import config from '../../../config'
+import { TOGGLE_ALL_DETAILS_ID, TOGGLE_ALL_SUMMARY_ID } from '../../../../assets/js/components/toggleAllCourtCases'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/prisonerSearchService')
@@ -638,6 +639,37 @@ describe('Route Handlers - Readonly Overview', () => {
       expect(courtRegisterService.getCourtMap).toHaveBeenCalledWith(['B10JQ'], defaultUser.username)
       const offenceCodesArg = manageOffencesService.getOffenceMap.mock.calls[0][0]
       expect(offenceCodesArg).toEqual(['CJ88001'])
+    })
+
+    it('should render the toggle-all-court-cases control when court cases exist', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'HLI',
+      } as Prisoner)
+      prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
+
+      const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
+
+      const $ = cheerio.load(res.text)
+      expect($(`#${TOGGLE_ALL_DETAILS_ID}`).length).toBe(1)
+      expect($(`#${TOGGLE_ALL_SUMMARY_ID}`).text()).toContain('all offences and sentence details')
+    })
+
+    it('should not render the toggle-all-court-cases control when there are no court cases', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'HLI',
+      } as Prisoner)
+      prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
+      remandAndSentencingService.searchCourtCases.mockResolvedValue({ content: [] } as SearchCourtCasesPage)
+      remandAndSentencingService.getConsecutiveToDetails.mockResolvedValue({
+        sentences: [],
+      } as SentenceConsecutiveToDetailsResponse)
+
+      const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
+
+      const $ = cheerio.load(res.text)
+      expect($('#toggle-all-court-cases-details').length).toBe(0)
     })
   })
 
