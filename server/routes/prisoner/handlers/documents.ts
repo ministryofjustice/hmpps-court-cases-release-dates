@@ -292,7 +292,6 @@ export default class DocumentRoutes {
               count: 0,
             } as FacetValue,
           ]
-
     return newFacets
   }
 
