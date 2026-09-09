@@ -293,29 +293,7 @@ export default class DocumentRoutes {
             } as FacetValue,
           ]
 
-    // TODO (CDIA-235): Remove this handling once backend service handles the concatenated case references by itself
-    newFacets.caseReferences.values = this.splitAndDeduplicateCaseReferences(facets.caseReferences.values)
     return newFacets
-  }
-
-  // TODO (CDIA-235): Remove this function once backend service handles the concatenated case references by itself
-  private splitAndDeduplicateCaseReferences = (values: FacetValue[]): FacetValue[] => {
-    const seen = new Set<string>()
-    const result: FacetValue[] = []
-
-    values.forEach(facetValue => {
-      facetValue.value
-        .split(',')
-        .map(it => it.trim())
-        .forEach(value => {
-          if (!seen.has(value)) {
-            seen.add(value)
-            result.push({ value, count: facetValue.count } as FacetValue)
-          }
-        })
-    })
-
-    return result
   }
 
   private async getCourtNames(documents: DocumentSearchResult, rasDocuments: RasPrisonerDocuments, username: string) {

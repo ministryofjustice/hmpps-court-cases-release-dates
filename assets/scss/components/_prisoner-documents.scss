@@ -57,3 +57,7 @@
   @include govuk-link-style-text;
   @include govuk-link-style-no-underline;
 }
+// TODO (CDIA-325): Remove this style class once backend service handles concatenated case references by itself
+[data-qa="case-reference"], .govuk-checkboxes__label {
+  word-wrap:break-word;
+}
