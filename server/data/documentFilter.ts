@@ -6,6 +6,7 @@ import config from '../config'
 
 export type DocumentFilters = {
   baseUrl: URL
+  baseUrlLink: string
   showing: string
   byCaseReferences: string[]
   facets?: { [p: string]: FacetResult }
@@ -25,18 +26,16 @@ export type DocumentFilters = {
 
 export function buildDocumentFilters(req: Request): DocumentFilters {
   const baseUrl = new URL(req.originalUrl, config.domain)
-  const showing = getAsStringOrDefault(req.query.showing, 'all')
   const byCaseReferences = getAsArrayOrDefault(req.query.byCaseReference, 'all')
-  const sortByQuery = getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT')
-  const pageNumber = parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10)
 
   return {
     baseUrl,
-    showing,
+    baseUrlLink: getBaseUrlLink(baseUrl),
+    showing: getAsStringOrDefault(req.query.showing, 'all'),
     byCaseReferences,
     pagination: {
-      sortBy: sortByQuery,
-      pageNumber,
+      sortBy: getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT'),
+      pageNumber: parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10),
     },
     sortLink: {
       mostRecent: getSortLink(baseUrl, 'MOST_RECENT'),
@@ -47,6 +46,16 @@ export function buildDocumentFilters(req: Request): DocumentFilters {
       caseReferences: getCaseReferencesRemoveFilterLinks(baseUrl, byCaseReferences),
     },
   }
+}
+
+// Builds a link to the base page, clean of any filters or sorting options
+export function getBaseUrlLink(url: URL): string {
+  const linkUrl = new URL(url)
+  linkUrl.searchParams.delete('pageNumber')
+  linkUrl.searchParams.delete('sortBy')
+  linkUrl.searchParams.delete('showing')
+  linkUrl.searchParams.delete('byCaseReference')
+  return linkUrl.pathname
 }
 
 // Builds a link to the current page with the given sortBy applied, preserving all other existing query params (e.g. filters)

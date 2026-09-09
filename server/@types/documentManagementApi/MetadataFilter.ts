@@ -59,4 +59,11 @@ export class MetadataFilterMapper {
         values: [status],
       } as MetadataFilter
   }
+
+  static getIsUnmatchedDocument(): MetadataFilter {
+    return {
+      field: MetadataField.PRISONER_NUMBER,
+      operator: MetadataFilterOperator.NOT_EXISTS,
+    } as MetadataFilter
+  }
 }

@@ -20,7 +20,10 @@ export default function routes(services: Services): Router {
   router.use('/feedback', feedbackRoutes())
   router.use('/accessibility', accessibilityRoutes())
 
-  router.use('/unmatched-documents', unmatchedDocumentRoutes(services.documentManagementService))
+  router.use(
+    '/unmatched-documents',
+    unmatchedDocumentRoutes(services.documentManagementService, services.courtRegisterService),
+  )
   router.use('/backfills', backfillRoutes(services.courtDataIngestionService))
 
   return router
