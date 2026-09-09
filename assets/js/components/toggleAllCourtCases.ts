@@ -1,7 +1,11 @@
-export const TOGGLE_ALL_SUMMARY_ID = 'toggle-all-court-cases-summary'
-export const TOGGLE_ALL_DETAILS_ID = 'toggle-all-court-cases-details'
+const TOGGLE_ALL_SUMMARY_ID = 'toggle-all-court-cases-summary'
+const TOGGLE_ALL_DETAILS_ID = 'toggle-all-court-cases-details'
 
 export function initAll() {
+  toggleAllCourtCases()
+}
+
+export function toggleAllCourtCases() {
   const toggleAllCourtCasesDetails: HTMLElement | null = document.getElementById(TOGGLE_ALL_DETAILS_ID)
   const toggleAllCourtCasesSummary: HTMLElement | null = document.getElementById(TOGGLE_ALL_SUMMARY_ID)
   if (toggleAllCourtCasesSummary && toggleAllCourtCasesDetails) {

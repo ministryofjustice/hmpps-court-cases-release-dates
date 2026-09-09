@@ -23,7 +23,6 @@ import {
 } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import ImmigrationDetentionService from '../../../services/ImmigrationDetentionService'
 import config from '../../../config'
-import { TOGGLE_ALL_DETAILS_ID, TOGGLE_ALL_SUMMARY_ID } from '../../../../assets/js/components/toggleAllCourtCases'
 
 jest.mock('../../../services/prisonerService')
 jest.mock('../../../services/prisonerSearchService')
@@ -651,8 +650,8 @@ describe('Route Handlers - Readonly Overview', () => {
       const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
 
       const $ = cheerio.load(res.text)
-      expect($(`#${TOGGLE_ALL_DETAILS_ID}`).length).toBe(1)
-      expect($(`#${TOGGLE_ALL_SUMMARY_ID}`).text()).toContain('all offences and sentence details')
+      expect($(`#toggle-all-court-cases-details`).length).toBe(1)
+      expect($('#toggle-all-court-cases-summary').text()).toContain('all offences and sentence details')
     })
 
     it('should not render the toggle-all-court-cases control when there are no court cases', async () => {
