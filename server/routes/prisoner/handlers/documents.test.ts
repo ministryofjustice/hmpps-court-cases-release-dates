@@ -250,11 +250,7 @@ describe('Route Handlers - Overview', () => {
         )
         expect(sixthCommonPlatformDocumentHearingDate).toBe('01 January 2025')
         const sixthCommonPlatformDocumentCaseRef = textOf(sixthCommonPlatformDocument, '[data-qa=case-reference]')
-        expect(sixthCommonPlatformDocumentCaseRef).toContain('AB12345678A')
-        // TODO (CDIA-325): Remove ', AB12345678A,BC23456789B' from assertion once backend service handles concatenated case references
-        expect(sixthCommonPlatformDocumentCaseRef).toContain(
-          'AB12345678A, BC23456789B, CD34567890C, AB12345678A,BC23456789B',
-        )
+        expect(sixthCommonPlatformDocumentCaseRef).toContain('AB12345678A, BC23456789B, CD34567890C')
 
         const seventhCommonPlatformDocument = $('[data-qa=document-9612b032-383b-4a83-9765-30484182c7fa]')
         const seventhCommonPlatformDocumentText = normaliseText(seventhCommonPlatformDocument.text())
@@ -785,8 +781,7 @@ const documents = {
         prisonerId: 'A12345B',
         isUnread: 'false',
         courtCode: 'C678',
-        // TODO (CDIA-325): Remove 'AB12345678A,BC23456789B' from list once backend service handles concatenated case references
-        caseReferences: ['AB12345678A', 'BC23456789B', 'CD34567890C', 'AB12345678A,BC23456789B'],
+        caseReferences: ['AB12345678A', 'BC23456789B', 'CD34567890C'],
       },
     },
     {
@@ -837,8 +832,7 @@ const cpDocuments = [
     },
   },
   {
-    // TODO (CDIA-325): Remove 'AB12345678A,BC23456789B' from list once backend service handles concatenated case references
-    caseReferences: ['AB12345678A', 'BC23456789B', 'CD34567890C', 'AB12345678A,BC23456789B'],
+    caseReferences: ['AB12345678A', 'BC23456789B', 'CD34567890C'],
     prisonDocumentId: 'bdee9909-ba50-48d6-ad80-e8ecf6ffa912',
     isUnread: true,
     documentType: 'COMMON_PLATFORM_DOCUMENT',
