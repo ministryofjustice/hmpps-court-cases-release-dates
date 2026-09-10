@@ -235,8 +235,8 @@ describe('Route Handlers - Overview', () => {
         expect(fifthCommonPlatformDocumentHearingDate).toBe('01 January 2026')
 
         const sixthCommonPlatformDocument = $('[data-qa=document-bdee9909-ba50-48d6-ad80-e8ecf6ffa912]')
-        const sxithCommonPlatformDocumentText = normaliseText(sixthCommonPlatformDocument.text())
-        expect(sxithCommonPlatformDocumentText).toContain('Common platform document')
+        const sixthCommonPlatformDocumentText = normaliseText(sixthCommonPlatformDocument.text())
+        expect(sixthCommonPlatformDocumentText).toContain('Common platform document')
         const sixthCommonPlatformDocumentHearingTypeText = normaliseText(
           sixthCommonPlatformDocument.find('[data-qa=hearing-type]').text(),
         )
@@ -249,6 +249,8 @@ describe('Route Handlers - Overview', () => {
           sixthCommonPlatformDocument.find('[data-qa=hearing-date]').text(),
         )
         expect(sixthCommonPlatformDocumentHearingDate).toBe('01 January 2025')
+        const sixthCommonPlatformDocumentCaseRef = textOf(sixthCommonPlatformDocument, '[data-qa=case-reference]')
+        expect(sixthCommonPlatformDocumentCaseRef).toContain('AB12345678A, BC23456789B, CD34567890C')
 
         const seventhCommonPlatformDocument = $('[data-qa=document-9612b032-383b-4a83-9765-30484182c7fa]')
         const seventhCommonPlatformDocumentText = normaliseText(seventhCommonPlatformDocument.text())
@@ -779,6 +781,7 @@ const documents = {
         prisonerId: 'A12345B',
         isUnread: 'false',
         courtCode: 'C678',
+        caseReferences: ['AB12345678A', 'BC23456789B', 'CD34567890C'],
       },
     },
     {
@@ -829,7 +832,7 @@ const cpDocuments = [
     },
   },
   {
-    caseReferences: ['CommonPlatformCase123'],
+    caseReferences: ['AB12345678A', 'BC23456789B', 'CD34567890C'],
     prisonDocumentId: 'bdee9909-ba50-48d6-ad80-e8ecf6ffa912',
     isUnread: true,
     documentType: 'COMMON_PLATFORM_DOCUMENT',

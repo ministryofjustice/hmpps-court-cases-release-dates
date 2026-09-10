@@ -57,3 +57,7 @@
   @include govuk-link-style-text;
   @include govuk-link-style-no-underline;
 }
+
+.prisoner-doc-case-reference, .govuk-checkboxes__label {
+  word-wrap:break-word;
+}
