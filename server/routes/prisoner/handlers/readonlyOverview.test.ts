@@ -639,6 +639,37 @@ describe('Route Handlers - Readonly Overview', () => {
       const offenceCodesArg = manageOffencesService.getOffenceMap.mock.calls[0][0]
       expect(offenceCodesArg).toEqual(['CJ88001'])
     })
+
+    it('should render the toggle-all-court-cases control when court cases exist', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'HLI',
+      } as Prisoner)
+      prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
+
+      const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
+
+      const $ = cheerio.load(res.text)
+      expect($(`#toggle-all-court-cases-details`).length).toBe(1)
+      expect($('#toggle-all-court-cases-summary').text()).toContain('all offences and sentence details')
+    })
+
+    it('should not render the toggle-all-court-cases control when there are no court cases', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'HLI',
+      } as Prisoner)
+      prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
+      remandAndSentencingService.searchCourtCases.mockResolvedValue({ content: [] } as SearchCourtCasesPage)
+      remandAndSentencingService.getConsecutiveToDetails.mockResolvedValue({
+        sentences: [],
+      } as SentenceConsecutiveToDetailsResponse)
+
+      const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
+
+      const $ = cheerio.load(res.text)
+      expect($('#toggle-all-court-cases-details').length).toBe(0)
+    })
   })
 
   describe('Immigration documents section', () => {
