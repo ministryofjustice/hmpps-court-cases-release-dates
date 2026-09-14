@@ -4,7 +4,7 @@ import { resetStubs } from '../testUtils'
 import hmppsAuth from '../mockApis/hmppsAuth'
 import manageUsersApi from '../mockApis/manageUsersApi'
 import tokenVerification from '../mockApis/tokenVerification'
-import components from '../mockApis/components'
+import frontEndComponentsApi from '../mockApis/frontEndComponentsApi'
 
 test.describe('Healthcheck', () => {
   test.afterEach(async () => {
@@ -16,7 +16,7 @@ test.describe('Healthcheck', () => {
       await hmppsAuth.stubPing()
       await manageUsersApi.stubManageUsersPing()
       await tokenVerification.stubTokenVerificationPing()
-      await components.stubComponents()
+      await frontEndComponentsApi.stubComponents()
     })
 
     test('Health check page is visible and UP', async ({ request }) => {

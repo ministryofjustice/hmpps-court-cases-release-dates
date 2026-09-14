@@ -6,14 +6,14 @@ import manageUsersApi from '../mockApis/manageUsersApi'
 import tokenVerification from '../mockApis/tokenVerification'
 import prisonApi from '../mockApis/prisonApi'
 import prisonerSearchApi from '../mockApis/prisonerSearchApi'
-import components from '../mockApis/components'
 import ErrorPage from '../pages/errorPage'
+import frontEndComponentsApi from '../mockApis/frontEndComponentsApi'
 
 test.describe('Error', () => {
   test.beforeEach(async () => {
     await manageUsersApi.stubManageUser()
     await prisonApi.stubGetUserDifferentCaseload()
-    await components.stubComponents()
+    await frontEndComponentsApi.stubComponents()
 
     await hmppsAuth.favicon()
     await hmppsAuth.stubSignInPage()

@@ -10,11 +10,15 @@ import calculateReleaseDatesApi from '../mockApis/calculateReleaseDatesApi'
 import courtCasesReleaseDatesApi from '../mockApis/courtCasesReleaseDatesApi'
 import remandAndSentencingApi from '../mockApis/remandAndSentencingApi'
 import tokenVerification from '../mockApis/tokenVerification'
-import components from '../mockApis/components'
 import OverviewPage from '../pages/overviewPage'
 import AuthManageDetailsPage from '../pages/authManageDetailsPage'
+import frontEndComponentsApi from '../mockApis/frontEndComponentsApi'
 
 test.describe('SignIn', () => {
+  test.beforeEach(async () => {
+    await frontEndComponentsApi.stubComponents()
+  })
+
   test.afterEach(async () => {
     await resetStubs()
   })
@@ -51,7 +55,6 @@ test.describe('SignIn', () => {
       await prisonApi.stubGetSentencesAndOffences()
       await courtCasesReleaseDatesApi.stubGetThingsToDo()
       await remandAndSentencingApi.stubGetLatestImmigrationDetentionRecordByPrisoner()
-      await components.stubComponentsFail()
     })
 
     test('User name visible in header', async ({ page }) => {
