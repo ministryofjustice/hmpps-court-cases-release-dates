@@ -15,6 +15,6 @@
     "typeRoots": ["./server/@types", "./node_modules/@types"],
     "types": ["node", "jest"]
   },
-  "exclude": ["node_modules", "assets", "integration_tests", "dist", "esbuild", "eslint.config.mjs", "./cypress.config.ts"],
+  "exclude": ["node_modules", "assets", "integration_tests", "dist", "esbuild", "eslint.config.mjs", "./playwright.config.ts"],
   "include": ["**/*.js", "**/*.ts"]
 }

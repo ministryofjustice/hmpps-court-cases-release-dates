@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": true,
     "lib": ["es5", "dom", "es2015.promise"],
-    "types": ["cypress", "express", "express-session"],
+    "types": ["express", "express-session", "@playwright/test"],
     "esModuleInterop": true,
     "skipLibCheck": true
   },
