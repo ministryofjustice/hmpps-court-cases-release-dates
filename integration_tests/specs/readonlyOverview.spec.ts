@@ -57,3 +57,42 @@ test('should toggle all court case details open and closed', async ({ page }) =>
   elements = await overviewPage.courtCaseDetails.all()
   await Promise.all(elements.map(el => expect(el).not.toHaveAttribute('open', '')))
 })
+
+test('should contain a sentence date', async ({ page }) => {
+  await login(page)
+
+  await page.goto('/prisoner/A1234AB/readonly-overview')
+  const overviewPage = await ReadonlyOverviewPage.verifyOnPage(page)
+
+  await overviewPage.clickAllCourtCasesSummaryLink()
+  const sentenceDates = await overviewPage.offenceCardSummary.sentenceDate
+  expect(sentenceDates).toHaveLength(2)
+  await Promise.all(sentenceDates.map(kvp => expect(kvp.key).toHaveText('Sentence date')))
+  await Promise.all(sentenceDates.map(kvp => expect(kvp.value).toHaveText('Not entered')))
+})
+
+test('should contain overall sentence outcome', async ({ page }) => {
+  await login(page)
+
+  await page.goto('/prisoner/A1234AB/readonly-overview')
+  const overviewPage = await ReadonlyOverviewPage.verifyOnPage(page)
+
+  await overviewPage.clickAllCourtCasesSummaryLink()
+  const outcome = await overviewPage.offenceCardSummary.outcome
+  expect(outcome).toHaveLength(2)
+  await Promise.all(outcome.map(kvp => expect(kvp.key).toHaveText('Outcome')))
+  await Promise.all(outcome.map(kvp => expect(kvp.value).toHaveText('Imprisonment')))
+})
+
+test('should contain committed on', async ({ page }) => {
+  await login(page)
+
+  await page.goto('/prisoner/A1234AB/readonly-overview')
+  const overviewPage = await ReadonlyOverviewPage.verifyOnPage(page)
+
+  await overviewPage.clickAllCourtCasesSummaryLink()
+  const committedOn = await overviewPage.offenceCardSummary.committedOn
+  expect(committedOn).toHaveLength(2)
+  await Promise.all(committedOn.map(kvp => expect(kvp.key).toHaveText('Committed on')))
+  await Promise.all(committedOn.map(kvp => expect(kvp.value).toHaveText('30/12/2025')))
+})

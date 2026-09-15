@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page as Page2 } from '@playwright/test'
 import AbstractPage from './abstractPage'
+import OffenceCardSummaryList from './components/offenceCardSummaryList'
 
 export default class ReadonlyOverviewPage extends AbstractPage {
   readonly toggleAllCourtCasesDetails: Locator
@@ -7,6 +8,8 @@ export default class ReadonlyOverviewPage extends AbstractPage {
   readonly toggleAllCourtCasesSummary: Locator
 
   readonly courtCaseDetails: Locator
+
+  readonly offenceCardSummary: OffenceCardSummaryList
 
   private constructor(page: Page2) {
     super(page)
@@ -16,6 +19,7 @@ export default class ReadonlyOverviewPage extends AbstractPage {
     this.courtCaseDetails = page
       .locator('.court-case-details-card__details')
       .filter({ hasNot: this.toggleAllCourtCasesDetails })
+    this.offenceCardSummary = new OffenceCardSummaryList(page)
   }
 
   async clickAllCourtCasesSummaryLink() {

@@ -79,7 +79,7 @@ const defaultCourtCasesPage: SearchCourtCasesPage = {
         criminalAppealOfficeReference: '',
         courtCode: 'B10JQ',
         outcome: 'Imprisonment',
-        warrantDate: '',
+        warrantDate: '2026-05-23',
         warrantType: '',
         convictionDate: '',
         charges: [
@@ -580,6 +580,8 @@ describe('Route Handlers - Readonly Overview', () => {
       expect(res.text).toContain('Consecutive')
       expect(res.text).toContain('Aggravating factors')
       expect(res.text).toContain('Offence Aggravated by Terrorist Connection')
+      expect(res.text).toContain('Sentence date')
+      expect(res.text).toContain('23/05/2026')
     })
 
     it('should handle an empty court cases page and still render', async () => {
@@ -669,6 +671,37 @@ describe('Route Handlers - Readonly Overview', () => {
 
       const $ = cheerio.load(res.text)
       expect($('#toggle-all-court-cases-details').length).toBe(0)
+    })
+
+    it('should display sentence date as not entered', async () => {
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'HLI',
+      } as Prisoner)
+      prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
+      remandAndSentencingService.searchCourtCases.mockResolvedValue({
+        content: [
+          {
+            courtCaseUuid: 'cc-2',
+            latestCourtAppearance: {
+              courtCode: 'B10JQ',
+              warrantDate: '',
+              charges: [
+                { chargeUuid: 'c1', offenceCode: 'CJ88001', legacyData: { offenceDescription: 'Common assault' } },
+              ],
+            },
+          },
+        ],
+      } as SearchCourtCasesPage)
+
+      const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
+
+      const $ = cheerio.load(res.text)
+      const key = $('.govuk-summary-list__key')
+        .filter((_, el) => $(el).text().trim() === 'Sentence date')
+        .first()
+      expect(key.length).toBe(1)
+      expect(key.next('.govuk-summary-list__value').text().trim()).toBe('Not entered')
     })
   })
 
