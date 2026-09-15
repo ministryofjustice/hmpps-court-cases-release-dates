@@ -9,6 +9,8 @@ export default class CourtCasesDetailsModel {
 
   warrantType: string
 
+  warrantDate: string
+
   overallCaseOutcome: string
 
   overallSentenceLength: SentenceLength
@@ -28,6 +30,7 @@ export default class CourtCasesDetailsModel {
   constructor(pagedCourtCase: PagedCourtCase, courtMap: { [key: string]: string }) {
     this.courtCaseUuid = pagedCourtCase.courtCaseUuid
     this.warrantType = pagedCourtCase.latestCourtAppearance?.warrantType
+    this.warrantDate = pagedCourtCase.latestCourtAppearance?.warrantDate
     this.overallCaseOutcome = pagedCourtCase.latestCourtAppearance.outcome ?? 'Not entered'
     this.overallCaseStatus = pagedCourtCase.courtCaseStatus
     this.title = courtMap[pagedCourtCase.latestCourtAppearance?.courtCode]

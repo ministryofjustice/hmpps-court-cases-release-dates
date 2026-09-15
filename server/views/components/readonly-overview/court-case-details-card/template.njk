@@ -51,6 +51,7 @@
                             sentenceServeType: offence.sentence.sentenceServeType if offence.sentence,
                             consecutiveTo: (consecutiveToSentenceDetailsMap[offence.sentence.consecutiveToSentenceUuid] | checkConsecutiveToSameCase(courtCaseDetails.offences, offence.sentence.consecutiveToSentenceUuid))  if offence.sentence,
                             sentenceType: (courtCaseDetails.sentenceTypeMap[offence.sentence.sentenceTypeId] | sentenceTypeValueOrLegacy(offence.sentence.legacyData))  if offence.sentence,
+                            sentenceDate: courtCaseDetails.warrantDate | formatDate if courtCaseDetails.warrantDate else 'Not entered',
                             fineAmount: offence.sentence.fineAmount  if offence.sentence,
                             detailsClasses: 'govuk-!-padding-4',
                             mergedFromCase: offence.mergedFromCase,
