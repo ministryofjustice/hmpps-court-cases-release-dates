@@ -13,6 +13,7 @@ export default function Index(courtDataIngestionService: CourtDataIngestionServi
   const routes = new DeliveryAddressRoutes(courtDataIngestionService)
 
   router.get('/', asyncMiddleware(routes.overview))
+  router.get('/classified', asyncMiddleware(routes.classified))
   router.get('/categories', asyncMiddleware(routes.categories))
   router.get('/categories/new', asyncMiddleware(routes.newCategoryForm))
   router.post('/categories', asyncMiddleware(routes.createCategory))

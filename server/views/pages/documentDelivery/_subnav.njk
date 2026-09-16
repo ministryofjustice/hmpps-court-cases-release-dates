@@ -3,7 +3,8 @@
 {{ mojSubNavigation({
   label: "Document delivery",
   items: [
-    { text: "Unclassified addresses", href: "/document-delivery", active: (active === "addresses") },
-    { text: "Delivery Categories", href: "/document-delivery/categories", active: (active === "categories") }
+    { text: "Addresses", href: "/document-delivery/classified", active: (active === "classified") },
+    { text: "Unclassified", href: "/document-delivery", active: (active === "addresses") },
+    { text: "Categories", href: "/document-delivery/categories", active: (active === "categories") }
   ]
 }) }}

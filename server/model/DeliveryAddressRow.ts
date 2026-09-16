@@ -27,6 +27,15 @@ export default class DeliveryAddressRow {
     return this.address.lastSeen
   }
 
+  get categoryCode(): string {
+    return this.address.categoryCode ?? ''
+  }
+
+  /** A category with no prison code leaves this blank, which is correct rather than missing. */
+  get prisonCode(): string {
+    return this.address.prisonCode ?? ''
+  }
+
   get documentTypes(): string {
     return this.address.recentDocumentTypes.join(', ')
   }

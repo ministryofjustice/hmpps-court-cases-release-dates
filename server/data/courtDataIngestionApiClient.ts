@@ -55,8 +55,11 @@ export default class CourtDataIngestionApiClient {
     }) as Promise<BackfillTriggerResponse>
   }
 
-  async getUnclassifiedAddresses(): Promise<UnclassifiedAddress[]> {
-    return this.restClient.get({ path: '/admin/delivery-addresses?classified=false' }) as Promise<UnclassifiedAddress[]>
+  async getDeliveryAddresses(classified: boolean, categoryCode?: string): Promise<UnclassifiedAddress[]> {
+    const query = new URLSearchParams({ classified: String(classified) })
+    if (categoryCode) query.set('category', categoryCode)
+
+    return this.restClient.get({ path: `/admin/delivery-addresses?${query}` }) as Promise<UnclassifiedAddress[]>
   }
 
   async getDeliveryCategories(): Promise<DeliveryCategory[]> {

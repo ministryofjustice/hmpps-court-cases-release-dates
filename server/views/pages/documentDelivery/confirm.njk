@@ -57,6 +57,12 @@
         reaches whoever holds the person.
       </p>
 
+      {% if preview.locationsSampled %}
+        <p class="govuk-hint" data-qa="sampled">
+          Based on a sample of the people affected, not all {{ preview.peopleAffected }}.
+        </p>
+      {% endif %}
+
       <table class="govuk-table govuk-table--small-text-until-10pt" data-qa="locations">
         <caption class="govuk-table__caption govuk-visually-hidden">Current location of the people affected</caption>
         <thead class="govuk-table__head">

@@ -94,8 +94,12 @@ export default class CourtDataIngestionService {
    * administration does: CDIA checks the support role on that token, so authorisation is
    * enforced at the API and every mapping is attributable to a named person.
    */
-  public async getUnclassifiedAddresses(userToken: string): Promise<UnclassifiedAddress[]> {
-    return new CourtDataIngestionApiClient(userToken).getUnclassifiedAddresses()
+  public async getDeliveryAddresses(
+    classified: boolean,
+    categoryCode: string | undefined,
+    userToken: string,
+  ): Promise<UnclassifiedAddress[]> {
+    return new CourtDataIngestionApiClient(userToken).getDeliveryAddresses(classified, categoryCode)
   }
 
   public async getCategories(userToken: string): Promise<DeliveryCategory[]> {

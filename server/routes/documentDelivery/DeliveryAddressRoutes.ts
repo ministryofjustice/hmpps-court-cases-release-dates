@@ -13,10 +13,26 @@ export default class DeliveryAddressRoutes {
 
   public overview: RequestHandler = async (req, res) => {
     const { token } = res.locals.user
-    const addresses = await this.courtDataIngestionService.getUnclassifiedAddresses(token)
+    const addresses = await this.courtDataIngestionService.getDeliveryAddresses(false, undefined, token)
 
     return res.render('pages/documentDelivery/index', {
       model: new DeliveryAddressOverviewViewModel(addresses, this.notificationFrom(req.query)),
+    })
+  }
+
+  public classified: RequestHandler = async (req, res) => {
+    const { token } = res.locals.user
+    const selectedCategory = asString(req.query.category)
+
+    const [addresses, categories] = await Promise.all([
+      this.courtDataIngestionService.getDeliveryAddresses(true, selectedCategory || undefined, token),
+      this.courtDataIngestionService.getCategories(token),
+    ])
+
+    return res.render('pages/documentDelivery/classified', {
+      model: new DeliveryAddressOverviewViewModel(addresses),
+      categories,
+      selectedCategory,
     })
   }
 

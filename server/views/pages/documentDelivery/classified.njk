@@ -1,0 +1,91 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Classified addresses" %}
+{% set pageId = "document-delivery-classified" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-6">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">Document delivery</h1>
+
+      {% set active = "classified" %}
+      {% include "./_subnav.njk" %}
+
+      <form method="get" action="/document-delivery/classified" class="govuk-!-margin-bottom-6">
+        {% set categoryItems = [{ value: "", text: "All categories", selected: not selectedCategory }] %}
+        {% for category in categories %}
+          {% set categoryItems = (categoryItems.push({
+            value: category.code,
+            text: category.name,
+            selected: (selectedCategory === category.code)
+          }), categoryItems) %}
+        {% endfor %}
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-third">
+            {{ govukSelect({
+              id: "category",
+              name: "category",
+              label: { text: "Category" },
+              items: categoryItems
+            }) }}
+          </div>
+          <div class="govuk-grid-column-one-third govuk-!-padding-top-6">
+            {{ govukButton({ text: "Apply filter", classes: "govuk-button--secondary", attributes: { "data-qa": "apply-filter" } }) }}
+          </div>
+        </div>
+      </form>
+
+      <p class="govuk-body" data-qa="totals">
+        {{ model.totalAddresses }} addresses, {{ model.totalDocuments }} documents.
+      </p>
+
+      <table class="govuk-table govuk-table--small-text-until-10pt" data-module="moj-sortable-table" data-qa="classified-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">Delivery addresses that have been classified</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header" aria-sort="none">Addressed to</th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">Category</th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">Prison</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="descending">Documents</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="none">Not identified</th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">Last seen</th>
+            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for row in model.rows %}
+            <tr class="govuk-table__row" data-qa="row-{{ row.id }}">
+              <td class="govuk-table__cell govuk-!-font-family-monospace">{{ row.emailAddress }}</td>
+              <td class="govuk-table__cell">{{ row.categoryCode }}</td>
+              <td class="govuk-table__cell">{{ row.prisonCode }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric" data-sort-value="{{ row.documentCount }}">{{ row.documentCount }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric" data-sort-value="{{ row.notIdentified }}">{{ row.notIdentified }}</td>
+              <td class="govuk-table__cell">
+                {{ row.lastSeen }}
+                {% if row.isActive %}{{ govukTag({ text: "Active", classes: "govuk-tag--blue" }) }}{% endif %}
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <a class="govuk-link" href="/document-delivery/classify?email={{ row.id }}" data-qa="reclassify-{{ row.id }}">
+                  Change<span class="govuk-visually-hidden"> the classification of {{ row.emailAddress }}</span>
+                </a>
+              </td>
+            </tr>
+          {% else %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" colspan="7">No addresses have been classified{{ " in this category" if selectedCategory }}.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+{% endblock %}
