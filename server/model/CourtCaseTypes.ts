@@ -21,6 +21,7 @@ export interface Offence {
   createChargeOrder?: number
   replicatedFromUuid?: string
   offenceDateIsSame?: string
+  findingOfDomesticAbuse?: boolean
 }
 
 export interface Sentence {

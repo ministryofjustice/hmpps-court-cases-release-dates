@@ -42,7 +42,11 @@ export default class CourtCasesDetailsModel {
         return sortByDateDesc(b.createdAt, a.createdAt)
       })
       .slice(0, 6)
-    this.overallSentenceLength = pagedAppearancePeriodLengthToSentenceLength(pagedCourtCase?.overallSentenceLength)
+    this.overallSentenceLength = pagedAppearancePeriodLengthToSentenceLength(
+      pagedCourtCase.latestCourtAppearance?.periodLengths?.find(
+        periodLength => periodLength.type === 'OVERALL_SENTENCE_LENGTH',
+      ),
+    )
     this.offences = orderOffences(charges?.map((charge, index) => pagedChargeToOffence(charge, index)))
     this.sentenceTypeMap = Object.fromEntries(
       charges

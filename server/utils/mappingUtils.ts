@@ -45,6 +45,7 @@ export const pagedChargeToOffence = (pagedCharge: PagedCharge, createChargeOrder
     ...(pagedCharge.legacyData && { legacyData: { ...pagedCharge.legacyData } }),
     ...(pagedCharge.sentence && { sentence: pagedSentenceToSentence(pagedCharge.sentence) }),
     ...(pagedCharge.mergedFromCase && { mergedFromCase: pagedCharge.mergedFromCase }),
+    ...(pagedCharge.findingOfDomesticAbuse && { findingOfDomesticAbuse: pagedCharge.findingOfDomesticAbuse }),
   } as Offence
 }
 
