@@ -96,3 +96,15 @@ test('should contain committed on', async ({ page }) => {
   await Promise.all(committedOn.map(kvp => expect(kvp.key).toHaveText('Committed on')))
   await Promise.all(committedOn.map(kvp => expect(kvp.value).toHaveText('30/12/2025')))
 })
+
+test('should display all 10 offences without pagination', async ({ page }) => {
+  await remandAndSentencingApi.stubSearchCourtCasesSingleCourtCaseMultipleCharges()
+  await login(page)
+
+  await page.goto('/prisoner/A1234AB/readonly-overview')
+  const overviewPage = await ReadonlyOverviewPage.verifyOnPage(page)
+
+  await overviewPage.clickAllCourtCasesSummaryLink()
+  const committedOn = await overviewPage.offenceCardSummary.committedOn
+  expect(committedOn).toHaveLength(10)
+})
