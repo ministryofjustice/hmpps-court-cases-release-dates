@@ -1,0 +1,63 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% set pageTitle = applicationName + " - Categories" %}
+{% set pageId = "document-delivery-categories" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-6">
+    <div class="govuk-grid-column-full">
+
+      {% if notification %}
+        {{ govukNotificationBanner({
+          text: notification.text,
+          type: "success" if notification.type === "success",
+          attributes: { "data-qa": "category-outcome" }
+        }) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Document delivery</h1>
+
+      {% set active = "categories" %}
+      {% include "./_subnav.njk" %}
+
+      <p class="govuk-body">
+        A category records where the traffic addressed to an address belongs, and how the service treats it.
+      </p>
+
+      <table class="govuk-table govuk-table--small-text-until-10pt" data-qa="category-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">Destination categories</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Category</th>
+            <th scope="col" class="govuk-table__header">Needs a prison</th>
+            <th scope="col" class="govuk-table__header">Unmatched needs review</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for category in categories %}
+            <tr class="govuk-table__row" data-qa="category-{{ category.code }}">
+              <td class="govuk-table__cell">
+                {{ category.name }}
+                <span class="govuk-hint govuk-!-margin-bottom-0 govuk-!-font-family-monospace">{{ category.code }}</span>
+              </td>
+              <td class="govuk-table__cell">{{ "Yes" if category.requiresPrisonCode else "No" }}</td>
+              <td class="govuk-table__cell">{{ "Yes" if category.unmatchedNeedsReview else "No" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      {{ govukButton({
+        text: "Add a category",
+        href: "/document-delivery/categories/new",
+        attributes: { "data-qa": "add-category" }
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}

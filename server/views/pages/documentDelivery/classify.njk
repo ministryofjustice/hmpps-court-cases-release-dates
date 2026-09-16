@@ -1,0 +1,77 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageTitle = ("Error: " if errors.length) + applicationName + " - Classify address" %}
+{% set pageId = "document-delivery-classify" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/document-delivery" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-4">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors.length %}
+        {{ govukErrorSummary({ titleText: "There is a problem", errorList: errors }) }}
+      {% endif %}
+
+      {% set prisonInputHtml %}
+        {{ govukInput({
+          id: "prisonCode",
+          name: "prisonCode",
+          value: values.prisonCode,
+          label: { text: "Prison code" },
+          hint: { text: "The prison this address delivers to." },
+          classes: "govuk-input--width-5",
+          errorMessage: errors | selectattr("field", "equalto", "prisonCode") | first
+        }) }}
+      {% endset %}
+
+      {% set categoryItems = [] %}
+      {% for category in categories %}
+        {% set hintText = "Documents are not recorded as delivered to a prison." %}
+        {% if category.requiresPrisonCode %}
+          {% set hintText = "Documents are recorded as delivered to the prison you choose." %}
+        {% endif %}
+        {% set categoryItems = (categoryItems.push({
+          value: category.code,
+          text: category.name,
+          hint: { text: hintText },
+          checked: (values.categoryCode === category.code),
+          conditional: { html: prisonInputHtml } if category.requiresPrisonCode
+        }), categoryItems) %}
+      {% endfor %}
+
+      <form method="post" action="/document-delivery/classify" novalidate>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <input type="hidden" name="emailAddress" value="{{ emailAddress }}" />
+
+        {{ govukRadios({
+          name: "categoryCode",
+          idPrefix: "categoryCode",
+          fieldset: {
+            legend: {
+              text: "Where does this traffic belong?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l"
+            }
+          },
+          hint: { html: '<span class="govuk-!-font-family-monospace">' + emailAddress + '</span>' },
+          items: categoryItems,
+          errorMessage: errors | selectattr("field", "equalto", "categoryCode") | first
+        }) }}
+
+        {{ govukButton({ text: "Continue", preventDoubleClick: true, attributes: { "data-qa": "continue" } }) }}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
