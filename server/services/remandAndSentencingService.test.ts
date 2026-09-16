@@ -182,6 +182,7 @@ describe('Remand and sentencing service', () => {
               offenceEndDate: '2024-01-15',
               sentenceUuid: 'sentence-uuid-1',
               countNumber: '1',
+              status: 'ACTIVE',
             },
           ],
         }
