@@ -135,15 +135,17 @@ const defaultCourtCasesPage: SearchCourtCasesPage = {
             createdAt: '2024-01-01T00:00:00',
           },
         ],
-        periodLengths: [{
-        periodLengthUuid: 'period-uuid-1',
-        years: 1,
-        months: 1,
-        weeks: 1,
-        days: 1,
-        order: 'years,months,weeks,days',
-        type: 'SENTENCE_LENGTH',
-      }]
+        periodLengths: [
+          {
+            periodLengthUuid: 'period-uuid-1',
+            years: 1,
+            months: 1,
+            weeks: 1,
+            days: 1,
+            order: 'years,months,weeks,days',
+            type: 'SENTENCE_LENGTH',
+          },
+        ],
       },
       appearanceCount: 1,
       caseReferences: [],
