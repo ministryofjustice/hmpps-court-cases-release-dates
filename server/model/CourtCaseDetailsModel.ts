@@ -23,8 +23,6 @@ export default class CourtCasesDetailsModel {
 
   chargeTotal: number
 
-  showingChargeTotal?: number
-
   overallCaseStatus: string
 
   constructor(pagedCourtCase: PagedCourtCase, courtMap: { [key: string]: string }) {
@@ -37,15 +35,14 @@ export default class CourtCasesDetailsModel {
     if (pagedCourtCase.latestCourtAppearance?.caseReference) {
       this.title = `${pagedCourtCase.latestCourtAppearance.caseReference} at ${this.title}`
     }
-    const charges = pagedCourtCase.latestCourtAppearance?.charges
-      .sort((a, b) => {
-        return sortByDateDesc(b.createdAt, a.createdAt)
-      })
-      .slice(0, 6)
+    this.chargeTotal = pagedCourtCase.latestCourtAppearance?.charges.length
+    const charges = pagedCourtCase.latestCourtAppearance?.charges.sort((a, b) => {
+      return sortByDateDesc(b.createdAt, a.createdAt)
+    })
     this.overallSentenceLength = pagedAppearancePeriodLengthToSentenceLength(
-      pagedCourtCase.latestCourtAppearance?.periodLengths?.find(
-        periodLength => periodLength.type === 'OVERALL_SENTENCE_LENGTH',
-      ),
+        pagedCourtCase.latestCourtAppearance?.periodLengths?.find(
+            periodLength => periodLength.type === 'OVERALL_SENTENCE_LENGTH',
+        ),
     )
     this.offences = orderOffences(charges?.map((charge, index) => pagedChargeToOffence(charge, index)))
     this.sentenceTypeMap = Object.fromEntries(
@@ -53,9 +50,5 @@ export default class CourtCasesDetailsModel {
         ?.filter(charge => charge.sentence?.sentenceType)
         .map(charge => [charge.sentence.sentenceType.sentenceTypeUuid, charge.sentence.sentenceType.description]) ?? [],
     )
-    this.chargeTotal = pagedCourtCase.latestCourtAppearance?.charges.length
-    if (this.chargeTotal > 6) {
-      this.showingChargeTotal = 6
-    }
   }
 }
