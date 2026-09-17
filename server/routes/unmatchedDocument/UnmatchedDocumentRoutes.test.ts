@@ -4,6 +4,7 @@ import { constants } from 'node:http2'
 import { appWithAllRoutes, user } from '../testutils/appSetup'
 import { Document, DocumentSearchResult, FileDownload } from '../../@types/documentManagementApi/types'
 import DocumentManagementService from '../../services/documentManagementService'
+import { Role, Roles } from '../../@types/roles'
 
 jest.mock('../../services/documentManagementService')
 
@@ -15,7 +16,13 @@ const defaultServices = {
   documentManagementService,
 }
 
-const defaultUser = { ...user, hasAdjustmentsAccess: true, hasRasAccess: true, hasRecallsAccess: true }
+const defaultUser = {
+  ...user,
+  hasAdjustmentsAccess: true,
+  hasRasAccess: true,
+  hasRecallsAccess: true,
+  roles: [Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)],
+}
 
 beforeEach(() => {
   app = appWithAllRoutes({
@@ -28,6 +35,65 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.resetAllMocks()
+})
+
+describe('Route Handlers - Unmatched documents role check access control', () => {
+  let appWithoutAccess: Express
+  const userWithoutAccess = { ...defaultUser, roles: [] as string[] }
+
+  const documentId = '4fd5f7b0-eebf-4b69-9489-0cc48550e03b'
+  type DocumentRoute = { method: 'get' | 'post'; path: string }
+  const pageRoute: DocumentRoute = { method: 'get', path: '/unmatched-documents' }
+  const downloadRoutes: DocumentRoute[] = [
+    { method: 'get', path: `/unmatched-documents/${documentId}/download` },
+    { method: 'get', path: `/unmatched-documents/${documentId}/download/warrant.pdf` },
+  ]
+  const allRoutes: DocumentRoute[] = [pageRoute, ...downloadRoutes]
+
+  const call = (testApp: Express, { method, path }: DocumentRoute) =>
+    method === 'post' ? request(testApp).post(path).send() : request(testApp).get(path)
+
+  beforeEach(() => {
+    appWithoutAccess = appWithAllRoutes({
+      services: defaultServices,
+      userSupplier: () => userWithoutAccess,
+    })
+
+    documentManagementService.searchDocument.mockResolvedValue(documents)
+    documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
+    documentManagementService.downloadDocument.mockReturnValue(fileDownload)
+  })
+
+  it('the documents page redirects to the auth error page without the COURTCASE_RELEASEDATE_SUPPORT role', () => {
+    return call(appWithoutAccess, pageRoute).expect(constants.HTTP_STATUS_FOUND).expect('Location', '/authError')
+  })
+
+  it.each(downloadRoutes)('$method $path returns 302 without the COURTCASE_RELEASEDATE_SUPPORT role', route => {
+    return call(appWithoutAccess, route).expect(res => {
+      expect(res.status).toBe(302)
+    })
+  })
+
+  it.each(allRoutes)(
+    '$method $path does not reach any downstream service without the COURTCASE_RELEASEDATE_SUPPORT role',
+    async route => {
+      await call(appWithoutAccess, route)
+
+      expect(documentManagementService.searchDocument).not.toHaveBeenCalled()
+      expect(documentManagementService.getDocument).not.toHaveBeenCalled()
+      expect(documentManagementService.downloadDocument).not.toHaveBeenCalled()
+    },
+  )
+
+  it.each(allRoutes)(
+    '$method $path is not denied when the user holds the COURTCASE_RELEASEDATE_SUPPORT role',
+    async route => {
+      const res = await call(app, route)
+
+      expect(res.status).not.toBe(constants.HTTP_STATUS_FORBIDDEN)
+      expect(res.headers.location).not.toBe('/authError')
+    },
+  )
 })
 
 describe('Route Handlers - Valid Document Before Download', () => {
@@ -43,6 +109,7 @@ describe('Route Handlers - Valid Document Before Download', () => {
         expect(res.status).toBe(constants.HTTP_STATUS_OK)
       })
   })
+
   it('should return valid download when prisonerId is not present in metadata', () => {
     documentManagementService.getDocument.mockResolvedValue(documents.results[1] as Document)
     documentManagementService.downloadDocument.mockReturnValueOnce(fileDownload)
@@ -55,6 +122,7 @@ describe('Route Handlers - Valid Document Before Download', () => {
         expect(res.status).toBe(constants.HTTP_STATUS_OK)
       })
   })
+
   it('should return invalid download when document is matched to a prisonerId', () => {
     documentManagementService.getDocument.mockResolvedValue(documents.results[2] as Document)
     documentManagementService.downloadDocument.mockReturnValueOnce(fileDownload)
