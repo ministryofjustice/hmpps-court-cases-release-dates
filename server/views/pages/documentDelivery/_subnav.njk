@@ -1,0 +1,10 @@
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+
+{{ mojSubNavigation({
+  label: "Document delivery",
+  items: [
+    { text: "Addresses", href: "/document-delivery/classified", active: (active === "classified") },
+    { text: "Unclassified", href: "/document-delivery", active: (active === "addresses") },
+    { text: "Categories", href: "/document-delivery/categories", active: (active === "categories") }
+  ]
+}) }}

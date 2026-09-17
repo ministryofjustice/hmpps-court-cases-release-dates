@@ -1,0 +1,74 @@
+  {% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Unclassified addresses" %}
+{% set pageId = "document-delivery" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-6">
+    <div class="govuk-grid-column-full">
+
+      {% if model.notification %}
+        {{ govukNotificationBanner({
+          text: model.notification.text,
+          type: "success" if model.notification.type === "success",
+          attributes: { "data-qa": "mapping-outcome" }
+        }) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Document delivery</h1>
+
+      {% set active = "addresses" %}
+      {% include "./_subnav.njk" %}
+
+      <p class="govuk-body" data-qa="totals">
+        Showing {{ model.totalAddresses }} addresses, {{ model.totalDocuments }} documents.
+      </p>
+
+      <table class="govuk-table govuk-table--small-text-until-10pt" data-module="moj-sortable-table" data-qa="address-table">
+        <caption class="govuk-table__caption govuk-visually-hidden">Delivery addresses with no classification</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header" aria-sort="none">Addressed to</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="descending">Documents</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="none">Not identified</th>
+            <th scope="col" class="govuk-table__header">Document types</th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">First seen</th>
+            <th scope="col" class="govuk-table__header" aria-sort="none">Last seen</th>
+            <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for row in model.rows %}
+            <tr class="govuk-table__row" data-qa="row-{{ row.id }}">
+              <td class="govuk-table__cell govuk-!-font-family-monospace">{{ row.emailAddress }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric" data-sort-value="{{ row.documentCount }}">{{ row.documentCount }}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric" data-sort-value="{{ row.notIdentified }}">{{ row.notIdentified }}</td>
+              <td class="govuk-table__cell">{{ row.documentTypes }}</td>
+              <td class="govuk-table__cell">{{ row.firstSeen }}</td>
+              <td class="govuk-table__cell">
+                {{ row.lastSeen }}
+                {% if row.isActive %}{{ govukTag({ text: "Active", classes: "govuk-tag--blue" }) }}{% endif %}
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <a class="govuk-link" href="/document-delivery/classify?email={{ row.id }}" data-qa="classify-{{ row.id }}">
+                  Classify<span class="govuk-visually-hidden"> {{ row.emailAddress }}</span>
+                </a>
+              </td>
+            </tr>
+          {% else %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell" colspan="7">There are no unclassified addresses.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+{% endblock %}

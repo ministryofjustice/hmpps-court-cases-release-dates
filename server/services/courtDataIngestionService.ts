@@ -2,7 +2,22 @@ import { CourtDocument, CourtDocumentView } from '../@types/courtDataIngestionAp
 import { HmppsAuthClient } from '../data'
 import CourtDataIngestionApiClient from '../data/courtDataIngestionApiClient'
 import { BackfillListResponse, BackfillRunSummary, TriggerOutcome } from '../model/backfill'
+import {
+  ClassifyAddressPreview,
+  ClassifyAddressRequest,
+  ClassifyAddressResult,
+  CreateCategoryRequest,
+  DeliveryCategory,
+  UnclassifiedAddress,
+} from '../@types/courtDataIngestionApi/deliveryAddressTypes'
 import logger from '../../logger'
+
+export type ClassifyOutcome = 'classified' | 'unknown-category' | 'unknown-prison'
+
+export interface ClassifyResult {
+  outcome: ClassifyOutcome
+  result?: ClassifyAddressResult
+}
 
 export interface StartBackfillResult {
   outcome: TriggerOutcome
@@ -70,6 +85,58 @@ export default class CourtDataIngestionService {
         return { outcome: 'unknown-backfill', message: `No backfill is registered with the id ${backfillId}` }
       }
       logger.error(error, `Failed to start backfill ${backfillId}`)
+      throw error
+    }
+  }
+
+  /**
+   * Document delivery uses the signed in user's token for the same reason backfill
+   * administration does: CDIA checks the support role on that token, so authorisation is
+   * enforced at the API and every mapping is attributable to a named person.
+   */
+  public async getDeliveryAddresses(
+    classified: boolean,
+    categoryCode: string | undefined,
+    userToken: string,
+  ): Promise<UnclassifiedAddress[]> {
+    return new CourtDataIngestionApiClient(userToken).getDeliveryAddresses(classified, categoryCode)
+  }
+
+  public async getCategories(userToken: string): Promise<DeliveryCategory[]> {
+    return new CourtDataIngestionApiClient(userToken).getDeliveryCategories()
+  }
+
+  public async createCategory(
+    request: CreateCategoryRequest,
+    userToken: string,
+  ): Promise<{ outcome: 'created' | 'duplicate-category' }> {
+    try {
+      await new CourtDataIngestionApiClient(userToken).createDeliveryCategory(request)
+      return { outcome: 'created' }
+    } catch (error) {
+      const { status } = error as { status?: number }
+      if (status === 409) return { outcome: 'duplicate-category' }
+      logger.error(error, `Failed to create email destination category ${request.code}`)
+      throw error
+    }
+  }
+
+  public async previewClassification(
+    request: ClassifyAddressRequest,
+    userToken: string,
+  ): Promise<ClassifyAddressPreview> {
+    return new CourtDataIngestionApiClient(userToken).previewClassification(request)
+  }
+
+  public async classifyAddress(request: ClassifyAddressRequest, userToken: string): Promise<ClassifyResult> {
+    try {
+      const result = await new CourtDataIngestionApiClient(userToken).classifyAddress(request)
+      return { outcome: 'classified', result }
+    } catch (error) {
+      const { status } = error as { status?: number }
+      if (status === 404) return { outcome: 'unknown-category' }
+      if (status === 422) return { outcome: 'unknown-prison' }
+      logger.error(error, `Failed to classify address ${request.emailAddress}`)
       throw error
     }
   }

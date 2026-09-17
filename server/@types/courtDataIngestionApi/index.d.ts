@@ -4,607 +4,1142 @@
  */
 
 export interface paths {
-    "/queue-admin/retry-dlq/{dlqName}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["retryDlq"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/queue-admin/retry-all-dlqs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["retryAllDlqs"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/queue-admin/purge-queue/{queueName}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["purgeQueue"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/court-document/{prisonDocumentId}/view": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Record a viewing of a court document
-         * @description Records that a given user has viewed a court document.
-         */
-        post: operations["view"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/court-document/{prisonDocumentId}/mark-as-new": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Reset a court document to appear as new
-         * @description Records that a given user has reset a court document so it is surfaced as new again.
-         */
-        post: operations["markAsNew"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/things-to-do/prisoner/{prisonerId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Retrieve things-to-do for a prisoner
-         * @description Provides a list of things-to-do for a specified prisoner based on their ID.
-         */
-        get: operations["getThingsToDo"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/queue-admin/get-dlq-messages/{dlqName}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getDlqMessages"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/court-hearings/{courtHearingId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get court hearing info
-         * @description Gets court hearing data ingested from CP.
-         */
-        get: operations["getCourtHearings"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/court-hearings/prisoner/{prisonerNumber}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get all court hearing info for a prisoner
-         * @description Gets all court hearing data ingested from CP for a prisoner.
-         */
-        get: operations["getCourtHearingsByPrisoner"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/court-document/person/{personId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Record a viewing of a court document
-         * @description Records that a given user has viewed a court document.
-         */
-        get: operations["getCourtDocuments"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+  '/queue-admin/retry-dlq/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['retryDlq']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/retry-all-dlqs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['retryAllDlqs']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/purge-queue/{queueName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['purgeQueue']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/court-document/{prisonDocumentId}/view': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Record a viewing of a court document
+     * @description Records that a given user has viewed a court document.
+     */
+    post: operations['view']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/court-document/{prisonDocumentId}/mark-as-new': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Reset a court document to appear as new
+     * @description Records that a given user has reset a court document so it is surfaced as new again.
+     */
+    post: operations['markAsNew']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/delivery-categories': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Delivery categories */
+    get: operations['categories']
+    put?: never
+    /**
+     * Create a delivery category
+     * @description Categories are data, so new ones need no code change. A category created here is inert until its flags are widened deliberately.
+     */
+    post: operations['createCategory']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/delivery-addresses': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Addresses court documents have been delivered to
+     * @description Grouped by address rather than by document. classified=false returns the addresses with no category, which is the support worklist. PECS traffic is excluded: it is correctly delivered without a prison and is not a gap.
+     */
+    get: operations['deliveryAddresses']
+    put?: never
+    /**
+     * Classify a delivery address and re-resolve its documents
+     * @description Creates or replaces the mapping, then triggers the reresolve backfill.
+     */
+    post: operations['classify']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/delivery-addresses/preview': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Dry run a classification
+     * @description Same resolution path as the apply, so the counts are real.
+     */
+    post: operations['preview']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/backfill/{backfillId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve the most recent run for a single backfill */
+    get: operations['mostRecent']
+    put?: never
+    /**
+     * Start a backfill
+     * @description Acquires the run lock and starts the backfill asynchronously. Returns 409 if a run for that backfill is already in flight.
+     */
+    post: operations['start']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/things-to-do/prisoner/{prisonerId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve things-to-do for a prisoner
+     * @description Provides a list of things-to-do for a specified prisoner based on their ID.
+     */
+    get: operations['getThingsToDo']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/get-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getDlqMessages']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/court-hearings/prisoner/{prisonerNumber}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all court hearing info for a prisoner
+     * @description Gets all court hearing data ingested from CP for a prisoner.
+     */
+    get: operations['getCourtHearingsByPrisoner']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/court-hearings/prisoner/{prisonerNumber}/hearing/{courtHearingId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get all court hearing info for a prisoner
+     * @description Gets all court hearing data ingested from CP for a prisoner.
+     */
+    get: operations['getCourtHearing']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/court-document/person/{personId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Record a viewing of a court document
+     * @description Records that a given user has viewed a court document.
+     */
+    get: operations['getCourtDocuments']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/backfill': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * List registered backfills with their most recent run
+     * @description Returns every backfill id known to the registry, plus the latest run for each that has one.
+     */
+    get: operations['list']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 export interface components {
-    schemas: {
-        RetryDlqResult: {
-            /** Format: int32 */
-            messagesFoundCount: number;
-        };
-        PurgeQueueResult: {
-            /** Format: int32 */
-            messagesFoundCount: number;
-        };
-        CourtDocumentView: {
-            username: string;
-        };
-        ThingsToDo: {
-            prisonerId: string;
-            thingsToDo: "HMCTS_API_DOCUMENT_RECEIVED"[];
-        };
-        DlqMessage: {
-            body: {
-                [key: string]: unknown;
-            };
-            messageId: string;
-        };
-        GetDlqResult: {
-            /** Format: int32 */
-            messagesFoundCount: number;
-            /** Format: int32 */
-            messagesReturnedCount: number;
-            messages: components["schemas"]["DlqMessage"][];
-        };
-        CourtHearing: {
-            /** Format: uuid */
-            hearingId: string;
-            courtName: string;
-            /** Format: uuid */
-            courtId: string;
-            courtCode?: string | null;
-            /** Format: date-time */
-            hearingDate: string;
-            caseReferences: string[];
-            hearingType: string;
-            documents: components["schemas"]["CourtHearingDocument"][];
-        };
-        CourtHearingDocument: {
-            /** @enum {string} */
-            documentType: "PRISON_COURT_REGISTER" | "SENTENCING_WARRANT" | "REMAND_WARRANT" | "COMMON_PLATFORM_DOCUMENT";
-            /** Format: uuid */
-            documentId: string;
-            /** Format: date-time */
-            ingestionAt: string;
-        };
-        CourtDocument: {
-            /** Format: uuid */
-            prisonDocumentId: string;
-            caseReferences: string[];
-            isUnread: boolean;
-            /** @enum {string} */
-            documentType: "PRISON_COURT_REGISTER" | "SENTENCING_WARRANT" | "REMAND_WARRANT" | "COMMON_PLATFORM_DOCUMENT";
-            courtHearing?: components["schemas"]["CourtDocumentHearing"] | null;
-        };
-        CourtDocumentHearing: {
-            courtName: string;
-            hearingType: string;
-            /** Format: date-time */
-            hearingDate: string;
-        };
-    };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+  schemas: {
+    RetryDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+    }
+    PurgeQueueResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+    }
+    CourtDocumentView: {
+      username: string
+    }
+    CreateCategoryRequest: {
+      code: string
+      name: string
+      requiresPrisonCode: boolean
+      unmatchedNeedsReview: boolean
+    }
+    ClassifyAddressRequest: {
+      /** Format: email */
+      emailAddress: string
+      categoryCode: string
+      prisonCode?: string | null
+    }
+    ClassifyAddressResult: {
+      mappingId: string
+      /** Format: int32 */
+      documentsQueued: number
+      backfillRunId?: string | null
+      backfillOutcome: string
+    }
+    ClassifyAddressPreview: {
+      emailAddress: string
+      category: components['schemas']['DeliveryCategory']
+      prisonCode?: string | null
+      /** Format: int32 */
+      documentsAffected: number
+      /** Format: int32 */
+      peopleAffected: number
+      currentLocations: components['schemas']['LocationCount'][]
+      locationsSampled: boolean
+      replacesExisting: boolean
+    }
+    DeliveryCategory: {
+      code: string
+      name: string
+      requiresPrisonCode: boolean
+      unmatchedNeedsReview: boolean
+      createdBy?: string | null
+      /** Format: date-time */
+      createdAt: string
+    }
+    LocationCount: {
+      prisonCode: string
+      /** Format: int32 */
+      people: number
+    }
+    TriggerResponse: {
+      /** Format: uuid */
+      runId?: string | null
+      message: string
+    }
+    ThingsToDo: {
+      prisonerId: string
+      thingsToDo: 'HMCTS_API_DOCUMENT_RECEIVED'[]
+    }
+    DlqMessage: {
+      body: {
+        [key: string]: unknown
+      }
+      messageId: string
+    }
+    GetDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesReturnedCount: number
+      messages: components['schemas']['DlqMessage'][]
+    }
+    CourtCharge: {
+      /** Format: uuid */
+      hmctsId: string
+      /** Format: int32 */
+      listingNumber?: number | null
+      offenceLegislation?: string | null
+      code: string
+      /** Format: date */
+      pleaDate?: string | null
+      pleaValue?: string | null
+      /** Format: date */
+      startDate: string
+      /** Format: date */
+      endDate?: string | null
+      title: string
+      wording: string
+      results: components['schemas']['CourtResult'][]
+    }
+    CourtHearing: {
+      /** Format: uuid */
+      hearingId: string
+      courtName: string
+      /** Format: uuid */
+      courtId: string
+      courtCode?: string | null
+      /** Format: date */
+      hearingDate: string
+      caseReferences: string[]
+      hearingType: string
+      documents: components['schemas']['CourtHearingDocument'][]
+      charges: components['schemas']['CourtCharge'][]
+      nextHearing?: components['schemas']['NextCourtHearing'] | null
+    }
+    CourtHearingDocument: {
+      /** @enum {string} */
+      documentType: 'PRISON_COURT_REGISTER' | 'SENTENCING_WARRANT' | 'REMAND_WARRANT' | 'COMMON_PLATFORM_DOCUMENT'
+      /** Format: uuid */
+      documentId: string
+      /** Format: date-time */
+      ingestionAt: string
+    }
+    CourtResult: {
+      code: string
+      description: string
+    }
+    NextCourtHearing: {
+      courtName: string
+      /** Format: uuid */
+      hmctsCourtId: string
+      hmppsCourtId?: string | null
+      /** Format: date-time */
+      hearingDate?: string | null
+    }
+    CourtDocument: {
+      /** Format: uuid */
+      prisonDocumentId: string
+      caseReferences: string[]
+      isUnread: boolean
+      /** @enum {string} */
+      documentType: 'PRISON_COURT_REGISTER' | 'SENTENCING_WARRANT' | 'REMAND_WARRANT' | 'COMMON_PLATFORM_DOCUMENT'
+      courtHearing?: components['schemas']['CourtDocumentHearing'] | null
+    }
+    CourtDocumentHearing: {
+      courtName: string
+      hearingType: string
+      /** Format: date */
+      hearingDate: string
+    }
+    DeliveryAddressResponse: {
+      emailAddress: string
+      categoryCode?: string | null
+      prisonCode?: string | null
+      /** Format: int32 */
+      documentCount: number
+      /** Format: int32 */
+      matchedToPersonCount: number
+      firstSeen: string
+      lastSeen: string
+      recentDocumentTypes: string[]
+    }
+    BackfillListResponse: {
+      registered: string[]
+      recent: components['schemas']['BackfillRunResponse'][]
+    }
+    BackfillRunResponse: {
+      backfillId: string
+      /** Format: uuid */
+      runId?: string | null
+      status: string
+      cursor?: string | null
+      /** Format: int64 */
+      processed: number
+      /** Format: int64 */
+      failed: number
+      /** Format: date-time */
+      startedAt?: string | null
+      /** Format: date-time */
+      heartbeatAt?: string | null
+      /** Format: date-time */
+      completedAt?: string | null
+      triggeredBy?: string | null
+      failureReason?: string | null
+    }
+  }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
-export type $defs = Record<string, never>;
+export type $defs = Record<string, never>
 export interface operations {
-    retryDlq: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                dlqName: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["RetryDlqResult"];
-                };
-            };
-        };
-    };
-    retryAllDlqs: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["RetryDlqResult"][];
-                };
-            };
-        };
-    };
-    purgeQueue: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                queueName: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PurgeQueueResult"];
-                };
-            };
-        };
-    };
-    view: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                prisonDocumentId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CourtDocumentView"];
-            };
-        };
-        responses: {
-            /** @description Successfully recorded a viewing of court document. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocumentView"];
-                };
-            };
-            /** @description Unauthorized - valid Oauth2 token required */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocumentView"];
-                };
-            };
-            /** @description Forbidden - requires appropriate role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocumentView"];
-                };
-            };
-        };
-    };
-    markAsNew: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                prisonDocumentId: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CourtDocumentView"];
-            };
-        };
-        responses: {
-            /** @description Successfully reset the court document to new. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocumentView"];
-                };
-            };
-            /** @description Unauthorized - valid Oauth2 token required */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocumentView"];
-                };
-            };
-            /** @description Forbidden - requires appropriate role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocumentView"];
-                };
-            };
-        };
-    };
-    getThingsToDo: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description Prisoner's ID (also known as nomsId)
-                 * @example A1234AB
-                 */
-                prisonerId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully returns the things-to-do list */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ThingsToDo"];
-                };
-            };
-            /** @description Unauthorized - valid Oauth2 token required */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ThingsToDo"];
-                };
-            };
-            /** @description Forbidden - requires appropriate role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ThingsToDo"];
-                };
-            };
-        };
-    };
-    getDlqMessages: {
-        parameters: {
-            query?: {
-                maxMessages?: number;
-            };
-            header?: never;
-            path: {
-                dlqName: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["GetDlqResult"];
-                };
-            };
-        };
-    };
-    getCourtHearings: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                courtHearingId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully gets court hearing. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtHearing"];
-                };
-            };
-            /** @description Unauthorized - valid Oauth2 token required */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtHearing"];
-                };
-            };
-            /** @description Forbidden - requires appropriate role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtHearing"];
-                };
-            };
-        };
-    };
-    getCourtHearingsByPrisoner: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                prisonerNumber: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully gets court hearing. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtHearing"][];
-                };
-            };
-            /** @description Unauthorized - valid Oauth2 token required */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtHearing"][];
-                };
-            };
-            /** @description Forbidden - requires appropriate role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtHearing"][];
-                };
-            };
-        };
-    };
-    getCourtDocuments: {
-        parameters: {
-            query: {
-                prisonDocumentIds: string[];
-            };
-            header?: never;
-            path: {
-                personId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully recorded a viewing of court document. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocument"][];
-                };
-            };
-            /** @description Unauthorized - valid Oauth2 token required */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocument"][];
-                };
-            };
-            /** @description Forbidden - requires appropriate role */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CourtDocument"][];
-                };
-            };
-        };
-    };
+  retryDlq: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RetryDlqResult']
+        }
+      }
+    }
+  }
+  retryAllDlqs: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RetryDlqResult'][]
+        }
+      }
+    }
+  }
+  purgeQueue: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        queueName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PurgeQueueResult']
+        }
+      }
+    }
+  }
+  view: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonDocumentId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CourtDocumentView']
+      }
+    }
+    responses: {
+      /** @description Successfully recorded a viewing of court document. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+    }
+  }
+  markAsNew: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonDocumentId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CourtDocumentView']
+      }
+    }
+    responses: {
+      /** @description Successfully reset the court document to new. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocumentView']
+        }
+      }
+    }
+  }
+  categories: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DeliveryCategory'][]
+        }
+      }
+    }
+  }
+  createCategory: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateCategoryRequest']
+      }
+    }
+    responses: {
+      /** @description Category created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description A category with that code already exists */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  deliveryAddresses: {
+    parameters: {
+      query?: {
+        /** @description true returns the addresses that have been classified, false those that have not */
+        classified?: boolean
+        /** @description Narrow a classified list to one category */
+        category?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully returns the delivery address list */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DeliveryAddressResponse'][]
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DeliveryAddressResponse'][]
+        }
+      }
+      /** @description Forbidden - requires ROLE_COURTCASE_RELEASEDATE_SUPPORT */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DeliveryAddressResponse'][]
+        }
+      }
+    }
+  }
+  classify: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ClassifyAddressRequest']
+      }
+    }
+    responses: {
+      /** @description Mapping created and re-resolution requested */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ClassifyAddressResult']
+        }
+      }
+      /** @description No category with that code */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ClassifyAddressResult']
+        }
+      }
+      /** @description The category requires a prison code and none was given */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ClassifyAddressResult']
+        }
+      }
+    }
+  }
+  preview: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ClassifyAddressRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ClassifyAddressPreview']
+        }
+      }
+    }
+  }
+  mostRecent: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /**
+         * @description Registered backfill id
+         * @example extraction
+         */
+        backfillId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully returns the most recent run */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackfillRunResponse']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackfillRunResponse']
+        }
+      }
+      /** @description Forbidden - requires ROLE_COURTCASE_RELEASEDATE_SUPPORT */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackfillRunResponse']
+        }
+      }
+      /** @description No backfill is registered with that id */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackfillRunResponse']
+        }
+      }
+    }
+  }
+  start: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /**
+         * @description Registered backfill id
+         * @example extraction
+         */
+        backfillId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Backfill accepted and started */
+      202: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TriggerResponse']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TriggerResponse']
+        }
+      }
+      /** @description Forbidden - requires ROLE_COURTCASE_RELEASEDATE_SUPPORT */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TriggerResponse']
+        }
+      }
+      /** @description No backfill is registered with that id */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TriggerResponse']
+        }
+      }
+      /** @description A run for that backfill is already in flight */
+      409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['TriggerResponse']
+        }
+      }
+    }
+  }
+  getThingsToDo: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /**
+         * @description Prisoner's ID (also known as nomsId)
+         * @example A1234AB
+         */
+        prisonerId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully returns the things-to-do list */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ThingsToDo']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ThingsToDo']
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ThingsToDo']
+        }
+      }
+    }
+  }
+  getDlqMessages: {
+    parameters: {
+      query?: {
+        maxMessages?: number
+      }
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+    }
+  }
+  getCourtHearingsByPrisoner: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonerNumber: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully gets court hearing. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing'][]
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing'][]
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing'][]
+        }
+      }
+    }
+  }
+  getCourtHearing: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        courtHearingId: string
+        prisonerNumber: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully gets court hearing. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing']
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtHearing']
+        }
+      }
+    }
+  }
+  getCourtDocuments: {
+    parameters: {
+      query: {
+        prisonDocumentIds: string[]
+      }
+      header?: never
+      path: {
+        personId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully recorded a viewing of court document. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocument'][]
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocument'][]
+        }
+      }
+      /** @description Forbidden - requires appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CourtDocument'][]
+        }
+      }
+    }
+  }
+  list: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully returns the backfill list */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackfillListResponse']
+        }
+      }
+      /** @description Unauthorized - valid Oauth2 token required */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackfillListResponse']
+        }
+      }
+      /** @description Forbidden - requires ROLE_COURTCASE_RELEASEDATE_SUPPORT */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['BackfillListResponse']
+        }
+      }
+    }
+  }
 }
