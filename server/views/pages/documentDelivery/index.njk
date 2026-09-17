@@ -25,15 +25,8 @@
       {% set active = "addresses" %}
       {% include "./_subnav.njk" %}
 
-      {% set contextHtml %}
-        Court documents delivered to these addresses could not be resolved to a prison.
-        Classifying an address records where its traffic belongs and re-resolves the documents
-        already received from it.
-      {% endset %}
-      {{ govukInsetText({ html: contextHtml, attributes: { "data-qa": "context" } }) }}
-
       <p class="govuk-body" data-qa="totals">
-        {{ model.totalAddresses }} addresses, {{ model.totalDocuments }} documents.
+        Showing {{ model.totalAddresses }} addresses, {{ model.totalDocuments }} documents.
       </p>
 
       <table class="govuk-table govuk-table--small-text-until-10pt" data-module="moj-sortable-table" data-qa="address-table">

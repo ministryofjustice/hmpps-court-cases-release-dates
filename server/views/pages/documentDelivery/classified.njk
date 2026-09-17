@@ -42,13 +42,8 @@
         </div>
       </form>
 
-      <p class="govuk-hint" data-qa="no-change">
-        A classification cannot be changed here. Changing one would leave the documents it has
-        already resolved pointing at the old destination.
-      </p>
-
       <p class="govuk-body" data-qa="totals">
-        {{ model.totalAddresses }} addresses, {{ model.totalDocuments }} documents.
+        Showing {{ model.totalAddresses }} addresses, {{ model.totalDocuments }} documents.
       </p>
 
       <table class="govuk-table govuk-table--small-text-until-10pt" data-module="moj-sortable-table" data-qa="classified-table">

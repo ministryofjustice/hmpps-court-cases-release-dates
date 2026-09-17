@@ -31,7 +31,6 @@ export default class DeliveryAddressRow {
     return this.address.categoryCode ?? ''
   }
 
-  /** A category with no prison code leaves this blank, which is correct rather than missing. */
   get prisonCode(): string {
     return this.address.prisonCode ?? ''
   }
