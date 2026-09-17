@@ -446,6 +446,8 @@ export interface components {
     }
     DeliveryAddressResponse: {
       emailAddress: string
+      categoryCode?: string | null
+      prisonCode?: string | null
       /** Format: int32 */
       documentCount: number
       /** Format: int32 */
@@ -690,8 +692,10 @@ export interface operations {
   deliveryAddresses: {
     parameters: {
       query?: {
-        /** @description Only addresses with no category. The only supported value today is false. */
+        /** @description true returns the addresses that have been classified, false those that have not */
         classified?: boolean
+        /** @description Narrow a classified list to one category */
+        category?: string
       }
       header?: never
       path?: never
