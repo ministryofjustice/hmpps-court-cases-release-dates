@@ -7,6 +7,7 @@ import feedbackRoutes from './feedback'
 import accessibilityRoutes from './accessibility'
 import unmatchedDocumentRoutes from './unmatchedDocument'
 import backfillRoutes from './backfill'
+import documentDeliveryRoutes from './documentDelivery'
 import config from '../config'
 
 export default function routes(services: Services): Router {
@@ -25,6 +26,7 @@ export default function routes(services: Services): Router {
     unmatchedDocumentRoutes(services.documentManagementService, services.courtRegisterService),
   )
   router.use('/backfills', backfillRoutes(services.courtDataIngestionService))
+  router.use('/document-delivery', documentDeliveryRoutes(services.courtDataIngestionService))
 
   return router
 }

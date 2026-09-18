@@ -1,0 +1,71 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageTitle = ("Error: " if errors.length) + applicationName + " - Add a category" %}
+{% set pageId = "document-delivery-new-category" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back", href: "/document-delivery/categories" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-4">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if errors.length %}
+        {{ govukErrorSummary({ titleText: "There is a problem", errorList: errors }) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-l">Add a category</h1>
+
+      <form method="post" action="/document-delivery/categories" novalidate>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        {{ govukInput({
+          id: "code",
+          name: "code",
+          value: values.code,
+          label: { text: "Code" },
+          hint: { text: "Upper case with underscores, for example YOUTH_CUSTODY." },
+          classes: "govuk-input--width-20",
+          errorMessage: errors | selectattr("field", "equalto", "code") | first
+        }) }}
+
+        {{ govukInput({
+          id: "name",
+          name: "name",
+          value: values.name,
+          label: { text: "Name" },
+          hint: { text: "How this appears on screen, for example Youth custody." },
+          classes: "govuk-input--width-20",
+          errorMessage: errors | selectattr("field", "equalto", "name") | first
+        }) }}
+
+        {{ govukCheckboxes({
+          name: "unmatchedNeedsReview",
+          items: [{
+            value: "true",
+            checked: values.unmatchedNeedsReview,
+            text: "Unmatched documents here should go to the needs review queue",
+            hint: { text: "Leave this unticked where no matching data exists, such as youth custody, so those documents are not treated as failures." }
+          }]
+        }) }}
+
+        <p class="govuk-hint">
+          New categories are created without a prison code, so documents are not recorded as
+          delivered to a prison. Changing that is a separate action.
+        </p>
+
+        {{ govukButton({ text: "Add category", preventDoubleClick: true, attributes: { "data-qa": "create-category" } }) }}
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
