@@ -10,8 +10,6 @@ export default configureAllowedScripts({
     'node_modules/fsevents@2.3.3': 'ALLOW',
     // Needed by esbuild for building the package
     'node_modules/esbuild@0.28.2': 'ALLOW',
-    // Native fsevents build required by playwright
-    'node_modules/playwright/node_modules/fsevents@2.3.2': 'ALLOW',
     // Native solution to quickly resolve module paths, used by jest and eslint
     'node_modules/unrs-resolver@1.12.2': 'ALLOW',
   },
