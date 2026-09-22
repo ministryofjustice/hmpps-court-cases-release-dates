@@ -1,0 +1,69 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+
+{% set pageTitle = applicationName + " - " + model.prisonName %}
+{% set pageId = "court-documents-week" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "All prisons", href: "/court-documents" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-4">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">{{ model.prisonName }}</h1>
+
+      <h2 class="govuk-heading-m">
+        <a class="govuk-link govuk-!-font-size-19" href="{{ model.previousHref }}" data-qa="previous-week">Previous week</a>
+        <span class="govuk-!-margin-left-4 govuk-!-margin-right-4">{{ model.label }}</span>
+        {% if model.nextHref %}
+          <a class="govuk-link govuk-!-font-size-19" href="{{ model.nextHref }}" data-qa="next-week">Next week</a>
+        {% endif %}
+      </h2>
+
+      {% if model.totalDocuments === 0 %}
+        {% set nothingMessage = "No court documents arrived for the people held here this week." %}
+        {% include "./_nothing.njk" %}
+      {% else %}
+
+        {% set dayItems = [] %}
+        {% for day in model.days %}
+          {% set titleHtml %}
+            {{ day.label }}
+            {% if day.isToday %}{{ govukTag({ text: "Today", classes: "govuk-tag--blue govuk-!-margin-left-2" }) }}{% endif %}
+          {% endset %}
+          {% set dayItems = (dayItems.push({
+            title: { html: titleHtml },
+            href: day.href,
+            status: { text: day.counts }
+          }), dayItems) %}
+        {% endfor %}
+
+        {{ govukTaskList({ items: dayItems, attributes: { "data-qa": "week-days" } }) }}
+
+      {% endif %}
+
+    </div>
+
+    <div class="govuk-grid-column-one-third">
+      <h2 class="govuk-heading-s govuk-!-margin-top-8">Recent weeks</h2>
+      <ul class="govuk-list govuk-list--spaced govuk-!-font-size-16" data-qa="recent-weeks">
+        {% for week in model.recentWeeks %}
+          <li>
+            {% if week.isCurrent %}
+              <strong>{{ week.label }}</strong>
+            {% else %}
+              <a class="govuk-link" href="{{ week.href }}">{{ week.label }}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}

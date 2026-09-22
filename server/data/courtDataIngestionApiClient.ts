@@ -3,6 +3,10 @@ import RestClient from './restClient'
 import { CourtDocument, CourtDocumentView } from '../@types/courtDataIngestionApi/types'
 import { BackfillListResponse, BackfillRunSummary, BackfillTriggerResponse } from '../model/backfill'
 import {
+  PrisonCourtDocumentDay,
+  PrisonCourtDocumentWeek,
+} from '../@types/courtDataIngestionApi/prisonCourtDocumentTypes'
+import {
   ClassifyAddressPreview,
   ClassifyAddressRequest,
   ClassifyAddressResult,
@@ -86,5 +90,21 @@ export default class CourtDataIngestionApiClient {
       path: '/admin/delivery-addresses',
       data: request,
     }) as Promise<ClassifyAddressResult>
+  }
+
+  async getPrisonCourtDocumentWeek(prisonCode: string, date: string): Promise<PrisonCourtDocumentWeek> {
+    const query = new URLSearchParams({ date })
+
+    return this.restClient.get({
+      path: `/court-document/prison/${encodeURIComponent(prisonCode)}/week?${query}`,
+    }) as Promise<PrisonCourtDocumentWeek>
+  }
+
+  async getPrisonCourtDocumentDay(prisonCode: string, date: string): Promise<PrisonCourtDocumentDay> {
+    const query = new URLSearchParams({ date })
+
+    return this.restClient.get({
+      path: `/court-document/prison/${encodeURIComponent(prisonCode)}/day?${query}`,
+    }) as Promise<PrisonCourtDocumentDay>
   }
 }

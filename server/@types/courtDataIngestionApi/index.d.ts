@@ -254,6 +254,40 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/court-document/prison/{prisonCode}/week': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Documents received in the week containing the date, Monday to Sunday */
+    get: operations['week']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/court-document/prison/{prisonCode}/day': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Documents received on a day, grouped by hearing */
+    get: operations['day']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/court-document/person/{personId}': {
     parameters: {
       query?: never
@@ -378,7 +412,7 @@ export interface components {
     }
     CourtCharge: {
       /** Format: uuid */
-      hmctsId: string
+      chargeId: string
       /** Format: int32 */
       listingNumber?: number | null
       offenceLegislation?: string | null
@@ -428,6 +462,67 @@ export interface components {
       hmppsCourtId?: string | null
       /** Format: date-time */
       hearingDate?: string | null
+      /** Format: uuid */
+      hearingId?: string | null
+    }
+    PrisonCourtDocument: {
+      /** Format: uuid */
+      prisonDocumentId: string
+      prisonerNumber: string
+      /** @enum {string} */
+      documentType: 'PRISON_COURT_REGISTER' | 'SENTENCING_WARRANT' | 'REMAND_WARRANT' | 'COMMON_PLATFORM_DOCUMENT'
+      caseReferences: string[]
+      addressedPrison?: string | null
+      /** Format: date-time */
+      receivedAt: string
+    }
+    PrisonCourtDocumentDayCount: {
+      /** Format: date */
+      date: string
+      /** Format: int32 */
+      documents: number
+      /** Format: int32 */
+      people: number
+    }
+    PrisonCourtDocumentWeek: {
+      prisonCode: string
+      /** Format: date */
+      from: string
+      /** Format: date */
+      to: string
+      /** Format: int32 */
+      rollSize: number
+      days: components['schemas']['PrisonCourtDocumentDayCount'][]
+      /** Format: int32 */
+      totalDocuments: number
+      documents?: components['schemas']['PrisonCourtDocument'][] | null
+      /** Format: date */
+      previousWeek: string
+      /** Format: date */
+      nextWeek?: string | null
+    }
+    PrisonCourtDocumentDay: {
+      prisonCode: string
+      /** Format: date */
+      date: string
+      /** Format: int32 */
+      rollSize: number
+      hearings: components['schemas']['PrisonCourtHearing'][]
+      documentsWithoutAHearing: components['schemas']['PrisonCourtDocument'][]
+      prisonerNumbers: string[]
+    }
+    PrisonCourtHearing: {
+      /** Format: uuid */
+      courtHearingId: string
+      prisonerNumber: string
+      /** Format: date */
+      hearingDate: string
+      hearingType: string
+      courtName: string
+      caseReferences: string[]
+      /** Format: date-time */
+      receivedAt: string
+      documents: components['schemas']['PrisonCourtDocument'][]
     }
     CourtDocument: {
       /** Format: uuid */
@@ -1058,6 +1153,54 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['CourtHearing']
+        }
+      }
+    }
+  }
+  week: {
+    parameters: {
+      query: {
+        date: string
+      }
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonCourtDocumentWeek']
+        }
+      }
+    }
+  }
+  day: {
+    parameters: {
+      query: {
+        date: string
+      }
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonCourtDocumentDay']
         }
       }
     }

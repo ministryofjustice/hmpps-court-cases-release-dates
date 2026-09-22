@@ -3,6 +3,10 @@ import { HmppsAuthClient } from '../data'
 import CourtDataIngestionApiClient from '../data/courtDataIngestionApiClient'
 import { BackfillListResponse, BackfillRunSummary, TriggerOutcome } from '../model/backfill'
 import {
+  PrisonCourtDocumentDay,
+  PrisonCourtDocumentWeek,
+} from '../@types/courtDataIngestionApi/prisonCourtDocumentTypes'
+import {
   ClassifyAddressPreview,
   ClassifyAddressRequest,
   ClassifyAddressResult,
@@ -89,11 +93,6 @@ export default class CourtDataIngestionService {
     }
   }
 
-  /**
-   * Document delivery uses the signed in user's token for the same reason backfill
-   * administration does: CDIA checks the support role on that token, so authorisation is
-   * enforced at the API and every mapping is attributable to a named person.
-   */
   public async getDeliveryAddresses(
     classified: boolean,
     categoryCode: string | undefined,
@@ -139,6 +138,24 @@ export default class CourtDataIngestionService {
       logger.error(error, `Failed to classify address ${request.emailAddress}`)
       throw error
     }
+  }
+
+  public async getPrisonCourtDocumentWeek(
+    prisonCode: string,
+    date: string,
+    username: string,
+  ): Promise<PrisonCourtDocumentWeek> {
+    const client = new CourtDataIngestionApiClient(await this.getSystemClientToken(username))
+    return client.getPrisonCourtDocumentWeek(prisonCode, date)
+  }
+
+  public async getPrisonCourtDocumentDay(
+    prisonCode: string,
+    date: string,
+    username: string,
+  ): Promise<PrisonCourtDocumentDay> {
+    const client = new CourtDataIngestionApiClient(await this.getSystemClientToken(username))
+    return client.getPrisonCourtDocumentDay(prisonCode, date)
   }
 
   private async getSystemClientToken(username: string): Promise<string> {

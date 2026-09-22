@@ -6,6 +6,7 @@ import {
   PrisonerRecallsResponse,
   RasPrisonerDocuments,
   SearchCourtCasesPage,
+  ThingsToDo,
   SentenceConsecutiveToDetailsResponse,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
@@ -46,6 +47,12 @@ export default class RemandAndSentencingApiClient {
         sentenceUuids: sentenceUuids.join(','),
       },
     })) as unknown as Promise<SentenceConsecutiveToDetailsResponse>
+  }
+
+  async getThingsToDo(prisonerId: string): Promise<ThingsToDo> {
+    return this.restClient.get({
+      path: `/things-to-do/prisoner/${encodeURIComponent(prisonerId)}`,
+    }) as Promise<ThingsToDo>
   }
 
   async searchCourtCases(

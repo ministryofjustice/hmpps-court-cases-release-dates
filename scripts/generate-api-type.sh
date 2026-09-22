@@ -59,7 +59,11 @@ while read -r name url out; do
   echo "==> $name"
   mkdir -p "$(dirname "$out")"
 
-  npx openapi-typescript "$url" \
+  OPENAPI_TS_VERSION=7.12.0
+
+  npx --yes \
+    -p "openapi-typescript@${OPENAPI_TS_VERSION}" \
+    openapi-typescript "$url" \
     | sed "s/\"/'/g" \
     | sed "s/;//g" \
     > "$out"

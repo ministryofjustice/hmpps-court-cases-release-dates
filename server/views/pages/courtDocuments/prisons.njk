@@ -1,0 +1,47 @@
+{% extends "../../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Court documents" %}
+{% set pageId = "court-documents-prisons" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-6">
+    <div class="govuk-grid-column-full">
+
+      <h1 class="govuk-heading-xl">Court documents</h1>
+
+      <p class="govuk-body">
+        What has arrived for the people each prison currently holds. A document follows the person,
+        so it leaves a prison's list when they do.
+      </p>
+
+      <div class="govuk-grid-row" data-qa="prison-list">
+        {% for column in prisons %}
+          <div class="govuk-grid-column-one-third">
+            <ul class="govuk-list govuk-!-font-size-16">
+              {% for prison in column %}
+                <li class="govuk-!-margin-bottom-1">
+                  <a class="govuk-link" href="/court-documents/{{ prison.prisonId }}" data-qa="prison-{{ prison.prisonId }}">
+                    {{ prison.prisonName }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="/unmatched-documents" data-qa="unmatched-link">Unmatched documents</a>
+      </p>
+      <p class="govuk-hint">
+        Documents that could not be matched to a person. They cannot appear in a prison's list
+        because they have no person to belong to.
+      </p>
+
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+<div class="govuk-!-margin-bottom-6" data-qa="summary">
+  <p class="govuk-body">
+    {{ list.doneCount }} of {{ list.cards | length }} recorded in remand and sentencing.
+    {{ list.autocompleteCount }} can be autocompleted and {{ list.byHandCount }} need recording by hand.
+  </p>
+
+  {% if list.uncheckedPeople > 0 %}
+    {{ govukWarningText({
+      text: "Remand and sentencing could not be checked for " + list.uncheckedPeople + (" person" if list.uncheckedPeople == 1 else " people") + ", so their next step may be wrong.",
+      attributes: { "data-qa": "lookup-failed" }
+    }) }}
+  {% endif %}
+</div>

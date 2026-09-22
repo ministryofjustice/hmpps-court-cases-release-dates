@@ -4,13 +4,19 @@ import {
   ApiRecall,
   getRecallType,
   ImmigrationDetention,
+  PagedCourtCase,
   RasPrisonerDocuments,
   Recall,
   SearchCourtCasesPage,
   SentenceConsecutiveToDetailsResponse,
+  ThingsToDo,
+  ThingToDo,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import { HmppsAuthClient } from '../data'
 import logger from '../../logger'
+import { PersonCourtContext } from '../model/hearingAction'
+
+const COURT_CASE_PAGE_SIZE = 100
 
 export default class RemandAndSentencingService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -31,6 +37,53 @@ export default class RemandAndSentencingService {
         }
       }
       throw error
+    }
+  }
+
+  /**
+   * What remand and sentencing knows about one person, for deciding what can be done with a
+   * hearing: the hearings it has offered to prefill, and the case references it already holds.
+   *
+   * Two calls rather than one because they answer different questions, and things-to-do only
+   * reports outstanding work. A hearing it does not offer could be already recorded, or unsupported,
+   * and the case search is what lets us tell whether there is a case to add an appearance to.
+   *
+   * Either call failing degrades the row to the manual route rather than failing the page: a
+   * missing action is worse than an action that takes someone the long way round.
+   */
+  public async getCourtContext(prisonerId: string, username: string): Promise<PersonCourtContext> {
+    const client = new RemandAndSentencingApiClient(await this.getSystemClientToken(username))
+
+    const [thingsToDo, cases] = await Promise.all([
+      client.getThingsToDo(prisonerId).catch((error: unknown): ThingsToDo | undefined => {
+        logger.error(error, `Could not read things to do for ${prisonerId}`)
+        return undefined
+      }),
+      client
+        .searchCourtCases(prisonerId, 'APPEARANCE_DATE_DESC', 0, COURT_CASE_PAGE_SIZE)
+        .catch((error: unknown): SearchCourtCasesPage | undefined => {
+          logger.error(error, `Could not read court cases for ${prisonerId}`)
+          return undefined
+        }),
+    ])
+
+    const casesByReference = new Map<string, string>()
+    const latestAppearanceDates = new Map<string, string>()
+    cases?.content?.forEach((courtCase: PagedCourtCase) => {
+      courtCase.caseReferences?.forEach((reference: string) => casesByReference.set(reference, courtCase.courtCaseUuid))
+      if (courtCase.latestCourtAppearance?.warrantDate) {
+        latestAppearanceDates.set(courtCase.courtCaseUuid, courtCase.latestCourtAppearance.warrantDate)
+      }
+    })
+
+    return {
+      offeredHearingIds: new Set(
+        thingsToDo?.thingsToDo?.map((thingToDo: ThingToDo) => thingToDo.hearingThingsToDoData.hearingId) ?? [],
+      ),
+      casesByReference,
+      autocompleteChecked: thingsToDo !== undefined,
+      latestAppearanceDates,
+      casesChecked: cases !== undefined,
     }
   }
 
