@@ -15,11 +15,6 @@ const asString = (value: unknown): string => (typeof value === 'string' ? value 
 const inCaseload = (user: Express.User, prisonCode: string): boolean =>
   user.caseLoads?.some(caseLoad => caseLoad.caseLoadId === prisonCode) ?? false
 
-/**
- * The unmatched documents page requires the support role, so only offer it to someone who has it.
- * The page checks for itself too: this is so the link goes when the rest of the section opens up
- * to prison staff.
- */
 const canSeeUnmatched = (user: Express.User): boolean =>
   (user.roles ?? []).includes(Role.COURTCASE_RELEASEDATE_SUPPORT.replace('ROLE_', ''))
 
@@ -29,10 +24,8 @@ function inBatches<T>(items: T[], size: number): T[][] {
   )
 }
 
-/** Enough to keep a day quick without opening fifty connections to remand and sentencing. */
 const LOOKUP_CONCURRENCY = 5
 
-/** Above this many prisons, the page offers a typeahead rather than a list. */
 const PICKER_THRESHOLD = 10
 
 export default class CourtDocumentRoutes {
@@ -59,7 +52,6 @@ export default class CourtDocumentRoutes {
     return res.render('pages/courtDocuments/prisons', {
       prisons: sorted,
       canSeeUnmatched: canSeeUnmatched(res.locals.user),
-      // A handful is a list to read; more than that is a list to search.
       picker: sorted.length > PICKER_THRESHOLD,
     })
   }
@@ -67,7 +59,6 @@ export default class CourtDocumentRoutes {
   public week: RequestHandler = async (req, res) => {
     const { username } = res.locals.user
     const prisonCode = asString(req.params.prisonCode).toUpperCase()
-    // The same rule as a person's pages, which every link on this page leads to.
     if (!inCaseload(res.locals.user, prisonCode)) throw FullPageError.notInCaseLoadError()
     const date = asString(req.query.date) || dayjs().format('YYYY-MM-DD')
 
@@ -85,7 +76,6 @@ export default class CourtDocumentRoutes {
   public day: RequestHandler = async (req, res) => {
     const { username } = res.locals.user
     const prisonCode = asString(req.params.prisonCode).toUpperCase()
-    // The same rule as a person's pages, which every link on this page leads to.
     if (!inCaseload(res.locals.user, prisonCode)) throw FullPageError.notInCaseLoadError()
     const date = asString(req.query.date)
 
@@ -96,7 +86,6 @@ export default class CourtDocumentRoutes {
     ])
     const prisonNames = new Map(prisons.map(prison => [prison.prisonId, prison.prisonName]))
 
-    // Names come with the day, from the roll, so only remand and sentencing has to be asked.
     const names = new Map(
       day.people
         .filter(person => person.lastName)
@@ -118,9 +107,7 @@ export default class CourtDocumentRoutes {
   private async courtContextFor(prisonerNumbers: string[], username: string): Promise<Map<string, PersonCourtContext>> {
     const contexts = new Map<string, PersonCourtContext>()
 
-    // Batches run one after another, so a busy day does not open fifty connections to remand and
-    // sentencing at the same time. Chained rather than looped because awaiting in a loop is what
-    // this is avoiding.
+
     await inBatches(prisonerNumbers, LOOKUP_CONCURRENCY).reduce(
       (previous, batch) =>
         previous.then(async () => {
@@ -132,8 +119,6 @@ export default class CourtDocumentRoutes {
                   await this.remandAndSentencingService.getCourtContext(prisonerNumber, username),
                 )
               } catch {
-                // Someone we could not ask about falls back to the manual route, which is true
-                // rather than optimistic, and leaves the rest of the page intact.
                 contexts.set(prisonerNumber, emptyCourtContext())
               }
             }),

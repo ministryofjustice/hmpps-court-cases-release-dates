@@ -19,7 +19,6 @@ export default class PrisonCourtDocumentWeekViewModel {
     return this.weekLink(dayjs(this.week.from).subtract(1, 'week')).href
   }
 
-  /** Null on the current week, so no forward link is rendered rather than one that is refused. */
   get nextHref(): string | null {
     const next = dayjs(this.week.from).add(1, 'week')
     return next.isAfter(this.thisMonday) ? null : this.weekLink(next).href
@@ -38,16 +37,10 @@ export default class PrisonCourtDocumentWeekViewModel {
     return `/court-documents/${this.week.prisonCode}`
   }
 
-  /** True when the week being viewed is older than the list reaches, so the list shows an ellipsis. */
   get olderThanListed(): boolean {
     return !this.recentWeeks.slice(0, RECENT_WEEKS).some(week => week.isCurrent)
   }
 
-  /**
-   * The current week first, then the ones before it, whichever week is being viewed. A week
-   * further back than the list reaches is added on the end, so the one you are on is always there,
-   * shown as plain text rather than a link.
-   */
   get recentWeeks(): { label: string; href: string; isCurrent: boolean }[] {
     const weeks = Array.from({ length: RECENT_WEEKS }, (_, back) =>
       this.weekLink(this.thisMonday.subtract(back, 'week')),

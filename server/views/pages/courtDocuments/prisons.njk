@@ -19,7 +19,6 @@
       </p>
 
       {% if picker %}
-        {# A real form, so the select and button work without javascript. The typeahead enhances it. #}
         <form method="get" action="/court-documents" data-qa="prison-picker">
           {% set prisonItems = [{ value: "", text: "" }] %}
           {% for prison in prisons %}

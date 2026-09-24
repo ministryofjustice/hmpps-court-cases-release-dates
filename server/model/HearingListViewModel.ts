@@ -2,7 +2,6 @@ import { PrisonCourtDocument, PrisonCourtHearing } from '../@types/courtDataInge
 import { emptyCourtContext, HearingActionType, PersonCourtContext } from './hearingAction'
 import ArrivalCard from './ArrivalCard'
 
-/** The cards for a day, or for a week small enough to list. */
 export default class HearingListViewModel {
   readonly cards: ArrivalCard[]
 
@@ -52,7 +51,6 @@ export default class HearingListViewModel {
     return this.cards.length - this.doneCount - this.autocompleteCount
   }
 
-  /** People remand and sentencing could not be asked about, so their next step may be wrong. */
   get uncheckedPeople(): number {
     return [...this.contextByPrisoner.values()].filter(
       context => !context.autocompleteChecked || context.casesChecked === false,

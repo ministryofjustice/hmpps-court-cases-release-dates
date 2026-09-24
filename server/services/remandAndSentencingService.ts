@@ -40,17 +40,6 @@ export default class RemandAndSentencingService {
     }
   }
 
-  /**
-   * What remand and sentencing knows about one person, for deciding what can be done with a
-   * hearing: the hearings it has offered to prefill, and the case references it already holds.
-   *
-   * Two calls rather than one because they answer different questions, and things-to-do only
-   * reports outstanding work. A hearing it does not offer could be already recorded, or unsupported,
-   * and the case search is what lets us tell whether there is a case to add an appearance to.
-   *
-   * Either call failing degrades the row to the manual route rather than failing the page: a
-   * missing action is worse than an action that takes someone the long way round.
-   */
   public async getCourtContext(prisonerId: string, username: string): Promise<PersonCourtContext> {
     const client = new RemandAndSentencingApiClient(await this.getSystemClientToken(username))
 

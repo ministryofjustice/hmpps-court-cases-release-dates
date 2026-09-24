@@ -52,11 +52,6 @@
 
       <h2 class="govuk-heading-m govuk-!-margin-bottom-2">{{ model.label }}</h2>
 
-      {#
-        The pagination component's own markup, without its block modifier: the macro adds that
-        whenever there are no numbered items, which stacks previous above next. Without it the
-        component lays them out side by side.
-      #}
       <nav class="govuk-pagination govuk-!-margin-bottom-4" aria-label="Weeks">
         <div class="govuk-pagination__prev">
           <a class="govuk-link govuk-pagination__link" href="{{ model.previousHref }}" rel="prev" data-qa="previous-week">

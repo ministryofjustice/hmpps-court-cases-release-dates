@@ -261,7 +261,6 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** Documents received in the week containing the date, Monday to Sunday */
     get: operations['week']
     put?: never
     post?: never
@@ -278,7 +277,6 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** Documents received on a day, grouped by hearing */
     get: operations['day']
     put?: never
     post?: never

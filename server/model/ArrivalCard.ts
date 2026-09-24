@@ -5,14 +5,8 @@ import config from '../config'
 
 const rasUrl = () => config.applications.remandAndSentencing.url
 
-/** What remand and sentencing will prefill from. */
 const WARRANTS = ['REMAND_WARRANT', 'SENTENCING_WARRANT']
 
-/**
- * Documents that belong together: a hearing where the link has resolved, otherwise one person's
- * documents sharing the same case references. Without the fallback, documents with no hearing
- * link read as an unrelated list even when a warrant and its court register arrived together.
- */
 export default class ArrivalCard {
   private constructor(
     private readonly hearing: PrisonCourtHearing | null,
@@ -80,7 +74,6 @@ export default class ArrivalCard {
     return this.hearing?.hearingType ?? null
   }
 
-  /** The documents on the card named together, as the heading of the block. */
   get heading(): string {
     const types = [...new Set(this.documentList.map(document => documentTypeText(document.documentType)))]
     return types.length === 1
@@ -103,7 +96,6 @@ export default class ArrivalCard {
       .reverse()[0]
   }
 
-  /** Linked to the case in remand and sentencing where it exists, as on the documents tab. */
   get caseReferences(): { reference: string; caseHref: string | null }[] {
     return this.references.map(reference => {
       const courtCaseUuid = this.context.casesByReference.get(reference)
@@ -116,13 +108,11 @@ export default class ArrivalCard {
     })
   }
 
-  /** The person's documents tab, filtered to the case, where downloading and marking already live. */
   get documentsHref(): string {
     const filter = this.references[0] ? `?byCaseReference=${encodeURIComponent(this.references[0])}` : ''
     return `/prisoner/${this.prisonerNumber}/documents${filter}`
   }
 
-  /** The number when prisoner search could not be asked, so the entry still identifies someone. */
   get personName(): string | null {
     return this.names.get(this.prisonerNumber) ?? null
   }
@@ -131,7 +121,6 @@ export default class ArrivalCard {
     return `/prisoner/${this.prisonerNumber}/overview`
   }
 
-  /** Only when the documents went to another prison: otherwise it is the same on every entry. */
   get addressedElsewhere(): string | null {
     const addressed = this.documentList.find(it => it.addressedPrison)?.addressedPrison
     if (!addressed || addressed === this.prisonCode) return null
@@ -147,11 +136,6 @@ export default class ArrivalCard {
     return recorded === 0 ? 'None recorded' : 'Some recorded'
   }
 
-  /**
-   * Recorded when every case on the hearing is in remand and sentencing and its latest appearance is
-   * on the hearing date. Only the latest appearance is known, so an older hearing can read as not
-   * done once a newer one is added, but for arrivals the latest is almost always this one.
-   */
   get isDone(): boolean {
     if (!this.hearing || this.references.length === 0) return false
     return this.references.every(reference => {
@@ -160,16 +144,9 @@ export default class ArrivalCard {
     })
   }
 
-  /**
-   * Why remand and sentencing is not offering to prefill this hearing. Absence from things-to-do
-   * carries no reason, so these are read from what arrived rather than from its decision: a
-   * hearing it will prefill needs a warrant and a single case reference. Where none of those
-   * explain it, the page says it does not know.
-   */
   get noAutocompleteBecause(): string | null {
     if (this.canAutocomplete || this.isDone) return null
 
-    // Not "record manually": if we could not ask, autocomplete may yet be offered.
     if (!this.context.autocompleteChecked) {
       return 'Autocomplete not checked: remand and sentencing could not be asked about this person.'
     }
