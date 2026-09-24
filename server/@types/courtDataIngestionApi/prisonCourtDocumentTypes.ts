@@ -36,11 +36,17 @@ export interface PrisonCourtDocumentWeek {
   nextWeek?: string
 }
 
+export interface PrisonCourtPerson {
+  prisonerNumber: string
+  firstName?: string
+  lastName?: string
+}
+
 export interface PrisonCourtDocumentDay {
   prisonCode: string
   date: string
   rollSize: number
   hearings: PrisonCourtHearing[]
   documentsWithoutAHearing: PrisonCourtDocument[]
-  prisonerNumbers: string[]
+  people: PrisonCourtPerson[]
 }

@@ -11,6 +11,7 @@ export default class PrisonCourtDocumentDayViewModel {
     readonly prisonName: string,
     contextByPrisoner: Map<string, PersonCourtContext>,
     prisonNames: Map<string, string> = new Map(),
+    names: Map<string, string> = new Map(),
   ) {
     this.list = new HearingListViewModel(
       day.hearings,
@@ -18,6 +19,7 @@ export default class PrisonCourtDocumentDayViewModel {
       day.prisonCode,
       contextByPrisoner,
       prisonNames,
+      names,
     )
   }
 

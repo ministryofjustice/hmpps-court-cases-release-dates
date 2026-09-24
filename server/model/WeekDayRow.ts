@@ -33,6 +33,7 @@ export default class WeekDayRow {
     return this.day.date === dayjs().format('YYYY-MM-DD')
   }
 
+  /** Empty days get no link: there is nothing behind them, and a dead link invites a click. */
   get href(): string | null {
     return this.isEmpty ? null : `/court-documents/${this.prisonCode}/day?date=${this.day.date}`
   }

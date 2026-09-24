@@ -50,6 +50,7 @@
     "@ministryofjustice/hmpps-prison-permissions-lib": "4.3.0",
     "@ministryofjustice/hmpps-rest-client": "^2.2.0",
     "@types/lodash": "^4.17.25",
+    "accessible-autocomplete": "3.0.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
     "body-parser": "^2.3.0",

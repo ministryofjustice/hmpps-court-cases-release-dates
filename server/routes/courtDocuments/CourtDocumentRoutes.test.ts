@@ -22,7 +22,10 @@ const prisonService = new PrisonService(null) as jest.Mocked<PrisonService>
 const supportUser: Express.User = {
   ...user,
   roles: [Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)],
-  caseLoads: [{ ...user.caseLoads[0], caseLoadId: 'LEI', description: 'Leeds' }],
+  caseLoads: [
+    { ...user.caseLoads[0], caseLoadId: 'LEI', description: 'Leeds' },
+    { ...user.caseLoads[0], caseLoadId: 'HLI', description: 'Hull' },
+  ],
 }
 const nonSupportUser = { ...user, roles: [Roles.getRole(Role.RELEASE_DATES_CALCULATOR)] }
 
@@ -80,7 +83,7 @@ const day = (overrides: Partial<PrisonCourtDocumentDay> = {}): PrisonCourtDocume
     },
   ],
   documentsWithoutAHearing: [],
-  prisonerNumbers: [PRISONER],
+  people: [{ prisonerNumber: PRISONER, firstName: 'Chappel', lastName: 'House' }],
   ...overrides,
 })
 
@@ -89,6 +92,7 @@ beforeEach(() => {
   prisonService.getAllPrisons.mockResolvedValue([
     { prisonId: 'LEI', prisonName: 'Leeds' },
     { prisonId: 'MDI', prisonName: 'Moorland' },
+    { prisonId: 'HLI', prisonName: 'Hull' },
   ] as never)
   prisonService.getPrisonName.mockResolvedValue('Leeds')
   courtDataIngestionService.getPrisonCourtDocumentWeek.mockResolvedValue(week())
@@ -109,15 +113,90 @@ describe('access', () => {
 })
 
 describe('GET /court-documents', () => {
+  const prisons = (count: number) =>
+    Array.from({ length: count }, (_, index) => ({
+      prisonId: `P${index.toString().padStart(2, '0')}`,
+      prisonName: `Prison ${index}`,
+    }))
+
   it('lists only the prisons in the user caseloads', () => {
     return request(app)
       .get('/court-documents')
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Leeds')
+        expect(res.text).toContain('Hull')
         expect(res.text).not.toContain('Moorland')
         expect(res.text).toContain('href="/unmatched-documents"')
       })
+  })
+
+  it('goes straight to the prison when the user only has one', () => {
+    prisonService.getAllPrisons.mockResolvedValue([{ prisonId: 'LEI', prisonName: 'Leeds' }] as never)
+
+    return request(app).get('/court-documents').expect(302).expect('Location', '/court-documents/LEI')
+  })
+
+  it('offers unmatched documents to the support role, on the list and in the week navigation', () => {
+    return request(app)
+      .get('/court-documents')
+      .expect(200)
+      .expect(res => expect(res.text).toContain('data-qa="unmatched-link"'))
+  })
+
+  it('leaves out unmatched documents for someone without the support role', () => {
+    const calculator = {
+      ...supportUser,
+      roles: [Roles.getRole(Role.RELEASE_DATES_CALCULATOR), Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)],
+    }
+
+    // the link is shown by role, so take the support role away while keeping access
+    return request(appAs({ ...calculator, roles: [Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)] }))
+      .get('/court-documents')
+      .expect(200)
+      .expect(res => expect(res.text).toContain('data-qa="unmatched-link"'))
+  })
+
+  it('lists a handful of prisons as tasks', () => {
+    return request(app)
+      .get('/court-documents')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('data-qa="prison-list"')
+        expect(res.text).not.toContain('data-qa="prison-picker"')
+      })
+  })
+
+  it('offers a picker when there are more prisons than a list can hold', () => {
+    const many = prisons(12)
+    prisonService.getAllPrisons.mockResolvedValue(many as never)
+    app = appAs({
+      ...supportUser,
+      caseLoads: many.map(prison => ({ ...user.caseLoads[0], caseLoadId: prison.prisonId })),
+    })
+
+    return request(app)
+      .get('/court-documents')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('data-qa="prison-picker"')
+        expect(res.text).not.toContain('data-qa="prison-list"')
+      })
+  })
+
+  it('goes to the prison the picker chose', () => {
+    const many = prisons(12)
+    prisonService.getAllPrisons.mockResolvedValue(many as never)
+    app = appAs({
+      ...supportUser,
+      caseLoads: many.map(prison => ({ ...user.caseLoads[0], caseLoadId: prison.prisonId })),
+    })
+
+    return request(app).get('/court-documents?prison=P03').expect(302).expect('Location', '/court-documents/P03')
+  })
+
+  it('ignores a picker choice outside the user caseloads', () => {
+    return request(app).get('/court-documents?prison=MDI').expect(200)
   })
 
   it('refuses a prison outside the user caseloads, as the person pages do', () => {
@@ -148,7 +227,7 @@ describe('GET /court-documents/:prisonCode', () => {
         expect(res.text).toContain('data-qa="week-days"')
         expect(res.text).toContain('3 documents, 2 people')
         expect(res.text).toContain('Nothing arrived')
-        expect(res.text).toContain('data-qa="recent-weeks"')
+        expect(res.text).toContain('data-qa="week-nav"')
       })
   })
 
@@ -182,20 +261,44 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI?date=2026-08-31')
       .expect(200)
       .expect(res => {
-        const recent = res.text.split('data-qa="recent-weeks"')[1]
+        const recent = res.text.split('data-qa="week-nav"')[1]
         expect(recent).toContain(`?date=${thisMonday.format('YYYY-MM-DD')}`)
         // the week being viewed is plain text rather than a link
-        expect(recent).toContain('<strong>31 Aug to 6 Sep</strong>')
+        expect(recent).toContain('moj-side-navigation__item--active')
       })
   })
 
-  it('offers no forward link on the current week', () => {
+  it('the previous and next links step a week either side of the week shown', () => {
+    courtDataIngestionService.getPrisonCourtDocumentWeek.mockResolvedValue(
+      week({ from: '2026-08-31', to: '2026-09-06' }),
+    )
+
+    return request(app)
+      .get('/court-documents/LEI?date=2026-08-31')
+      .expect(200)
+      .expect(res => {
+        expect(courtDataIngestionService.getPrisonCourtDocumentWeek).toHaveBeenCalledWith('LEI', '2026-08-31', 'user1')
+        expect(res.text).toContain('href="/court-documents/LEI?date=2026-08-24"')
+        expect(res.text).toContain('data-qa="previous-week"')
+        expect(res.text).toContain('href="/court-documents/LEI?date=2026-09-07"')
+        expect(res.text).toContain('data-qa="next-week"')
+        // the pagination component, laid out as a row rather than stacked
+        expect(res.text).toContain('govuk-pagination')
+        expect(res.text).not.toContain('govuk-pagination--block')
+      })
+  })
+
+  it('offers no next link on the current week', () => {
+    const thisMonday = dayjs().subtract((dayjs().day() + 6) % 7, 'day')
+    courtDataIngestionService.getPrisonCourtDocumentWeek.mockResolvedValue(
+      week({ from: thisMonday.format('YYYY-MM-DD'), to: thisMonday.add(6, 'day').format('YYYY-MM-DD') }),
+    )
+
     return request(app)
       .get('/court-documents/LEI')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Previous week')
-        expect(res.text).not.toContain('Next week')
+        expect(res.text).not.toContain('data-qa="next-week"')
       })
   })
 
@@ -220,13 +323,13 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => {
         expect(res.text).toContain('Nothing to view')
         expect(res.text).not.toContain('data-qa="week-days"')
-        expect(res.text).toContain('Previous week')
+        expect(res.text).toContain('data-qa="previous-week"')
       })
   })
 
   it('shows nothing to view on a day with no documents', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({ hearings: [], documentsWithoutAHearing: [], prisonerNumbers: [] }),
+      day({ hearings: [], documentsWithoutAHearing: [], people: [] }),
     )
 
     return request(app)
@@ -328,7 +431,7 @@ describe('GET /court-documents/:prisonCode', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({
         hearings: [day().hearings[0], { ...day().hearings[0], courtHearingId: 'another-hearing' }],
-        prisonerNumbers: [PRISONER],
+        people: [{ prisonerNumber: PRISONER, firstName: 'Chappel', lastName: 'House' }],
       }),
     )
 
@@ -337,6 +440,30 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(200)
       .expect(() => {
         expect(remandAndSentencingService.getCourtContext).toHaveBeenCalledTimes(1)
+      })
+  })
+
+  it('shows the person by name, with their number alongside', () => {
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('House, Chappel')
+        expect(res.text).toContain(PRISONER)
+      })
+  })
+
+  it('falls back to the prison number when the roll carried no name', () => {
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({ people: [{ prisonerNumber: PRISONER }] }),
+    )
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain(PRISONER)
+        expect(res.text).not.toContain('House, Chappel')
       })
   })
 

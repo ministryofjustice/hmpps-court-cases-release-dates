@@ -53,7 +53,8 @@
         {% set personHtml %}
           <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Person</p>
           <p class="govuk-body govuk-!-margin-bottom-2">
-            <a class="govuk-link" href="{{ card.personHref }}">{{ card.prisonerNumber }}</a>
+            <a class="govuk-link" href="{{ card.personHref }}">{{ card.personName or card.prisonerNumber }}</a>
+            {% if card.personName %}<span class="govuk-hint govuk-!-display-inline govuk-!-margin-left-1">{{ card.prisonerNumber }}</span>{% endif %}
           </p>
         {% endset %}
 

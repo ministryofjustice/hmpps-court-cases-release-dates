@@ -1,9 +1,11 @@
 import { RequestHandler } from 'express'
 import dayjs from 'dayjs'
+import { convertToTitleCase } from '../../utils/utils'
 import FullPageError from '../../model/FullPageError'
 import CourtDataIngestionService from '../../services/courtDataIngestionService'
 import RemandAndSentencingService from '../../services/remandAndSentencingService'
 import PrisonService from '../../services/prisonService'
+import { Role } from '../../@types/roles'
 import PrisonCourtDocumentWeekViewModel from '../../model/PrisonCourtDocumentWeekViewModel'
 import PrisonCourtDocumentDayViewModel from '../../model/PrisonCourtDocumentDayViewModel'
 import { emptyCourtContext, PersonCourtContext } from '../../model/hearingAction'
@@ -13,21 +15,25 @@ const asString = (value: unknown): string => (typeof value === 'string' ? value 
 const inCaseload = (user: Express.User, prisonCode: string): boolean =>
   user.caseLoads?.some(caseLoad => caseLoad.caseLoadId === prisonCode) ?? false
 
+/**
+ * The unmatched documents page requires the support role, so only offer it to someone who has it.
+ * The page checks for itself too: this is so the link goes when the rest of the section opens up
+ * to prison staff.
+ */
+const canSeeUnmatched = (user: Express.User): boolean =>
+  (user.roles ?? []).includes(Role.COURTCASE_RELEASEDATE_SUPPORT.replace('ROLE_', ''))
+
 function inBatches<T>(items: T[], size: number): T[][] {
   return Array.from({ length: Math.ceil(items.length / size) }, (_, batch) =>
     items.slice(batch * size, (batch + 1) * size),
   )
 }
 
-/** Splits a sorted list down columns, so it still reads alphabetically top to bottom. */
-function intoColumns<T>(items: T[], columns: number): T[][] {
-  const perColumn = Math.ceil(items.length / columns)
-
-  return Array.from({ length: columns }, (_, column) => items.slice(column * perColumn, (column + 1) * perColumn))
-}
-
-/** Enough to keep a day quick without opening fifty connections to remand and sentencing at once. */
+/** Enough to keep a day quick without opening fifty connections to remand and sentencing. */
 const LOOKUP_CONCURRENCY = 5
+
+/** Above this many prisons, the page offers a typeahead rather than a list. */
+const PICKER_THRESHOLD = 10
 
 export default class CourtDocumentRoutes {
   constructor(
@@ -43,7 +49,19 @@ export default class CourtDocumentRoutes {
       .filter(prison => inCaseload(res.locals.user, prison.prisonId))
       .sort((a, b) => a.prisonName.localeCompare(b.prisonName))
 
-    return res.render('pages/courtDocuments/prisons', { prisons: intoColumns(sorted, 3) })
+    // Where the picker was used, or there is only one prison to pick, go straight there.
+    const chosen = asString(req.query.prison).toUpperCase()
+    if (chosen && sorted.some(prison => prison.prisonId === chosen)) {
+      return res.redirect(`/court-documents/${chosen}`)
+    }
+    if (sorted.length === 1) return res.redirect(`/court-documents/${sorted[0].prisonId}`)
+
+    return res.render('pages/courtDocuments/prisons', {
+      prisons: sorted,
+      canSeeUnmatched: canSeeUnmatched(res.locals.user),
+      // A handful is a list to read; more than that is a list to search.
+      picker: sorted.length > PICKER_THRESHOLD,
+    })
   }
 
   public week: RequestHandler = async (req, res) => {
@@ -60,6 +78,7 @@ export default class CourtDocumentRoutes {
 
     return res.render('pages/courtDocuments/week', {
       model: new PrisonCourtDocumentWeekViewModel(week, prisonName),
+      canSeeUnmatched: canSeeUnmatched(res.locals.user),
     })
   }
 
@@ -77,12 +96,22 @@ export default class CourtDocumentRoutes {
     ])
     const prisonNames = new Map(prisons.map(prison => [prison.prisonId, prison.prisonName]))
 
-    // Asked once per person rather than once per hearing: the API returns the day's people
-    // deduplicated for exactly this.
-    const contextByPrisoner = await this.courtContextFor(day.prisonerNumbers, username)
+    // Names come with the day, from the roll, so only remand and sentencing has to be asked.
+    const names = new Map(
+      day.people
+        .filter(person => person.lastName)
+        .map(person => [
+          person.prisonerNumber,
+          `${convertToTitleCase(person.lastName)}, ${convertToTitleCase(person.firstName ?? '')}`.replace(/, $/, ''),
+        ]),
+    )
+    const contextByPrisoner = await this.courtContextFor(
+      day.people.map(person => person.prisonerNumber),
+      username,
+    )
 
     return res.render('pages/courtDocuments/day', {
-      model: new PrisonCourtDocumentDayViewModel(day, prisonName, contextByPrisoner, prisonNames),
+      model: new PrisonCourtDocumentDayViewModel(day, prisonName, contextByPrisoner, prisonNames, names),
     })
   }
 

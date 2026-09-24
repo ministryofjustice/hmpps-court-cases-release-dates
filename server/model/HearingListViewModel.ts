@@ -2,6 +2,7 @@ import { PrisonCourtDocument, PrisonCourtHearing } from '../@types/courtDataInge
 import { emptyCourtContext, HearingActionType, PersonCourtContext } from './hearingAction'
 import ArrivalCard from './ArrivalCard'
 
+/** The cards for a day, or for a week small enough to list. */
 export default class HearingListViewModel {
   readonly cards: ArrivalCard[]
 
@@ -11,6 +12,7 @@ export default class HearingListViewModel {
     prisonCode: string,
     private readonly contextByPrisoner: Map<string, PersonCourtContext>,
     prisonNames: Map<string, string> = new Map(),
+    names: Map<string, string> = new Map(),
   ) {
     const contextFor = (prisonerNumber: string) => contextByPrisoner.get(prisonerNumber) ?? emptyCourtContext()
 
@@ -22,10 +24,10 @@ export default class HearingListViewModel {
 
     this.cards = [
       ...hearings.map(hearing =>
-        ArrivalCard.forHearing(hearing, prisonCode, contextFor(hearing.prisonerNumber), prisonNames),
+        ArrivalCard.forHearing(hearing, prisonCode, contextFor(hearing.prisonerNumber), prisonNames, names),
       ),
       ...[...unlinkedGroups.values()].map(documents =>
-        ArrivalCard.forUnlinked(documents, prisonCode, contextFor(documents[0].prisonerNumber), prisonNames),
+        ArrivalCard.forUnlinked(documents, prisonCode, contextFor(documents[0].prisonerNumber), prisonNames, names),
       ),
     ].sort((a, b) => b.receivedAt.localeCompare(a.receivedAt))
   }
@@ -50,6 +52,7 @@ export default class HearingListViewModel {
     return this.cards.length - this.doneCount - this.autocompleteCount
   }
 
+  /** People remand and sentencing could not be asked about, so their next step may be wrong. */
   get uncheckedPeople(): number {
     return [...this.contextByPrisoner.values()].filter(
       context => !context.autocompleteChecked || context.casesChecked === false,

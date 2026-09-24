@@ -1,12 +1,16 @@
 {% extends "../../partials/layout.njk" %}
 
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+
 {% set pageTitle = applicationName + " - Court documents" %}
 {% set pageId = "court-documents-prisons" %}
 
 {% block content %}
 
   <div class="govuk-grid-row govuk-!-padding-top-6">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
 
       <h1 class="govuk-heading-xl">Court documents</h1>
 
@@ -14,31 +18,53 @@
         Recently arrived notifications from HMCTS Common Platform
       </p>
 
-      <div class="govuk-grid-row" data-qa="prison-list">
-        {% for column in prisons %}
-          <div class="govuk-grid-column-one-third">
-            <ul class="govuk-list govuk-!-font-size-16">
-              {% for prison in column %}
-                <li class="govuk-!-margin-bottom-1">
-                  <a class="govuk-link" href="/court-documents/{{ prison.prisonId }}" data-qa="prison-{{ prison.prisonId }}">
-                    {{ prison.prisonName }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
+      {% if picker %}
+        {# A real form, so the select and button work without javascript. The typeahead enhances it. #}
+        <form method="get" action="/court-documents" data-qa="prison-picker">
+          {% set prisonItems = [{ value: "", text: "" }] %}
+          {% for prison in prisons %}
+            {% set prisonItems = (prisonItems.push({ value: prison.prisonId, text: prison.prisonName }), prisonItems) %}
+          {% endfor %}
+
+          {{ govukSelect({
+            id: "prison-picker",
+            name: "prison",
+            label: { text: "Which prison?", classes: "govuk-label--s" },
+            items: prisonItems
+          }) }}
+
+          {{ govukButton({ text: "Continue" }) }}
+        </form>
+      {% else %}
+        {% set prisonItems = [] %}
+        {% for prison in prisons %}
+          {% set prisonItems = (prisonItems.push({
+            title: { text: prison.prisonName },
+            href: "/court-documents/" + prison.prisonId,
+            status: { text: prison.prisonId }
+          }), prisonItems) %}
         {% endfor %}
-      </div>
 
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        {{ govukTaskList({ items: prisonItems, attributes: { "data-qa": "prison-list" } }) }}
+      {% endif %}
 
-      <p class="govuk-body">
-        <a class="govuk-link" href="/unmatched-documents" data-qa="unmatched-link">Unmatched documents</a>
-      </p>
-      <p class="govuk-hint">
-        Documents that could not be matched to a person. They cannot appear in a prison's list
-        because they have no person to belong to.
-      </p>
+      {% if canSeeUnmatched %}
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <h2 class="govuk-heading-m">Documents with no person</h2>
+        <p class="govuk-body">
+          Some documents cannot be matched to anyone, so they belong to no prison and appear in no
+          list above. They need looking at separately.
+        </p>
+        <p class="govuk-body">
+          {{ govukButton({
+            text: "Unmatched documents",
+            href: "/unmatched-documents",
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "unmatched-link" }
+          }) }}
+        </p>
+      {% endif %}
 
     </div>
   </div>
