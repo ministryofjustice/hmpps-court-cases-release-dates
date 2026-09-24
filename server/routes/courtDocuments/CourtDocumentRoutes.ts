@@ -107,7 +107,6 @@ export default class CourtDocumentRoutes {
   private async courtContextFor(prisonerNumbers: string[], username: string): Promise<Map<string, PersonCourtContext>> {
     const contexts = new Map<string, PersonCourtContext>()
 
-
     await inBatches(prisonerNumbers, LOOKUP_CONCURRENCY).reduce(
       (previous, batch) =>
         previous.then(async () => {
