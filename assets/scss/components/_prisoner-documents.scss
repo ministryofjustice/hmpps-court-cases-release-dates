@@ -61,3 +61,8 @@
 .prisoner-doc-case-reference, .govuk-checkboxes__label {
   word-wrap:break-word;
 }
+
+.document--autocomplete .document__inner {
+  border-left: 4px solid govuk-colour("green");
+  padding-left: govuk-spacing(3);
+}

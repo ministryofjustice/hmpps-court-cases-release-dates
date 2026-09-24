@@ -81,3 +81,5 @@ export type PeriodLengthLegacyData = components['schemas']['PeriodLengthLegacyDa
 
 // Client Types
 export type PagedAppearancePeriodLength = components['schemas']['PagedAppearancePeriodLength']
+export type ThingsToDo = components['schemas']['ThingsToDo']
+export type ThingToDo = components['schemas']['ThingToDo']

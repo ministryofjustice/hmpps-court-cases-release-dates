@@ -1,0 +1,98 @@
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+
+
+<hr class="govuk-section-break govuk-section-break--visible">
+
+{% macro field(label, value) %}
+  <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{ label }}</p>
+  <p class="govuk-body govuk-!-margin-bottom-2">{{ value }}</p>
+{% endmacro %}
+
+<div data-qa="arrival-list">
+  {% for card in list.cards %}
+    <div class="document{% if card.canAutocomplete %} document--autocomplete{% endif %}" data-qa="arrival">
+      <div class="document__inner">
+
+        <div class="document__header">
+          <div class="document__main">
+            <p class="govuk-body govuk-!-margin-bottom-1">
+              <a class="govuk-link govuk-link--no-visited-state prisoner-doc-link" href="{{ card.documentsHref }}">{{ card.heading }}</a>
+              <span class="document__meta govuk-!-margin-left-2">
+                {{ card.documentCount }} {{ "document" if card.documentCount == 1 else "documents" }}
+              </span>
+            </p>
+          </div>
+          <div class="document__tag">
+            {{ govukButton({
+              text: card.action.text,
+              href: card.action.href,
+              classes: "govuk-!-margin-bottom-0" + ("" if card.canAutocomplete else " govuk-button--secondary"),
+              attributes: { "data-qa": "action-" + card.action.type }
+            }) }}
+          </div>
+        </div>
+
+        {% set caseReferenceHtml %}
+          <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Case reference</p>
+          <p class="govuk-body govuk-!-margin-bottom-2 prisoner-doc-case-reference" data-qa="case-reference">
+            {% for case in card.caseReferences %}
+              {% if case.caseHref %}
+                <a class="govuk-link" href="{{ case.caseHref }}">{{ case.reference }}</a>
+              {% else %}
+                {{ case.reference }}
+              {% endif %}
+              {% if not loop.last %}<br>{% endif %}
+            {% else %}
+              Not entered
+            {% endfor %}
+          </p>
+        {% endset %}
+
+        {% set personHtml %}
+          <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Person</p>
+          <p class="govuk-body govuk-!-margin-bottom-2">
+            <a class="govuk-link" href="{{ card.personHref }}">{{ card.personName or card.prisonerNumber }}</a>
+            {% if card.personName %}<span class="govuk-hint govuk-!-display-inline govuk-!-margin-left-1">{{ card.prisonerNumber }}</span>{% endif %}
+          </p>
+        {% endset %}
+
+        {% if card.hasHearing %}
+          <div class="govuk-grid-row document__row">
+            <div class="govuk-grid-column-one-third">{{ caseReferenceHtml | safe }}</div>
+            <div class="govuk-grid-column-one-third" data-qa="court-case">{{ field("Court case", card.courtCase) }}</div>
+            <div class="govuk-grid-column-one-third">{{ field("Court name", card.courtName) }}</div>
+          </div>
+          <div class="govuk-grid-row document__row">
+            <div class="govuk-grid-column-one-third">{{ field("Hearing date", card.hearingDate | date) }}</div>
+            <div class="govuk-grid-column-one-third">{{ field("Hearing type", card.hearingType) }}</div>
+            <div class="govuk-grid-column-one-third">{{ field("Date added", card.receivedAt | dateTimeShort) }}</div>
+          </div>
+        {% else %}
+          {# No hearing link, so there is no court, hearing date or hearing type to show. #}
+          <div class="govuk-grid-row document__row">
+            <div class="govuk-grid-column-one-third">{{ caseReferenceHtml | safe }}</div>
+            <div class="govuk-grid-column-one-third" data-qa="court-case">{{ field("Court case", card.courtCase) }}</div>
+            <div class="govuk-grid-column-one-third">{{ field("Date added", card.receivedAt | dateTimeShort) }}</div>
+          </div>
+        {% endif %}
+
+        <div class="govuk-grid-row document__row">
+          <div class="govuk-grid-column-one-third">{{ personHtml | safe }}</div>
+          {% if card.addressedElsewhere %}
+            <div class="govuk-grid-column-one-third" data-qa="addressed-to">{{ field("Addressed to", card.addressedElsewhere) }}</div>
+          {% endif %}
+        </div>
+
+        {% if card.noAutocompleteBecause %}
+          <p class="govuk-hint govuk-body-s govuk-!-margin-bottom-2" data-qa="no-autocomplete">
+            {{ card.noAutocompleteBecause }}
+          </p>
+        {% endif %}
+
+      </div>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--visible">
+  {% endfor %}
+</div>

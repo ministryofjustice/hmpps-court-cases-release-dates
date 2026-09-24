@@ -9,6 +9,10 @@ export default class PrisonRegisterApiClient {
     this.restClient = new RestClient('Prison Register API', config.apis.prisonRegisterApi as ApiConfig, token)
   }
 
+  async getAllPrisons(): Promise<Prison[]> {
+    return this.restClient.get({ path: '/prisons' }) as Promise<Prison[]>
+  }
+
   async getPrisonDetails(prisonId: string): Promise<Prison[]> {
     const searchObj: PrisonsSearchRequest = { prisonIds: [prisonId] }
     return this.restClient.post({

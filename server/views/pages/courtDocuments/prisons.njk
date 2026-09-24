@@ -1,0 +1,71 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+
+{% set pageTitle = applicationName + " - Court documents" %}
+{% set pageId = "court-documents-prisons" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-6">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">Court documents</h1>
+
+      <p class="govuk-body">
+        Recently arrived notifications from HMCTS Common Platform
+      </p>
+
+      {% if picker %}
+        <form method="get" action="/court-documents" data-qa="prison-picker">
+          {% set prisonItems = [{ value: "", text: "" }] %}
+          {% for prison in prisons %}
+            {% set prisonItems = (prisonItems.push({ value: prison.prisonId, text: prison.prisonName }), prisonItems) %}
+          {% endfor %}
+
+          {{ govukSelect({
+            id: "prison-picker",
+            name: "prison",
+            label: { text: "Which prison?", classes: "govuk-label--s" },
+            items: prisonItems
+          }) }}
+
+          {{ govukButton({ text: "Continue" }) }}
+        </form>
+      {% else %}
+        {% set prisonItems = [] %}
+        {% for prison in prisons %}
+          {% set prisonItems = (prisonItems.push({
+            title: { text: prison.prisonName },
+            href: "/court-documents/" + prison.prisonId,
+            status: { text: prison.prisonId }
+          }), prisonItems) %}
+        {% endfor %}
+
+        {{ govukTaskList({ items: prisonItems, attributes: { "data-qa": "prison-list" } }) }}
+      {% endif %}
+
+      {% if canSeeUnmatched %}
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <h2 class="govuk-heading-m">Documents with no person</h2>
+        <p class="govuk-body">
+          Some documents cannot be matched to anyone, so they belong to no prison and appear in no
+          list above. They need looking at separately.
+        </p>
+        <p class="govuk-body">
+          {{ govukButton({
+            text: "Unmatched documents",
+            href: "/unmatched-documents",
+            classes: "govuk-button--secondary",
+            attributes: { "data-qa": "unmatched-link" }
+          }) }}
+        </p>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock %}

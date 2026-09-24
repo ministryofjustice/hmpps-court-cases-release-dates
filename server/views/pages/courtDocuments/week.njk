@@ -1,0 +1,102 @@
+{% extends "../../partials/layout.njk" %}
+
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+{% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
+
+{% set pageTitle = applicationName + " - " + model.prisonName %}
+{% set pageId = "court-documents-week" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "All prisons", href: "/court-documents" }) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row govuk-!-padding-top-4">
+    <div class="govuk-grid-column-one-quarter">
+      {% set elsewhereItems = [{ text: "Choose a prison", href: "/court-documents" }] %}
+      {% if canSeeUnmatched %}
+        {% set elsewhereItems = (elsewhereItems.push({ text: "Unmatched documents", href: "/unmatched-documents" }), elsewhereItems) %}
+      {% endif %}
+
+      {% set weekItems = [] %}
+      {% for week in model.recentWeeks %}
+        {% set weekItems = (weekItems.push({
+          text: week.label,
+          href: week.href,
+          active: week.isCurrent
+        }), weekItems) %}
+      {% endfor %}
+
+      {{ mojSideNavigation({
+        label: "Weeks",
+        sections: [
+          { heading: { text: "Weeks" }, items: weekItems },
+          { heading: { text: "Court documents" }, items: elsewhereItems }
+        ],
+        attributes: { "data-qa": "week-nav" }
+      }) }}
+
+      {% if model.olderThanListed %}
+        <p class="govuk-body-s govuk-!-margin-left-3" data-qa="older-weeks">
+          &hellip; <a class="govuk-link" href="{{ model.latestHref }}">Back to the latest week</a>
+        </p>
+      {% endif %}
+    </div>
+
+    <div class="govuk-grid-column-three-quarters">
+
+      <h1 class="govuk-heading-xl">{{ model.prisonName }}</h1>
+
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">{{ model.label }}</h2>
+
+      <nav class="govuk-pagination govuk-!-margin-bottom-4" aria-label="Weeks">
+        <div class="govuk-pagination__prev">
+          <a class="govuk-link govuk-pagination__link" href="{{ model.previousHref }}" rel="prev" data-qa="previous-week">
+            <svg class="govuk-pagination__icon govuk-pagination__icon--prev" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+              <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+            </svg>
+            <span class="govuk-pagination__link-title">Previous<span class="govuk-visually-hidden"> week</span></span>
+          </a>
+        </div>
+        {% if model.nextHref %}
+          <div class="govuk-pagination__next">
+            <a class="govuk-link govuk-pagination__link" href="{{ model.nextHref }}" rel="next" data-qa="next-week">
+              <span class="govuk-pagination__link-title">Next<span class="govuk-visually-hidden"> week</span></span>
+              <svg class="govuk-pagination__icon govuk-pagination__icon--next" xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+                <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+              </svg>
+            </a>
+          </div>
+        {% endif %}
+      </nav>
+
+      {% if model.totalDocuments === 0 %}
+        {% set nothingMessage = "No court documents arrived for the people held here this week." %}
+        {% include "./_nothing.njk" %}
+      {% else %}
+
+        {% set dayItems = [] %}
+        {% for day in model.days %}
+          {% set titleHtml %}
+            {{ day.label }}
+            {% if day.isToday %}{{ govukTag({ text: "Today", classes: "govuk-tag--blue govuk-!-margin-left-2" }) }}{% endif %}
+          {% endset %}
+          {% set dayItems = (dayItems.push({
+            title: { html: titleHtml },
+            href: day.href,
+            status: { text: day.counts }
+          }), dayItems) %}
+        {% endfor %}
+
+        {{ govukTaskList({ items: dayItems, attributes: { "data-qa": "week-days" } }) }}
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+{% endblock %}
