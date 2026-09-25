@@ -632,7 +632,7 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('says why autocomplete is not offered when the hearing has several case references', () => {
+  it('states the facts remand and sentencing decides on: several case references', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
     )
@@ -646,11 +646,11 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Record manually: the hearing has more than one case reference')
+        expect(res.text).toContain('Several case references')
       })
   })
 
-  it('says why autocomplete is not offered when no warrant arrived', () => {
+  it('states the facts remand and sentencing decides on: no warrant', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({
         hearings: [
@@ -671,11 +671,11 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Record manually: no warrant arrived')
+        expect(res.text).toContain('No warrant')
       })
   })
 
-  it('admits it does not know why when nothing about the documents explains it', () => {
+  it('states what arrived even when everything looks eligible', () => {
     remandAndSentencingService.getCourtContext.mockResolvedValue({
       offeredHearingIds: new Set(),
       casesByReference: new Map(),
@@ -686,20 +686,55 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Record manually: remand and sentencing is not offering this hearing')
+        expect(res.text).toContain('Remand warrant')
+        expect(res.text).toContain('data-qa="facts"')
       })
   })
 
-  it('says autocomplete could not be checked on the entry as well as in the summary', () => {
+  it('says on the entry when remand and sentencing could not be checked', () => {
     remandAndSentencingService.getCourtContext.mockRejectedValue(new Error('forbidden'))
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain(
-          'Autocomplete not checked: remand and sentencing could not be asked about this person',
-        )
+        expect(res.text).toContain('Remand and sentencing not checked')
+      })
+  })
+
+  it('marks an existing case and appearance as facts', () => {
+    remandAndSentencingService.getCourtContext.mockResolvedValue({
+      offeredHearingIds: new Set(),
+      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
+      autocompleteChecked: true,
+      latestAppearanceDates: new Map([['case-uuid-1', '2026-09-08']]),
+      casesChecked: true,
+    })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Existing case')
+        expect(res.text).toContain('Existing appearance')
+      })
+  })
+
+  it('marks an existing case and its appearance as facts', () => {
+    remandAndSentencingService.getCourtContext.mockResolvedValue({
+      offeredHearingIds: new Set(),
+      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
+      autocompleteChecked: true,
+      latestAppearanceDates: new Map([['case-uuid-1', '2026-09-08']]),
+      casesChecked: true,
+    })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Existing case reference')
+        expect(res.text).toContain('Existing appearance')
       })
   })
 

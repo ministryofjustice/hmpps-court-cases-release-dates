@@ -1,4 +1,5 @@
 
+{% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 
@@ -85,11 +86,12 @@
           {% endif %}
         </div>
 
-        {% if card.noAutocompleteBecause %}
-          <p class="govuk-hint govuk-body-s govuk-!-margin-bottom-2" data-qa="no-autocomplete">
-            {{ card.noAutocompleteBecause }}
-          </p>
-        {% endif %}
+        <p class="govuk-!-margin-bottom-2" data-qa="facts">
+          <span class="govuk-visually-hidden">What arrived and what is already recorded:</span>
+          {% for fact in card.facts %}
+            {{ govukTag({ text: fact, classes: "govuk-tag--grey govuk-!-margin-right-1" }) }}
+          {% endfor %}
+        </p>
 
       </div>
     </div>
