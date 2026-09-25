@@ -74,6 +74,7 @@ export default class ArrivalCard {
     return this.hearing?.hearingType ?? null
   }
 
+  /** The documents on the card named together, as the heading of the block. */
   get heading(): string {
     const types = [...new Set(this.documentList.map(document => documentTypeText(document.documentType)))]
     return types.length === 1
@@ -144,22 +145,27 @@ export default class ArrivalCard {
     })
   }
 
-  get noAutocompleteBecause(): string | null {
-    if (this.canAutocomplete || this.isDone) return null
+  get facts(): string[] {
+    const facts: string[] = []
+
+    if (!this.hearing) facts.push('No HMCTS hearing')
+
+    const types = this.documentList.map(document => document.documentType)
+    if (types.includes('REMAND_WARRANT')) facts.push('Remand warrant')
+    if (types.includes('SENTENCING_WARRANT')) facts.push('Sentencing warrant')
+    if (!types.some(type => WARRANTS.includes(type))) facts.push('No warrant')
+
+    if (this.references.length === 0) facts.push('No case reference')
+    if (this.references.length > 1) facts.push('Several case references')
 
     if (!this.context.autocompleteChecked) {
-      return 'Autocomplete not checked: remand and sentencing could not be asked about this person.'
+      facts.push('Remand and sentencing not checked')
+    } else if (this.references.some(reference => this.context.casesByReference.has(reference))) {
+      facts.push('Existing case reference')
+      if (this.isDone) facts.push('Existing appearance')
     }
 
-    return `Record manually: ${this.manualBecause}.`
-  }
-
-  private get manualBecause(): string {
-    if (!this.hearing) return 'the documents are not linked to a hearing'
-    if (!this.documentList.some(document => WARRANTS.includes(document.documentType))) return 'no warrant arrived'
-    if (this.references.length > 1) return 'the hearing has more than one case reference'
-    if (this.references.length === 0) return 'the hearing has no case reference'
-    return 'remand and sentencing is not offering this hearing'
+    return facts
   }
 
   get action(): HearingAction {
