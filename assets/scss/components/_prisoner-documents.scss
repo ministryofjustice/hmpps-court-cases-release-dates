@@ -66,3 +66,10 @@
   border-left: 4px solid govuk-colour("green");
   padding-left: govuk-spacing(3);
 }
+
+.document__facts .govuk-tag {
+  max-width: none;
+  white-space: nowrap;
+  margin-right: govuk-spacing(1);
+  margin-bottom: govuk-spacing(1);
+}

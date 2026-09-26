@@ -1,4 +1,5 @@
 import { compareDesc } from 'date-fns'
+import config from '../config'
 import RemandAndSentencingApiClient from '../data/remandAndSentencingApiClient'
 import {
   ApiRecall,
@@ -9,8 +10,6 @@ import {
   Recall,
   SearchCourtCasesPage,
   SentenceConsecutiveToDetailsResponse,
-  ThingsToDo,
-  ThingToDo,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import { HmppsAuthClient } from '../data'
 import logger from '../../logger'
@@ -40,21 +39,19 @@ export default class RemandAndSentencingService {
     }
   }
 
+  public thingsToDoConfig(): { enabled: boolean; repeatRemandHearingEnabled: boolean } {
+    return config.thingsToDo
+  }
+
   public async getCourtContext(prisonerId: string, username: string): Promise<PersonCourtContext> {
     const client = new RemandAndSentencingApiClient(await this.getSystemClientToken(username))
 
-    const [thingsToDo, cases] = await Promise.all([
-      client.getThingsToDo(prisonerId).catch((error: unknown): ThingsToDo | undefined => {
-        logger.error(error, `Could not read things to do for ${prisonerId}`)
+    const cases = await client
+      .searchCourtCases(prisonerId, 'APPEARANCE_DATE_DESC', 0, COURT_CASE_PAGE_SIZE)
+      .catch((error: unknown): SearchCourtCasesPage | undefined => {
+        logger.error(error, `Could not read court cases for ${prisonerId}`)
         return undefined
-      }),
-      client
-        .searchCourtCases(prisonerId, 'APPEARANCE_DATE_DESC', 0, COURT_CASE_PAGE_SIZE)
-        .catch((error: unknown): SearchCourtCasesPage | undefined => {
-          logger.error(error, `Could not read court cases for ${prisonerId}`)
-          return undefined
-        }),
-    ])
+      })
 
     const casesByReference = new Map<string, string>()
     const latestAppearanceDates = new Map<string, string>()
@@ -66,11 +63,7 @@ export default class RemandAndSentencingService {
     })
 
     return {
-      offeredHearingIds: new Set(
-        thingsToDo?.thingsToDo?.map((thingToDo: ThingToDo) => thingToDo.hearingThingsToDoData.hearingId) ?? [],
-      ),
       casesByReference,
-      autocompleteChecked: thingsToDo !== undefined,
       latestAppearanceDates,
       casesChecked: cases !== undefined,
     }

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { PrisonCourtDocument, PrisonCourtHearing } from '../@types/courtDataIngestionApi/prisonCourtDocumentTypes'
 import { HearingAction, HearingActionType, PersonCourtContext } from './hearingAction'
 import documentTypeText from './documentTypeText'
@@ -90,6 +91,19 @@ export default class ArrivalCard {
     return this.action.type === HearingActionType.AUTOCOMPLETE
   }
 
+  private get hasRemandWarrant(): boolean {
+    return this.documentList.some(document => document.documentType === 'REMAND_WARRANT')
+  }
+
+  private get wouldBeOffered(): boolean {
+    if (!config.thingsToDo.enabled) return false
+    if (!this.hearing || !this.hasRemandWarrant || this.references.length !== 1) return false
+    if (this.context.casesChecked === false) return false
+
+    if (!this.hasExistingCase) return true
+    return config.thingsToDo.repeatRemandHearingEnabled
+  }
+
   get receivedAt(): string {
     return this.documentList
       .map(document => document.receivedAt)
@@ -145,6 +159,10 @@ export default class ArrivalCard {
     })
   }
 
+  private get hasExistingCase(): boolean {
+    return this.references.some(reference => this.context.casesByReference.has(reference))
+  }
+
   get facts(): string[] {
     const facts: string[] = []
 
@@ -156,16 +174,31 @@ export default class ArrivalCard {
     if (!types.some(type => WARRANTS.includes(type))) facts.push('No warrant')
 
     if (this.references.length === 0) facts.push('No case reference')
-    if (this.references.length > 1) facts.push('Several case references')
+    if (this.references.length > 1) facts.push('Several cases')
 
-    if (!this.context.autocompleteChecked) {
-      facts.push('Remand and sentencing not checked')
-    } else if (this.references.some(reference => this.context.casesByReference.has(reference))) {
-      facts.push('Existing case reference')
+    if (this.context.casesChecked === false) {
+      facts.push('Could not ask remand and sentencing')
+    } else if (this.hasExistingCase) {
+      facts.push('Existing case')
       if (this.isDone) facts.push('Existing appearance')
     }
 
+    if (!config.thingsToDo.enabled) {
+      facts.push('Autocomplete switched off')
+    } else if (!config.thingsToDo.repeatRemandHearingEnabled && this.hasExistingCase) {
+      facts.push('Repeat hearings not offered')
+    }
+
     return facts
+  }
+
+  get appearanceHref(): string | null {
+    if (!this.isDone || !this.hearing) return null
+
+    const courtCase = this.references.map(reference => this.context.casesByReference.get(reference)).find(Boolean)
+    const shown = encodeURIComponent(dayjs(this.hearing.hearingDate).format('DD/MM/YYYY'))
+
+    return `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${courtCase}/details#:~:text=Hearing%20date-,${shown}`
   }
 
   get action(): HearingAction {
@@ -173,12 +206,12 @@ export default class ArrivalCard {
     const everyCaseRecorded = recordedCases.length > 0 && recordedCases.every(Boolean)
     const existingCase = recordedCases.find(Boolean)
 
-    if (this.hearing && this.context.offeredHearingIds.has(this.hearing.courtHearingId)) {
+    if (this.wouldBeOffered && !this.isDone) {
       const caseSegment = existingCase ? `/${existingCase}` : ''
       return {
         type: HearingActionType.AUTOCOMPLETE,
         text: 'Autocomplete',
-        href: `${rasUrl()}/person/${this.prisonerNumber}/review-new-documents/${this.hearing.courtHearingId}/start${caseSegment}`,
+        href: `${rasUrl()}/person/${this.prisonerNumber}/review-new-documents/${this.hearing!.courtHearingId}/start${caseSegment}`,
       }
     }
 
