@@ -75,7 +75,6 @@ export default class ArrivalCard {
     return this.hearing?.hearingType ?? null
   }
 
-  /** The documents on the card named together, as the heading of the block. */
   get heading(): string {
     const types = [...new Set(this.documentList.map(document => documentTypeText(document.documentType)))]
     return types.length === 1
