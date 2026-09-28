@@ -89,9 +89,10 @@ const day = (overrides: Partial<PrisonCourtDocumentDay> = {}): PrisonCourtDocume
 })
 
 afterEach(() => {
-  // the flags stand in for remand and sentencing's own, so put them back
   config.thingsToDo.enabled = true
-  config.thingsToDo.repeatRemandHearingEnabled = true
+  config.thingsToDo.repeatRemandHearingEnabled = false
+  config.thingsToDo.sentencingEnabled = false
+  config.thingsToDo.multipleNotificationsEnabled = false
 })
 
 beforeEach(() => {
@@ -155,7 +156,6 @@ describe('GET /court-documents', () => {
       roles: [Roles.getRole(Role.RELEASE_DATES_CALCULATOR), Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)],
     }
 
-    // the link is shown by role, so take the support role away while keeping access
     return request(appAs({ ...calculator, roles: [Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)] }))
       .get('/court-documents')
       .expect(200)
@@ -268,7 +268,6 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => {
         const recent = res.text.split('data-qa="week-nav"')[1]
         expect(recent).toContain(`?date=${thisMonday.format('YYYY-MM-DD')}`)
-        // the week being viewed is plain text rather than a link
         expect(recent).toContain('moj-side-navigation__item--active')
       })
   })
@@ -287,7 +286,6 @@ describe('GET /court-documents/:prisonCode', () => {
         expect(res.text).toContain('data-qa="previous-week"')
         expect(res.text).toContain('href="/court-documents/LEI?date=2026-09-07"')
         expect(res.text).toContain('data-qa="next-week"')
-        // the pagination component, laid out as a row rather than stacked
         expect(res.text).toContain('govuk-pagination')
         expect(res.text).not.toContain('govuk-pagination--block')
       })
@@ -414,7 +412,6 @@ describe('GET /court-documents/:prisonCode', () => {
   })
 
   it('offers recording case and appearance where neither exists', () => {
-    // several case references, so remand and sentencing would not prefill it
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
     )
@@ -447,7 +444,6 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        // derived from the documents and the flags, so no things-to-do call per person
         expect(res.text).toContain('Autocomplete')
         expect(remandAndSentencingService.getCourtContext).toHaveBeenCalledTimes(1)
       })
@@ -667,7 +663,6 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => {
         expect(res.text).toContain('1 of 1 recorded in remand and sentencing')
         expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*View case/)
-        // and the hearing date links to the appearance itself
         expect(res.text).toContain('data-qa="appearance-link"')
         expect(res.text).toContain('details#:~:text=Hearing%20date-,08%2F09%2F2026')
         expect(res.text).not.toContain('Record appearance')
@@ -826,8 +821,90 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
+  it('offers a sentencing warrant on a new case where sentencing is switched on', () => {
+    config.thingsToDo.sentencingEnabled = true
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          {
+            ...day().hearings[0],
+            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
+          },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => expect(res.text).toMatch(/class="govuk-button[^"]*"[^>]*>\s*Autocomplete/))
+  })
+
+  it('says sentencing warrants are not offered where sentencing is switched off', () => {
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          {
+            ...day().hearings[0],
+            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
+          },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Sentencing warrants not offered')
+        expect(res.text).not.toContain('>Autocomplete')
+      })
+  })
+
+  it('offers none of the hearings where a person has several and only one may be reported', () => {
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          day().hearings[0],
+          { ...day().hearings[0], courtHearingId: 'other-hearing', caseReferences: ['OTHER123'] },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('>Autocomplete')
+        expect(res.text.match(/Several hearings for this person/g)).toHaveLength(2)
+      })
+  })
+
+  it('offers them where several may be reported', () => {
+    config.thingsToDo.multipleNotificationsEnabled = true
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          day().hearings[0],
+          { ...day().hearings[0], courtHearingId: 'other-hearing', caseReferences: ['OTHER123'] },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text.match(/>\s*Autocomplete/g)).toHaveLength(2)
+        expect(res.text).not.toContain('Several hearings for this person')
+      })
+  })
+
   it('shows a manual step as a secondary button', () => {
-    // several case references, so remand and sentencing would not prefill it
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
     )
@@ -845,6 +922,7 @@ describe('GET /court-documents/:prisonCode', () => {
   })
 
   it('carries the court case into the autocomplete journey when one exists', () => {
+    config.thingsToDo.repeatRemandHearingEnabled = true
     remandAndSentencingService.getCourtContext.mockResolvedValue({
       casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
     })

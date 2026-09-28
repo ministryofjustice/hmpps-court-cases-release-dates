@@ -31,6 +31,10 @@ generic-service:
     DOCUMENT_MANAGEMENT_API_URL: "https://document-api.hmpps.service.justice.gov.uk"
     COURT_DATA_INGESTION_API_URL: "https://court-data-ingestion-api.hmpps.service.justice.gov.uk"
     MANAGE_OFFENCES_API_URL: "https://manage-offences-api.hmpps.service.justice.gov.uk"
+    RAS_THINGS_TO_DO_ENABLED: "true"
+    RAS_THINGS_TO_DO_REPEAT_REMAND_HEARING_ENABLED: "false"
+    RAS_THINGS_TO_DO_SENTENCING_ENABLED: "false"
+    RAS_THINGS_TO_DO_MULTIPLE_NOTIFICATIONS_ENABLED: "false"
 
 
 generic-prometheus-alerts:
