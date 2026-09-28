@@ -191,7 +191,6 @@ export default class ArrivalCard {
       if (this.isDone) facts.push('Existing appearance')
     }
 
-    // Configuration, not documents: worth saying, since nothing about the entry explains it.
     if (!config.thingsToDo.enabled) {
       facts.push('Autocomplete switched off')
     } else if (this.suppressedByOthers) {
