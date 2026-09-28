@@ -35,6 +35,12 @@
           </div>
         </div>
 
+        <p class="document__facts govuk-!-margin-bottom-2" data-qa="facts">
+          {% for fact in card.facts %}
+            {{ govukTag({ text: fact, classes: "govuk-tag--grey" }) }}
+          {% endfor %}
+        </p>
+
         {% set caseReferenceHtml %}
           <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Case reference</p>
           <p class="govuk-body govuk-!-margin-bottom-2 prisoner-doc-case-reference" data-qa="case-reference">
@@ -66,7 +72,16 @@
             <div class="govuk-grid-column-one-third">{{ field("Court name", card.courtName) }}</div>
           </div>
           <div class="govuk-grid-row document__row">
-            <div class="govuk-grid-column-one-third">{{ field("Hearing date", card.hearingDate | date) }}</div>
+            <div class="govuk-grid-column-one-third">
+              <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing date</p>
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                {% if card.appearanceHref %}
+                  <a class="govuk-link" href="{{ card.appearanceHref }}" data-qa="appearance-link">{{ card.hearingDate | date }}</a>
+                {% else %}
+                  {{ card.hearingDate | date }}
+                {% endif %}
+              </p>
+            </div>
             <div class="govuk-grid-column-one-third">{{ field("Hearing type", card.hearingType) }}</div>
             <div class="govuk-grid-column-one-third">{{ field("Date added", card.receivedAt | dateTimeShort) }}</div>
           </div>
@@ -85,13 +100,6 @@
             <div class="govuk-grid-column-one-third" data-qa="addressed-to">{{ field("Addressed to", card.addressedElsewhere) }}</div>
           {% endif %}
         </div>
-
-        <p class="govuk-!-margin-bottom-2" data-qa="facts">
-          <span class="govuk-visually-hidden">What arrived and what is already recorded:</span>
-          {% for fact in card.facts %}
-            {{ govukTag({ text: fact, classes: "govuk-tag--grey govuk-!-margin-right-1" }) }}
-          {% endfor %}
-        </p>
 
       </div>
     </div>

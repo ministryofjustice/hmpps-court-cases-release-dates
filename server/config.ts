@@ -223,6 +223,10 @@ export default {
       url: get('REMAND_AND_SENTENCING_UI_URL', 'http://localhost:3000', requiredInProduction),
     },
   },
+  thingsToDo: {
+    enabled: get('RAS_THINGS_TO_DO_ENABLED', 'true') === 'true',
+    repeatRemandHearingEnabled: get('RAS_REPEAT_REMAND_HEARING_ENABLED', 'true') === 'true',
+  },
   externalUrls: {
     releaseDateDefinitions: {
       url: get(

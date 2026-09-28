@@ -52,8 +52,6 @@ export default class HearingListViewModel {
   }
 
   get uncheckedPeople(): number {
-    return [...this.contextByPrisoner.values()].filter(
-      context => !context.autocompleteChecked || context.casesChecked === false,
-    ).length
+    return [...this.contextByPrisoner.values()].filter(context => context.casesChecked === false).length
   }
 }

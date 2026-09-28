@@ -12,17 +12,13 @@ export interface HearingAction {
 }
 
 export interface PersonCourtContext {
-  offeredHearingIds: Set<string>
   casesByReference: Map<string, string>
-  autocompleteChecked: boolean
   latestAppearanceDates?: Map<string, string>
   casesChecked?: boolean
 }
 
 export const emptyCourtContext = (): PersonCourtContext => ({
-  offeredHearingIds: new Set(),
   casesByReference: new Map(),
-  autocompleteChecked: false,
   latestAppearanceDates: new Map(),
   casesChecked: false,
 })
