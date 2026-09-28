@@ -6,7 +6,12 @@ import config from '../config'
 
 const rasUrl = () => config.applications.remandAndSentencing.url
 
-const WARRANTS = ['REMAND_WARRANT', 'SENTENCING_WARRANT']
+export type ArrivalFactTone = 'neutral' | 'blocked' | 'settled'
+
+export type ArrivalFact = {
+  text: string
+  tone: ArrivalFactTone
+}
 
 export default class ArrivalCard {
   private constructor(
@@ -101,15 +106,30 @@ export default class ArrivalCard {
   suppressedByOthers = false
 
   get wouldBeOffered(): boolean {
+    return this.offered()
+  }
+
+  private offered(flags: { sentencing?: boolean; repeatRemand?: boolean } = {}): boolean {
+    const sentencing = flags.sentencing ?? config.thingsToDo.sentencingEnabled
+    const repeatRemand = flags.repeatRemand ?? config.thingsToDo.repeatRemandHearingEnabled
+
     if (!config.thingsToDo.enabled || this.suppressedByOthers) return false
     if (!this.hearing || this.references.length !== 1) return false
     if (this.context.casesChecked === false) return false
 
     const newRemand = !this.hasExistingCase && this.hasRemandWarrant
-    const newSentencing = config.thingsToDo.sentencingEnabled && !this.hasExistingCase && this.hasSentencingWarrant
-    const repeatRemand = config.thingsToDo.repeatRemandHearingEnabled && this.hasExistingCase && this.hasRemandWarrant
+    const newSentencing = sentencing && !this.hasExistingCase && this.hasSentencingWarrant
+    const repeatRemandHearing = repeatRemand && this.hasExistingCase && this.hasRemandWarrant
 
-    return newRemand || newSentencing || repeatRemand
+    return newRemand || newSentencing || repeatRemandHearing
+  }
+
+  private get waitingOnSentencing(): boolean {
+    return !this.offered() && this.offered({ sentencing: true })
+  }
+
+  private get waitingOnRepeatHearings(): boolean {
+    return !this.offered() && this.offered({ repeatRemand: true })
   }
 
   get receivedAt(): string {
@@ -171,15 +191,27 @@ export default class ArrivalCard {
     return this.references.some(reference => this.context.casesByReference.has(reference))
   }
 
-  get facts(): string[] {
+  get facts(): ArrivalFact[] {
+    const blocking = this.blockingFacts
+    const facts = this.statedFacts.map(text => ({ text, tone: this.toneOf(text, blocking) }))
+    const inTone = (tone: ArrivalFactTone) => facts.filter(fact => fact.tone === tone)
+
+    return [...inTone('blocked'), ...inTone('settled'), ...inTone('neutral')]
+  }
+
+  private toneOf(text: string, blocking: Set<string>): ArrivalFactTone {
+    if (this.isDone && text === 'Existing appearance') return 'settled'
+    return blocking.has(text) ? 'blocked' : 'neutral'
+  }
+
+  private get statedFacts(): string[] {
     const facts: string[] = []
 
     if (!this.hearing) facts.push('No HMCTS hearing')
 
-    const types = this.documentList.map(document => document.documentType)
-    if (types.includes('REMAND_WARRANT')) facts.push('Remand warrant')
-    if (types.includes('SENTENCING_WARRANT')) facts.push('Sentencing warrant')
-    if (!types.some(type => WARRANTS.includes(type))) facts.push('No warrant')
+    if (this.hasRemandWarrant) facts.push('Remand warrant')
+    if (this.hasSentencingWarrant) facts.push('Sentencing warrant')
+    if (!this.hasRemandWarrant && !this.hasSentencingWarrant) facts.push('No warrant')
 
     if (this.references.length === 0) facts.push('No case reference')
     if (this.references.length > 1) facts.push('Several cases')
@@ -191,17 +223,32 @@ export default class ArrivalCard {
       if (this.isDone) facts.push('Existing appearance')
     }
 
-    if (!config.thingsToDo.enabled) {
-      facts.push('Autocomplete switched off')
-    } else if (this.suppressedByOthers) {
-      facts.push('Several hearings for this person')
-    } else if (!config.thingsToDo.repeatRemandHearingEnabled && this.hasExistingCase) {
-      facts.push('Repeat hearings not offered')
-    } else if (!config.thingsToDo.sentencingEnabled && this.hasSentencingWarrant && !this.hasRemandWarrant) {
-      facts.push('Sentencing warrants not offered')
-    }
+    if (!config.thingsToDo.enabled) facts.push('Autocomplete switched off')
+    else if (this.suppressedByOthers) facts.push('Several hearings for this person')
+    else if (this.waitingOnSentencing) facts.push('No autocomplete for sentencing')
+    else if (this.waitingOnRepeatHearings) facts.push('No autocomplete for repeat hearings')
 
     return facts
+  }
+
+  private get blockingFacts(): Set<string> {
+    const blocking = new Set<string>()
+    if (this.wouldBeOffered || this.isDone) return blocking
+
+    if (!config.thingsToDo.enabled) return new Set(['Autocomplete switched off'])
+    if (this.suppressedByOthers) return new Set(['Several hearings for this person'])
+    if (this.waitingOnSentencing) return new Set(['No autocomplete for sentencing'])
+    if (this.waitingOnRepeatHearings) return new Set(['No autocomplete for repeat hearings'])
+
+    if (!this.hearing) blocking.add('No HMCTS hearing')
+    if (this.references.length === 0) blocking.add('No case reference')
+    if (this.references.length > 1) blocking.add('Several cases')
+    if (this.context.casesChecked === false) blocking.add('Could not ask remand and sentencing')
+    if (!this.hasRemandWarrant && !this.hasSentencingWarrant) blocking.add('No warrant')
+
+    if (this.hasExistingCase) blocking.add('Existing case')
+
+    return blocking
   }
 
   get appearanceHref(): string | null {

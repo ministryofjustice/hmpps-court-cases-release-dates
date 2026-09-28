@@ -344,13 +344,29 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('highlights hearings that can be autocompleted, with the step as a primary button', () => {
+  it('marks an arrival still owed something, with autocomplete as a primary button', () => {
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('document--autocomplete')
+        expect(res.text).toContain('document--action')
         expect(res.text).toMatch(/class="govuk-button govuk-!-margin-bottom-0"[^>]*>\s*Autocomplete/)
+      })
+  })
+
+  it('leaves an arrival already recorded unmarked, so what is left stands out', () => {
+    remandAndSentencingService.getCourtContext.mockResolvedValue({
+      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
+      latestAppearanceDates: new Map([['case-uuid-1', '2026-09-08']]),
+      casesChecked: true,
+    })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('document--action')
+        expect(res.text).toMatch(/govuk-tag--green[^>]*>\s*Existing appearance/)
       })
   })
 
@@ -794,7 +810,7 @@ describe('GET /court-documents/:prisonCode', () => {
     expect(res.text).toContain('Autocomplete switched off')
   })
 
-  it('says when a hearing on an existing case will not be offered', async () => {
+  it('blames our own limit, not the arrival, where repeat hearings are switched off', async () => {
     config.thingsToDo.repeatRemandHearingEnabled = false
     remandAndSentencingService.getCourtContext.mockResolvedValue({
       casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
@@ -802,10 +818,65 @@ describe('GET /court-documents/:prisonCode', () => {
 
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
-    expect(res.text).toContain('Repeat hearings not offered')
+    expect(res.text).toMatch(/govuk-tag--orange[^>]*>\s*No autocomplete for repeat hearings/)
+    expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
+    expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Remand warrant/)
   })
 
-  it('marks an existing case and its appearance as facts', () => {
+  it('drops the limit entirely once repeat remand hearings are switched on', async () => {
+    config.thingsToDo.repeatRemandHearingEnabled = true
+    remandAndSentencingService.getCourtContext.mockResolvedValue({
+      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
+    })
+
+    const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
+
+    expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
+    expect(res.text).not.toContain('govuk-tag--orange')
+    expect(res.text).not.toContain('No autocomplete for repeat hearings')
+  })
+
+  it('marks the existing case where no flag would carry it', async () => {
+    config.thingsToDo.sentencingEnabled = true
+    config.thingsToDo.repeatRemandHearingEnabled = true
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          {
+            ...day().hearings[0],
+            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
+          },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({
+      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
+    })
+
+    const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
+
+    expect(res.text).toMatch(/govuk-tag--orange[^>]*>\s*Existing case/)
+    expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Sentencing warrant/)
+  })
+
+  it('marks a missing warrant as what stopped a hearing being offered', async () => {
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          {
+            ...day().hearings[0],
+            documents: [{ ...day().hearings[0].documents[0], documentType: 'OTHER' }],
+          },
+        ],
+      }),
+    )
+
+    const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
+
+    expect(res.text).toMatch(/govuk-tag--orange[^>]*>\s*No warrant/)
+  })
+
+  it('marks the recorded appearance as the reason there is nothing to autocomplete', () => {
     remandAndSentencingService.getCourtContext.mockResolvedValue({
       casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
       latestAppearanceDates: new Map([['case-uuid-1', '2026-09-08']]),
@@ -816,8 +887,9 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Existing case')
-        expect(res.text).toContain('Existing appearance')
+        expect(res.text).toMatch(/govuk-tag--green[^>]*>\s*Existing appearance/)
+        expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
+        expect(res.text).not.toContain('govuk-tag--orange')
       })
   })
 
@@ -841,7 +913,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => expect(res.text).toMatch(/class="govuk-button[^"]*"[^>]*>\s*Autocomplete/))
   })
 
-  it('says sentencing warrants are not offered where sentencing is switched off', () => {
+  it('leaves the sentencing warrant alone and names the limit where sentencing is switched off', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({
         hearings: [
@@ -858,7 +930,8 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Sentencing warrants not offered')
+        expect(res.text).toMatch(/govuk-tag--orange[^>]*>\s*No autocomplete for sentencing/)
+        expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Sentencing warrant/)
         expect(res.text).not.toContain('>Autocomplete')
       })
   })
