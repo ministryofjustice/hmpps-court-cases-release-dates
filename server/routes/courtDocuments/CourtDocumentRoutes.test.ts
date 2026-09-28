@@ -156,7 +156,6 @@ describe('GET /court-documents', () => {
       roles: [Roles.getRole(Role.RELEASE_DATES_CALCULATOR), Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)],
     }
 
-    // the link is shown by role, so take the support role away while keeping access
     return request(appAs({ ...calculator, roles: [Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)] }))
       .get('/court-documents')
       .expect(200)
@@ -269,7 +268,6 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => {
         const recent = res.text.split('data-qa="week-nav"')[1]
         expect(recent).toContain(`?date=${thisMonday.format('YYYY-MM-DD')}`)
-        // the week being viewed is plain text rather than a link
         expect(recent).toContain('moj-side-navigation__item--active')
       })
   })
@@ -288,7 +286,6 @@ describe('GET /court-documents/:prisonCode', () => {
         expect(res.text).toContain('data-qa="previous-week"')
         expect(res.text).toContain('href="/court-documents/LEI?date=2026-09-07"')
         expect(res.text).toContain('data-qa="next-week"')
-        // the pagination component, laid out as a row rather than stacked
         expect(res.text).toContain('govuk-pagination')
         expect(res.text).not.toContain('govuk-pagination--block')
       })
@@ -415,7 +412,6 @@ describe('GET /court-documents/:prisonCode', () => {
   })
 
   it('offers recording case and appearance where neither exists', () => {
-    // several case references, so remand and sentencing would not prefill it
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
     )
@@ -448,7 +444,6 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        // derived from the documents and the flags, so no things-to-do call per person
         expect(res.text).toContain('Autocomplete')
         expect(remandAndSentencingService.getCourtContext).toHaveBeenCalledTimes(1)
       })
@@ -668,7 +663,6 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => {
         expect(res.text).toContain('1 of 1 recorded in remand and sentencing')
         expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*View case/)
-        // and the hearing date links to the appearance itself
         expect(res.text).toContain('data-qa="appearance-link"')
         expect(res.text).toContain('details#:~:text=Hearing%20date-,08%2F09%2F2026')
         expect(res.text).not.toContain('Record appearance')
@@ -911,7 +905,6 @@ describe('GET /court-documents/:prisonCode', () => {
   })
 
   it('shows a manual step as a secondary button', () => {
-    // several case references, so remand and sentencing would not prefill it
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
     )
