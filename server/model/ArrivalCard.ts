@@ -94,13 +94,22 @@ export default class ArrivalCard {
     return this.documentList.some(document => document.documentType === 'REMAND_WARRANT')
   }
 
-  private get wouldBeOffered(): boolean {
-    if (!config.thingsToDo.enabled) return false
-    if (!this.hearing || !this.hasRemandWarrant || this.references.length !== 1) return false
+  private get hasSentencingWarrant(): boolean {
+    return this.documentList.some(document => document.documentType === 'SENTENCING_WARRANT')
+  }
+
+  suppressedByOthers = false
+
+  get wouldBeOffered(): boolean {
+    if (!config.thingsToDo.enabled || this.suppressedByOthers) return false
+    if (!this.hearing || this.references.length !== 1) return false
     if (this.context.casesChecked === false) return false
 
-    if (!this.hasExistingCase) return true
-    return config.thingsToDo.repeatRemandHearingEnabled
+    const newRemand = !this.hasExistingCase && this.hasRemandWarrant
+    const newSentencing = config.thingsToDo.sentencingEnabled && !this.hasExistingCase && this.hasSentencingWarrant
+    const repeatRemand = config.thingsToDo.repeatRemandHearingEnabled && this.hasExistingCase && this.hasRemandWarrant
+
+    return newRemand || newSentencing || repeatRemand
   }
 
   get receivedAt(): string {
@@ -182,10 +191,15 @@ export default class ArrivalCard {
       if (this.isDone) facts.push('Existing appearance')
     }
 
+    // Configuration, not documents: worth saying, since nothing about the entry explains it.
     if (!config.thingsToDo.enabled) {
       facts.push('Autocomplete switched off')
+    } else if (this.suppressedByOthers) {
+      facts.push('Several hearings for this person')
     } else if (!config.thingsToDo.repeatRemandHearingEnabled && this.hasExistingCase) {
       facts.push('Repeat hearings not offered')
+    } else if (!config.thingsToDo.sentencingEnabled && this.hasSentencingWarrant && !this.hasRemandWarrant) {
+      facts.push('Sentencing warrants not offered')
     }
 
     return facts

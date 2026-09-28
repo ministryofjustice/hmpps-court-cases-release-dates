@@ -89,9 +89,10 @@ const day = (overrides: Partial<PrisonCourtDocumentDay> = {}): PrisonCourtDocume
 })
 
 afterEach(() => {
-  // the flags stand in for remand and sentencing's own, so put them back
   config.thingsToDo.enabled = true
-  config.thingsToDo.repeatRemandHearingEnabled = true
+  config.thingsToDo.repeatRemandHearingEnabled = false
+  config.thingsToDo.sentencingEnabled = false
+  config.thingsToDo.multipleNotificationsEnabled = false
 })
 
 beforeEach(() => {
@@ -826,6 +827,89 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
+  it('offers a sentencing warrant on a new case where sentencing is switched on', () => {
+    config.thingsToDo.sentencingEnabled = true
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          {
+            ...day().hearings[0],
+            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
+          },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => expect(res.text).toMatch(/class="govuk-button[^"]*"[^>]*>\s*Autocomplete/))
+  })
+
+  it('says sentencing warrants are not offered where sentencing is switched off', () => {
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          {
+            ...day().hearings[0],
+            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
+          },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Sentencing warrants not offered')
+        expect(res.text).not.toContain('>Autocomplete')
+      })
+  })
+
+  it('offers none of the hearings where a person has several and only one may be reported', () => {
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          day().hearings[0],
+          { ...day().hearings[0], courtHearingId: 'other-hearing', caseReferences: ['OTHER123'] },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('>Autocomplete')
+        expect(res.text.match(/Several hearings for this person/g)).toHaveLength(2)
+      })
+  })
+
+  it('offers them where several may be reported', () => {
+    config.thingsToDo.multipleNotificationsEnabled = true
+    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
+      day({
+        hearings: [
+          day().hearings[0],
+          { ...day().hearings[0], courtHearingId: 'other-hearing', caseReferences: ['OTHER123'] },
+        ],
+      }),
+    )
+    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text.match(/>\s*Autocomplete/g)).toHaveLength(2)
+        expect(res.text).not.toContain('Several hearings for this person')
+      })
+  })
+
   it('shows a manual step as a secondary button', () => {
     // several case references, so remand and sentencing would not prefill it
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
@@ -845,6 +929,7 @@ describe('GET /court-documents/:prisonCode', () => {
   })
 
   it('carries the court case into the autocomplete journey when one exists', () => {
+    config.thingsToDo.repeatRemandHearingEnabled = true
     remandAndSentencingService.getCourtContext.mockResolvedValue({
       casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
     })

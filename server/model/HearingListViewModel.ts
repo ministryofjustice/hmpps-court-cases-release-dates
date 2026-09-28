@@ -1,6 +1,7 @@
 import { PrisonCourtDocument, PrisonCourtHearing } from '../@types/courtDataIngestionApi/prisonCourtDocumentTypes'
 import { emptyCourtContext, HearingActionType, PersonCourtContext } from './hearingAction'
 import ArrivalCard from './ArrivalCard'
+import config from '../config'
 
 export default class HearingListViewModel {
   readonly cards: ArrivalCard[]
@@ -29,6 +30,24 @@ export default class HearingListViewModel {
         ArrivalCard.forUnlinked(documents, prisonCode, contextFor(documents[0].prisonerNumber), prisonNames, names),
       ),
     ].sort((a, b) => b.receivedAt.localeCompare(a.receivedAt))
+
+    this.suppressWhereAPersonHasSeveral()
+  }
+
+  private suppressWhereAPersonHasSeveral() {
+    if (config.thingsToDo.multipleNotificationsEnabled) return
+
+    const offeredPerPerson = new Map<string, number>()
+    this.cards
+      .filter(card => card.wouldBeOffered)
+      .forEach(card => offeredPerPerson.set(card.prisonerNumber, (offeredPerPerson.get(card.prisonerNumber) ?? 0) + 1))
+
+    this.cards
+      .filter(card => (offeredPerPerson.get(card.prisonerNumber) ?? 0) > 1)
+      .forEach(card => {
+        // eslint-disable-next-line no-param-reassign
+        card.suppressedByOthers = true
+      })
   }
 
   get isEmpty(): boolean {
