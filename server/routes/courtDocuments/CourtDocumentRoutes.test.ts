@@ -92,7 +92,6 @@ afterEach(() => {
   config.thingsToDo.enabled = true
   config.thingsToDo.repeatRemandHearingEnabled = false
   config.thingsToDo.sentencingEnabled = false
-  config.thingsToDo.multipleNotificationsEnabled = false
 })
 
 beforeEach(() => {
@@ -810,7 +809,7 @@ describe('GET /court-documents/:prisonCode', () => {
     expect(res.text).toContain('Autocomplete switched off')
   })
 
-  it('blames our own limit, not the arrival, where repeat hearings are switched off', async () => {
+  it('colours the existing case, not a separate label, where repeat hearings are switched off', async () => {
     config.thingsToDo.repeatRemandHearingEnabled = false
     remandAndSentencingService.getCourtContext.mockResolvedValue({
       casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
@@ -818,12 +817,13 @@ describe('GET /court-documents/:prisonCode', () => {
 
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
-    expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*No autocomplete for repeat hearings/)
-    expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
+    expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*Existing case/)
     expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Remand warrant/)
+    expect(res.text).not.toContain('No autocomplete for')
+    expect(res.text).not.toContain('Repeat hearings not offered')
   })
 
-  it('drops the limit entirely once repeat remand hearings are switched on', async () => {
+  it('stops colouring the existing case once repeat remand hearings are switched on', async () => {
     config.thingsToDo.repeatRemandHearingEnabled = true
     remandAndSentencingService.getCourtContext.mockResolvedValue({
       casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
@@ -833,7 +833,6 @@ describe('GET /court-documents/:prisonCode', () => {
 
     expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
     expect(res.text).not.toContain('govuk-tag--red')
-    expect(res.text).not.toContain('No autocomplete for repeat hearings')
   })
 
   it('marks the existing case where no flag would carry it', async () => {
@@ -874,6 +873,7 @@ describe('GET /court-documents/:prisonCode', () => {
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
     expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*No warrant/)
+    expect(res.text).toContain('No warrant<span class="govuk-visually-hidden">, prevents Autocomplete</span>')
   })
 
   it('marks the recorded appearance as the reason there is nothing to autocomplete', () => {
@@ -913,7 +913,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => expect(res.text).toMatch(/class="govuk-button[^"]*"[^>]*>\s*Autocomplete/))
   })
 
-  it('leaves the sentencing warrant alone and names the limit where sentencing is switched off', () => {
+  it('colours the sentencing warrant itself where sentencing is switched off', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({
         hearings: [
@@ -930,18 +930,25 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*No autocomplete for sentencing/)
-        expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Sentencing warrant/)
+        expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*Sentencing warrant/)
+        expect(res.text).toContain(
+          'Sentencing warrant<span class="govuk-visually-hidden">, no autocomplete for sentencing</span>',
+        )
+        expect(res.text).not.toContain('No autocomplete for')
+        expect(res.text).not.toContain('Sentencing warrants not offered')
         expect(res.text).not.toContain('>Autocomplete')
       })
   })
 
-  it('offers none of the hearings where a person has several and only one may be reported', () => {
+  it('does not colour the sentencing warrant once sentencing is switched on', () => {
+    config.thingsToDo.sentencingEnabled = true
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({
         hearings: [
-          day().hearings[0],
-          { ...day().hearings[0], courtHearingId: 'other-hearing', caseReferences: ['OTHER123'] },
+          {
+            ...day().hearings[0],
+            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
+          },
         ],
       }),
     )
@@ -951,13 +958,13 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).not.toContain('>Autocomplete')
-        expect(res.text.match(/Several hearings for this person/g)).toHaveLength(2)
+        expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Sentencing warrant/)
+        expect(res.text).not.toContain('govuk-tag--red')
+        expect(res.text).not.toContain('no autocomplete for sentencing')
       })
   })
 
-  it('offers them where several may be reported', () => {
-    config.thingsToDo.multipleNotificationsEnabled = true
+  it("offers each of a person's hearings, since the journey does not depend on the notification", () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({
         hearings: [

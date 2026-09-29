@@ -39,7 +39,7 @@
           {% for fact in card.facts %}
             {% if fact.tone == "blocked" %}
               {{ govukTag({
-                html: fact.text + '<span class="govuk-visually-hidden">, prevents Autocomplete</span>',
+                html: fact.text + '<span class="govuk-visually-hidden">, ' + (fact.reason or 'prevents Autocomplete') + '</span>',
                 classes: "govuk-tag--red"
               }) }}
             {% elif fact.tone == "settled" %}

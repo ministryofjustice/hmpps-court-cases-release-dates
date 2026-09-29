@@ -11,6 +11,7 @@ export type ArrivalFactTone = 'neutral' | 'blocked' | 'settled'
 export type ArrivalFact = {
   text: string
   tone: ArrivalFactTone
+  reason?: string
 }
 
 export default class ArrivalCard {
@@ -103,33 +104,25 @@ export default class ArrivalCard {
     return this.documentList.some(document => document.documentType === 'SENTENCING_WARRANT')
   }
 
-  suppressedByOthers = false
-
   get wouldBeOffered(): boolean {
     return this.offered()
   }
 
-  private offered(flags: { sentencing?: boolean; repeatRemand?: boolean } = {}): boolean {
-    const sentencing = flags.sentencing ?? config.thingsToDo.sentencingEnabled
-    const repeatRemand = flags.repeatRemand ?? config.thingsToDo.repeatRemandHearingEnabled
-
-    if (!config.thingsToDo.enabled || this.suppressedByOthers) return false
+  private offered(sentencing: boolean = config.thingsToDo.sentencingEnabled): boolean {
+    if (!config.thingsToDo.enabled) return false
     if (!this.hearing || this.references.length !== 1) return false
     if (this.context.casesChecked === false) return false
 
     const newRemand = !this.hasExistingCase && this.hasRemandWarrant
     const newSentencing = sentencing && !this.hasExistingCase && this.hasSentencingWarrant
-    const repeatRemandHearing = repeatRemand && this.hasExistingCase && this.hasRemandWarrant
+    const repeatRemandHearing =
+      config.thingsToDo.repeatRemandHearingEnabled && this.hasExistingCase && this.hasRemandWarrant
 
     return newRemand || newSentencing || repeatRemandHearing
   }
 
   private get waitingOnSentencing(): boolean {
-    return !this.offered() && this.offered({ sentencing: true })
-  }
-
-  private get waitingOnRepeatHearings(): boolean {
-    return !this.offered() && this.offered({ repeatRemand: true })
+    return !this.offered() && this.offered(true)
   }
 
   get receivedAt(): string {
@@ -193,10 +186,17 @@ export default class ArrivalCard {
 
   get facts(): ArrivalFact[] {
     const blocking = this.blockingFacts
-    const facts = this.statedFacts.map(text => ({ text, tone: this.toneOf(text, blocking) }))
+    const facts = this.statedFacts.map(text => {
+      const tone = this.toneOf(text, blocking)
+      return { text, tone, reason: tone === 'blocked' ? this.reasonFor(text) : undefined }
+    })
     const inTone = (tone: ArrivalFactTone) => facts.filter(fact => fact.tone === tone)
 
     return [...inTone('blocked'), ...inTone('settled'), ...inTone('neutral')]
+  }
+
+  private reasonFor(text: string): string | undefined {
+    return text === 'Sentencing warrant' && this.waitingOnSentencing ? 'no autocomplete for sentencing' : undefined
   }
 
   private toneOf(text: string, blocking: Set<string>): ArrivalFactTone {
@@ -224,9 +224,6 @@ export default class ArrivalCard {
     }
 
     if (!config.thingsToDo.enabled) facts.push('Autocomplete switched off')
-    else if (this.suppressedByOthers) facts.push('Several hearings for this person')
-    else if (this.waitingOnSentencing) facts.push('No autocomplete for sentencing')
-    else if (this.waitingOnRepeatHearings) facts.push('No autocomplete for repeat hearings')
 
     return facts
   }
@@ -236,9 +233,6 @@ export default class ArrivalCard {
     if (this.wouldBeOffered || this.isDone) return blocking
 
     if (!config.thingsToDo.enabled) return new Set(['Autocomplete switched off'])
-    if (this.suppressedByOthers) return new Set(['Several hearings for this person'])
-    if (this.waitingOnSentencing) return new Set(['No autocomplete for sentencing'])
-    if (this.waitingOnRepeatHearings) return new Set(['No autocomplete for repeat hearings'])
 
     if (!this.hearing) blocking.add('No HMCTS hearing')
     if (this.references.length === 0) blocking.add('No case reference')
@@ -246,6 +240,7 @@ export default class ArrivalCard {
     if (this.context.casesChecked === false) blocking.add('Could not ask remand and sentencing')
     if (!this.hasRemandWarrant && !this.hasSentencingWarrant) blocking.add('No warrant')
 
+    if (this.waitingOnSentencing) blocking.add('Sentencing warrant')
     if (this.hasExistingCase) blocking.add('Existing case')
 
     return blocking
