@@ -62,8 +62,8 @@
   word-wrap:break-word;
 }
 
-.document--autocomplete .document__inner {
-  border-left: 4px solid govuk-colour("green");
+.document--action .document__inner {
+  border-left: 4px solid govuk-colour("blue");
   padding-left: govuk-spacing(3);
 }
 

@@ -13,7 +13,7 @@
 
 <div data-qa="arrival-list">
   {% for card in list.cards %}
-    <div class="document{% if card.canAutocomplete %} document--autocomplete{% endif %}" data-qa="arrival">
+    <div class="document{% if not card.isDone %} document--action{% endif %}" data-qa="arrival">
       <div class="document__inner">
 
         <div class="document__header">
@@ -37,7 +37,19 @@
 
         <p class="document__facts govuk-!-margin-bottom-2" data-qa="facts">
           {% for fact in card.facts %}
-            {{ govukTag({ text: fact, classes: "govuk-tag--grey" }) }}
+            {% if fact.tone == "blocked" %}
+              {{ govukTag({
+                html: fact.text + '<span class="govuk-visually-hidden">, prevents Autocomplete</span>',
+                classes: "govuk-tag--red"
+              }) }}
+            {% elif fact.tone == "settled" %}
+              {{ govukTag({
+                html: fact.text + '<span class="govuk-visually-hidden">, nothing to autocomplete</span>',
+                classes: "govuk-tag--green"
+              }) }}
+            {% else %}
+              {{ govukTag({ text: fact.text, classes: "govuk-tag--grey" }) }}
+            {% endif %}
           {% endfor %}
         </p>
 
