@@ -818,7 +818,7 @@ describe('GET /court-documents/:prisonCode', () => {
 
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
-    expect(res.text).toMatch(/govuk-tag--orange[^>]*>\s*No autocomplete for repeat hearings/)
+    expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*No autocomplete for repeat hearings/)
     expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
     expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Remand warrant/)
   })
@@ -832,7 +832,7 @@ describe('GET /court-documents/:prisonCode', () => {
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
     expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
-    expect(res.text).not.toContain('govuk-tag--orange')
+    expect(res.text).not.toContain('govuk-tag--red')
     expect(res.text).not.toContain('No autocomplete for repeat hearings')
   })
 
@@ -855,7 +855,7 @@ describe('GET /court-documents/:prisonCode', () => {
 
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
-    expect(res.text).toMatch(/govuk-tag--orange[^>]*>\s*Existing case/)
+    expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*Existing case/)
     expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Sentencing warrant/)
   })
 
@@ -889,7 +889,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => {
         expect(res.text).toMatch(/govuk-tag--green[^>]*>\s*Existing appearance/)
         expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
-        expect(res.text).not.toContain('govuk-tag--orange')
+        expect(res.text).not.toContain('govuk-tag--red')
       })
   })
 
@@ -930,7 +930,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toMatch(/govuk-tag--orange[^>]*>\s*No autocomplete for sentencing/)
+        expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*No autocomplete for sentencing/)
         expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Sentencing warrant/)
         expect(res.text).not.toContain('>Autocomplete')
       })
