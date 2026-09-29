@@ -873,7 +873,7 @@ describe('GET /court-documents/:prisonCode', () => {
 
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
-    expect(res.text).toMatch(/govuk-tag--orange[^>]*>\s*No warrant/)
+    expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*No warrant/)
   })
 
   it('marks the recorded appearance as the reason there is nothing to autocomplete', () => {
