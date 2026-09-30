@@ -227,7 +227,6 @@ export default {
     enabled: get('RAS_THINGS_TO_DO_ENABLED', 'false') === 'true',
     repeatRemandHearingEnabled: get('RAS_THINGS_TO_DO_REPEAT_REMAND_HEARING_ENABLED', 'false') === 'true',
     sentencingEnabled: get('RAS_THINGS_TO_DO_SENTENCING_ENABLED', 'false') === 'true',
-    multipleNotificationsEnabled: get('RAS_THINGS_TO_DO_MULTIPLE_NOTIFICATIONS_ENABLED', 'false') === 'true',
   },
   externalUrls: {
     releaseDateDefinitions: {
