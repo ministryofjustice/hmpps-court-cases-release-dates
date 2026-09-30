@@ -1,5 +1,5 @@
 import { Request, RequestHandler } from 'express'
-import { auditService } from '@ministryofjustice/hmpps-audit-client'
+import auditService from '../../data/auditService'
 import logger from '../../../logger'
 import CourtDataIngestionService from '../../services/courtDataIngestionService'
 import { ClassifyAddressRequest } from '../../@types/courtDataIngestionApi/deliveryAddressTypes'
@@ -211,16 +211,17 @@ export default class DeliveryAddressRoutes {
     details: Record<string, unknown>,
   ): Promise<void> {
     try {
-      await auditService.sendAuditMessage({
-        action,
-        who: req.user.username,
-        subjectId,
-        subjectType,
-        service: 'hmpps-court-cases-release-dates',
-        correlationId: req.id,
-        details: JSON.stringify(details),
-        logErrors: true,
-      })
+      await auditService.logAuditEvent(
+        {
+          what: action,
+          who: req.user.username,
+          subjectId,
+          subjectType,
+          correlationId: req.id,
+          details,
+        },
+        { logOnError: true },
+      )
     } catch (error) {
       logger.error(`Error sending audit event [${error}]`)
     }

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Readable } from 'stream'
 import { constants } from 'node:http2'
-import { auditService } from '@ministryofjustice/hmpps-audit-client'
+import auditService from '../../../data/auditService'
 import PrisonerService from '../../../services/prisonerService'
 import DocumentManagementService from '../../../services/documentManagementService'
 import logger from '../../../../logger'
@@ -224,20 +224,18 @@ export default class DocumentRoutes {
       const { prisonerNumber, documentId } = req.params
       const { username } = req.user
 
-      const auditMessage = {
-        action,
+      const auditEvent = {
+        what: action,
         who: username,
         subjectId: prisonerNumber,
-        subjectType: 'PRISONER_ID',
-        service: 'hmpps-court-cases-release-dates',
+        subjectType: 'PRISONER_ID' as const,
         correlationId: req.id,
-        details: JSON.stringify({
+        details: {
           documentUuid: documentId,
-        }),
-        logErrors: true,
+        },
       }
-      logger.debug(`Sending audit event [${auditMessage}]`)
-      await auditService.sendAuditMessage(auditMessage)
+      logger.debug(`Sending audit event [${JSON.stringify(auditEvent)}]`)
+      await auditService.logAuditEvent(auditEvent, { logOnError: true })
       logger.debug(`Audit event sent successfully`)
     } catch (error) {
       logger.error(`Error sending audit event [${error}]`)
