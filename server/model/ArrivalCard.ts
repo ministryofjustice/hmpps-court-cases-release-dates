@@ -163,15 +163,6 @@ export default class ArrivalCard {
     return this.prisonNames.get(addressed) ?? addressed
   }
 
-  get courtCase(): string {
-    const recorded = this.references.filter(reference => this.context.casesByReference.has(reference)).length
-
-    if (this.references.length === 0) return 'Not known'
-    if (this.references.length === 1) return recorded === 1 ? 'Recorded' : 'Not recorded'
-    if (recorded === this.references.length) return 'All recorded'
-    return recorded === 0 ? 'None recorded' : 'Some recorded'
-  }
-
   get isDone(): boolean {
     if (!this.hearing || this.references.length === 0) return false
     return this.references.every(reference => {
@@ -217,7 +208,7 @@ export default class ArrivalCard {
     if (this.references.length > 1) facts.push('Several cases')
 
     if (this.context.casesChecked === false) {
-      facts.push('Could not ask remand and sentencing')
+      facts.push('Could not check DPS')
     } else if (this.hasExistingCase) {
       facts.push('Existing case')
       if (this.isDone) facts.push('Existing appearance')
@@ -237,7 +228,7 @@ export default class ArrivalCard {
     if (!this.hearing) blocking.add('No HMCTS hearing')
     if (this.references.length === 0) blocking.add('No case reference')
     if (this.references.length > 1) blocking.add('Several cases')
-    if (this.context.casesChecked === false) blocking.add('Could not ask remand and sentencing')
+    if (this.context.casesChecked === false) blocking.add('Could not check DPS')
     if (!this.hasRemandWarrant && !this.hasSentencingWarrant) blocking.add('No warrant')
 
     if (this.waitingOnSentencing) blocking.add('Sentencing warrant')
@@ -261,11 +252,11 @@ export default class ArrivalCard {
     const existingCase = recordedCases.find(Boolean)
 
     if (this.wouldBeOffered && !this.isDone) {
-      const caseSegment = existingCase ? `/${existingCase}` : ''
+      const existingCaseSegment = existingCase ? '/existing-case' : ''
       return {
         type: HearingActionType.AUTOCOMPLETE,
         text: 'Autocomplete',
-        href: `${rasUrl()}/person/${this.prisonerNumber}/review-new-documents/${this.hearing!.courtHearingId}/start${caseSegment}`,
+        href: `${rasUrl()}/person/${this.prisonerNumber}/review-new-documents/${this.hearing!.courtHearingId}/landing${existingCaseSegment}`,
       }
     }
 

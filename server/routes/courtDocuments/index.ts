@@ -3,9 +3,8 @@ import CourtDocumentRoutes from './CourtDocumentRoutes'
 import CourtDataIngestionService from '../../services/courtDataIngestionService'
 import RemandAndSentencingService from '../../services/remandAndSentencingService'
 import PrisonService from '../../services/prisonService'
-import requireRole from '../../middleware/requireRole'
 import asyncMiddleware from '../../middleware/asyncMiddleware'
-import { Role, Roles } from '../../@types/roles'
+import { canOpenCourtDocuments } from './access'
 
 export default function Index(
   courtDataIngestionService: CourtDataIngestionService,
@@ -14,10 +13,11 @@ export default function Index(
 ): Router {
   const router = Router()
 
-  router.use(requireRole(Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)))
+  router.use(canOpenCourtDocuments)
 
   const routes = new CourtDocumentRoutes(courtDataIngestionService, remandAndSentencingService, prisonService)
 
+  router.use(routes.previewing)
   router.get('/', asyncMiddleware(routes.prisons))
   router.get('/:prisonCode', asyncMiddleware(routes.week))
   router.get('/:prisonCode/day', asyncMiddleware(routes.day))

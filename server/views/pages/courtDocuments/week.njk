@@ -5,7 +5,7 @@
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 
-{% set pageTitle = applicationName + " - " + model.prisonName %}
+{% set pageTitle = applicationName + " - " + model.title + " - " + model.prisonName %}
 {% set pageId = "court-documents-week" %}
 
 {% block beforeContent %}
@@ -17,7 +17,7 @@
   <div class="govuk-grid-row govuk-!-padding-top-4">
     <div class="govuk-grid-column-one-quarter">
       {% set elsewhereItems = [{ text: "Choose a prison", href: "/court-documents" }] %}
-      {% if canSeeUnmatched %}
+      {% if supportView %}
         {% set elsewhereItems = (elsewhereItems.push({ text: "Unmatched documents", href: "/unmatched-documents" }), elsewhereItems) %}
       {% endif %}
 
@@ -48,9 +48,14 @@
 
     <div class="govuk-grid-column-three-quarters">
 
-      <h1 class="govuk-heading-xl">{{ model.prisonName }}</h1>
+      {% include "./_preview.njk" %}
 
-      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">{{ model.label }}</h2>
+      <span class="govuk-caption-xl">{{ model.prisonName }}</span>
+      <h1 class="govuk-heading-xl">{{ model.title }}</h1>
+
+      <p class="govuk-body" data-qa="intro">
+        Documents received in time order, for {{ model.prisonName }}, from HMCTS Common Platform, grouped by week and day.
+      </p>
 
       <nav class="govuk-pagination govuk-!-margin-bottom-4" aria-label="Weeks">
         <div class="govuk-pagination__prev">

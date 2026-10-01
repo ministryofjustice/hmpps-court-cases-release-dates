@@ -37,6 +37,7 @@ generic-service:
     RAS_THINGS_TO_DO_ENABLED: "true"
     RAS_THINGS_TO_DO_REPEAT_REMAND_HEARING_ENABLED: "false"
     RAS_THINGS_TO_DO_SENTENCING_ENABLED: "true"
+    COURT_DOCUMENTS_OPEN_TO_PRISONS: "false"
 
   # Switches off the allow list in the DEV env only.
   allowlist: null

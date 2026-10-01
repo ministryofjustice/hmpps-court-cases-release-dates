@@ -15,6 +15,13 @@ export default class PrisonCourtDocumentWeekViewModel {
     this.days = week.days.map(day => new WeekDayRow(day, week.prisonCode))
   }
 
+  get title(): string {
+    const monday = dayjs(this.week.from)
+    if (monday.isSame(this.thisMonday, 'day')) return 'This week'
+    if (monday.isSame(this.thisMonday.subtract(1, 'week'), 'day')) return 'Last week'
+    return `Week commencing ${monday.format('D MMMM YYYY')}`
+  }
+
   get previousHref(): string {
     return this.weekLink(dayjs(this.week.from).subtract(1, 'week')).href
   }

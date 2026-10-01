@@ -35,6 +35,7 @@
           </div>
         </div>
 
+        {% if supportView %}
         <p class="document__facts govuk-!-margin-bottom-2" data-qa="facts">
           {% for fact in card.facts %}
             {% if fact.tone == "blocked" %}
@@ -52,6 +53,7 @@
             {% endif %}
           {% endfor %}
         </p>
+        {% endif %}
 
         {% set caseReferenceHtml %}
           <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Case reference</p>
@@ -79,8 +81,8 @@
 
         {% if card.hasHearing %}
           <div class="govuk-grid-row document__row">
+            <div class="govuk-grid-column-one-third">{{ personHtml | safe }}</div>
             <div class="govuk-grid-column-one-third">{{ caseReferenceHtml | safe }}</div>
-            <div class="govuk-grid-column-one-third" data-qa="court-case">{{ field("Court case", card.courtCase) }}</div>
             <div class="govuk-grid-column-one-third">{{ field("Court name", card.courtName) }}</div>
           </div>
           <div class="govuk-grid-row document__row">
@@ -98,20 +100,18 @@
             <div class="govuk-grid-column-one-third">{{ field("Date added", card.receivedAt | dateTimeShort) }}</div>
           </div>
         {% else %}
-          {# No hearing link, so there is no court, hearing date or hearing type to show. #}
           <div class="govuk-grid-row document__row">
+            <div class="govuk-grid-column-one-third">{{ personHtml | safe }}</div>
             <div class="govuk-grid-column-one-third">{{ caseReferenceHtml | safe }}</div>
-            <div class="govuk-grid-column-one-third" data-qa="court-case">{{ field("Court case", card.courtCase) }}</div>
             <div class="govuk-grid-column-one-third">{{ field("Date added", card.receivedAt | dateTimeShort) }}</div>
           </div>
         {% endif %}
 
-        <div class="govuk-grid-row document__row">
-          <div class="govuk-grid-column-one-third">{{ personHtml | safe }}</div>
-          {% if card.addressedElsewhere %}
+        {% if card.addressedElsewhere %}
+          <div class="govuk-grid-row document__row">
             <div class="govuk-grid-column-one-third" data-qa="addressed-to">{{ field("Addressed to", card.addressedElsewhere) }}</div>
-          {% endif %}
-        </div>
+          </div>
+        {% endif %}
 
       </div>
     </div>
