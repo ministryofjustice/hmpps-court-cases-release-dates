@@ -223,6 +223,9 @@ export default {
       url: get('REMAND_AND_SENTENCING_UI_URL', 'http://localhost:3000', requiredInProduction),
     },
   },
+  courtDocuments: {
+    openToPrisons: get('COURT_DOCUMENTS_OPEN_TO_PRISONS', 'false') === 'true',
+  },
   thingsToDo: {
     enabled: get('RAS_THINGS_TO_DO_ENABLED', 'false') === 'true',
     repeatRemandHearingEnabled: get('RAS_THINGS_TO_DO_REPEAT_REMAND_HEARING_ENABLED', 'false') === 'true',

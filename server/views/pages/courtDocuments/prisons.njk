@@ -12,11 +12,15 @@
   <div class="govuk-grid-row govuk-!-padding-top-6">
     <div class="govuk-grid-column-two-thirds">
 
+      {% include "./_preview.njk" %}
+
       <h1 class="govuk-heading-xl">Court documents</h1>
 
-      <p class="govuk-body">
-        Recently arrived notifications from HMCTS Common Platform
+      <p class="govuk-body" data-qa="intro">
+        Documents received in time order, for a specific OMU, from HMCTS Common Platform, grouped by week and day.
       </p>
+
+      <h2 class="govuk-heading-m">Choose a prison</h2>
 
       {% if picker %}
         <form method="get" action="/court-documents" data-qa="prison-picker">
@@ -28,7 +32,7 @@
           {{ govukSelect({
             id: "prison-picker",
             name: "prison",
-            label: { text: "Which prison?", classes: "govuk-label--s" },
+            label: { text: "Prison", classes: "govuk-label--s" },
             items: prisonItems
           }) }}
 
@@ -47,7 +51,7 @@
         {{ govukTaskList({ items: prisonItems, attributes: { "data-qa": "prison-list" } }) }}
       {% endif %}
 
-      {% if canSeeUnmatched %}
+      {% if supportView %}
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
         <h2 class="govuk-heading-m">Documents with no person</h2>

@@ -112,8 +112,71 @@ beforeEach(() => {
 afterEach(() => jest.resetAllMocks())
 
 describe('access', () => {
+  const PRISON_ROLES = [Role.CCRD_DOCUMENTS, Role.RAS_DOCUMENT_AUTO, Role.RELEASE_DATES_CALCULATOR]
+  const withRoles = (roles: Role[]): Express.User => ({
+    ...user,
+    roles: roles.map(role => Roles.getRole(role)),
+    caseLoads: [{ ...user.caseLoads[0], caseLoadId: 'LEI', description: 'Leeds' }],
+  })
+  const prisonUser = withRoles(PRISON_ROLES)
+
+  afterEach(() => {
+    config.courtDocuments.openToPrisons = false
+  })
+
   it('is refused without the support role', () => {
     return request(appAs(nonSupportUser)).get('/court-documents').expect(302).expect('Location', '/authError')
+  })
+
+  it('is refused to prisons until opened to them', () => {
+    return request(appAs(prisonUser)).get('/court-documents/LEI').expect(302).expect('Location', '/authError')
+  })
+
+  describe('once opened to prisons', () => {
+    beforeEach(() => {
+      config.thingsToDo.enabled = true
+      config.courtDocuments.openToPrisons = true
+    })
+
+    it.each(PRISON_ROLES)('needs every one of the roles, so refuses anyone missing %s', missing => {
+      return request(appAs(withRoles(PRISON_ROLES.filter(role => role !== missing))))
+        .get('/court-documents/LEI')
+        .expect(302)
+        .expect('Location', '/authError')
+    })
+
+    it('lets in someone with all of them, with no support detail', async () => {
+      const prison = request(appAs(prisonUser))
+
+      const weekPage = await prison.get('/court-documents/LEI').expect(200)
+      expect(weekPage.text).not.toContain('Unmatched documents')
+
+      const dayPage = await prison.get('/court-documents/LEI/day?date=2026-09-08').expect(200)
+      expect(dayPage.text).toContain('Autocomplete')
+      expect(dayPage.text).not.toContain('data-qa="facts"')
+      expect(dayPage.text).not.toContain('data-qa="preview-banner"')
+    })
+
+    it('still limits them to their caseload', () => {
+      return request(appAs(prisonUser))
+        .get('/court-documents/MDI')
+        .expect(res => expect(res.status).not.toBe(200))
+    })
+
+    it('still keeps unmatched documents to the support role', () => {
+      return request(appAs(prisonUser)).get('/unmatched-documents').expect(302).expect('Location', '/authError')
+    })
+
+    it('still lets support in, with the support detail', () => {
+      return request(app)
+        .get('/court-documents/LEI/day?date=2026-09-08')
+        .expect(200)
+        .expect(res => expect(res.text).toContain('data-qa="facts"'))
+    })
+
+    it('still refuses someone with neither role', () => {
+      return request(appAs(nonSupportUser)).get('/court-documents').expect(302).expect('Location', '/authError')
+    })
   })
 })
 
@@ -133,6 +196,20 @@ describe('GET /court-documents', () => {
         expect(res.text).toContain('Hull')
         expect(res.text).not.toContain('Moorland')
         expect(res.text).toContain('href="/unmatched-documents"')
+      })
+  })
+
+  it('says in one sentence what the documents are, then asks for a prison', () => {
+    return request(app)
+      .get('/court-documents')
+      .expect(200)
+      .expect(res => {
+        const text = res.text.replace(/\s+/g, ' ')
+        expect(text).toContain(
+          'Documents received in time order, for a specific OMU, from HMCTS Common Platform, grouped by week and day.',
+        )
+        expect(text).toContain('Choose a prison')
+        expect(text).not.toContain('What you need to do')
       })
   })
 
@@ -223,12 +300,70 @@ describe('GET /court-documents', () => {
 })
 
 describe('GET /court-documents/:prisonCode', () => {
+  const mondayBack = (weeks: number) =>
+    dayjs()
+      .subtract((dayjs().day() + 6) % 7, 'day')
+      .subtract(weeks, 'week')
+  const weekStarting = (monday: dayjs.Dayjs) =>
+    week({ from: monday.format('YYYY-MM-DD'), to: monday.add(6, 'day').format('YYYY-MM-DD') })
+
+  it('calls the current week This week, with the prison as the caption', () => {
+    courtDataIngestionService.getPrisonCourtDocumentWeek.mockResolvedValue(weekStarting(mondayBack(0)))
+
+    return request(app)
+      .get('/court-documents/LEI')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toMatch(/govuk-caption-xl">Leeds</)
+        expect(res.text).toMatch(/<h1 class="govuk-heading-xl">This week<\/h1>/)
+        expect(res.text).toContain('<title>')
+        expect(res.text).toMatch(/<title>[^<]*This week - Leeds<\/title>/)
+      })
+  })
+
+  it('calls the week before Last week', () => {
+    courtDataIngestionService.getPrisonCourtDocumentWeek.mockResolvedValue(weekStarting(mondayBack(1)))
+
+    return request(app)
+      .get('/court-documents/LEI')
+      .expect(200)
+      .expect(res => expect(res.text).toMatch(/<h1 class="govuk-heading-xl">Last week<\/h1>/))
+  })
+
+  it('names an older week by the Monday it starts on', () => {
+    const monday = mondayBack(3)
+    courtDataIngestionService.getPrisonCourtDocumentWeek.mockResolvedValue(weekStarting(monday))
+
+    return request(app)
+      .get(`/court-documents/LEI?date=${monday.format('YYYY-MM-DD')}`)
+      .expect(200)
+      .expect(res =>
+        expect(res.text).toContain(`<h1 class="govuk-heading-xl">Week commencing ${monday.format('D MMMM YYYY')}</h1>`),
+      )
+  })
+
+  it('says the same in the prison context, for someone sent straight here, then asks for a day', () => {
+    return request(app)
+      .get('/court-documents/LEI')
+      .expect(200)
+      .expect(res => {
+        const text = res.text.replace(/\s+/g, ' ')
+        expect(text).toContain(
+          'Documents received in time order, for Leeds, from HMCTS Common Platform, grouped by week and day.',
+        )
+        expect(text).not.toContain('Choose a day')
+        expect(text).not.toContain('What you need to do')
+      })
+  })
+
   it('lists the days as tasks, with what arrived on each, and the recent weeks alongside', () => {
     return request(app)
       .get('/court-documents/LEI')
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('data-qa="week-days"')
+        expect(res.text).toContain('Monday 7 September')
+        expect(res.text).not.toContain('Mon 7 Sep')
         expect(res.text).toContain('3 documents, 2 people')
         expect(res.text).toContain('Nothing arrived')
         expect(res.text).toContain('data-qa="week-nav"')
@@ -376,7 +511,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Remand and sentencing could not be checked for 1 person')
+        expect(res.text).toContain('DPS could not be checked for 1 person')
       })
   })
 
@@ -391,13 +526,25 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('offers autocomplete where remand and sentencing will prefill the hearing', () => {
+  it('shows the person before their case, and no separate court case column', () => {
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text.indexOf('>Person</p>')).toBeGreaterThan(-1)
+        expect(res.text.indexOf('>Person</p>')).toBeLessThan(res.text.indexOf('>Case reference</p>'))
+        expect(res.text).not.toContain('>Court case</p>')
+      })
+  })
+
+  it('sends autocomplete to the landing page, where the documents can be seen first', () => {
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Autocomplete')
-        expect(res.text).toContain(`/person/${PRISONER}/review-new-documents/${HEARING}/start`)
+        expect(res.text).toContain(`/person/${PRISONER}/review-new-documents/${HEARING}/landing"`)
+        expect(res.text).not.toContain('/start')
       })
   })
 
@@ -439,7 +586,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Record case and appearance')
-        expect(res.text).toMatch(/Court case<\/p>\s*<p[^>]*>None recorded/)
+        expect(res.text).not.toContain('view-court-case/')
       })
   })
 
@@ -648,7 +795,7 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('says some recorded, and asks for the case to be recorded, when only some references are in remand and sentencing', () => {
+  it('links only the recorded reference, and asks for the case to be recorded, when only some are in remand and sentencing', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
     )
@@ -660,7 +807,9 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toMatch(/Court case<\/p>\s*<p[^>]*>Some recorded/)
+        expect(res.text).toContain(`view-court-case/case-uuid-1/details">${CASE_REFERENCE}</a>`)
+        expect(res.text).not.toContain('>OTHER123</a>')
+        expect(res.text).toContain('OTHER123')
         expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*Record case and appearance/)
       })
   })
@@ -676,7 +825,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('1 of 1 recorded in remand and sentencing')
+        expect(res.text).toContain('1 of 1 already recorded in DPS')
         expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*View case/)
         expect(res.text).toContain('data-qa="appearance-link"')
         expect(res.text).toContain('details#:~:text=Hearing%20date-,08%2F09%2F2026')
@@ -706,7 +855,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*Record appearance/)
-        expect(res.text).toContain('0 of 1 recorded in remand and sentencing')
+        expect(res.text).toContain('0 of 1 already recorded in DPS')
       })
   })
 
@@ -715,7 +864,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('0 of 1 recorded in remand and sentencing')
+        expect(res.text).toContain('0 of 1 already recorded in DPS')
         expect(res.text).toContain('1 can be autocompleted and 0 need recording by hand')
         expect(res.text).not.toContain('people currently held')
       })
@@ -781,7 +930,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Could not ask remand and sentencing')
+        expect(res.text).toContain('Could not check DPS')
       })
   })
 
@@ -1001,7 +1150,7 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('carries the court case into the autocomplete journey when one exists', () => {
+  it('tells the landing page a case already exists, as the things-to-do notification does', () => {
     config.thingsToDo.repeatRemandHearingEnabled = true
     remandAndSentencingService.getCourtContext.mockResolvedValue({
       casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
@@ -1011,7 +1160,60 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain(`/person/${PRISONER}/review-new-documents/${HEARING}/start/case-uuid-1`)
+        expect(res.text).toContain(`/person/${PRISONER}/review-new-documents/${HEARING}/landing/existing-case"`)
+        expect(res.text).not.toContain('/start')
       })
+  })
+})
+
+describe('support view and preview', () => {
+  const DAY = '/court-documents/LEI/day?date=2026-09-08'
+
+  it('shows the labels to the support role', () => {
+    return request(app)
+      .get(DAY)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('data-qa="facts"')
+        expect(res.text).not.toContain('data-qa="preview-banner"')
+      })
+  })
+
+  it('previewing hides the labels, keeps the next step, and says it is a preview', () => {
+    return request(app)
+      .get(`${DAY}&preview=non-support`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('data-qa="facts"')
+        expect(res.text).toContain('Autocomplete')
+        expect(res.text).toContain('data-qa="preview-banner"')
+        expect(res.text).toContain('href="/court-documents/LEI/day?date=2026-09-08&amp;preview=off"')
+      })
+  })
+
+  it('carries the preview across the pages until it is stopped', async () => {
+    const agent = request.agent(app)
+
+    const list = await agent.get('/court-documents?preview=non-support').expect(200)
+    expect(list.text).not.toContain('data-qa="unmatched-link"')
+    expect(list.text).toContain('data-qa="preview-banner"')
+
+    const weekPage = await agent.get('/court-documents/LEI').expect(200)
+    expect(weekPage.text).not.toContain('Unmatched documents')
+    expect(weekPage.text).toContain('data-qa="preview-banner"')
+
+    const dayPage = await agent.get(DAY).expect(200)
+    expect(dayPage.text).not.toContain('data-qa="facts"')
+
+    const stopped = await agent.get(`${DAY}&preview=off`).expect(200)
+    expect(stopped.text).toContain('data-qa="facts"')
+    expect(stopped.text).not.toContain('data-qa="preview-banner"')
+  })
+
+  it('cannot give anyone access: the pages still need the support role', () => {
+    return request(appAs(nonSupportUser))
+      .get('/court-documents?preview=non-support')
+      .expect(302)
+      .expect('Location', '/authError')
   })
 })

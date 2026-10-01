@@ -1,0 +1,14 @@
+{# While previewing, every page says so, so the support view cannot be left off by accident. #}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% if previewWithoutSupportRole %}
+  {% set previewHtml %}
+    <p class="govuk-notification-banner__heading">You are seeing what a user without the support role sees.</p>
+    <p class="govuk-body"><a class="govuk-notification-banner__link" href="{{ stopPreviewHref }}" data-qa="stop-preview">Stop previewing</a></p>
+  {% endset %}
+  {{ govukNotificationBanner({
+    titleText: "Preview",
+    html: previewHtml,
+    attributes: { "data-qa": "preview-banner" }
+  }) }}
+{% endif %}

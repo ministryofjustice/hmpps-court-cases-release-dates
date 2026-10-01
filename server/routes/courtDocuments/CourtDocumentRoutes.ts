@@ -5,18 +5,15 @@ import FullPageError from '../../model/FullPageError'
 import CourtDataIngestionService from '../../services/courtDataIngestionService'
 import RemandAndSentencingService from '../../services/remandAndSentencingService'
 import PrisonService from '../../services/prisonService'
-import { Role } from '../../@types/roles'
 import PrisonCourtDocumentWeekViewModel from '../../model/PrisonCourtDocumentWeekViewModel'
 import PrisonCourtDocumentDayViewModel from '../../model/PrisonCourtDocumentDayViewModel'
 import { emptyCourtContext, PersonCourtContext } from '../../model/hearingAction'
+import { supportView } from './access'
 
 const asString = (value: unknown): string => (typeof value === 'string' ? value : '')
 
 const inCaseload = (user: Express.User, prisonCode: string): boolean =>
   user.caseLoads?.some(caseLoad => caseLoad.caseLoadId === prisonCode) ?? false
-
-const canSeeUnmatched = (user: Express.User): boolean =>
-  (user.roles ?? []).includes(Role.COURTCASE_RELEASEDATE_SUPPORT.replace('ROLE_', ''))
 
 function inBatches<T>(items: T[], size: number): T[][] {
   return Array.from({ length: Math.ceil(items.length / size) }, (_, batch) =>
@@ -35,6 +32,20 @@ export default class CourtDocumentRoutes {
     private readonly prisonService: PrisonService,
   ) {}
 
+  public previewing: RequestHandler = (req, res, next) => {
+    const preview = asString(req.query.preview)
+    if (req.session && preview === 'non-support') req.session.previewWithoutSupportRole = true
+    if (req.session && preview === 'off') delete req.session.previewWithoutSupportRole
+
+    res.locals.previewWithoutSupportRole = !!req.session?.previewWithoutSupportRole
+    if (res.locals.previewWithoutSupportRole) {
+      const url = new URL(req.originalUrl, 'http://localhost')
+      url.searchParams.set('preview', 'off')
+      res.locals.stopPreviewHref = url.pathname + url.search
+    }
+    next()
+  }
+
   public prisons: RequestHandler = async (req, res) => {
     const { username } = res.locals.user
     const prisons = await this.prisonService.getAllPrisons(username)
@@ -42,7 +53,6 @@ export default class CourtDocumentRoutes {
       .filter(prison => inCaseload(res.locals.user, prison.prisonId))
       .sort((a, b) => a.prisonName.localeCompare(b.prisonName))
 
-    // Where the picker was used, or there is only one prison to pick, go straight there.
     const chosen = asString(req.query.prison).toUpperCase()
     if (chosen && sorted.some(prison => prison.prisonId === chosen)) {
       return res.redirect(`/court-documents/${chosen}`)
@@ -51,7 +61,7 @@ export default class CourtDocumentRoutes {
 
     return res.render('pages/courtDocuments/prisons', {
       prisons: sorted,
-      canSeeUnmatched: canSeeUnmatched(res.locals.user),
+      supportView: supportView(req, res),
       picker: sorted.length > PICKER_THRESHOLD,
     })
   }
@@ -69,7 +79,7 @@ export default class CourtDocumentRoutes {
 
     return res.render('pages/courtDocuments/week', {
       model: new PrisonCourtDocumentWeekViewModel(week, prisonName),
-      canSeeUnmatched: canSeeUnmatched(res.locals.user),
+      supportView: supportView(req, res),
     })
   }
 
@@ -101,6 +111,7 @@ export default class CourtDocumentRoutes {
 
     return res.render('pages/courtDocuments/day', {
       model: new PrisonCourtDocumentDayViewModel(day, prisonName, contextByPrisoner, prisonNames, names),
+      supportView: supportView(req, res),
     })
   }
 

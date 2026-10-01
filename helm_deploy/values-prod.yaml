@@ -34,6 +34,7 @@ generic-service:
     RAS_THINGS_TO_DO_ENABLED: "true"
     RAS_THINGS_TO_DO_REPEAT_REMAND_HEARING_ENABLED: "false"
     RAS_THINGS_TO_DO_SENTENCING_ENABLED: "false"
+    COURT_DOCUMENTS_OPEN_TO_PRISONS: "false"
 
 
 generic-prometheus-alerts:
