@@ -19,7 +19,6 @@
     {% if not documents.length %}
         {%- set noFiltersApplied = ("all" in filters.byCaseReferences) and (filters.showing === "all") -%}
 
-
         {% if noFiltersApplied %}
             <p class="govuk-body">There are no documents to show. Documents could be missing because:</p>
             <ul class="govuk-body">
