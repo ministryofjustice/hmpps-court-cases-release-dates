@@ -20,7 +20,12 @@
         {%- set noFiltersApplied = ("all" in filters.byCaseReferences) and (filters.showing === "all") -%}
 
         {% if noFiltersApplied %}
-            <p class="govuk-body">No documents have been received.</p>
+            <p class="govuk-body">There are no documents to show. Documents could be missing because:</p>
+            <ul class="govuk-body">
+                <li>we have not been able match documents from Common Platform to this person</li>
+                <li>documents pre-date the launch of this feature on 1 June 2026</li>
+                <li>documents are from a source we currently do not support, such as Libra or Xhibit</li>
+            </ul>
         {% else %}
             <p class="govuk-body">No documents found - try changing filters to display documents.</p>
         {% endif %}
