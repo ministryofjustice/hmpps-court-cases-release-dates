@@ -150,7 +150,7 @@ describe('Route Handlers - Overview', () => {
         const secondRasDocumentText = normaliseText(secondRasDocument.text())
         expect(secondRasDocumentText).toContain('Prison court register')
         expect(secondRasDocumentText).toContain('PDF 119 MB')
-        expect(secondRasDocumentText).toContain('Court cases')
+        expect(secondRasDocumentText).toContain('Uploaded manually')
         expect(secondRasDocumentText).toContain('Case reference')
 
         const secondRasDocumentCaseRef = textOf(secondRasDocument, '[data-qa=case-reference]')
@@ -175,7 +175,7 @@ describe('Route Handlers - Overview', () => {
         const thirdRasDocumentText = normaliseText(thirdRasDocument.text())
         expect(thirdRasDocumentText).toContain('Sentencing warrant')
         expect(thirdRasDocumentText).toContain('PDF 11 GB')
-        expect(thirdRasDocumentText).toContain('Court cases')
+        expect(thirdRasDocumentText).toContain('Uploaded manually')
         expect(thirdRasDocumentText).toContain('Case reference')
         expect(thirdRasDocumentText).toContain('AB12345678A, BC23456789B, CD34567890C')
 
@@ -200,7 +200,7 @@ describe('Route Handlers - Overview', () => {
         const fourthRasDocumentText = normaliseText(fourthRasDocument.text())
         expect(fourthRasDocumentText).toContain('Sentencing warrant')
         expect(fourthRasDocumentText).toContain('PDF 11 GB')
-        expect(fourthRasDocumentText).toContain('Court cases')
+        expect(fourthRasDocumentText).toContain('Uploaded manually')
         expect(fourthRasDocumentText).toContain('Case reference')
         const fourthRasDocumentCaseRef = textOf(fourthRasDocument, '[data-qa=case-reference]')
         expect(fourthRasDocumentCaseRef).toContain(RaSDocumentMapper.CASE_REFERENCE_NOT_ENTERED)
