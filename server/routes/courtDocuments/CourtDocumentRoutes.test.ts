@@ -492,7 +492,7 @@ describe('GET /court-documents/:prisonCode', () => {
     remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
       {
         ...eligibility,
-        cases: [{ caseReference: 'asd', caseUniqueIdentifier: 'asdasdx1x21x1' }],
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: 'asdasdx1x21x1' }],
         hasBeenCompleted: true,
       },
     ])
