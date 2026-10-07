@@ -127,8 +127,8 @@ export interface paths {
     get: operations['deliveryAddresses']
     put?: never
     /**
-     * Classify a delivery address and re-resolve its documents
-     * @description Creates or replaces the mapping, then triggers the reresolve backfill.
+     * Classify a delivery address
+     * @description Creates or replaces the mapping only. Documents already ingested for the address are updated by the addressed-prison-reresolve backfill, which is started separately from the backfill administration endpoints once all classification is done.
      */
     post: operations['classify']
     delete?: never
@@ -148,7 +148,7 @@ export interface paths {
     put?: never
     /**
      * Dry run a classification
-     * @description Same resolution path as the apply, so the counts are real.
+     * @description Shows the category and prison a classification would set, and whether it replaces an existing mapping. It does not count documents, which is slow on a large table. Existing documents are updated by the backfill.
      */
     post: operations['preview']
     delete?: never
@@ -355,21 +355,12 @@ export interface components {
     }
     ClassifyAddressResult: {
       mappingId: string
-      /** Format: int32 */
-      documentsQueued: number
-      backfillRunId?: string | null
       backfillOutcome: string
     }
     ClassifyAddressPreview: {
       emailAddress: string
       category: components['schemas']['DeliveryCategory']
       prisonCode?: string | null
-      /** Format: int32 */
-      documentsAffected: number
-      /** Format: int32 */
-      peopleAffected: number
-      currentLocations: components['schemas']['LocationCount'][]
-      locationsSampled: boolean
       replacesExisting: boolean
     }
     DeliveryCategory: {
@@ -380,11 +371,6 @@ export interface components {
       createdBy?: string | null
       /** Format: date-time */
       createdAt: string
-    }
-    LocationCount: {
-      prisonCode: string
-      /** Format: int32 */
-      people: number
     }
     TriggerResponse: {
       /** Format: uuid */
@@ -838,7 +824,7 @@ export interface operations {
       }
     }
     responses: {
-      /** @description Mapping created and re-resolution requested */
+      /** @description Mapping saved; existing documents are updated by the next backfill run */
       200: {
         headers: {
           [name: string]: unknown
