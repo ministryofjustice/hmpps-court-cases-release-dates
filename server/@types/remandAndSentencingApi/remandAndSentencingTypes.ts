@@ -83,3 +83,6 @@ export type PeriodLengthLegacyData = components['schemas']['PeriodLengthLegacyDa
 export type PagedAppearancePeriodLength = components['schemas']['PagedAppearancePeriodLength']
 export type ThingsToDo = components['schemas']['ThingsToDo']
 export type ThingToDo = components['schemas']['ThingToDo']
+export type HmctsHearingAutopopulateEligibility = components['schemas']['HmctsHearingAutopopulateEligibility']
+export type HmctsHearingIdPair = components['schemas']['HmctsHearingIdPair']
+export type HmctsAutopopulateFeatureType = components['schemas']['HmctsAutopopulateFeature']['type']

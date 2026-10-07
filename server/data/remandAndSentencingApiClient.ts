@@ -8,6 +8,8 @@ import {
   SearchCourtCasesPage,
   ThingsToDo,
   SentenceConsecutiveToDetailsResponse,
+  HmctsHearingIdPair,
+  HmctsHearingAutopopulateEligibility,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 export default class RemandAndSentencingApiClient {
@@ -70,5 +72,14 @@ export default class RemandAndSentencingApiClient {
         size,
       },
     })
+  }
+
+  async areHmctsHearingsEligibleForAutopopulate(
+    hearingIds: HmctsHearingIdPair[],
+  ): Promise<HmctsHearingAutopopulateEligibility[]> {
+    return this.restClient.post({
+      path: `/hmcts-court-data/hearing-autopopulate-eligibility`,
+      data: hearingIds,
+    }) as Promise<HmctsHearingAutopopulateEligibility[]>
   }
 }

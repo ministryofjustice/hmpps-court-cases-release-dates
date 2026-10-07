@@ -7,21 +7,12 @@ import RemandAndSentencingService from '../../services/remandAndSentencingServic
 import PrisonService from '../../services/prisonService'
 import PrisonCourtDocumentWeekViewModel from '../../model/PrisonCourtDocumentWeekViewModel'
 import PrisonCourtDocumentDayViewModel from '../../model/PrisonCourtDocumentDayViewModel'
-import { emptyCourtContext, PersonCourtContext } from '../../model/hearingAction'
 import { supportView } from './access'
 
 const asString = (value: unknown): string => (typeof value === 'string' ? value : '')
 
 const inCaseload = (user: Express.User, prisonCode: string): boolean =>
   user.caseLoads?.some(caseLoad => caseLoad.caseLoadId === prisonCode) ?? false
-
-function inBatches<T>(items: T[], size: number): T[][] {
-  return Array.from({ length: Math.ceil(items.length / size) }, (_, batch) =>
-    items.slice(batch * size, (batch + 1) * size),
-  )
-}
-
-const LOOKUP_CONCURRENCY = 5
 
 const PICKER_THRESHOLD = 10
 
@@ -104,39 +95,21 @@ export default class CourtDocumentRoutes {
           `${convertToTitleCase(person.lastName)}, ${convertToTitleCase(person.firstName ?? '')}`.replace(/, $/, ''),
         ]),
     )
-    const contextByPrisoner = await this.courtContextFor(
-      day.people.map(person => person.prisonerNumber),
+
+    const hearingIds = day.hearings.map(it => {
+      return {
+        hearingId: it.courtHearingId,
+        prisonerNumber: it.prisonerNumber,
+      }
+    })
+    const autocompleteEligibilty = await this.remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate(
+      hearingIds,
       username,
     )
 
     return res.render('pages/courtDocuments/day', {
-      model: new PrisonCourtDocumentDayViewModel(day, prisonName, contextByPrisoner, prisonNames, names),
+      model: new PrisonCourtDocumentDayViewModel(day, prisonName, prisonNames, names, autocompleteEligibilty),
       supportView: supportView(req, res),
     })
-  }
-
-  private async courtContextFor(prisonerNumbers: string[], username: string): Promise<Map<string, PersonCourtContext>> {
-    const contexts = new Map<string, PersonCourtContext>()
-
-    await inBatches(prisonerNumbers, LOOKUP_CONCURRENCY).reduce(
-      (previous, batch) =>
-        previous.then(async () => {
-          await Promise.all(
-            batch.map(async prisonerNumber => {
-              try {
-                contexts.set(
-                  prisonerNumber,
-                  await this.remandAndSentencingService.getCourtContext(prisonerNumber, username),
-                )
-              } catch {
-                contexts.set(prisonerNumber, emptyCourtContext())
-              }
-            }),
-          )
-        }),
-      Promise.resolve(),
-    )
-
-    return contexts
   }
 }

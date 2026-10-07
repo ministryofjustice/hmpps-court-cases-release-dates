@@ -226,11 +226,6 @@ export default {
   courtDocuments: {
     openToPrisons: get('COURT_DOCUMENTS_OPEN_TO_PRISONS', 'false') === 'true',
   },
-  thingsToDo: {
-    enabled: get('RAS_THINGS_TO_DO_ENABLED', 'false') === 'true',
-    repeatRemandHearingEnabled: get('RAS_THINGS_TO_DO_REPEAT_REMAND_HEARING_ENABLED', 'false') === 'true',
-    sentencingEnabled: get('RAS_THINGS_TO_DO_SENTENCING_ENABLED', 'false') === 'true',
-  },
   externalUrls: {
     releaseDateDefinitions: {
       url: get(

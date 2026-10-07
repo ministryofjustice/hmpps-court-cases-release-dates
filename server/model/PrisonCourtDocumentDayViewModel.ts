@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { PrisonCourtDocumentDay } from '../@types/courtDataIngestionApi/prisonCourtDocumentTypes'
-import { PersonCourtContext } from './hearingAction'
 import HearingListViewModel from './HearingListViewModel'
+import { HmctsHearingAutopopulateEligibility } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 export default class PrisonCourtDocumentDayViewModel {
   readonly list: HearingListViewModel
@@ -9,17 +9,17 @@ export default class PrisonCourtDocumentDayViewModel {
   constructor(
     private readonly day: PrisonCourtDocumentDay,
     readonly prisonName: string,
-    contextByPrisoner: Map<string, PersonCourtContext>,
     prisonNames: Map<string, string> = new Map(),
     names: Map<string, string> = new Map(),
+    autocompleteEligibilty: HmctsHearingAutopopulateEligibility[] = [],
   ) {
     this.list = new HearingListViewModel(
       day.hearings,
       day.documentsWithoutAHearing,
       day.prisonCode,
-      contextByPrisoner,
       prisonNames,
       names,
+      autocompleteEligibilty,
     )
   }
 

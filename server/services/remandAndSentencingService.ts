@@ -1,11 +1,11 @@
 import { compareDesc } from 'date-fns'
-import config from '../config'
 import RemandAndSentencingApiClient from '../data/remandAndSentencingApiClient'
 import {
   ApiRecall,
   getRecallType,
+  HmctsHearingAutopopulateEligibility,
+  HmctsHearingIdPair,
   ImmigrationDetention,
-  PagedCourtCase,
   RasPrisonerDocuments,
   Recall,
   SearchCourtCasesPage,
@@ -13,12 +13,17 @@ import {
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import { HmppsAuthClient } from '../data'
 import logger from '../../logger'
-import { PersonCourtContext } from '../model/hearingAction'
-
-const COURT_CASE_PAGE_SIZE = 100
 
 export default class RemandAndSentencingService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
+
+  public async areHmctsHearingsEligibleForAutopopulate(
+    hearingIds: HmctsHearingIdPair[],
+    username: string,
+  ): Promise<HmctsHearingAutopopulateEligibility[]> {
+    const client = new RemandAndSentencingApiClient(await this.getSystemClientToken(username))
+    return client.areHmctsHearingsEligibleForAutopopulate(hearingIds)
+  }
 
   public async getLatestImmigrationDetentionRecordForPrisoner(
     prisonerId: string,
@@ -36,36 +41,6 @@ export default class RemandAndSentencingService {
         }
       }
       throw error
-    }
-  }
-
-  public thingsToDoConfig(): { enabled: boolean; repeatRemandHearingEnabled: boolean } {
-    return config.thingsToDo
-  }
-
-  public async getCourtContext(prisonerId: string, username: string): Promise<PersonCourtContext> {
-    const client = new RemandAndSentencingApiClient(await this.getSystemClientToken(username))
-
-    const cases = await client
-      .searchCourtCases(prisonerId, 'APPEARANCE_DATE_DESC', 0, COURT_CASE_PAGE_SIZE)
-      .catch((error: unknown): SearchCourtCasesPage | undefined => {
-        logger.error(error, `Could not read court cases for ${prisonerId}`)
-        return undefined
-      })
-
-    const casesByReference = new Map<string, string>()
-    const latestAppearanceDates = new Map<string, string>()
-    cases?.content?.forEach((courtCase: PagedCourtCase) => {
-      courtCase.caseReferences?.forEach((reference: string) => casesByReference.set(reference, courtCase.courtCaseUuid))
-      if (courtCase.latestCourtAppearance?.warrantDate) {
-        latestAppearanceDates.set(courtCase.courtCaseUuid, courtCase.latestCourtAppearance.warrantDate)
-      }
-    })
-
-    return {
-      casesByReference,
-      latestAppearanceDates,
-      casesChecked: cases !== undefined,
     }
   }
 

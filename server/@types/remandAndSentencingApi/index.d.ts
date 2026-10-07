@@ -968,6 +968,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/hmcts-court-data/hearing-autopopulate-eligibility": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Is the hearing eligible for autopopulation
+         * @description This endpoint will retrieve hmcts hearing and check if its eligible for the autopopulate journey
+         */
+        post: operations["areHmctsHearingsEligibleForAutopopulate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/event-admin/republish": {
         parameters: {
             query?: never;
@@ -2456,7 +2476,7 @@ export interface components {
             previousSentenceIds?: string[] | null;
             originalSentenceId?: string | null;
             isOnFutureAppearance?: boolean | null;
-            isBreach?: boolean | null;
+            isBreach: boolean | null;
             courtAppearanceIds?: string[] | null;
             chargeIds?: string[] | null;
             periodLengthIds?: string[] | null;
@@ -2496,7 +2516,7 @@ export interface components {
             outcomeDescription?: string | null;
             /** Format: date-time */
             nextEventDateTime?: string | null;
-            /** @example 14:57:04.858042196 */
+            /** @example 07:44:46.372748735 */
             appearanceTime?: string | null;
             outcomeDispositionCode?: string | null;
             outcomeConvictionFlag?: boolean | null;
@@ -2590,6 +2610,8 @@ export interface components {
             replacingChargeUuid?: string | null;
             /** Format: int32 */
             createChargeOrder?: number | null;
+            /** Format: uuid */
+            hmctsChargeId?: string | null;
             aggravatingFactors?: components["schemas"]["AggravatingFactor"][];
         };
         CreateCourtAppearance: {
@@ -2612,6 +2634,8 @@ export interface components {
             prisonId: string;
             documents?: components["schemas"]["UploadedDocument"][] | null;
             periodLengths?: components["schemas"]["CreatePeriodLength"][] | null;
+            /** Format: uuid */
+            hmctsCourtHearingId?: string | null;
         };
         CreateCourtCase: {
             prisonerId: string;
@@ -2625,7 +2649,7 @@ export interface components {
         CreateNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 14:57:04.858042196 */
+            /** @example 07:44:46.372748735 */
             appearanceTime?: string | null;
             courtCode: string;
             /** Format: uuid */
@@ -2633,6 +2657,8 @@ export interface components {
             prisonId: string;
             /** Format: uuid */
             courtAppearanceSubtypeUuid?: string | null;
+            /** Format: uuid */
+            hmctsCourtHearingId?: string | null;
         };
         CreatePeriodLength: {
             /** Format: uuid */
@@ -2711,6 +2737,7 @@ export interface components {
             /** Format: int32 */
             displayOrder: number;
             dispositionCode: string;
+            hmctsCode?: string | null;
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE";
         };
@@ -2723,6 +2750,7 @@ export interface components {
             /** Format: int32 */
             displayOrder: number;
             dispositionCode: string;
+            hmctsCode?: string | null;
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE";
         };
@@ -3210,6 +3238,28 @@ export interface components {
             courtCaseUuid: string;
             prisonerId: string;
         };
+        HmctsHearingIdPair: {
+            prisonerNumber: string;
+            /** Format: uuid */
+            hearingId: string;
+        };
+        HmctsAutopopulateFeature: {
+            /** @enum {string} */
+            type: "MULTIPLE_CASE_REFERENCES" | "REMAND_WARRANT" | "SENTENCING_WARRANT" | "NEW_REMAND_APPEARANCE_ON_EXISTING_CASE" | "NEW_SENTENCING_APPEARANCE_ON_EXISTING_CASE";
+            enabled: boolean;
+        };
+        HmctsHearingAutopopulateEligibility: {
+            prisonerNumber: string,
+            hearingId: string,
+            cases: components["schemas"]["ExistingCaseReferenceAndId"][];
+            features: components["schemas"]["HmctsAutopopulateFeature"][];
+            hasBeenCompleted: boolean;
+            hasWarrantAndPcr: boolean;
+        };
+        ExistingCaseReferenceAndId: {
+            caseReference: string,
+            caseUniqueIdentifier: string
+        };
         RepublishEvents: {
             eventsMetadata: components["schemas"]["EventMetadata"][];
         };
@@ -3608,6 +3658,8 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
             findingOfDomesticAbuse?: boolean | null;
+            /** Format: uuid */
+            hmctsChargeId?: string | null;
         };
         CourtAppearance: {
             /** Format: uuid */
@@ -3630,6 +3682,8 @@ export interface components {
             /** @enum {string} */
             deleteStatus: "SUPPORTED" | "NOT_SUPPORTED";
             periodLengths: components["schemas"]["PeriodLength"][];
+            /** Format: uuid */
+            hmctsCourtHearingId?: string | null;
         };
         CourtAppearanceSubtype: {
             /** Format: uuid */
@@ -3664,13 +3718,15 @@ export interface components {
         NextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 14:57:04.858042196 */
+            /** @example 07:44:46.372748735 */
             appearanceTime?: string | null;
             courtCode: string;
             appearanceType: components["schemas"]["AppearanceType"];
             /** Format: uuid */
             futureSkeletonAppearanceUuid: string;
             courtAppearanceSubType?: components["schemas"]["CourtAppearanceSubtype"] | null;
+            /** Format: uuid */
+            hmctsCourtHearingId?: string | null;
         };
         PrisonerSentenceEnvelope: {
             /** Format: date */
@@ -3907,7 +3963,7 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            /** @example 14:57:04.858042196 */
+            /** @example 07:44:46.372748735 */
             appearanceTime: string;
             nomisOutcomeCode?: string | null;
             legacyData?: components["schemas"]["CourtAppearanceLegacyData"] | null;
@@ -3930,7 +3986,7 @@ export interface components {
         ReconciliationNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 14:57:04.858042196 */
+            /** @example 07:44:46.372748735 */
             appearanceTime?: string | null;
             courtId: string;
         };
@@ -3985,7 +4041,7 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            /** @example 14:57:04.858042196 */
+            /** @example 07:44:46.372748735 */
             appearanceTime: string;
             charges: components["schemas"]["LegacyCharge"][];
             nextCourtAppearance?: components["schemas"]["LegacyNextCourtAppearance"] | null;
@@ -3997,7 +4053,7 @@ export interface components {
         LegacyNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 14:57:04.858042196 */
+            /** @example 07:44:46.372748735 */
             appearanceTime?: string | null;
             courtId: string;
         };
@@ -4205,7 +4261,7 @@ export interface components {
         PagedNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 14:57:04.858042196 */
+            /** @example 07:44:46.372748735 */
             appearanceTime?: string | null;
             courtCode?: string | null;
             appearanceTypeDescription: string;
@@ -7032,6 +7088,57 @@ export interface operations {
             };
         };
     };
+    areHmctsHearingsEligibleForAutopopulate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HmctsHearingIdPair"][];
+            };
+        };
+        responses: {
+            /** @description Returns eligibility details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HmctsHearingAutopopulateEligibility"][];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HmctsHearingAutopopulateEligibility"][];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HmctsHearingAutopopulateEligibility"][];
+                };
+            };
+            /** @description Not found if no court case at uuid */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HmctsHearingAutopopulateEligibility"][];
+                };
+            };
+        };
+    };
     republishEvents: {
         parameters: {
             query?: never;
@@ -8758,7 +8865,9 @@ export interface operations {
     };
     getImmigrationDetentionByPrisonerId: {
         parameters: {
-            query?: never;
+            query?: {
+                bookingId?: string;
+            };
             header?: never;
             path: {
                 prisonerId: string;
