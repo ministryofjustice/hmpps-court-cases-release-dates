@@ -189,18 +189,14 @@ export default class DeliveryAddressRoutes {
     request: ClassifyAddressRequest,
     token: string,
   ) {
-    const { outcome, result } = await this.courtDataIngestionService.classifyAddress(request, token)
+    const { outcome } = await this.courtDataIngestionService.classifyAddress(request, token)
 
     await this.audit(req, 'CLASSIFY_DELIVERY_ADDRESS', 'DELIVERY_ADDRESS', request.emailAddress, {
       ...request,
       outcome,
-      documentsQueued: result?.documentsQueued,
     })
 
-    return res.redirect(
-      `/document-delivery?outcome=${outcome}&email=${encodeURIComponent(request.emailAddress)}` +
-        `&documents=${result?.documentsQueued ?? 0}&backfill=${result?.backfillOutcome ?? 'not-triggered'}`,
-    )
+    return res.redirect(`/document-delivery?outcome=${outcome}&email=${encodeURIComponent(request.emailAddress)}`)
   }
 
   private async audit(
@@ -232,17 +228,12 @@ export default class DeliveryAddressRoutes {
     if (!outcome) return undefined
 
     const email = asString(query.email)
-    const documents = asString(query.documents) || '0'
-    const backfill = asString(query.backfill)
 
     switch (outcome) {
       case 'classified':
         return {
           type: 'success',
-          text:
-            backfill === 'already-running'
-              ? `${email} classified. Its ${documents} documents will be picked up by the re-resolution already running.`
-              : `${email} classified. Re-resolution started for ${documents} documents.`,
+          text: `${email} classified. Its existing documents are updated when the re-resolution backfill is next run.`,
         }
       case 'created':
         return { type: 'success', text: `Category ${asString(query.code)} created` }

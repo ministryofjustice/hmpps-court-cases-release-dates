@@ -36,50 +36,22 @@
             key: { text: "Prison" },
             value: { text: preview.prisonCode },
             actions: { items: [{ href: changeHref, text: "Change", visuallyHiddenText: "prison" }] }
-          },
-          { key: { text: "Documents affected" }, value: { text: preview.documentsAffected } },
-          { key: { text: "People affected" }, value: { text: preview.peopleAffected } }
+          }
         ],
         attributes: { "data-qa": "preview" }
       }) }}
 
       {% set warningHtml %}
-        This records {{ preview.documentsAffected }} documents already received as delivered to
-        {{ preview.prisonCode }}, not just future traffic.
-        {% if preview.replacesExisting %}It also replaces the mapping this address already has.{% endif %}
+        Documents already received from this address are recorded as delivered to
+        {{ preview.prisonCode }} when the re-resolution backfill is next run, not just future traffic.
+        {% if preview.replacesExisting %}This also replaces the mapping this address already has.{% endif %}
       {% endset %}
       {{ govukWarningText({ html: warningHtml, iconFallbackText: "Warning", attributes: { "data-qa": "blast-radius" } }) }}
 
-      <h2 class="govuk-heading-m">Where these people are now</h2>
       <p class="govuk-body">
-        If they are spread across the estate rather than held at {{ preview.prisonCode }}, this address
-        probably serves a hub, and recording it against one prison would be wrong. Each document still
-        reaches whoever holds the person.
+        If this address serves a hub rather than a single prison, recording it against one prison would be
+        wrong. Each document still reaches whoever holds the person.
       </p>
-
-      {% if preview.locationsSampled %}
-        <p class="govuk-hint" data-qa="sampled">
-          Based on a sample of the people affected, not all {{ preview.peopleAffected }}.
-        </p>
-      {% endif %}
-
-      <table class="govuk-table govuk-table--small-text-until-10pt" data-qa="locations">
-        <caption class="govuk-table__caption govuk-visually-hidden">Current location of the people affected</caption>
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Prison</th>
-            <th scope="col" class="govuk-table__header govuk-table__header--numeric">People</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% for location in preview.currentLocations %}
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">{{ location.prisonCode }}</td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">{{ location.people }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
 
       <form method="post" action="/document-delivery/confirm" novalidate>
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
@@ -88,7 +60,7 @@
         <input type="hidden" name="prisonCode" value="{{ preview.prisonCode }}" />
 
         <div class="govuk-button-group">
-          {{ govukButton({ text: "Create mapping and re-resolve", preventDoubleClick: true, attributes: { "data-qa": "confirm" } }) }}
+          {{ govukButton({ text: "Save mapping", preventDoubleClick: true, attributes: { "data-qa": "confirm" } }) }}
           <a class="govuk-link" href="/document-delivery">Cancel</a>
         </div>
       </form>

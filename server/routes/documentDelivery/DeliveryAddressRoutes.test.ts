@@ -61,13 +61,6 @@ const preview: ClassifyAddressPreview = {
   emailAddress: BIRMINGHAM,
   category: prisonCategory,
   prisonCode: 'BMI',
-  documentsAffected: 196,
-  peopleAffected: 180,
-  currentLocations: [
-    { prisonCode: 'BMI', people: 120 },
-    { prisonCode: 'LEI', people: 60 },
-  ],
-  locationsSampled: true,
   replacesExisting: false,
 }
 
@@ -80,9 +73,7 @@ beforeEach(() => {
     outcome: 'classified',
     result: {
       mappingId: '11111111-1111-1111-1111-111111111111',
-      documentsQueued: 196,
-      backfillRunId: '22222222-2222-2222-2222-222222222222',
-      backfillOutcome: 'started',
+      backfillOutcome: 'pending',
     },
   })
 })
@@ -153,12 +144,10 @@ describe('GET /document-delivery', () => {
 
   it('reports the outcome of a classification when redirected back', () => {
     return request(app)
-      .get(
-        `/document-delivery?outcome=classified&email=${encodeURIComponent(BIRMINGHAM)}&documents=196&backfill=started`,
-      )
+      .get(`/document-delivery?outcome=classified&email=${encodeURIComponent(BIRMINGHAM)}`)
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Re-resolution started for 196 documents')
+        expect(res.text).toContain('existing documents are updated when the re-resolution backfill is next run')
       })
   })
 })
@@ -218,14 +207,28 @@ describe('POST /document-delivery/classify', () => {
 })
 
 describe('GET /document-delivery/confirm', () => {
-  it('shows what the mapping would affect and where those people are now', () => {
+  it('shows the mapping to be created and says existing documents are updated by the backfill', () => {
     return request(app)
       .get(`/document-delivery/confirm?email=${encodeURIComponent(BIRMINGHAM)}&category=PRISON&prison=BMI`)
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('196')
         expect(res.text).toContain('BMI')
-        expect(res.text).toContain('LEI')
+        expect(res.text).toContain('when the re-resolution backfill is next run')
+        expect(res.text).toContain('Save mapping')
+        expect(res.text).not.toContain('Documents affected')
+        expect(res.text).not.toContain('data-qa="locations"')
+        expect(res.text).not.toContain('replaces the mapping this address already has')
+      })
+  })
+
+  it('warns when the mapping replaces an existing one', () => {
+    courtDataIngestionService.previewClassification.mockResolvedValue({ ...preview, replacesExisting: true })
+
+    return request(app)
+      .get(`/document-delivery/confirm?email=${encodeURIComponent(BIRMINGHAM)}&category=PRISON&prison=BMI`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('replaces the mapping this address already has')
       })
   })
 
@@ -241,13 +244,13 @@ describe('GET /document-delivery/confirm', () => {
 })
 
 describe('POST /document-delivery/confirm', () => {
-  it('applies the mapping and reports how many documents will be re-resolved', () => {
+  it('applies the mapping and leaves existing documents for the backfill', () => {
     return request(app)
       .post('/document-delivery/confirm')
       .type('form')
       .send({ emailAddress: BIRMINGHAM, categoryCode: 'PRISON', prisonCode: 'BMI' })
       .expect(302)
-      .expect('Location', /outcome=classified.*documents=196.*backfill=started/)
+      .expect('Location', `/document-delivery?outcome=classified&email=${encodeURIComponent(BIRMINGHAM)}`)
       .expect(() => {
         expect(courtDataIngestionService.classifyAddress).toHaveBeenCalledWith(
           { emailAddress: BIRMINGHAM, categoryCode: 'PRISON', prisonCode: 'BMI' },
