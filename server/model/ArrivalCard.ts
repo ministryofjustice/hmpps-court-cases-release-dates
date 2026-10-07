@@ -160,7 +160,7 @@ export default class ArrivalCard {
   }
 
   get isDone(): boolean {
-    return this.autocompleteEligibility?.hasBeenCompleted
+    return this.autocompleteEligibility?.hasBeenCompleted === true
   }
 
   private get hasExistingCase(): boolean {
@@ -245,12 +245,12 @@ export default class ArrivalCard {
   get appearanceHref(): string | null {
     if (!this.isDone || !this.hearing) return null
 
-    const courtCase = this.references.map(reference =>
-      this.autocompleteEligibility?.cases?.find(it => it.caseReference === reference),
-    )
+    const courtCase = this.references
+      .map(reference => this.autocompleteEligibility?.cases?.find(it => it.caseReference === reference))
+      .find(Boolean)
     const shown = encodeURIComponent(dayjs(this.hearing.hearingDate).format('DD/MM/YYYY'))
 
-    return `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${courtCase}/details#:~:text=Hearing%20date-,${shown}`
+    return `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${courtCase.caseUniqueIdentifier}/details#:~:text=Hearing%20date-,${shown}`
   }
 
   get action(): HearingAction {
