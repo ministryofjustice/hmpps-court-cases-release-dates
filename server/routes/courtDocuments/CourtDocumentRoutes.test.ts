@@ -11,6 +11,7 @@ import {
   PrisonCourtDocumentWeek,
 } from '../../@types/courtDataIngestionApi/prisonCourtDocumentTypes'
 import { Role, Roles } from '../../@types/roles'
+import { HmctsHearingAutopopulateEligibility } from '../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 jest.mock('../../services/courtDataIngestionService')
 jest.mock('../../services/remandAndSentencingService')
@@ -88,11 +89,14 @@ const day = (overrides: Partial<PrisonCourtDocumentDay> = {}): PrisonCourtDocume
   ...overrides,
 })
 
-afterEach(() => {
-  config.thingsToDo.enabled = true
-  config.thingsToDo.repeatRemandHearingEnabled = false
-  config.thingsToDo.sentencingEnabled = false
-})
+const eligibility = {
+  prisonerNumber: PRISONER,
+  hearingId: HEARING,
+  cases: [],
+  features: [],
+  hasBeenCompleted: false,
+  hasWarrantAndPcr: true,
+} as HmctsHearingAutopopulateEligibility
 
 beforeEach(() => {
   app = appAs(supportUser)
@@ -104,9 +108,7 @@ beforeEach(() => {
   prisonService.getPrisonName.mockResolvedValue('Leeds')
   courtDataIngestionService.getPrisonCourtDocumentWeek.mockResolvedValue(week())
   courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(day())
-  remandAndSentencingService.getCourtContext.mockResolvedValue({
-    casesByReference: new Map(),
-  })
+  remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([eligibility])
 })
 
 afterEach(() => jest.resetAllMocks())
@@ -134,10 +136,8 @@ describe('access', () => {
 
   describe('once opened to prisons', () => {
     beforeEach(() => {
-      config.thingsToDo.enabled = true
       config.courtDocuments.openToPrisons = true
     })
-
     it.each(PRISON_ROLES)('needs every one of the roles, so refuses anyone missing %s', missing => {
       return request(appAs(withRoles(PRISON_ROLES.filter(role => role !== missing))))
         .get('/court-documents/LEI')
@@ -376,7 +376,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(200)
       .expect(() => {
         expect(courtDataIngestionService.getPrisonCourtDocumentDay).not.toHaveBeenCalled()
-        expect(remandAndSentencingService.getCourtContext).not.toHaveBeenCalled()
+        expect(remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate).not.toHaveBeenCalled()
       })
   })
 
@@ -489,11 +489,13 @@ describe('GET /court-documents/:prisonCode', () => {
   })
 
   it('leaves an arrival already recorded unmarked, so what is left stands out', () => {
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-      latestAppearanceDates: new Map([['case-uuid-1', '2026-09-08']]),
-      casesChecked: true,
-    })
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: 'asd', caseUniqueIdentifier: 'asdasdx1x21x1' }],
+        hasBeenCompleted: true,
+      },
+    ])
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
@@ -501,17 +503,6 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => {
         expect(res.text).not.toContain('document--action')
         expect(res.text).toMatch(/govuk-tag--green[^>]*>\s*Existing appearance/)
-      })
-  })
-
-  it('warns when remand and sentencing could not be checked, rather than implying nothing is eligible', () => {
-    remandAndSentencingService.getCourtContext.mockRejectedValue(new Error('forbidden'))
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain('DPS could not be checked for 1 person')
       })
   })
 
@@ -559,9 +550,13 @@ describe('GET /court-documents/:prisonCode', () => {
         ],
       }),
     )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-    })
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        features: [{ type: 'NEW_SENTENCING_APPEARANCE_ON_EXISTING_CASE', enabled: false }],
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: 'case-uuid-1' }],
+      },
+    ])
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
@@ -577,9 +572,13 @@ describe('GET /court-documents/:prisonCode', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
     )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map(),
-    })
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        features: [{ type: 'REMAND_WARRANT', enabled: false }],
+        cases: [],
+      },
+    ])
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
@@ -590,24 +589,13 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('falls back to the manual route when remand and sentencing cannot be asked', () => {
-    remandAndSentencingService.getCourtContext.mockRejectedValue(new Error('unavailable'))
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain('Record case and appearance')
-      })
-  })
-
   it('asks remand and sentencing nothing about what it would offer', () => {
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Autocomplete')
-        expect(remandAndSentencingService.getCourtContext).toHaveBeenCalledTimes(1)
+        expect(remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate).toHaveBeenCalledTimes(1)
       })
   })
 
@@ -622,9 +610,13 @@ describe('GET /court-documents/:prisonCode', () => {
         ],
       }),
     )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-    })
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        features: [{ type: 'NEW_SENTENCING_APPEARANCE_ON_EXISTING_CASE', enabled: false }],
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: '1231' }],
+      },
+    ])
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
@@ -632,28 +624,6 @@ describe('GET /court-documents/:prisonCode', () => {
       .expect(res => {
         expect(res.text).not.toContain('>Autocomplete')
         expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*Record appearance/)
-      })
-  })
-
-  it('does not offer a sentencing warrant on a case that does not exist either', () => {
-    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({
-        hearings: [
-          {
-            ...day().hearings[0],
-            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
-          },
-        ],
-      }),
-    )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).not.toContain('>Autocomplete')
-        expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*Record case and appearance/)
       })
   })
 
@@ -669,7 +639,7 @@ describe('GET /court-documents/:prisonCode', () => {
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
       .expect(() => {
-        expect(remandAndSentencingService.getCourtContext).toHaveBeenCalledTimes(1)
+        expect(remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate).toHaveBeenCalledTimes(1)
       })
   })
 
@@ -795,31 +765,14 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('links only the recorded reference, and asks for the case to be recorded, when only some are in remand and sentencing', () => {
-    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
-    )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-    })
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain(`view-court-case/case-uuid-1/details">${CASE_REFERENCE}</a>`)
-        expect(res.text).not.toContain('>OTHER123</a>')
-        expect(res.text).toContain('OTHER123')
-        expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*Record case and appearance/)
-      })
-  })
-
   it('counts a hearing as done when its case already has an appearance on the hearing date', () => {
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-      latestAppearanceDates: new Map([['case-uuid-1', '2026-09-08']]),
-      casesChecked: true,
-    })
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: '1231' }],
+        hasBeenCompleted: true,
+      },
+    ])
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
@@ -844,12 +797,14 @@ describe('GET /court-documents/:prisonCode', () => {
         ],
       }),
     )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-      latestAppearanceDates: new Map([['case-uuid-1', '2026-06-01']]),
-      casesChecked: true,
-    })
-
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: '1231' }],
+        features: [{ type: 'SENTENCING_WARRANT', enabled: false }],
+        hasBeenCompleted: false,
+      },
+    ])
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
@@ -874,9 +829,6 @@ describe('GET /court-documents/:prisonCode', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
     )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map(),
-    })
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
@@ -897,9 +849,6 @@ describe('GET /court-documents/:prisonCode', () => {
         ],
       }),
     )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map(),
-    })
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
@@ -910,10 +859,6 @@ describe('GET /court-documents/:prisonCode', () => {
   })
 
   it('states what arrived even when everything looks eligible', () => {
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map(),
-    })
-
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
       .expect(200)
@@ -923,23 +868,14 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('says on the entry when remand and sentencing could not be checked', () => {
-    remandAndSentencingService.getCourtContext.mockRejectedValue(new Error('forbidden'))
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain('Could not check DPS')
-      })
-  })
-
   it('marks an existing case and appearance as facts', () => {
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-      latestAppearanceDates: new Map([['case-uuid-1', '2026-09-08']]),
-      casesChecked: true,
-    })
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: '1231' }],
+        hasBeenCompleted: true,
+      },
+    ])
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')
@@ -950,20 +886,15 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
-  it('says when autocomplete is switched off, rather than leaving every entry unexplained', async () => {
-    config.thingsToDo.enabled = false
-
-    const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
-
-    expect(res.text).toContain('Autocomplete switched off')
-  })
-
   it('colours the existing case, not a separate label, where repeat hearings are switched off', async () => {
-    config.thingsToDo.repeatRemandHearingEnabled = false
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-    })
-
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: '1231' }],
+        features: [{ type: 'NEW_REMAND_APPEARANCE_ON_EXISTING_CASE', enabled: false }],
+        hasBeenCompleted: false,
+      },
+    ])
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
     expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*Existing case/)
@@ -973,38 +904,19 @@ describe('GET /court-documents/:prisonCode', () => {
   })
 
   it('stops colouring the existing case once repeat remand hearings are switched on', async () => {
-    config.thingsToDo.repeatRemandHearingEnabled = true
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-    })
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: '1231' }],
+        features: [{ type: 'NEW_REMAND_APPEARANCE_ON_EXISTING_CASE', enabled: true }],
+        hasBeenCompleted: false,
+      },
+    ])
 
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
     expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
     expect(res.text).not.toContain('govuk-tag--red')
-  })
-
-  it('marks the existing case where no flag would carry it', async () => {
-    config.thingsToDo.sentencingEnabled = true
-    config.thingsToDo.repeatRemandHearingEnabled = true
-    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({
-        hearings: [
-          {
-            ...day().hearings[0],
-            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
-          },
-        ],
-      }),
-    )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-    })
-
-    const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
-
-    expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*Existing case/)
-    expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Sentencing warrant/)
   })
 
   it('marks a missing warrant as what stopped a hearing being offered', async () => {
@@ -1019,142 +931,26 @@ describe('GET /court-documents/:prisonCode', () => {
       }),
     )
 
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        hasWarrantAndPcr: false,
+      },
+    ])
+
     const res = await request(app).get('/court-documents/LEI/day?date=2026-09-08').expect(200)
 
     expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*No warrant/)
     expect(res.text).toContain('No warrant<span class="govuk-visually-hidden">, prevents Autocomplete</span>')
   })
 
-  it('marks the recorded appearance as the reason there is nothing to autocomplete', () => {
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-      latestAppearanceDates: new Map([['case-uuid-1', '2026-09-08']]),
-      casesChecked: true,
-    })
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toMatch(/govuk-tag--green[^>]*>\s*Existing appearance/)
-        expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Existing case/)
-        expect(res.text).not.toContain('govuk-tag--red')
-      })
-  })
-
-  it('offers a sentencing warrant on a new case where sentencing is switched on', () => {
-    config.thingsToDo.sentencingEnabled = true
-    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({
-        hearings: [
-          {
-            ...day().hearings[0],
-            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
-          },
-        ],
-      }),
-    )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => expect(res.text).toMatch(/class="govuk-button[^"]*"[^>]*>\s*Autocomplete/))
-  })
-
-  it('colours the sentencing warrant itself where sentencing is switched off', () => {
-    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({
-        hearings: [
-          {
-            ...day().hearings[0],
-            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
-          },
-        ],
-      }),
-    )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toMatch(/govuk-tag--red[^>]*>\s*Sentencing warrant/)
-        expect(res.text).toContain(
-          'Sentencing warrant<span class="govuk-visually-hidden">, no autocomplete for sentencing</span>',
-        )
-        expect(res.text).not.toContain('No autocomplete for')
-        expect(res.text).not.toContain('Sentencing warrants not offered')
-        expect(res.text).not.toContain('>Autocomplete')
-      })
-  })
-
-  it('does not colour the sentencing warrant once sentencing is switched on', () => {
-    config.thingsToDo.sentencingEnabled = true
-    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({
-        hearings: [
-          {
-            ...day().hearings[0],
-            documents: [{ ...day().hearings[0].documents[0], documentType: 'SENTENCING_WARRANT' }],
-          },
-        ],
-      }),
-    )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toMatch(/govuk-tag--grey[^>]*>\s*Sentencing warrant/)
-        expect(res.text).not.toContain('govuk-tag--red')
-        expect(res.text).not.toContain('no autocomplete for sentencing')
-      })
-  })
-
-  it("offers each of a person's hearings, since the journey does not depend on the notification", () => {
-    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({
-        hearings: [
-          day().hearings[0],
-          { ...day().hearings[0], courtHearingId: 'other-hearing', caseReferences: ['OTHER123'] },
-        ],
-      }),
-    )
-    remandAndSentencingService.getCourtContext.mockResolvedValue({ casesByReference: new Map() })
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text.match(/>\s*Autocomplete/g)).toHaveLength(2)
-        expect(res.text).not.toContain('Several hearings for this person')
-      })
-  })
-
-  it('shows a manual step as a secondary button', () => {
-    courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
-      day({ hearings: [{ ...day().hearings[0], caseReferences: [CASE_REFERENCE, 'OTHER123'] }] }),
-    )
-
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map(),
-    })
-
-    return request(app)
-      .get('/court-documents/LEI/day?date=2026-09-08')
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*Record case and appearance/)
-      })
-  })
-
   it('tells the landing page a case already exists, as the things-to-do notification does', () => {
-    config.thingsToDo.repeatRemandHearingEnabled = true
-    remandAndSentencingService.getCourtContext.mockResolvedValue({
-      casesByReference: new Map([[CASE_REFERENCE, 'case-uuid-1']]),
-    })
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: CASE_REFERENCE, caseUniqueIdentifier: 'case-uuid-1' }],
+      },
+    ])
 
     return request(app)
       .get('/court-documents/LEI/day?date=2026-09-08')

@@ -1,6 +1,7 @@
 import { PrisonCourtDocument, PrisonCourtHearing } from '../@types/courtDataIngestionApi/prisonCourtDocumentTypes'
-import { emptyCourtContext, HearingActionType, PersonCourtContext } from './hearingAction'
+import { HearingActionType } from './hearingAction'
 import ArrivalCard from './ArrivalCard'
+import { HmctsHearingAutopopulateEligibility } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 export default class HearingListViewModel {
   readonly cards: ArrivalCard[]
@@ -9,11 +10,12 @@ export default class HearingListViewModel {
     hearings: PrisonCourtHearing[],
     documentsWithoutAHearing: PrisonCourtDocument[],
     prisonCode: string,
-    private readonly contextByPrisoner: Map<string, PersonCourtContext>,
     prisonNames: Map<string, string> = new Map(),
     names: Map<string, string> = new Map(),
+    autocompleteEligibilty: HmctsHearingAutopopulateEligibility[] = [],
   ) {
-    const contextFor = (prisonerNumber: string) => contextByPrisoner.get(prisonerNumber) ?? emptyCourtContext()
+    const eligibiltyFor = (prisonerNumber: string, hearingId: string) =>
+      autocompleteEligibilty.find(it => it.prisonerNumber === prisonerNumber && it.hearingId === hearingId)
 
     const unlinkedGroups = new Map<string, PrisonCourtDocument[]>()
     documentsWithoutAHearing.forEach(document => {
@@ -23,10 +25,16 @@ export default class HearingListViewModel {
 
     this.cards = [
       ...hearings.map(hearing =>
-        ArrivalCard.forHearing(hearing, prisonCode, contextFor(hearing.prisonerNumber), prisonNames, names),
+        ArrivalCard.forHearing(
+          hearing,
+          prisonCode,
+          prisonNames,
+          names,
+          eligibiltyFor(hearing.prisonerNumber, hearing.courtHearingId),
+        ),
       ),
       ...[...unlinkedGroups.values()].map(documents =>
-        ArrivalCard.forUnlinked(documents, prisonCode, contextFor(documents[0].prisonerNumber), prisonNames, names),
+        ArrivalCard.forUnlinked(documents, prisonCode, prisonNames, names, null),
       ),
     ].sort((a, b) => b.receivedAt.localeCompare(a.receivedAt))
   }
@@ -49,9 +57,5 @@ export default class HearingListViewModel {
 
   get byHandCount(): number {
     return this.cards.length - this.doneCount - this.autocompleteCount
-  }
-
-  get uncheckedPeople(): number {
-    return [...this.contextByPrisoner.values()].filter(context => context.casesChecked === false).length
   }
 }

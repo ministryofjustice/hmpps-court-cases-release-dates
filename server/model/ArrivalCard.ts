@@ -1,8 +1,12 @@
 import dayjs from 'dayjs'
 import { PrisonCourtDocument, PrisonCourtHearing } from '../@types/courtDataIngestionApi/prisonCourtDocumentTypes'
-import { HearingAction, HearingActionType, PersonCourtContext } from './hearingAction'
+import { HearingAction, HearingActionType } from './hearingAction'
 import documentTypeText from './documentTypeText'
 import config from '../config'
+import {
+  HmctsAutopopulateFeatureType,
+  HmctsHearingAutopopulateEligibility,
+} from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 const rasUrl = () => config.applications.remandAndSentencing.url
 
@@ -21,17 +25,17 @@ export default class ArrivalCard {
     private readonly references: string[],
     private readonly documentList: PrisonCourtDocument[],
     private readonly prisonCode: string,
-    private readonly context: PersonCourtContext,
     private readonly prisonNames: Map<string, string>,
     private readonly names: Map<string, string>,
+    private readonly autocompleteEligibility: HmctsHearingAutopopulateEligibility,
   ) {}
 
   static forHearing(
     hearing: PrisonCourtHearing,
     prisonCode: string,
-    context: PersonCourtContext,
     prisonNames: Map<string, string>,
     names: Map<string, string>,
+    autocompleteEligibility: HmctsHearingAutopopulateEligibility,
   ): ArrivalCard {
     return new ArrivalCard(
       hearing,
@@ -39,18 +43,18 @@ export default class ArrivalCard {
       hearing.caseReferences,
       hearing.documents,
       prisonCode,
-      context,
       prisonNames,
       names,
+      autocompleteEligibility,
     )
   }
 
   static forUnlinked(
     documents: PrisonCourtDocument[],
     prisonCode: string,
-    context: PersonCourtContext,
     prisonNames: Map<string, string>,
     names: Map<string, string>,
+    autocompleteEligibility: HmctsHearingAutopopulateEligibility,
   ): ArrivalCard {
     const references = [...new Set(documents.flatMap(document => document.caseReferences))]
     return new ArrivalCard(
@@ -59,9 +63,9 @@ export default class ArrivalCard {
       references,
       documents,
       prisonCode,
-      context,
       prisonNames,
       names,
+      autocompleteEligibility,
     )
   }
 
@@ -108,21 +112,11 @@ export default class ArrivalCard {
     return this.offered()
   }
 
-  private offered(sentencing: boolean = config.thingsToDo.sentencingEnabled): boolean {
-    if (!config.thingsToDo.enabled) return false
-    if (!this.hearing || this.references.length !== 1) return false
-    if (this.context.casesChecked === false) return false
-
-    const newRemand = !this.hasExistingCase && this.hasRemandWarrant
-    const newSentencing = sentencing && !this.hasExistingCase && this.hasSentencingWarrant
-    const repeatRemandHearing =
-      config.thingsToDo.repeatRemandHearingEnabled && this.hasExistingCase && this.hasRemandWarrant
-
-    return newRemand || newSentencing || repeatRemandHearing
-  }
-
-  private get waitingOnSentencing(): boolean {
-    return !this.offered() && this.offered(true)
+  private offered(): boolean {
+    return (
+      this.autocompleteEligibility?.hasWarrantAndPcr &&
+      (this.autocompleteEligibility?.features?.every(it => it.enabled) ?? false)
+    )
   }
 
   get receivedAt(): string {
@@ -134,7 +128,9 @@ export default class ArrivalCard {
 
   get caseReferences(): { reference: string; caseHref: string | null }[] {
     return this.references.map(reference => {
-      const courtCaseUuid = this.context.casesByReference.get(reference)
+      const courtCaseUuid = this.autocompleteEligibility?.cases?.find(
+        it => it.caseReference === reference,
+      )?.caseUniqueIdentifier
       return {
         reference,
         caseHref: courtCaseUuid
@@ -164,30 +160,22 @@ export default class ArrivalCard {
   }
 
   get isDone(): boolean {
-    if (!this.hearing || this.references.length === 0) return false
-    return this.references.every(reference => {
-      const courtCase = this.context.casesByReference.get(reference)
-      return courtCase !== undefined && this.context.latestAppearanceDates?.get(courtCase) === this.hearing!.hearingDate
-    })
+    return this.autocompleteEligibility?.hasBeenCompleted
   }
 
   private get hasExistingCase(): boolean {
-    return this.references.some(reference => this.context.casesByReference.has(reference))
+    return this.autocompleteEligibility?.cases?.length !== 0
   }
 
   get facts(): ArrivalFact[] {
     const blocking = this.blockingFacts
     const facts = this.statedFacts.map(text => {
       const tone = this.toneOf(text, blocking)
-      return { text, tone, reason: tone === 'blocked' ? this.reasonFor(text) : undefined }
+      return { text, tone }
     })
     const inTone = (tone: ArrivalFactTone) => facts.filter(fact => fact.tone === tone)
 
     return [...inTone('blocked'), ...inTone('settled'), ...inTone('neutral')]
-  }
-
-  private reasonFor(text: string): string | undefined {
-    return text === 'Sentencing warrant' && this.waitingOnSentencing ? 'no autocomplete for sentencing' : undefined
   }
 
   private toneOf(text: string, blocking: Set<string>): ArrivalFactTone {
@@ -207,14 +195,10 @@ export default class ArrivalCard {
     if (this.references.length === 0) facts.push('No case reference')
     if (this.references.length > 1) facts.push('Several cases')
 
-    if (this.context.casesChecked === false) {
-      facts.push('Could not check DPS')
-    } else if (this.hasExistingCase) {
+    if (this.hasExistingCase) {
       facts.push('Existing case')
       if (this.isDone) facts.push('Existing appearance')
     }
-
-    if (!config.thingsToDo.enabled) facts.push('Autocomplete switched off')
 
     return facts
   }
@@ -223,31 +207,56 @@ export default class ArrivalCard {
     const blocking = new Set<string>()
     if (this.wouldBeOffered || this.isDone) return blocking
 
-    if (!config.thingsToDo.enabled) return new Set(['Autocomplete switched off'])
-
     if (!this.hearing) blocking.add('No HMCTS hearing')
+
     if (this.references.length === 0) blocking.add('No case reference')
     if (this.references.length > 1) blocking.add('Several cases')
-    if (this.context.casesChecked === false) blocking.add('Could not check DPS')
     if (!this.hasRemandWarrant && !this.hasSentencingWarrant) blocking.add('No warrant')
 
-    if (this.waitingOnSentencing) blocking.add('Sentencing warrant')
-    if (this.hasExistingCase) blocking.add('Existing case')
+    this.autocompleteEligibility?.features?.forEach(it => {
+      if (!it.enabled) {
+        const text = this.textFor(it.type)
+        if (text) {
+          blocking.add(text)
+        }
+      }
+    })
 
     return blocking
+  }
+
+  private textFor(type: HmctsAutopopulateFeatureType): string {
+    switch (type) {
+      case 'MULTIPLE_CASE_REFERENCES':
+        return 'Several cases'
+      case 'NEW_REMAND_APPEARANCE_ON_EXISTING_CASE':
+        return 'Existing case'
+      case 'NEW_SENTENCING_APPEARANCE_ON_EXISTING_CASE':
+        return 'Existing case'
+      case 'REMAND_WARRANT':
+        return 'Remand warrant'
+      case 'SENTENCING_WARRANT':
+        return 'Sentencing warrant'
+      default:
+        return null
+    }
   }
 
   get appearanceHref(): string | null {
     if (!this.isDone || !this.hearing) return null
 
-    const courtCase = this.references.map(reference => this.context.casesByReference.get(reference)).find(Boolean)
+    const courtCase = this.references.map(reference =>
+      this.autocompleteEligibility?.cases?.find(it => it.caseReference === reference),
+    )
     const shown = encodeURIComponent(dayjs(this.hearing.hearingDate).format('DD/MM/YYYY'))
 
     return `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${courtCase}/details#:~:text=Hearing%20date-,${shown}`
   }
 
   get action(): HearingAction {
-    const recordedCases = this.references.map(reference => this.context.casesByReference.get(reference))
+    const recordedCases = this.references.map(reference =>
+      this.autocompleteEligibility?.cases?.find(it => it.caseReference === reference),
+    )
     const everyCaseRecorded = recordedCases.length > 0 && recordedCases.every(Boolean)
     const existingCase = recordedCases.find(Boolean)
 
