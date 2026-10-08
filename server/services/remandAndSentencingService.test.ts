@@ -189,7 +189,7 @@ describe('Remand and sentencing service', () => {
 
         fakeApi
           .get('/sentence/consecutive-to-details')
-          .query({ sentenceUuids: sentenceUuids.join(',') })
+          .query({ sentenceUuids: sentenceUuids.join(','), isPrisonerReadOnly: true })
           .reply(200, response)
 
         const result = await remandAndSentencingService.getConsecutiveToDetails(sentenceUuids, 'test-username')
@@ -223,7 +223,7 @@ describe('Remand and sentencing service', () => {
 
         fakeApi
           .get('/court-case/paged/search')
-          .query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page, size })
+          .query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page, size, isPrisonerReadOnly: true })
           .reply(200, response)
 
         const result = await remandAndSentencingService.searchCourtCases(
@@ -241,7 +241,10 @@ describe('Remand and sentencing service', () => {
         const sortBy = 'DESC'
         const page = 0
 
-        fakeApi.get('/court-case/paged/search').query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page }).reply(404)
+        fakeApi
+          .get('/court-case/paged/search')
+          .query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page, isPrisonerReadOnly: true })
+          .reply(404)
 
         const result = await remandAndSentencingService.searchCourtCases(prisonerId, 'test-username', sortBy, page)
 
@@ -252,7 +255,10 @@ describe('Remand and sentencing service', () => {
         const sortBy = 'DESC'
         const page = 0
 
-        fakeApi.get('/court-case/paged/search').query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page }).reply(400)
+        fakeApi
+          .get('/court-case/paged/search')
+          .query({ prisonerId, pagedCourtCaseOrderBy: sortBy, page, isPrisonerReadOnly: true })
+          .reply(400)
 
         await expect(
           remandAndSentencingService.searchCourtCases(prisonerId, 'test-username', sortBy, page),

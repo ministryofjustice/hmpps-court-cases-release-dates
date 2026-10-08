@@ -47,6 +47,7 @@ export default class RemandAndSentencingApiClient {
       path: '/sentence/consecutive-to-details',
       query: {
         sentenceUuids: sentenceUuids.join(','),
+        isPrisonerReadOnly: true,
       },
     })) as unknown as Promise<SentenceConsecutiveToDetailsResponse>
   }
@@ -70,6 +71,7 @@ export default class RemandAndSentencingApiClient {
         pagedCourtCaseOrderBy: sortBy,
         page,
         size,
+        isPrisonerReadOnly: true,
       },
     })
   }
