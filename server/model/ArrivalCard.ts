@@ -273,7 +273,7 @@ export default class ArrivalCard {
       return {
         type: HearingActionType.DONE,
         text: 'View case',
-        href: `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${existingCase}/details`,
+        href: `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${existingCase.caseUniqueIdentifier}/details`,
       }
     }
 
@@ -281,7 +281,7 @@ export default class ArrivalCard {
       return {
         type: HearingActionType.RECORD_APPEARANCE,
         text: 'Record appearance',
-        href: `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${existingCase}/details`,
+        href: `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${existingCase.caseUniqueIdentifier}/details`,
       }
     }
 
