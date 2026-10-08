@@ -1004,6 +1004,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/document-generator/f986": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create F986 Document
+         * @description This endpoint will create an F986 document
+         */
+        post: operations["createF986Document"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/court-case": {
         parameters: {
             query?: never;
@@ -2476,7 +2496,7 @@ export interface components {
             previousSentenceIds?: string[] | null;
             originalSentenceId?: string | null;
             isOnFutureAppearance?: boolean | null;
-            isBreach: boolean | null;
+            isBreach?: boolean | null;
             courtAppearanceIds?: string[] | null;
             chargeIds?: string[] | null;
             periodLengthIds?: string[] | null;
@@ -2516,7 +2536,7 @@ export interface components {
             outcomeDescription?: string | null;
             /** Format: date-time */
             nextEventDateTime?: string | null;
-            /** @example 07:44:46.372748735 */
+            /** @example 09:58:43.391444368 */
             appearanceTime?: string | null;
             outcomeDispositionCode?: string | null;
             outcomeConvictionFlag?: boolean | null;
@@ -2649,7 +2669,7 @@ export interface components {
         CreateNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 07:44:46.372748735 */
+            /** @example 09:58:43.391444368 */
             appearanceTime?: string | null;
             courtCode: string;
             /** Format: uuid */
@@ -3243,25 +3263,36 @@ export interface components {
             /** Format: uuid */
             hearingId: string;
         };
+        ExistingCaseReferenceAndId: {
+            caseReference: string;
+            caseUniqueIdentifier: string;
+        };
         HmctsAutopopulateFeature: {
             /** @enum {string} */
             type: "MULTIPLE_CASE_REFERENCES" | "REMAND_WARRANT" | "SENTENCING_WARRANT" | "NEW_REMAND_APPEARANCE_ON_EXISTING_CASE" | "NEW_SENTENCING_APPEARANCE_ON_EXISTING_CASE";
             enabled: boolean;
         };
         HmctsHearingAutopopulateEligibility: {
-            prisonerNumber: string,
-            hearingId: string,
+            prisonerNumber: string;
+            /** Format: uuid */
+            hearingId: string;
             cases: components["schemas"]["ExistingCaseReferenceAndId"][];
             features: components["schemas"]["HmctsAutopopulateFeature"][];
             hasBeenCompleted: boolean;
             hasWarrantAndPcr: boolean;
         };
-        ExistingCaseReferenceAndId: {
-            caseReference: string,
-            caseUniqueIdentifier: string
-        };
         RepublishEvents: {
             eventsMetadata: components["schemas"]["EventMetadata"][];
+        };
+        CreateF986: {
+            /** Format: uuid */
+            courtAppearanceUuid: string;
+            courtPremise?: string | null;
+            courtStreet?: string | null;
+            courtTown?: string | null;
+            courtCounty?: string | null;
+            courtPostalCode?: string | null;
+            prisonTelephoneNumber?: string | null;
         };
         SentenceTypeUpdate: {
             /** Format: uuid */
@@ -3718,7 +3749,7 @@ export interface components {
         NextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 07:44:46.372748735 */
+            /** @example 09:58:43.391444368 */
             appearanceTime?: string | null;
             courtCode: string;
             appearanceType: components["schemas"]["AppearanceType"];
@@ -3963,7 +3994,7 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            /** @example 07:44:46.372748735 */
+            /** @example 09:58:43.391444368 */
             appearanceTime: string;
             nomisOutcomeCode?: string | null;
             legacyData?: components["schemas"]["CourtAppearanceLegacyData"] | null;
@@ -3986,7 +4017,7 @@ export interface components {
         ReconciliationNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 07:44:46.372748735 */
+            /** @example 09:58:43.391444368 */
             appearanceTime?: string | null;
             courtId: string;
         };
@@ -4041,7 +4072,7 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            /** @example 07:44:46.372748735 */
+            /** @example 09:58:43.391444368 */
             appearanceTime: string;
             charges: components["schemas"]["LegacyCharge"][];
             nextCourtAppearance?: components["schemas"]["LegacyNextCourtAppearance"] | null;
@@ -4053,7 +4084,7 @@ export interface components {
         LegacyNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 07:44:46.372748735 */
+            /** @example 09:58:43.391444368 */
             appearanceTime?: string | null;
             courtId: string;
         };
@@ -4261,7 +4292,7 @@ export interface components {
         PagedNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 07:44:46.372748735 */
+            /** @example 09:58:43.391444368 */
             appearanceTime?: string | null;
             courtCode?: string | null;
             appearanceTypeDescription: string;
@@ -7161,6 +7192,57 @@ export interface operations {
             };
         };
     };
+    createF986Document: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateF986"];
+            };
+        };
+        responses: {
+            /** @description Returns F986 PDF document stream */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+            /** @description Bad request - no results found based on courtAppearanceUuid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": string;
+                };
+            };
+        };
+    };
     createCourtCase: {
         parameters: {
             query?: never;
@@ -7918,6 +8000,7 @@ export interface operations {
         parameters: {
             query: {
                 sentenceUuids: string[];
+                isPrisonerReadOnly?: boolean;
             };
             header?: never;
             path?: never;
@@ -9350,6 +9433,7 @@ export interface operations {
                 appearanceDateFrom?: string;
                 appearanceDateTo?: string;
                 bookingId?: string;
+                isPrisonerReadOnly?: boolean;
             };
             header?: never;
             path?: never;
