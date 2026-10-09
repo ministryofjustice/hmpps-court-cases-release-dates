@@ -10,6 +10,10 @@ import {
 
 const rasUrl = () => config.applications.remandAndSentencing.url
 
+const normalised = (reference: string | null | undefined) => reference?.trim().toUpperCase() ?? ''
+
+type RecordedCase = HmctsHearingAutopopulateEligibility['cases'][number]
+
 export type ArrivalFactTone = 'neutral' | 'blocked' | 'settled'
 
 export type ArrivalFact = {
@@ -128,9 +132,7 @@ export default class ArrivalCard {
 
   get caseReferences(): { reference: string; caseHref: string | null }[] {
     return this.references.map(reference => {
-      const courtCaseUuid = this.autocompleteEligibility?.cases?.find(
-        it => it.caseReference === reference,
-      )?.caseUniqueIdentifier
+      const courtCaseUuid = this.caseFor(reference)?.caseUniqueIdentifier
       return {
         reference,
         caseHref: courtCaseUuid
@@ -242,26 +244,38 @@ export default class ArrivalCard {
     }
   }
 
-  get appearanceHref(): string | null {
-    if (!this.isDone || !this.hearing) return null
+  private caseFor(reference: string): RecordedCase | undefined {
+    return this.autocompleteEligibility?.cases?.find(it => normalised(it.caseReference) === normalised(reference))
+  }
 
-    const courtCase = this.references
-      .map(reference => this.autocompleteEligibility?.cases?.find(it => it.caseReference === reference))
-      .find(Boolean)
+  private get recordedCase(): RecordedCase | undefined {
+    return (
+      this.references.map(reference => this.caseFor(reference)).find(Boolean) ??
+      this.autocompleteEligibility?.cases?.[0]
+    )
+  }
+
+  private caseHref(courtCase: RecordedCase | undefined): string {
+    return courtCase
+      ? `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${courtCase.caseUniqueIdentifier}/details`
+      : `${rasUrl()}/person/${this.prisonerNumber}`
+  }
+
+  get appearanceHref(): string | null {
+    const courtCase = this.recordedCase
+    if (!this.isDone || !this.hearing || !courtCase) return null
+
     const shown = encodeURIComponent(dayjs(this.hearing.hearingDate).format('DD/MM/YYYY'))
 
-    return `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${courtCase.caseUniqueIdentifier}/details#:~:text=Hearing%20date-,${shown}`
+    return `${this.caseHref(courtCase)}#:~:text=Hearing%20date-,${shown}`
   }
 
   get action(): HearingAction {
-    const recordedCases = this.references.map(reference =>
-      this.autocompleteEligibility?.cases?.find(it => it.caseReference === reference),
-    )
+    const recordedCases = this.references.map(reference => this.caseFor(reference))
     const everyCaseRecorded = recordedCases.length > 0 && recordedCases.every(Boolean)
-    const existingCase = recordedCases.find(Boolean)
 
     if (this.wouldBeOffered && !this.isDone) {
-      const existingCaseSegment = existingCase ? '/existing-case' : ''
+      const existingCaseSegment = recordedCases.some(Boolean) ? '/existing-case' : ''
       return {
         type: HearingActionType.AUTOCOMPLETE,
         text: 'Autocomplete',
@@ -273,7 +287,7 @@ export default class ArrivalCard {
       return {
         type: HearingActionType.DONE,
         text: 'View case',
-        href: `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${existingCase.caseUniqueIdentifier}/details`,
+        href: this.caseHref(this.recordedCase),
       }
     }
 
@@ -281,7 +295,7 @@ export default class ArrivalCard {
       return {
         type: HearingActionType.RECORD_APPEARANCE,
         text: 'Record appearance',
-        href: `${rasUrl()}/person/${this.prisonerNumber}/view-court-case/${existingCase.caseUniqueIdentifier}/details`,
+        href: this.caseHref(recordedCases[0]),
       }
     }
 
