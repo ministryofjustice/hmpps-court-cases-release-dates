@@ -786,6 +786,58 @@ describe('GET /court-documents/:prisonCode', () => {
       })
   })
 
+  it('links a done hearing to its case when R&S reports the case under its latest reference', () => {
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: 'T20267001', caseUniqueIdentifier: 'later-reference-case' }],
+        hasBeenCompleted: true,
+      },
+    ])
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('1 of 1 already recorded in DPS')
+        expect(res.text).toContain(`/person/${PRISONER}/view-court-case/later-reference-case/details`)
+      })
+  })
+
+  it('matches a case reference ignoring letter case, as R&S does', () => {
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      {
+        ...eligibility,
+        cases: [{ caseReference: CASE_REFERENCE.toLowerCase(), caseUniqueIdentifier: 'lower-case-case' }],
+        hasBeenCompleted: false,
+        hasWarrantAndPcr: false,
+      },
+    ])
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Record appearance')
+        expect(res.text).toContain(`/person/${PRISONER}/view-court-case/lower-case-case/details`)
+      })
+  })
+
+  it('still shows the day when a hearing is done but R&S returns no case for it', () => {
+    remandAndSentencingService.areHmctsHearingsEligibleForAutopopulate.mockResolvedValue([
+      { ...eligibility, cases: [], hasBeenCompleted: true },
+    ])
+
+    return request(app)
+      .get('/court-documents/LEI/day?date=2026-09-08')
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('1 of 1 already recorded in DPS')
+        expect(res.text).toMatch(/govuk-button--secondary[^>]*>\s*View case/)
+        expect(res.text).not.toContain('data-qa="appearance-link"')
+      })
+  })
+
   it('does not count a hearing as done when its case has only an older appearance', () => {
     courtDataIngestionService.getPrisonCourtDocumentDay.mockResolvedValue(
       day({
