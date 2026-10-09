@@ -174,12 +174,16 @@ beforeEach(() => {
       {
         sentenceUuid: 'sentence-uuid-1',
         offenceCode: 'CJ88117',
+        courtCode: 'CRT1',
         chargeLegacyData: { offenceDescription: 'Possess knife blade or sharp pointed article' },
       },
     ],
   } as SentenceConsecutiveToDetailsResponse)
 
-  courtRegisterService.getCourtMap.mockResolvedValue({ B10JQ: 'Cambridge Magistrates Court' } as {
+  courtRegisterService.getCourtMap.mockResolvedValue({
+    B10JQ: 'Cambridge Magistrates Court',
+    CRT1: 'Court description 1',
+  } as {
     [p: string]: string
   })
   manageOffencesService.getOffenceMap.mockResolvedValue({
