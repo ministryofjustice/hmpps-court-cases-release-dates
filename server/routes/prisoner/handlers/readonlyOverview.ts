@@ -40,7 +40,7 @@ export default class ReadonlyOverviewRoutes {
       nextCourtEvent,
       latestRecall,
       latestImmigrationRecord,
-      [courtCaseDetailModels, offenceMap, offenceOutcomeMap],
+      [courtCaseDetailModels, offenceMap, offenceOutcomeMap, courtMap],
     ] = await Promise.all([
       this.prisonerService.hasActiveSentencesAsSystem(bookingId, username),
       this.prisonerService.getNextCourtEventAsSystem(bookingId, username),
@@ -74,6 +74,7 @@ export default class ReadonlyOverviewRoutes {
       latestRecall,
       nextCourtEvent,
       hasImmigrationDetentionAccess,
+      courtMap,
       immigrationDetentionMessage:
         this.immigrationDetentionService.getImmigrationDetentionMessage(latestImmigrationRecord),
     })
@@ -88,10 +89,6 @@ export default class ReadonlyOverviewRoutes {
       pageNumber,
       config.courtCasesPageSize,
     )
-    const courtIds = courtCases.content
-      .flatMap(courtCase => courtCase.latestCourtAppearance.courtCode)
-      .filter(courtCode => courtCode !== undefined && courtCode !== null)
-    const uniqueCourtCodes = Array.from(new Set(courtIds))
 
     const consecutiveToSentenceUuids = courtCases.content
       .flatMap(courtCase => courtCase.latestCourtAppearance.charges)
@@ -117,6 +114,23 @@ export default class ReadonlyOverviewRoutes {
         ][],
       ),
     )
+
+    const courtIds = courtCases.content
+      .flatMap(courtCase =>
+        [
+          courtCase.latestCourtAppearance.courtCode,
+          courtCase.latestCourtAppearance.nextCourtAppearance?.courtCode,
+          courtCase.mergedToCase?.courtCode,
+        ].concat(courtCase.latestCourtAppearance.charges.map(charge => charge.mergedFromCase?.courtCode)),
+      )
+      .filter(courtCode => courtCode !== undefined && courtCode !== null)
+      .concat(
+        consecutiveToSentenceDetails.sentences.map(
+          consecutiveToSentenceDetail => consecutiveToSentenceDetail.courtCode,
+        ),
+      )
+    const uniqueCourtCodes = Array.from(new Set(courtIds))
+
     const [offenceMap, courtMap] = await Promise.all([
       this.manageOffencesService.getOffenceMap(Array.from(new Set(chargeCodes)), req.user.username, chargeDescriptions),
       this.courtRegisterService.getCourtMap(Array.from(new Set(uniqueCourtCodes)), req.user.username),
@@ -132,7 +146,7 @@ export default class ReadonlyOverviewRoutes {
     const courtCaseDetailModels = courtCases.content.map(
       pageCourtCaseContent => new CourtCasesDetailsModel(pageCourtCaseContent, courtMap),
     )
-    return [courtCaseDetailModels, offenceMap, offenceOutcomeMap]
+    return [courtCaseDetailModels, offenceMap, offenceOutcomeMap, courtMap]
   }
 
   private getFeedbackPromptServiceDefinition(feedback: ThingToDo): CcrdServiceDefinitions {

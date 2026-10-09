@@ -134,6 +134,20 @@ const defaultCourtCasesPage: SearchCourtCasesPage = {
             legacyData: { offenceDescription: 'Common assault' },
             createdAt: '2024-01-01T00:00:00',
           },
+          {
+            chargeUuid: 'charge-uuid-2',
+            offenceCode: 'CJ88001',
+            offenceStartDate: '2024-01-12',
+            outcome: { outcomeUuid: 'outcome-1', outcomeName: 'Dismissed' },
+            legacyData: { offenceDescription: 'Common assault' },
+            createdAt: '2026-01-01T00:00:00',
+            mergedFromCase: {
+              appearanceUuid: 'appearance-uuid-2',
+              courtCode: 'B10JQ',
+              mergedFromDate: '2026-04-01',
+              warrantDate: '2024-03-02',
+            },
+          },
         ],
         periodLengths: [
           {
@@ -174,12 +188,16 @@ beforeEach(() => {
       {
         sentenceUuid: 'sentence-uuid-1',
         offenceCode: 'CJ88117',
+        courtCode: 'CRT1',
         chargeLegacyData: { offenceDescription: 'Possess knife blade or sharp pointed article' },
       },
     ],
   } as SentenceConsecutiveToDetailsResponse)
 
-  courtRegisterService.getCourtMap.mockResolvedValue({ B10JQ: 'Cambridge Magistrates Court' } as {
+  courtRegisterService.getCourtMap.mockResolvedValue({
+    B10JQ: 'Cambridge Magistrates Court',
+    CRT1: 'Court description 1',
+  } as {
     [p: string]: string
   })
   manageOffencesService.getOffenceMap.mockResolvedValue({
