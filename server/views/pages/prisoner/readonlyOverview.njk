@@ -33,7 +33,7 @@
                 {% endif %}
                 <h2 class="govuk-heading-l">Court cases</h2>
                 {{ toggleAllCourtCases() }}
-                {{ courtCaseDetailsCard(courtCaseDetailModels, offenceMap, offenceOutcomeMap) }}
+                {{ courtCaseDetailsCard(courtCaseDetailModels, offenceMap, offenceOutcomeMap, courtMap) }}
                 {% set enableSectionBreak = true %}
             {% endif %}
 

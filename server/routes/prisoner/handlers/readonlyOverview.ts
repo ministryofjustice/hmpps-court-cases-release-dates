@@ -40,7 +40,7 @@ export default class ReadonlyOverviewRoutes {
       nextCourtEvent,
       latestRecall,
       latestImmigrationRecord,
-      [courtCaseDetailModels, offenceMap, offenceOutcomeMap],
+      [courtCaseDetailModels, offenceMap, offenceOutcomeMap, courtMap],
     ] = await Promise.all([
       this.prisonerService.hasActiveSentencesAsSystem(bookingId, username),
       this.prisonerService.getNextCourtEventAsSystem(bookingId, username),
@@ -74,6 +74,7 @@ export default class ReadonlyOverviewRoutes {
       latestRecall,
       nextCourtEvent,
       hasImmigrationDetentionAccess,
+      courtMap,
       immigrationDetentionMessage:
         this.immigrationDetentionService.getImmigrationDetentionMessage(latestImmigrationRecord),
     })
@@ -145,7 +146,7 @@ export default class ReadonlyOverviewRoutes {
     const courtCaseDetailModels = courtCases.content.map(
       pageCourtCaseContent => new CourtCasesDetailsModel(pageCourtCaseContent, courtMap),
     )
-    return [courtCaseDetailModels, offenceMap, offenceOutcomeMap]
+    return [courtCaseDetailModels, offenceMap, offenceOutcomeMap, courtMap]
   }
 
   private getFeedbackPromptServiceDefinition(feedback: ThingToDo): CcrdServiceDefinitions {
