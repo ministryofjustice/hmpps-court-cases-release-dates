@@ -19,7 +19,7 @@ import { MetadataFilterMapper } from '../../@types/documentManagementApi/Metadat
 import commonPlatformDocumentStatuses from '../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
 import DocumentSearchOrderBy from '../../@types/documentManagementApi/DocumentSearchOrderBy'
 import CourtRegisterService from '../../services/courtRegisterService'
-import { buildDocumentFilters, DocumentFilters } from '../../data/unmatchedDocumentFilter'
+import { buildDocumentFilters, UnmatchedDocumentFilters } from '../../data/unmatchedDocumentFilter'
 
 export default class UnmatchedDocumentRoutes {
   constructor(
@@ -120,7 +120,7 @@ export default class UnmatchedDocumentRoutes {
     }
   }
 
-  buildDocumentSearchRequest = (filters: DocumentFilters): DocumentSearchRequest => {
+  buildDocumentSearchRequest = (filters: UnmatchedDocumentFilters): DocumentSearchRequest => {
     return {
       documentTypes: DOCUMENT_SEARCH_DEFAULT_TYPES,
       canonical: true,
@@ -139,7 +139,7 @@ export default class UnmatchedDocumentRoutes {
     } as DocumentSearchRequest
   }
 
-  private buildDocumentSearchFacetRequest = (filters: DocumentFilters): FacetRequest[] => {
+  private buildDocumentSearchFacetRequest = (filters: UnmatchedDocumentFilters): FacetRequest[] => {
     const showingFacetRequest = {
       field: 'isUnread',
       type: 'VALUE',

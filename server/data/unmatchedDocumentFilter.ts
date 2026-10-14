@@ -1,33 +1,24 @@
 import { Request } from 'express'
-import { FacetResult } from '../@types/documentManagementApi/types'
 import { getSortLink } from './pagination'
 import { getAsArrayOrDefault, getAsStringOrDefault } from '../utils/utils'
 import config from '../config'
-import { getCaseReferencesRemoveFilterLinks, getRemoveFilterLinks, getShowingRemoveFilterLink } from './documentFilter'
+import {
+  DocumentFilters,
+  getCaseReferencesRemoveFilterLinks,
+  getRemoveFilterLinks,
+  getShowingRemoveFilterLink,
+} from './documentFilter'
 
-export type DocumentFilters = {
-  baseUrl: URL
-  baseUrlLink: string
-  showing: string
-  byCaseReferences: string[]
+export type UnmatchedDocumentFilters = {
   byAddressedPrisons: string[]
-  facets?: { [p: string]: FacetResult }
-  pagination: {
-    sortBy: string
-    pageNumber: number
-  }
-  sortLink: {
-    mostRecent: string
-    earliest: string
-  }
   removeFilterLink: {
     showing: string
     caseReferences: { [p: string]: string }
     addressedPrisons: { [p: string]: string }
   }
-}
+} & DocumentFilters
 
-export function buildDocumentFilters(req: Request): DocumentFilters {
+export function buildDocumentFilters(req: Request): UnmatchedDocumentFilters {
   const baseUrl = new URL(req.originalUrl, config.domain)
   const byCaseReferences = getAsArrayOrDefault(req.query.byCaseReference, 'all')
   const byAddressedPrisons = getAsArrayOrDefault(req.query.byAddressedPrison, 'all')
