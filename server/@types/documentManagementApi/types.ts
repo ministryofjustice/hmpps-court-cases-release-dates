@@ -53,6 +53,10 @@ export class DocumentManagementMapper {
     return (Array.isArray(caseReferences) && caseReferences.length > 0) ? [...new Set(caseReferences)].join(', ') : null
   }
 
+  public static getAddressedPrison(document: Document): string | undefined {
+    return this.asString(document?.metadata?.addressedPrison)
+  }
+
   public static getSource(it: Document): string {
     return this.asString(it.metadata?.source) === 'court-data-ingestion-api'
       ? this.SOURCE_COMMON_PLATFORM
