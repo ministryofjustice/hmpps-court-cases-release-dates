@@ -12,6 +12,7 @@ export enum MetadataFilterOperator {
 export enum MetadataField {
   IS_UNREAD = "isUnread",
   CASE_REFERENCES = "caseReferences",
+  ADDRESSED_PRISON = "addressedPrison",
   PRISONER_NUMBER = "prisonerId",
   STATUS = "status",
 }
@@ -39,6 +40,22 @@ export class MetadataFilterMapper {
       {
         field: MetadataField.CASE_REFERENCES,
         operator: MetadataFilterOperator.JSON_ARRAY_CONTAINS,
+        values: filters,
+      } as MetadataFilter :
+      null
+  }
+
+  static getByAddressedPrison(filters: string[]): MetadataFilter | null {
+    if (filters.find(it => it === 'none'))
+      return {
+        field: MetadataField.ADDRESSED_PRISON,
+        operator: MetadataFilterOperator.NOT_EXISTS,
+      } as MetadataFilter
+
+    return (!filters.find(it => it === 'all')) ?
+      {
+        field: MetadataField.ADDRESSED_PRISON,
+        operator: MetadataFilterOperator.IN,
         values: filters,
       } as MetadataFilter :
       null

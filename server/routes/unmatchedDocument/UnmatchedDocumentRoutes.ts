@@ -46,6 +46,7 @@ export default class UnmatchedDocumentRoutes {
           fileExtension: it.fileExtension,
           fileSize: it.fileSize,
           caseReference: DocumentManagementMapper.getCaseReferences(it),
+          addressedPrison: DocumentManagementMapper.getAddressedPrison(it),
           isNew: DocumentManagementMapper.getIsNew(it),
 
           source: DocumentManagementMapper.getSource(it),
@@ -152,7 +153,13 @@ export default class UnmatchedDocumentRoutes {
       filter: MetadataFilterMapper.getByCaseReferences(filters.byCaseReferences),
     } as FacetRequest
 
-    return [showingFacetRequest, caseReferencesFacetRequest]
+    const addressedPrisonFacetRequest = {
+      field: 'addressedPrison',
+      type: 'VALUE',
+      filter: MetadataFilterMapper.getByAddressedPrison(filters.byAddressedPrisons),
+    } as FacetRequest
+
+    return [showingFacetRequest, caseReferencesFacetRequest, addressedPrisonFacetRequest]
   }
 
   private parseFacetsForRendering = (facets: { [p: string]: FacetResult }) => {
@@ -185,4 +192,5 @@ type UnmatchedDocumentViewModel = {
   typeDescription: string
   courtCode: string
   courtName: string
+  addressedPrison: string
 }

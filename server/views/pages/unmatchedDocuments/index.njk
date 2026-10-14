@@ -83,7 +83,6 @@
               {% endif %}
             </div>
           </div>
-
           <div class="govuk-grid-row document__row">
             <div class="govuk-grid-column-one-third">
               <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Date added</p>
@@ -100,6 +99,18 @@
             <div class="govuk-grid-column-one-third">
               <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing type</p>
               <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-type">{{ document.hearingType or "Not entered" }}</p>
+            </div>
+          </div>
+          <div class="govuk-grid-row document__row">
+            <div class="govuk-grid-column-one-third">
+                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Addressed Prison</p>
+                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="case-reference">
+                  {{ document.addressedPrison or "Not available" }}
+                </p>
+            </div>
+            <div class="govuk-grid-column-one-third">
+            </div>
+            <div class="govuk-grid-column-one-third">
             </div>
           </div>
         </div>
