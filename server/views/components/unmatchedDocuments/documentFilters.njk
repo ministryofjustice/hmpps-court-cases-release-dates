@@ -1,150 +1,29 @@
 {%- from "moj/components/filter/macro.njk" import mojFilter -%}
-{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
-{%- from "govuk/components/radios/macro.njk" import govukRadios -%}
-{%- from "govuk/components/input/macro.njk" import govukInput -%}
-
-{%- set caseReferenceItems = [
-    {
-        value: "all",
-        text: "All case references",
-        checked: ("all" in filters.byCaseReferences),
-        behaviour: "exclusive"
-    },
-    {
-        value: "none",
-        text: "No case reference",
-        checked: ("none" in filters.byCaseReferences),
-        behaviour: "exclusive"
-    }
-] -%}
-
-{% if filters.facets['caseReferences'].values.length > 0 %}
-    {%- set caseReferenceItems = (caseReferenceItems.push({
-        divider: "or"
-    }), caseReferenceItems) -%}
-{% endif %}
-
-{%- for caseReference in filters.facets['caseReferences'].values -%}
-    {%- set caseReferenceItems = (caseReferenceItems.push({
-        value: caseReference.value,
-        text: caseReference.value + " (" + caseReference.count + ")",
-        checked: (caseReference.value in filters.byCaseReferences)
-    }), caseReferenceItems) -%}
-{%- endfor -%}
-
-
-{%- set addressedPrisonItems = [
-    {
-        value: "all",
-        text: "All addressed prisons",
-        checked: ("all" in filters.byAddressedPrisons),
-        behaviour: "exclusive"
-    }
-] -%}
-
-{%- for addressedPrison in filters.facets['addressedPrison'].values -%}
-    {% if addressedPrison.value == null %}
-        {%- set addressedPrisonItems = (addressedPrisonItems.push({
-            value: "none",
-            text: "No addressed prison" + " (" + addressedPrison.count + ")",
-            checked: ("none" in filters.byAddressedPrisons),
-            behaviour: "exclusive"
-        }), addressedPrisonItems) -%}
-
-        {% if filters.facets['addressedPrison'].values.length > 1 %}
-            {%- set addressedPrisonItems = (addressedPrisonItems.push({
-                divider: "or"
-            }), addressedPrisonItems) -%}
-        {% endif %}
-    {% else %}
-        {%- set addressedPrisonItems = (addressedPrisonItems.push({
-            value: addressedPrison.value,
-            text: addressedPrison.value + " (" + addressedPrison.count + ")",
-            checked: (addressedPrison.value in filters.byAddressedPrisons)
-        }), addressedPrisonItems) -%}
-    {% endif %}
-{%- endfor -%}
+{% from "components/prisoner/filters/showingFilter.njk"
+    import getFilterOptionHTML as getShowingFilterOption ,
+           selectedFilterCategory as showingSelectedFilterCategory
+    with context %}
+{% from "components/prisoner/filters/caseReferencesFilter.njk"
+    import getFilterOptionHTML as getCaseReferencesFilterOption ,
+           selectedFilterCategory as caseReferenceSelectedFilterCategory
+    with context %}
+{% from "components/unmatchedDocuments/filters/addressedPrisonFilter.njk"
+    import getFilterOptionHTML as getAddressedPrisonFilterOption ,
+           selectedFilterCategory as addressedPrisonSelectedFilterCategory
+    with context %}
 
 
 {%- set filterOptionsHtml %}
-    {{ govukRadios({
-        idPrefix: "showing",
-        name: "showing",
-        classes: "govuk-radios--small",
-        fieldset: {
-            legend: {
-                text: "Showing",
-                classes: "govuk-fieldset__legend--m"
-            }
-        },
-        items: [
-            {
-                text: "New documents" + " (" + filters.facets['isUnread'].values[0].count + ")",
-                value: "new",
-                checked: (filters.showing === "new")
-            },
-            {
-                text: "All documents",
-                value: "all",
-                checked: (filters.showing === "all")
-            }
-        ]
-    }) }}
-
-    {{ govukCheckboxes({
-        name: "byCaseReference",
-        classes: "govuk-checkboxes--small",
-        fieldset: {
-            legend: {
-                text: "Case reference",
-                classes: "govuk-fieldset__legend--m"
-            }
-        },
-        items: caseReferenceItems
-    }) }}
-
-    {{ govukCheckboxes({
-        name: "byAddressedPrison",
-        classes: "govuk-checkboxes--small",
-        fieldset: {
-            legend: {
-                text: "Addressed prison",
-                classes: "govuk-fieldset__legend--m"
-            }
-        },
-        items: addressedPrisonItems
-    }) }}
+    {{ getShowingFilterOption(filters) }}
+    {{ getCaseReferencesFilterOption(filters) }}
+    {{ getAddressedPrisonFilterOption(filters) }}
 {% endset -%}
 
-{% set selectedFilterCategories = [] %}
-
-{%- set selectedFilterCategories = (selectedFilterCategories.push({
-    heading: {
-        text: 'Showing'
-    },
-    items: [
-        {
-            text: "New documents" if (filters.showing === "new") else "All documents",
-            href: filters.removeFilterLink.showing
-        }
-    ]
-    }), selectedFilterCategories) %}
-
-{%- set caseReferenceRemoveFilters = [] %}
-
-{%- for caseReference in filters.byCaseReferences -%}
-    {%- set caseReferenceRemoveFilters = (caseReferenceRemoveFilters.push({
-        text: "All case references" if (caseReference === "all") else ("No case reference" if (caseReference === "none") else caseReference),
-        href: filters.removeFilterLink.caseReferences[caseReference]
-    }), caseReferenceRemoveFilters) -%}
-{%- endfor -%}
-
-{%- set selectedFilterCategories = (selectedFilterCategories.push({
-    heading: {
-        text: 'Case reference'
-    },
-    items: caseReferenceRemoveFilters
-}), selectedFilterCategories) -%}
+{%- set selectedFilterCategories = [
+    showingSelectedFilterCategory,
+    caseReferenceSelectedFilterCategory,
+    addressedPrisonSelectedFilterCategory
+] -%}
 
 <div class="moj-filter-layout__filter">
 <form id="documentFiltersForm" action="{{filters.baseUrlLink}}" method="GET">
