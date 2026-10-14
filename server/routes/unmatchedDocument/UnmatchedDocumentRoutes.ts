@@ -15,11 +15,11 @@ import {
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../data/pagination'
 import DocumentManagementService from '../../services/documentManagementService'
 import logger from '../../../logger'
-import { buildDocumentFilters, DocumentFilters } from '../../data/documentFilter'
 import { MetadataFilterMapper } from '../../@types/documentManagementApi/MetadataFilter'
 import commonPlatformDocumentStatuses from '../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
 import DocumentSearchOrderBy from '../../@types/documentManagementApi/DocumentSearchOrderBy'
 import CourtRegisterService from '../../services/courtRegisterService'
+import { buildDocumentFilters, DocumentFilters } from '../../data/unmatchedDocumentFilter'
 
 export default class UnmatchedDocumentRoutes {
   constructor(

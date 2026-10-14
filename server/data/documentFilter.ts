@@ -49,7 +49,7 @@ export function buildDocumentFilters(req: Request): DocumentFilters {
 }
 
 // Builds a link to the base page, clean of any filters or sorting options
-export function getBaseUrlLink(url: URL): string {
+function getBaseUrlLink(url: URL): string {
   const linkUrl = new URL(url)
   linkUrl.searchParams.delete('pageNumber')
   linkUrl.searchParams.delete('sortBy')
@@ -66,32 +66,36 @@ export function getShowingRemoveFilterLink(url: URL): string {
 }
 
 export function getCaseReferencesRemoveFilterLinks(url: URL, caseReferences: string[]): { [p: string]: string } {
-  return caseReferences.reduce(
-    (acc, caseReference) => {
-      acc[caseReference] = getCaseReferenceRemoveFilterLink(url, caseReference)
+  return getRemoveFilterLinks(url, 'byCaseReference', caseReferences)
+}
+
+export function getRemoveFilterLinks(url: URL, filterName: string, filterValues: string[]): { [p: string]: string } {
+  return filterValues.reduce(
+    (acc, filterValue) => {
+      acc[filterValue] = getRemoveFilterLink(url, filterName, filterValue)
       return acc
     },
     {} as { [p: string]: string },
   )
 }
 
-function getCaseReferenceRemoveFilterLink(url: URL, caseReference: string): string {
+function getRemoveFilterLink(url: URL, filterName: string, filterValue: string): string {
   const linkUrl = new URL(url)
 
-  const caseReferences = linkUrl.searchParams.getAll('byCaseReference')
+  const allFilterValues = linkUrl.searchParams.getAll(filterName)
   linkUrl.searchParams.delete('pageNumber')
-  linkUrl.searchParams.delete('byCaseReference')
+  linkUrl.searchParams.delete(filterName)
 
-  if (caseReference === 'all' || caseReference === 'none') {
+  if (filterValue === 'all' || filterValue === 'none') {
     return linkUrl.href
   }
 
-  const removedCaseReferences = caseReferences.filter(value => value !== caseReference)
+  const removedFilterValues = allFilterValues.filter(value => value !== filterValue)
 
-  if (removedCaseReferences.length === 0) {
+  if (removedFilterValues.length === 0) {
     return linkUrl.href
   }
 
-  removedCaseReferences.forEach(value => linkUrl.searchParams.append('byCaseReference', value))
+  removedFilterValues.forEach(value => linkUrl.searchParams.append(filterName, value))
   return linkUrl.href
 }
