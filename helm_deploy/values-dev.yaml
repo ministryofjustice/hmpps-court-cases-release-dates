@@ -40,5 +40,5 @@ generic-service:
   allowlist: null
 
 generic-prometheus-alerts:
-  alertSeverity: legacy-replacement-alerts-non-prod
+  alertSeverityOverride: legacy-replacement-alerts-non-prod
   businessHoursOnly: true
