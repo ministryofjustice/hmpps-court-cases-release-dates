@@ -33,6 +33,5 @@ generic-service:
     MANAGE_OFFENCES_API_URL: "https://manage-offences-api.hmpps.service.justice.gov.uk"
     COURT_DOCUMENTS_OPEN_TO_PRISONS: "true"
 
-
 generic-prometheus-alerts:
-  alertSeverity: legacy-replacement-alerts
+  alertSeverityOverride: legacy-replacement-alerts
