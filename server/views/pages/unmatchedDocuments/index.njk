@@ -6,8 +6,9 @@
 {% set pageTitle = "Court cases and release dates - unmatched documents" %}
 {% set pageId = "unmatched-documents" %}
 
+
 {% block content %}
-  <h1 class="govuk-heading-xl">Documents</h1>
+  <h1 class="govuk-heading-xl govuk-!-margin-top-8">Unmatched Documents</h1>
   <div class="govuk-grid-row">
 
     <div id="document-filters" class="moj-filter-layout govuk-grid-column-one-quarter">
@@ -61,14 +62,27 @@
 
           <div class="govuk-grid-row document__row">
             <div class="govuk-grid-column-one-third">
+                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Addressed to</p>
+                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="case-reference">
+                  {{ document.addressedPrison or "Not available" }}
+                </p>
+            </div>
+            <div class="govuk-grid-column-one-third">
+            </div>
+            <div class="govuk-grid-column-one-third">
+            </div>
+          </div>
+
+          <div class="govuk-grid-row document__row">
+            <div class="govuk-grid-column-one-third">
               <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Case reference</p>
               <p class="govuk-body govuk-!-margin-bottom-2" data-qa="case-reference">
                 {{ document.caseReference or "Not entered" }}
               </p>
             </div>
             <div class="govuk-grid-column-one-third">
-                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Court name</p>
-                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="court-name">{{ document.courtName or "Not entered" }}</p>
+              <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Court name</p>
+              <p class="govuk-body govuk-!-margin-bottom-2" data-qa="court-name">{{ (document.courtName + " (" + document.courtCode + ")") if document.courtName and document.courtCode else "Not entered" }}</p>
             </div>
             <div class="govuk-grid-column-one-third">
               {% if document.hearingDate %}
@@ -83,6 +97,7 @@
               {% endif %}
             </div>
           </div>
+
           <div class="govuk-grid-row document__row">
             <div class="govuk-grid-column-one-third">
               <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Date added</p>
@@ -99,18 +114,6 @@
             <div class="govuk-grid-column-one-third">
               <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Hearing type</p>
               <p class="govuk-body govuk-!-margin-bottom-2" data-qa="hearing-type">{{ document.hearingType or "Not entered" }}</p>
-            </div>
-          </div>
-          <div class="govuk-grid-row document__row">
-            <div class="govuk-grid-column-one-third">
-                <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Addressed Prison</p>
-                <p class="govuk-body govuk-!-margin-bottom-2" data-qa="case-reference">
-                  {{ document.addressedPrison or "Not available" }}
-                </p>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            </div>
-            <div class="govuk-grid-column-one-third">
             </div>
           </div>
         </div>
