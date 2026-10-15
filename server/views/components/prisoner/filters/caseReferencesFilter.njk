@@ -1,0 +1,61 @@
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+
+{% macro getFilterOptionHTML(filters) %}
+    {%- set caseReferenceItems = [
+        {
+            value: "all",
+            text: "All case references",
+            checked: ("all" in filters.byCaseReferences),
+            behaviour: "exclusive"
+        },
+        {
+            value: "none",
+            text: "No case reference",
+            checked: ("none" in filters.byCaseReferences),
+            behaviour: "exclusive"
+        }
+    ] -%}
+
+    {% if filters.facets['caseReferences'].values.length > 0 %}
+        {%- set caseReferenceItems = (caseReferenceItems.push({
+            divider: "or"
+        }), caseReferenceItems) -%}
+    {% endif %}
+
+    {%- for caseReference in filters.facets['caseReferences'].values -%}
+        {%- set caseReferenceItems = (caseReferenceItems.push({
+            value: caseReference.value,
+            text: caseReference.value + " (" + caseReference.count + ")",
+            checked: (caseReference.value in filters.byCaseReferences)
+        }), caseReferenceItems) -%}
+    {%- endfor -%}
+
+    {{ govukCheckboxes({
+        name: "byCaseReference",
+        classes: "govuk-checkboxes--small",
+        fieldset: {
+            legend: {
+                text: "Case reference",
+                classes: "govuk-fieldset__legend--m"
+            }
+        },
+        items: caseReferenceItems
+    }) }}
+{% endmacro %}
+
+{%- set caseReferenceRemoveFilters = [] %}
+
+{%- for caseReference in filters.byCaseReferences -%}
+    {%- set caseReferenceRemoveFilters = (caseReferenceRemoveFilters.push({
+        text: "All case references" if (caseReference === "all") else ("No case reference" if (caseReference === "none") else caseReference),
+        href: filters.removeFilterLink.caseReferences[caseReference]
+    }), caseReferenceRemoveFilters) -%}
+{%- endfor -%}
+
+{%- set selectedFilterCategory = {
+    heading: {
+        text: 'Case reference'
+    },
+    items: caseReferenceRemoveFilters
+} -%}

@@ -1,0 +1,40 @@
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/radios/macro.njk" import govukRadios -%}
+
+{% macro getFilterOptionHTML(filters) %}
+    {{ govukRadios({
+        idPrefix: "showing",
+        name: "showing",
+        classes: "govuk-radios--small",
+        fieldset: {
+            legend: {
+                text: "Showing",
+                classes: "govuk-fieldset__legend--m"
+            }
+        },
+        items: [
+            {
+                text: "New documents" + " (" + filters.facets['isUnread'].values[0].count + ")",
+                value: "new",
+                checked: (filters.showing === "new")
+            },
+            {
+                text: "All documents",
+                value: "all",
+                checked: (filters.showing === "all")
+            }
+        ]
+    }) }}
+{% endmacro %}
+
+{%- set selectedFilterCategory = {
+    heading: {
+        text: 'Showing'
+    },
+    items: [
+        {
+            text: "New documents" if (filters.showing === "new") else "All documents",
+            href: filters.removeFilterLink.showing
+        }
+    ]
+} -%}
