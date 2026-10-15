@@ -11,6 +11,7 @@ export type DocumentFilters = {
   showing: string
   byCaseReferences: string[]
   byAddressedPrisons: string[]
+  byCourtCodes: string[]
   facets?: { [p: string]: FacetResult }
   pagination: {
     sortBy: string
@@ -24,6 +25,7 @@ export type DocumentFilters = {
     showing: string
     caseReferences: { [p: string]: string }
     addressedPrisons: { [p: string]: string }
+    courtCodes: { [p: string]: string }
   }
 }
 
@@ -31,6 +33,7 @@ export function buildDocumentFilters(req: Request): DocumentFilters {
   const baseUrl = new URL(req.originalUrl, config.domain)
   const byCaseReferences = getAsArrayOrDefault(req.query.byCaseReference, 'all')
   const byAddressedPrisons = getAsArrayOrDefault(req.query.byAddressedPrison, 'all')
+  const byCourtCodes = getAsArrayOrDefault(req.query.byCourtCode, 'all')
 
   return {
     baseUrl,
@@ -38,6 +41,7 @@ export function buildDocumentFilters(req: Request): DocumentFilters {
     showing: getAsStringOrDefault(req.query.showing, 'all'),
     byCaseReferences,
     byAddressedPrisons,
+    byCourtCodes,
     pagination: {
       sortBy: getAsStringOrDefault(req.query.sortBy, 'MOST_RECENT'),
       pageNumber: parseInt(getAsStringOrDefault(req.query.pageNumber, '1'), 10),
@@ -50,6 +54,7 @@ export function buildDocumentFilters(req: Request): DocumentFilters {
       showing: getShowingRemoveFilterLink(baseUrl),
       caseReferences: getCaseReferencesRemoveFilterLinks(baseUrl, byCaseReferences),
       addressedPrisons: getAddressedPrisonRemoveFilterLinks(baseUrl, byAddressedPrisons),
+      courtCodes: getCourtCodeRemoveFilterLinks(baseUrl, byCourtCodes),
     },
   }
 }
@@ -62,9 +67,14 @@ function getBaseUrlLink(url: URL): string {
   linkUrl.searchParams.delete('showing')
   linkUrl.searchParams.delete('byCaseReference')
   linkUrl.searchParams.delete('byAddressedPrison')
+  linkUrl.searchParams.delete('byCourtCode')
   return linkUrl.pathname
 }
 
 function getAddressedPrisonRemoveFilterLinks(url: URL, addressedPrisons: string[]): { [p: string]: string } {
   return getRemoveFilterLinks(url, 'byAddressedPrison', addressedPrisons)
+}
+
+function getCourtCodeRemoveFilterLinks(url: URL, courtCodes: string[]): { [p: string]: string } {
+  return getRemoveFilterLinks(url, 'byCourtCode', courtCodes)
 }

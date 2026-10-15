@@ -1,0 +1,64 @@
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+
+{% macro getFilterOptionHTML(filters) %}
+    {%- set courtCodeItems = [
+        {
+            value: "all",
+            text: "All courts",
+            checked: ("all" in filters.byCourtCodes),
+            behaviour: "exclusive"
+        }
+    ] -%}
+
+    {%- for courtCode in filters.facets['courtCode'].values -%}
+        {% if courtCode.value == null %}
+            {%- set courtCodeItems = (courtCodeItems.push({
+                value: "none",
+                text: "Not entered" + " (" + courtCode.count + ")",
+                checked: ("none" in filters.byCourtCodes),
+                behaviour: "exclusive"
+            }), courtCodeItems) -%}
+
+            {% if filters.facets['courtCode'].values.length > 1 %}
+                {%- set courtCodeItems = (courtCodeItems.push({
+                    divider: "or"
+                }), courtCodeItems) -%}
+            {% endif %}
+        {% else %}
+            {%- set courtCodeItems = (courtCodeItems.push({
+                value: courtCode.value,
+                text: courtCode.value + " (" + courtCode.count + ")",
+                checked: (courtCode.value in filters.byCourtCodes)
+            }), courtCodeItems) -%}
+        {% endif %}
+    {%- endfor -%}
+
+    {{ govukCheckboxes({
+        name: "byCourtCode",
+        classes: "govuk-checkboxes--small",
+        fieldset: {
+            legend: {
+                text: "Court",
+                classes: "govuk-fieldset__legend--m"
+            }
+        },
+        items: courtCodeItems
+    }) }}
+{% endmacro %}
+
+{%- set courtCodeRemoveFilters = [] %}
+
+{%- for courtCode in filters.byCourtCodes -%}
+    {%- set courtCodeRemoveFilters = (courtCodeRemoveFilters.push({
+        text: "All courts" if (courtCode === "all") else ("Not entered" if (courtCode === "none") else courtCode),
+        href: filters.removeFilterLink.courtCodes[courtCode]
+    }), courtCodeRemoveFilters) -%}
+{%- endfor -%}
+
+{%- set selectedFilterCategory = {
+    heading: {
+        text: 'Court'
+    },
+    items: courtCodeRemoveFilters
+} -%}
