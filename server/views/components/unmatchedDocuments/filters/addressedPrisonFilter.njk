@@ -5,7 +5,7 @@
     {%- set addressedPrisonItems = [
         {
             value: "all",
-            text: "All addressed prisons",
+            text: "All addressees",
             checked: ("all" in filters.byAddressedPrisons),
             behaviour: "exclusive"
         }
@@ -39,7 +39,7 @@
         classes: "govuk-checkboxes--small",
         fieldset: {
             legend: {
-                text: "Addressed prison",
+                text: "Addressed to",
                 classes: "govuk-fieldset__legend--m"
             }
         },
@@ -51,14 +51,14 @@
 
 {%- for addressedPrison in filters.byAddressedPrisons -%}
     {%- set addressedPrisonRemoveFilters = (addressedPrisonRemoveFilters.push({
-        text: "All addressed prisons" if (addressedPrison === "all") else ("Not available" if (addressedPrison === "none") else addressedPrison),
+        text: "All addressees" if (addressedPrison === "all") else ("Not available" if (addressedPrison === "none") else addressedPrison),
         href: filters.removeFilterLink.addressedPrisons[addressedPrison]
     }), addressedPrisonRemoveFilters) -%}
 {%- endfor -%}
 
 {%- set selectedFilterCategory = {
     heading: {
-        text: 'Addressed prison'
+        text: 'Addressed to'
     },
     items: addressedPrisonRemoveFilters
 } -%}
