@@ -1,11 +1,11 @@
 {%- from "moj/components/filter/macro.njk" import mojFilter -%}
-{% from "components/prisoner/filters/showingFilter.njk"
-    import getFilterOptionHTML as getShowingFilterOption ,
-           selectedFilterCategory as showingSelectedFilterCategory
-    with context %}
 {% from "components/prisoner/filters/caseReferencesFilter.njk"
     import getFilterOptionHTML as getCaseReferencesFilterOption ,
            selectedFilterCategory as caseReferenceSelectedFilterCategory
+    with context %}
+{% from "components/unmatchedDocuments/filters/courtCodeFilter.njk"
+    import getFilterOptionHTML as getCourtCodeFilterOption ,
+           selectedFilterCategory as courtCodeSelectedFilterCategory
     with context %}
 {% from "components/unmatchedDocuments/filters/addressedPrisonFilter.njk"
     import getFilterOptionHTML as getAddressedPrisonFilterOption ,
@@ -14,14 +14,14 @@
 
 
 {%- set filterOptionsHtml %}
-    {{ getShowingFilterOption(filters) }}
     {{ getCaseReferencesFilterOption(filters) }}
+    {{ getCourtCodeFilterOption(filters) }}
     {{ getAddressedPrisonFilterOption(filters) }}
 {% endset -%}
 
 {%- set selectedFilterCategories = [
-    showingSelectedFilterCategory,
     caseReferenceSelectedFilterCategory,
+    courtCodeSelectedFilterCategory,
     addressedPrisonSelectedFilterCategory
 ] -%}
 

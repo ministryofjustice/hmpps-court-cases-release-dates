@@ -13,6 +13,7 @@ export enum MetadataField {
   IS_UNREAD = "isUnread",
   CASE_REFERENCES = "caseReferences",
   ADDRESSED_PRISON = "addressedPrison",
+  COURT_CODE = "courtCode",
   PRISONER_NUMBER = "prisonerId",
   STATUS = "status",
 }
@@ -30,35 +31,15 @@ export class MetadataFilterMapper {
   }
 
   static getByCaseReferences(filters: string[]): MetadataFilter | null {
-    if (filters.find(it => it === 'none'))
-      return {
-        field: MetadataField.CASE_REFERENCES,
-        operator: MetadataFilterOperator.NOT_EXISTS,
-      } as MetadataFilter
-
-    return (!filters.find(it => it === 'all')) ?
-      {
-        field: MetadataField.CASE_REFERENCES,
-        operator: MetadataFilterOperator.JSON_ARRAY_CONTAINS,
-        values: filters,
-      } as MetadataFilter :
-      null
+    return MetadataFilterMapper.getByFilter(filters, MetadataField.CASE_REFERENCES, MetadataFilterOperator.JSON_ARRAY_CONTAINS)
   }
 
   static getByAddressedPrison(filters: string[]): MetadataFilter | null {
-    if (filters.find(it => it === 'none'))
-      return {
-        field: MetadataField.ADDRESSED_PRISON,
-        operator: MetadataFilterOperator.NOT_EXISTS,
-      } as MetadataFilter
+    return MetadataFilterMapper.getByFilter(filters, MetadataField.ADDRESSED_PRISON, MetadataFilterOperator.IN)
+  }
 
-    return (!filters.find(it => it === 'all')) ?
-      {
-        field: MetadataField.ADDRESSED_PRISON,
-        operator: MetadataFilterOperator.IN,
-        values: filters,
-      } as MetadataFilter :
-      null
+  static getByCourtCode(filters: string[]): MetadataFilter | null {
+    return MetadataFilterMapper.getByFilter(filters, MetadataField.COURT_CODE, MetadataFilterOperator.IN)
   }
 
   static getPrisonerNumber(prisonerNumber: string): MetadataFilter {
@@ -82,5 +63,21 @@ export class MetadataFilterMapper {
       field: MetadataField.PRISONER_NUMBER,
       operator: MetadataFilterOperator.NOT_EXISTS,
     } as MetadataFilter
+  }
+
+  static getByFilter(filterValues: string[], filterField: MetadataField, filterOperator: MetadataFilterOperator): MetadataFilter | null {
+    if (filterValues.find(it => it === 'none'))
+      return {
+        field: filterField,
+        operator: MetadataFilterOperator.NOT_EXISTS,
+      } as MetadataFilter
+
+    return (!filterValues.find(it => it === 'all')) ?
+      {
+        field: filterField,
+        operator: filterOperator,
+        values: filterValues,
+      } as MetadataFilter :
+      null
   }
 }

@@ -159,7 +159,13 @@ export default class UnmatchedDocumentRoutes {
       filter: MetadataFilterMapper.getByAddressedPrison(filters.byAddressedPrisons),
     } as FacetRequest
 
-    return [showingFacetRequest, caseReferencesFacetRequest, addressedPrisonFacetRequest]
+    const courtCodeFacetRequest = {
+      field: 'courtCode',
+      type: 'VALUE',
+      filter: MetadataFilterMapper.getByCourtCode(filters.byCourtCodes),
+    } as FacetRequest
+
+    return [showingFacetRequest, caseReferencesFacetRequest, addressedPrisonFacetRequest, courtCodeFacetRequest]
   }
 
   private parseFacetsForRendering = (facets: { [p: string]: FacetResult }) => {
