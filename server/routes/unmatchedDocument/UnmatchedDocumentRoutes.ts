@@ -9,7 +9,6 @@ import {
   DocumentSearchRequest,
   FacetRequest,
   FacetResult,
-  FacetValue,
   FileDownload,
 } from '../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../data/pagination'
@@ -19,7 +18,12 @@ import { MetadataFilterMapper } from '../../@types/documentManagementApi/Metadat
 import commonPlatformDocumentStatuses from '../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
 import DocumentSearchOrderBy from '../../@types/documentManagementApi/DocumentSearchOrderBy'
 import CourtRegisterService from '../../services/courtRegisterService'
-import { buildDocumentFilters, DocumentFilters } from '../../data/unmatchedDocumentFilter'
+import {
+  buildDocumentFilters,
+  DocumentFilters,
+  parseAddressedPrisonFacetForRendering,
+  parseCourtCodeFacetForRendering,
+} from '../../data/unmatchedDocumentFilter'
 
 export default class UnmatchedDocumentRoutes {
   constructor(
@@ -141,12 +145,6 @@ export default class UnmatchedDocumentRoutes {
   }
 
   private buildDocumentSearchFacetRequest = (filters: DocumentFilters): FacetRequest[] => {
-    const showingFacetRequest = {
-      field: 'isUnread',
-      type: 'VALUE',
-      filter: MetadataFilterMapper.getShowing(filters.showing),
-    } as FacetRequest
-
     const caseReferencesFacetRequest = {
       field: 'caseReferences',
       type: 'ARRAY',
@@ -165,22 +163,20 @@ export default class UnmatchedDocumentRoutes {
       filter: MetadataFilterMapper.getByCourtCode(filters.byCourtCodes),
     } as FacetRequest
 
-    return [showingFacetRequest, caseReferencesFacetRequest, addressedPrisonFacetRequest, courtCodeFacetRequest]
+    return [caseReferencesFacetRequest, addressedPrisonFacetRequest, courtCodeFacetRequest]
   }
 
   private parseFacetsForRendering = (facets: { [p: string]: FacetResult }) => {
     const newFacets = facets
-    const isUnreadFacet = facets.isUnread.values.filter(it => it.value === 'true')
 
-    newFacets.isUnread.values =
-      isUnreadFacet.length > 0
-        ? isUnreadFacet
-        : [
-            {
-              value: 'true',
-              count: 0,
-            } as FacetValue,
-          ]
+    if (newFacets?.addressedPrison) {
+      newFacets.addressedPrison.values = parseAddressedPrisonFacetForRendering(facets?.addressedPrison)
+    }
+
+    if (newFacets?.courtCode) {
+      newFacets.courtCode.values = parseCourtCodeFacetForRendering(facets?.courtCode)
+    }
+
     return newFacets
   }
 }

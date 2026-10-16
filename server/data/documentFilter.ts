@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { FacetResult } from '../@types/documentManagementApi/types'
+import { FacetResult, FacetValue } from '../@types/documentManagementApi/types'
 import { getSortLink } from './pagination'
 import { getAsArrayOrDefault, getAsStringOrDefault } from '../utils/utils'
 import config from '../config'
@@ -46,6 +46,17 @@ export function buildDocumentFilters(req: Request): DocumentFilters {
       caseReferences: getCaseReferencesRemoveFilterLinks(baseUrl, byCaseReferences),
     },
   }
+}
+
+export function parseIsUnreadFacetForRendering(isUnreadFacet: FacetResult) {
+  return (
+    isUnreadFacet?.values.filter(it => it.value === 'true') ?? [
+      {
+        value: 'true',
+        count: 0,
+      } as FacetValue,
+    ]
+  )
 }
 
 // Builds a link to the base page, clean of any filters or sorting options
