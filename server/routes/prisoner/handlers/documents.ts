@@ -16,7 +16,6 @@ import {
   DocumentSearchResult,
   FacetRequest,
   FacetResult,
-  FacetValue,
 } from '../../../@types/documentManagementApi/types'
 import { getPagedDataResponse, getPaginationResults, govukPagination } from '../../../data/pagination'
 import { RasDocument, RaSDocumentMapper } from '../../../@types/remandAndSentencingApi/types'
@@ -25,7 +24,7 @@ import commonPlatformDocumentTypes from '../../../@types/courtDataIngestionApi/c
 import commonPlatformDocumentStatuses from '../../../@types/courtDataIngestionApi/commonPlatformDocumentStatuses'
 import DocumentSearchOrderBy from '../../../@types/documentManagementApi/DocumentSearchOrderBy'
 import { MetadataFilterMapper } from '../../../@types/documentManagementApi/MetadataFilter'
-import { buildDocumentFilters, DocumentFilters } from '../../../data/documentFilter'
+import { buildDocumentFilters, DocumentFilters, parseIsUnreadFacetForRendering } from '../../../data/documentFilter'
 import { RasPrisonerDocuments } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 
 export default class DocumentRoutes {
@@ -279,17 +278,11 @@ export default class DocumentRoutes {
 
   private parseFacetsForRendering = (facets: { [p: string]: FacetResult }) => {
     const newFacets = facets
-    const isUnreadFacet = facets.isUnread.values.filter(it => it.value === 'true')
 
-    newFacets.isUnread.values =
-      isUnreadFacet.length > 0
-        ? isUnreadFacet
-        : [
-            {
-              value: 'true',
-              count: 0,
-            } as FacetValue,
-          ]
+    if (newFacets?.isUnread) {
+      newFacets.isUnread.values = parseIsUnreadFacetForRendering(facets?.isUnread)
+    }
+
     return newFacets
   }
 

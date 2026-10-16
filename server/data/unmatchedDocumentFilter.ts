@@ -1,14 +1,13 @@
 import { Request } from 'express'
-import { FacetResult } from '../@types/documentManagementApi/types'
+import { FacetResult, FacetValue } from '../@types/documentManagementApi/types'
 import { getSortLink } from './pagination'
 import { getAsArrayOrDefault, getAsStringOrDefault } from '../utils/utils'
 import config from '../config'
-import { getCaseReferencesRemoveFilterLinks, getRemoveFilterLinks, getShowingRemoveFilterLink } from './documentFilter'
+import { getCaseReferencesRemoveFilterLinks, getRemoveFilterLinks } from './documentFilter'
 
 export type DocumentFilters = {
   baseUrl: URL
   baseUrlLink: string
-  showing: string
   byCaseReferences: string[]
   byAddressedPrisons: string[]
   byCourtCodes: string[]
@@ -22,7 +21,6 @@ export type DocumentFilters = {
     earliest: string
   }
   removeFilterLink: {
-    showing: string
     caseReferences: { [p: string]: string }
     addressedPrisons: { [p: string]: string }
     courtCodes: { [p: string]: string }
@@ -38,7 +36,6 @@ export function buildDocumentFilters(req: Request): DocumentFilters {
   return {
     baseUrl,
     baseUrlLink: getBaseUrlLink(baseUrl),
-    showing: getAsStringOrDefault(req.query.showing, 'all'),
     byCaseReferences,
     byAddressedPrisons,
     byCourtCodes,
@@ -51,12 +48,35 @@ export function buildDocumentFilters(req: Request): DocumentFilters {
       earliest: getSortLink(baseUrl, 'EARLIEST'),
     },
     removeFilterLink: {
-      showing: getShowingRemoveFilterLink(baseUrl),
       caseReferences: getCaseReferencesRemoveFilterLinks(baseUrl, byCaseReferences),
       addressedPrisons: getAddressedPrisonRemoveFilterLinks(baseUrl, byAddressedPrisons),
       courtCodes: getCourtCodeRemoveFilterLinks(baseUrl, byCourtCodes),
     },
   }
+}
+
+export function parseAddressedPrisonFacetForRendering(addressedPrisonFacet: FacetResult) {
+  const noAddresseeFacet = addressedPrisonFacet?.values.filter(it => it.value === null) ?? [
+    {
+      value: null,
+      count: 0,
+    } as FacetValue,
+  ]
+  const withAddresseeFacet = addressedPrisonFacet?.values.filter(it => it.value != null) ?? []
+  return [...noAddresseeFacet, ...withAddresseeFacet]
+}
+
+export function parseCourtCodeFacetForRendering(courtCodeFacet: FacetResult) {
+  const noCourtCodeFacet = courtCodeFacet?.values.filter(it => it.value === null) ?? [
+    {
+      value: null,
+      count: 0,
+    } as FacetValue,
+  ]
+
+  const withCourtCodeFacet = courtCodeFacet?.values.filter(it => it.value != null) ?? []
+
+  return [...noCourtCodeFacet, ...withCourtCodeFacet]
 }
 
 // Builds a link to the base page, clean of any filters or sorting options
