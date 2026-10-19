@@ -1,50 +1,46 @@
 {%- from "moj/components/filter/macro.njk" import mojFilter -%}
-{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{%- from "govuk/components/select/macro.njk" import govukSelect -%}
 
 {% macro getFilterOptionHTML(filters) %}
-    {%- set addressedPrisonItems = [
-        {
-            value: "all",
-            text: "All addressees",
-            checked: ("all" in filters.byAddressedPrisons),
-            behaviour: "exclusive"
-        }
-    ] -%}
+    {%- set addressedPrisonItems = [] -%}
 
     {%- for addressedPrison in filters.facets['addressedPrison'].values -%}
         {% if addressedPrison.value == null %}
             {%- set addressedPrisonItems = (addressedPrisonItems.push({
                 value: "none",
-                text: "Not available" + " (" + addressedPrison.count + ")",
-                checked: ("none" in filters.byAddressedPrisons),
-                behaviour: "exclusive"
+                text: "Not available",
+                selected: ("none" in filters.byAddressedPrisons)
             }), addressedPrisonItems) -%}
-
-            {% if filters.facets['addressedPrison'].values.length > 1 %}
-                {%- set addressedPrisonItems = (addressedPrisonItems.push({
-                    divider: "or"
-                }), addressedPrisonItems) -%}
-            {% endif %}
         {% else %}
             {%- set addressedPrisonItems = (addressedPrisonItems.push({
                 value: addressedPrison.value,
-                text: addressedPrison.value + " (" + addressedPrison.count + ")",
-                checked: (addressedPrison.value in filters.byAddressedPrisons)
+                text: addressedPrison.value,
+                selected: (addressedPrison.value in filters.byAddressedPrisons)
             }), addressedPrisonItems) -%}
         {% endif %}
     {%- endfor -%}
 
-    {{ govukCheckboxes({
+    {{ govukSelect({
+        id: "byAddressedPrisonAutocomplete",
         name: "byAddressedPrison",
-        classes: "govuk-checkboxes--small",
-        fieldset: {
-            legend: {
-                text: "Addressed to",
-                classes: "govuk-fieldset__legend--m"
-            }
+        label: {
+          text: "Addressed to",
+          isPageHeading: true,
+          classes: "govuk-fieldset__legend--m"
         },
-        items: addressedPrisonItems
-    }) }}
+        hint: {
+          text: "All addressees"
+        },
+        items: addressedPrisonItems,
+        classes: "js-autocomplete-select",
+        attributes: {
+          "data-test": "select-autocomplete-input",
+          "data-input-classes": "govuk-input--width-10",
+          "data-menu-classes": "govuk-input--width-10",
+          "multiple": "multiple"
+        }
+      }) }}
+
 {% endmacro %}
 
 {%- set addressedPrisonRemoveFilters = [] %}
