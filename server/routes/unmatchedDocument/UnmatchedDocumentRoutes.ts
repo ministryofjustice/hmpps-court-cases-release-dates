@@ -63,7 +63,7 @@ export default class UnmatchedDocumentRoutes {
     )
 
     const pagedDataResponse = getPagedDataResponse(documents)
-    filters.facets = this.parseFacetsForRendering(documents.facets)
+    filters.facets = await this.parseFacetsForRendering(documents.facets, username)
 
     res.render('pages/unmatchedDocuments/index', {
       documents: viewModelDocuments,
@@ -166,7 +166,7 @@ export default class UnmatchedDocumentRoutes {
     return [caseReferencesFacetRequest, addressedPrisonFacetRequest, courtCodeFacetRequest]
   }
 
-  private parseFacetsForRendering = (facets: { [p: string]: FacetResult }) => {
+  private parseFacetsForRendering = async (facets: { [p: string]: FacetResult }, username: string) => {
     const newFacets = facets
 
     if (newFacets?.addressedPrison) {
@@ -174,7 +174,12 @@ export default class UnmatchedDocumentRoutes {
     }
 
     if (newFacets?.courtCode) {
-      newFacets.courtCode.values = parseCourtCodeFacetForRendering(facets?.courtCode)
+      newFacets.courtCode.values = await Promise.all(
+        parseCourtCodeFacetForRendering(facets?.courtCode).map(async courtCode => ({
+          ...courtCode,
+          description: await this.courtRegisterService.getCourtName(courtCode.value, username),
+        })),
+      )
     }
 
     return newFacets
