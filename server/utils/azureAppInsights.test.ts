@@ -1,8 +1,13 @@
+import jwt from 'jsonwebtoken'
 import { DataTelemetry, EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import { addCustomDataToRequests, ContextObject, buildPermissionsTelemetryClient } from './azureAppInsights'
 
+const userUuid = '11111111-2222-3333-4444-555555555555'
+const token = jwt.sign({ user_uuid: userUuid }, 'secret')
+
 const user = {
   username: 'test-user',
+  user_uuid: userUuid,
 }
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>
@@ -13,20 +18,21 @@ const createEnvelope = (properties: Record<string, string | boolean>, baseType =
     } as DataTelemetry,
   }) as EnvelopeTelemetry
 
-const createContext = (username: string) =>
+const createContext = (username: string, userToken?: string) =>
   ({
     'http.ServerRequest': {
       res: {
         locals: {
           user: {
             username,
+            token: userToken,
           },
         },
       },
     },
   }) as ContextObject
 
-const context = createContext(user.username)
+const context = createContext(user.username, token)
 
 describe('azureAppInsights', () => {
   describe('addUserDataToRequests', () => {
@@ -65,6 +71,22 @@ describe('azureAppInsights', () => {
       addCustomDataToRequests(envelope, context)
 
       expect(envelope.data.baseData.properties).toStrictEqual(user)
+    })
+
+    it('adds user_uuid from the token as well as username', () => {
+      const envelope = createEnvelope({})
+
+      addCustomDataToRequests(envelope, createContext('test-user', token))
+
+      expect(envelope.data.baseData.properties).toStrictEqual({ username: 'test-user', user_uuid: userUuid })
+    })
+
+    it('omits user_uuid when token is missing or invalid', () => {
+      const envelope = createEnvelope({})
+
+      addCustomDataToRequests(envelope, createContext(user.username, 'not-a-jwt'))
+
+      expect(envelope.data.baseData.properties).toStrictEqual({ username: user.username })
     })
 
     it('handles missing user details', () => {
