@@ -1,3 +1,4 @@
+import { jwtDecode } from 'jwt-decode'
 import { Contracts, setup, defaultClient, TelemetryClient, DistributedTracingModes } from 'applicationinsights'
 import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 import type { TelemetryClient as PermissionsTelemetryClient } from '@ministryofjustice/hmpps-prison-permissions-lib'
@@ -40,19 +41,32 @@ export function buildAppInsightsClient(
   return null
 }
 
+function getUserUuid(token: string | undefined): string | undefined {
+  if (!token) {
+    return undefined
+  }
+  try {
+    return (jwtDecode(token) as { user_uuid?: string }).user_uuid
+  } catch {
+    return undefined
+  }
+}
+
 export function addCustomDataToRequests(
   envelope: EnvelopeTelemetry,
   contextObjects: ContextObject | undefined,
 ): boolean {
   const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
   if (isRequest) {
-    const { username } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
+    const { username, token } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
+    const userUuid = getUserUuid(token)
     const { prisonId } = contextObjects?.['http.ServerRequest']?.prisoner || {}
     const { properties } = envelope.data.baseData
     // eslint-disable-next-line no-param-reassign
     envelope.data.baseData.properties = {
       ...properties,
       ...(username && { username }),
+      ...(userUuid && { user_uuid: userUuid }),
       ...(prisonId && { caseloadId: prisonId }),
     }
   }
