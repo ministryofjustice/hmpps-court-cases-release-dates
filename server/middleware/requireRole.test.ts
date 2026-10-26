@@ -80,9 +80,9 @@ describe('requireRole', () => {
 
 describe('requireRoleWith', () => {
   it('calls next when the user holds the required role, whichever denial mode is configured', () => {
-    const res = responseWithRoles([Roles.getRole(Role.CCRD_DOCUMENTS)])
+    const res = responseWithRoles([Roles.getRole(Role.COURT_CASES)])
 
-    requireRoleWith('forbidden', Roles.getRole(Role.CCRD_DOCUMENTS))(req, res, next)
+    requireRoleWith('forbidden', Roles.getRole(Role.COURT_CASES))(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.status).not.toHaveBeenCalled()
@@ -92,7 +92,7 @@ describe('requireRoleWith', () => {
   it('ends the response with 403 rather than redirecting when configured as forbidden', () => {
     const res = responseWithRoles([])
 
-    requireRoleWith('forbidden', Roles.getRole(Role.CCRD_DOCUMENTS))(req, res, next)
+    requireRoleWith('forbidden', Roles.getRole(Role.COURT_CASES))(req, res, next)
 
     expect(next).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(constants.HTTP_STATUS_FORBIDDEN)
@@ -103,7 +103,7 @@ describe('requireRoleWith', () => {
   it('redirects when configured as redirect, matching the default export', () => {
     const res = responseWithRoles([])
 
-    requireRoleWith('redirect', Roles.getRole(Role.CCRD_DOCUMENTS))(req, res, next)
+    requireRoleWith('redirect', Roles.getRole(Role.COURT_CASES))(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith('/authError')
     expect(res.status).not.toHaveBeenCalled()
@@ -112,7 +112,7 @@ describe('requireRoleWith', () => {
   it('returns 403 rather than throwing when there is no user on res.locals', () => {
     const res = responseWithRoles(undefined)
 
-    requireRoleWith('forbidden', Roles.getRole(Role.CCRD_DOCUMENTS))(req, res, next)
+    requireRoleWith('forbidden', Roles.getRole(Role.COURT_CASES))(req, res, next)
 
     expect(next).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(constants.HTTP_STATUS_FORBIDDEN)

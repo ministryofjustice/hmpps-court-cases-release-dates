@@ -54,7 +54,7 @@ const defaultUser = {
   hasAdjustmentsAccess: true,
   hasRasAccess: true,
   hasRecallsAccess: true,
-  roles: [Roles.getRole(Role.CCRD_DOCUMENTS)],
+  roles: [Roles.getRole(Role.COURT_CASES)],
 }
 
 const userWithoutDocumentsRole = { ...defaultUser, roles: [] as string[] }
