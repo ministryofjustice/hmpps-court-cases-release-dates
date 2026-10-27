@@ -8,7 +8,7 @@ import { Role, Roles } from '../server/@types/roles'
 
 export { resetStubs }
 
-const DEFAULT_ROLES = [Roles.getAuthority(Role.COURT_CASES)]
+const DEFAULT_ROLES = [Roles.getAuthority(Role.RELEASE_DATES_CALCULATOR)]
 
 export const attemptHmppsAuthLogin = async (page: Page, returnToPath = '/') => {
   await digitalPrisonServices.stubDps()
