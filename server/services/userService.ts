@@ -54,15 +54,11 @@ export default class UserService {
   }
 
   hasRasAccess(roles: string[]): boolean {
-    return [Roles.getRole(Role.REMAND_AND_SENTENCING), Roles.getRole(Role.COURT_CASES)].some((role: string) =>
-      roles.includes(role),
-    )
+    return roles.includes(Roles.getRole(Role.COURT_CASES))
   }
 
   hasRecallAccess(roles: string[]): boolean {
-    return [Roles.getRole(Role.RECALL_MAINTAINER), Roles.getRole(Role.COURT_CASES)].some((role: string) =>
-      roles.includes(role),
-    )
+    return roles.includes(Roles.getRole(Role.COURT_CASES))
   }
 
   hasInactiveBookingAccess(roles: string[]): boolean {
@@ -74,10 +70,6 @@ export default class UserService {
   }
 
   hasImmigrationDetentionAccess(roles: string[]): boolean {
-    return [
-      Roles.getRole(Role.IMMIGRATION_DETENTION_USER),
-      Roles.getRole(Role.IMMIGRATION_DETENTION_ADMIN),
-      Roles.getRole(Role.COURT_CASES),
-    ].some((role: string) => roles.includes(role))
+    return roles.includes(Roles.getRole(Role.COURT_CASES))
   }
 }
