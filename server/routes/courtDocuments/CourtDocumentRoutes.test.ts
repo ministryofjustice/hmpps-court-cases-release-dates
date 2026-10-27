@@ -114,7 +114,7 @@ beforeEach(() => {
 afterEach(() => jest.resetAllMocks())
 
 describe('access', () => {
-  const PRISON_ROLES = [Role.CCRD_DOCUMENTS, Role.RAS_DOCUMENT_AUTO, Role.RELEASE_DATES_CALCULATOR]
+  const PRISON_ROLES = [Role.COURT_CASES, Role.RAS_DOCUMENT_AUTO, Role.RELEASE_DATES_CALCULATOR]
   const withRoles = (roles: Role[]): Express.User => ({
     ...user,
     roles: roles.map(role => Roles.getRole(role)),

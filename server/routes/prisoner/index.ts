@@ -44,8 +44,8 @@ export default function Index({
     requestDependentOn: [PersonSentenceCalculationPermission.edit],
   })
 
-  const requireDocuments = requireRole(Roles.getRole(Role.CCRD_DOCUMENTS))
-  const requireDocumentsApi = requireRoleWith('forbidden', Roles.getRole(Role.CCRD_DOCUMENTS))
+  const requireDocuments = requireRole(Roles.getRole(Role.COURT_CASES))
+  const requireDocumentsApi = requireRoleWith('forbidden', Roles.getRole(Role.COURT_CASES))
 
   get('/:prisonerNumber/image', requireRead, new ImageRoutes(prisonerService).GET)
   get('/:prisonerNumber/adjustments', requireEdit, new AdjustmentsRoutes().GET)

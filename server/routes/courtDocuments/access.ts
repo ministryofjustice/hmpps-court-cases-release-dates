@@ -6,7 +6,7 @@ import { Role, Roles } from '../../@types/roles'
 const SUPPORT = Roles.getRole(Role.COURTCASE_RELEASEDATE_SUPPORT)
 
 const PRISON_ROLES = [
-  Roles.getRole(Role.CCRD_DOCUMENTS),
+  Roles.getRole(Role.COURT_CASES),
   Roles.getRole(Role.RAS_DOCUMENT_AUTO),
   Roles.getRole(Role.RELEASE_DATES_CALCULATOR),
 ]
