@@ -219,6 +219,7 @@ describe('Remand and sentencing service', () => {
           first: true,
           last: true,
           empty: true,
+          anyConsecutiveToFixes: false,
         }
 
         fakeApi

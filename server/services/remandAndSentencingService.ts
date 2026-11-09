@@ -13,6 +13,7 @@ import {
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import { HmppsAuthClient } from '../data'
 import logger from '../../logger'
+import { PersonNextCourtAppearance } from '../@types/remandAndSentencingApi/types'
 
 export default class RemandAndSentencingService {
   constructor(private readonly hmppsAuthClient: HmppsAuthClient) {}
@@ -105,6 +106,25 @@ export default class RemandAndSentencingService {
         const { status } = error as { status: number }
         if (status === 404) {
           logger.info('No Court Cases found for prisonerId %s', prisonerId)
+          return undefined
+        }
+      }
+      throw error
+    }
+  }
+
+  public async getPersonNextCourtAppearance(
+    prisonerId: string,
+    username: string,
+  ): Promise<PersonNextCourtAppearance | undefined> {
+    try {
+      return new RemandAndSentencingApiClient(await this.getSystemClientToken(username)).getPersonNextCourtAppearance(
+        prisonerId,
+      )
+    } catch (error: unknown) {
+      if (typeof error === 'object' && error !== null && 'status' in error) {
+        const { status } = error as { status: number }
+        if (status === 404) {
           return undefined
         }
       }

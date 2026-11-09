@@ -136,17 +136,15 @@
 
       <h2 class="govuk-heading-l">Next court hearing</h2>
 
-      {% if not (nextCourtEvent | length) %}
-        <p class="govuk-body">There are no upcoming court hearings</p>
-      {% else %}
-        {{ govukSummaryList({
+      {% if nextCourtAppearance %}
+      {{ govukSummaryList({
           rows: [
             {
               key: {
               text: "Case reference"
             },
               value: {
-              text: nextCourtEvent.caseReference or 'Not entered'
+              text: nextCourtAppearance.caseReference or 'Not entered'
             }
             },
             {
@@ -154,7 +152,7 @@
               text: "Location"
             },
               value: {
-              text: nextCourtEvent.courtLocation
+              text: courtName
             }
             },
             {
@@ -162,7 +160,7 @@
               text: "Hearing type"
             },
               value: {
-              html: nextCourtEvent.courtEventType
+              html: nextCourtAppearance.courtAppearanceSubType.description if nextCourtAppearance.courtAppearanceSubType else nextCourtAppearance.appearanceType.description
             }
             },
             {
@@ -170,11 +168,13 @@
               text: "Date"
             },
               value: {
-              text: nextCourtEvent.startTime | dateTime
+              text: nextCourtAppearance.dateTime | dateTime
             }
             }
           ]
         }) }}
+      {% else %}
+        <p class="govuk-body">There are no upcoming court hearings</p>
       {% endif %}
       {% if hasReadOnlyNomisConfigAccess %}
         <h2 class="govuk-heading-l">Configuration</h2>

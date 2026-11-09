@@ -60,6 +60,7 @@ export default function Index({
       remandAndSentencingService,
       prisonService,
       immigrationDetentionService,
+      courtRegisterService,
     ).GET,
   )
   get(

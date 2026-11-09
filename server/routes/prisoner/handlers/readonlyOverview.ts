@@ -37,13 +37,13 @@ export default class ReadonlyOverviewRoutes {
 
     const [
       hasActiveSentences,
-      nextCourtEvent,
+      nextCourtAppearance,
       latestRecall,
       latestImmigrationRecord,
       [courtCaseDetailModels, offenceMap, offenceOutcomeMap, courtMap],
     ] = await Promise.all([
       this.prisonerService.hasActiveSentencesAsSystem(bookingId, username),
-      this.prisonerService.getNextCourtEventAsSystem(bookingId, username),
+      this.remandAndSentencingService.getPersonNextCourtAppearance(prisoner.prisonerNumber, username),
       this.remandAndSentencingService.getMostRecentRecallAsSystem(prisoner.prisonerNumber, username),
       latestImmigrationRecordPromise,
       this.getCourtCases(req, prisoner, username),
@@ -54,6 +54,8 @@ export default class ReadonlyOverviewRoutes {
           username,
         )
       : null
+
+    const courtName = await this.courtRegisterService.getCourtName(nextCourtAppearance?.courtCode, username)
 
     const feedbackPrompt: ThingToDo = {
       title: 'Did you find what you need?',
@@ -72,7 +74,8 @@ export default class ReadonlyOverviewRoutes {
       offenceMap,
       offenceOutcomeMap,
       latestRecall,
-      nextCourtEvent,
+      nextCourtAppearance,
+      courtName,
       hasImmigrationDetentionAccess,
       courtMap,
       immigrationDetentionMessage:

@@ -11,6 +11,7 @@ import {
   HmctsHearingIdPair,
   HmctsHearingAutopopulateEligibility,
 } from '../@types/remandAndSentencingApi/remandAndSentencingTypes'
+import { PersonNextCourtAppearance } from '../@types/remandAndSentencingApi/types'
 
 export default class RemandAndSentencingApiClient {
   restClient: RestClient
@@ -83,5 +84,11 @@ export default class RemandAndSentencingApiClient {
       path: `/hmcts-court-data/hearing-autopopulate-eligibility`,
       data: hearingIds,
     }) as Promise<HmctsHearingAutopopulateEligibility[]>
+  }
+
+  async getPersonNextCourtAppearance(prisonerId: string): Promise<PersonNextCourtAppearance> {
+    return this.restClient.get({
+      path: `/person/${prisonerId}/next-court-appearance`,
+    })
   }
 }
