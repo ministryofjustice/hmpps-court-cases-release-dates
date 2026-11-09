@@ -13,4 +13,17 @@ const stubGetCourtMap = () =>
     },
   })
 
-export default { stubGetCourtMap }
+const stubGetCourtByCode = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPath: '/court-register-api/courts/id/ALD',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: [{ courtId: 'ALD', courtName: 'Aldershot' }],
+    },
+  })
+
+export default { stubGetCourtMap, stubGetCourtByCode }

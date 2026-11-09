@@ -4,6 +4,7 @@ import { RasPrisonerDocuments } from './remandAndSentencingTypes'
 
 export type AppearanceDocument = components['schemas']['AppearanceDocument']
 export type RaSCourtCaseDocument = components['schemas']['CourtCaseDocuments']
+export type PersonNextCourtAppearance = components['schemas']['PersonNextCourtAppearance']
 
 export type RasDocument = {
   caseDocument: RaSCourtCaseDocument

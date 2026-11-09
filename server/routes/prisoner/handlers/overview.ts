@@ -8,6 +8,7 @@ import PrisonService from '../../../services/prisonService'
 import { Recall } from '../../../@types/remandAndSentencingApi/remandAndSentencingTypes'
 import config from '../../../config'
 import ImmigrationDetentionService from '../../../services/ImmigrationDetentionService'
+import CourtRegisterService from '../../../services/courtRegisterService'
 
 export default class OverviewRoutes {
   constructor(
@@ -17,6 +18,7 @@ export default class OverviewRoutes {
     private readonly remandAndSentencingService: RemandAndSentencingService,
     private readonly prisonService: PrisonService,
     private readonly immigrationDetentionService: ImmigrationDetentionService,
+    private readonly courtRegisterService: CourtRegisterService,
   ) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -35,8 +37,7 @@ export default class OverviewRoutes {
     const showAdjustments = !(hasInactiveBookingAccess && (isPrisonerOutside || isPrisonerBeingTransferred))
 
     const startOfSentenceEnvelope = await this.prisonerService.getStartOfSentenceEnvelope(bookingId, token)
-    const [nextCourtEvent, hasActiveSentences, serviceDefinitions] = await Promise.all([
-      this.prisonerService.getNextCourtEvent(bookingId, token),
+    const [hasActiveSentences, serviceDefinitions] = await Promise.all([
       this.prisonerService.hasActiveSentences(bookingId, token),
       this.prisonerService.getServiceDefinitions(prisoner.prisonerNumber, token),
     ])
@@ -71,6 +72,11 @@ export default class OverviewRoutes {
           username,
         )
       : null
+    const nextCourtAppearance = await this.remandAndSentencingService.getPersonNextCourtAppearance(
+      prisoner.prisonerNumber,
+      username,
+    )
+    const courtName = await this.courtRegisterService.getCourtName(nextCourtAppearance?.courtCode, username)
     const addImmigrationDetentionUrl = `${config.applications.immigrationDetention.url}/${prisoner.prisonerNumber}/immigration-detention/add`
     let overviewImmigrationDetentionUrl
     if (latestImmigrationRecord) {
@@ -79,7 +85,8 @@ export default class OverviewRoutes {
 
     return res.render('pages/prisoner/overview', {
       prisoner,
-      nextCourtEvent,
+      nextCourtAppearance,
+      courtName,
       aggregatedAdjustments,
       latestCalculationConfig,
       isIndeterminateAndHasNoCalculatedDates,

@@ -7,7 +7,6 @@ import PrisonerService from '../../../services/prisonerService'
 import { appWithAllRoutes, user } from '../../testutils/appSetup'
 import { Prisoner } from '../../../@types/prisonerSearchApi/types'
 import PrisonerSearchService from '../../../services/prisonerSearchService'
-import { CourtEventDetails } from '../../../@types/prisonApi/types'
 import CalculateReleaseDatesService from '../../../services/calculateReleaseDatesService'
 import { CcrdServiceDefinitions } from '../../../@types/courtCasesReleaseDatesApi/types'
 import RemandAndSentencingService from '../../../services/remandAndSentencingService'
@@ -169,9 +168,13 @@ const defaultCourtCasesPage: SearchCourtCasesPage = {
       firstDayInCustodyWarrantType: '',
       canAppeal: false,
       canBreach: false,
+      canAddHearing: false,
+      hasUnconfirmedConsecutiveToFixSentences: false,
+      hasRecalls: false,
     },
   ],
   prisonerCourtCaseTotal: 1,
+  anyConsecutiveToFixes: false,
 }
 
 beforeEach(() => {
@@ -207,6 +210,8 @@ beforeEach(() => {
   immigrationDetentionService.getImmigrationDetentionMessage.mockReturnValue(
     'There are no immigration documents recorded.',
   )
+  remandAndSentencingService.getPersonNextCourtAppearance.mockResolvedValue(undefined)
+  courtRegisterService.getCourtName.mockResolvedValue(null)
 })
 
 afterEach(() => {
@@ -222,7 +227,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonId: 'HLI',
       } as Prisoner)
       prisonerService.getStartOfSentenceEnvelope.mockResolvedValue(new Date())
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
 
@@ -239,7 +243,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonerNumber: 'A12345B',
         prisonId: 'HLI',
       } as Prisoner)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
 
@@ -255,7 +258,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonerNumber: 'A12345B',
         prisonId: 'HLI',
       } as Prisoner)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
 
@@ -276,7 +278,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonerNumber: 'A12345B',
         prisonId: 'HLI',
       } as Prisoner)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
 
@@ -314,7 +315,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonerNumber: 'A12345B',
         prisonId: 'HLI',
       } as Prisoner)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
       calculateReleaseDatesService.getLatestCalculationForPrisonerAsSystem.mockResolvedValue(
@@ -333,7 +333,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonerNumber: 'A12345B',
         prisonId: 'HLI',
       } as Prisoner)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
       // fixture 'latestCalculation' only contains a CRD
@@ -350,7 +349,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonerNumber: 'A12345B',
         prisonId: 'HLI',
       } as Prisoner)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
       calculateReleaseDatesService.getLatestCalculationForPrisonerAsSystem.mockResolvedValue(latestCalculation)
@@ -411,7 +409,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonerNumber: 'A12345B',
         prisonId: 'HLI',
       } as Prisoner)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(true)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
       calculateReleaseDatesService.getLatestCalculationForPrisonerAsSystem.mockResolvedValue(latestCalculation)
@@ -909,7 +906,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
 
       const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
 
@@ -922,19 +918,25 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonId: 'HLI',
       } as Prisoner)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({
+      remandAndSentencingService.getPersonNextCourtAppearance.mockResolvedValue({
         caseReference: 'CASE-123',
-        courtLocation: 'Leeds Crown Court',
-        courtEventType: 'Sentencing',
-        startTime: '2024-06-01T10:30:00',
-      } as CourtEventDetails)
+        courtCode: 'LEE',
+        appearanceType: {
+          appearanceTypeUuid: '1',
+          description: 'Court appearance',
+          displayOrder: 1,
+          hasSubtypes: false,
+        },
+        dateTime: '2024-06-01T10:30:00',
+      })
+      courtRegisterService.getCourtName.mockResolvedValue('Leeds Crown Court')
 
       const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
 
       expect(res.text).not.toContain('There are no upcoming court hearings')
       expect(res.text).toContain('CASE-123')
       expect(res.text).toContain('Leeds Crown Court')
-      expect(res.text).toContain('Sentencing')
+      expect(res.text).toContain('Court appearance')
     })
   })
 
@@ -956,7 +958,6 @@ describe('Route Handlers - Readonly Overview', () => {
         prisonId: 'OUT',
       } as Prisoner)
       prisonerService.getStartOfSentenceEnvelope.mockResolvedValue(new Date())
-      prisonerService.getNextCourtEventAsSystem.mockResolvedValue({} as CourtEventDetails)
       prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
       prisonerService.getServiceDefinitions.mockResolvedValue(serviceDefinitionsNoThingsToDo)
 

@@ -13,6 +13,7 @@ import tokenVerification from '../mockApis/tokenVerification'
 import OverviewPage from '../pages/overviewPage'
 import AuthManageDetailsPage from '../pages/authManageDetailsPage'
 import frontEndComponentsApi from '../mockApis/frontEndComponentsApi'
+import courtRegisterApi from '../mockApis/courtRegisterApi'
 
 test.describe('SignIn', () => {
   test.beforeEach(async () => {
@@ -47,14 +48,14 @@ test.describe('SignIn', () => {
     test.beforeEach(async () => {
       await manageUsersApi.stubManageUser()
       await prisonerSearchApi.stubGetPrisonerDetails()
-      await prisonApi.stubGetNextCourtEvent()
-      await prisonApi.stubGetActiveCaseCount()
       await adjustmentsApi.stubGetAdjustments()
       await adjustmentsApi.stubGetIntercept()
       await calculateReleaseDatesApi.stubGetLatestCalculation()
       await prisonApi.stubGetSentencesAndOffences()
       await courtCasesReleaseDatesApi.stubGetThingsToDo()
       await remandAndSentencingApi.stubGetLatestImmigrationDetentionRecordByPrisoner()
+      await remandAndSentencingApi.stubGetPersonNextCourtAppearance()
+      await courtRegisterApi.stubGetCourtByCode()
     })
 
     test('User name visible in header', async ({ page }) => {
