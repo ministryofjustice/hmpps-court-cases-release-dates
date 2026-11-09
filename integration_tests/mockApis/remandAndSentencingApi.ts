@@ -182,6 +182,29 @@ const stubGetLatestImmigrationDetentionRecordByPrisoner = () =>
     },
   })
 
+const stubGetPersonNextCourtAppearance = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/ras-api/person/A1234AB/next-court-appearance',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: {
+        caseReference: 'A1473295B',
+        courtCode: 'ALD',
+        appearanceType: {
+          appearanceTypeUuid: '1',
+          description: 'Court appearance',
+          displayOrder: 1,
+          hasSubtypes: false,
+        },
+        dateTime: '2021-07-05T10:35:17',
+      },
+    },
+  })
+
 const ping = () =>
   stubFor({
     request: {
@@ -200,4 +223,5 @@ export default {
   stubSearchCourtCasesSingleCourtCaseMultipleCharges,
   stubGetConsecutiveToDetails,
   stubGetAllRecalls,
+  stubGetPersonNextCourtAppearance,
 }

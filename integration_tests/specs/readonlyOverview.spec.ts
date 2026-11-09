@@ -21,8 +21,6 @@ test.beforeEach(async () => {
   await hmppsAuth.stubSignInPage()
   await manageUsersApi.stubManageUser()
   await prisonerSearchApi.stubGetPrisonerDetails()
-  await prisonApi.stubGetNextCourtEvent()
-  await prisonApi.stubGetActiveCaseCount()
   await adjustmentsApi.stubGetAdjustments()
   await adjustmentsApi.stubGetIntercept()
   await calculateReleaseDatesApi.stubGetLatestCalculation()
@@ -33,7 +31,9 @@ test.beforeEach(async () => {
   await remandAndSentencingApi.stubGetAllRecalls()
   await remandAndSentencingApi.stubSearchCourtCases()
   await remandAndSentencingApi.stubGetConsecutiveToDetails()
+  await remandAndSentencingApi.stubGetPersonNextCourtAppearance()
   await courtRegisterApi.stubGetCourtMap()
+  await courtRegisterApi.stubGetCourtByCode()
   await manageOffencesApi.stubGetOffencesByCodes()
 })
 
