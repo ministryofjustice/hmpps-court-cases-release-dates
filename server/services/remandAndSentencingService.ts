@@ -118,9 +118,9 @@ export default class RemandAndSentencingService {
     username: string,
   ): Promise<PersonNextCourtAppearance | undefined> {
     try {
-      return new RemandAndSentencingApiClient(await this.getSystemClientToken(username)).getPersonNextCourtAppearance(
-        prisonerId,
-      )
+      return await new RemandAndSentencingApiClient(
+        await this.getSystemClientToken(username),
+      ).getPersonNextCourtAppearance(prisonerId)
     } catch (error: unknown) {
       if (typeof error === 'object' && error !== null && 'status' in error) {
         const { status } = error as { status: number }
