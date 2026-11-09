@@ -266,5 +266,14 @@ describe('Remand and sentencing service', () => {
         ).rejects.toThrow()
       })
     })
+
+    describe('getPersonNextCourtAppearance', () => {
+      it('Should return undefined when API responds with 404', async () => {
+        fakeApi.get(`/person/${prisonerId}/next-court-appearance`).reply(404)
+
+        const result = await remandAndSentencingService.getPersonNextCourtAppearance(prisonerId, 'test-username')
+        expect(result).toBeUndefined()
+      })
+    })
   })
 })
