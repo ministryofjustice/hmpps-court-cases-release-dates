@@ -16,7 +16,6 @@ import ManageOffencesApiClient from '../data/manageOffencesApiClient'
 import ImmigrationDetentionService from './ImmigrationDetentionService'
 import config from '../config'
 import logger from '../../logger'
-import CourtDataIngestionUnmatchedDocumentService from './courtDataIngestionUnmatchedDocumentService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuthClient, hmppsAuthenticationClient, manageUsersApiClient, feComponentsClient } =
@@ -41,8 +40,6 @@ export const services = () => {
   const documentManagementService = new DocumentManagementService(hmppsAuthenticationClient)
 
   const courtDataIngestionService = new CourtDataIngestionService(hmppsAuthClient)
-
-  const courtDataIngestionUnmatchedDocumentService = new CourtDataIngestionUnmatchedDocumentService(hmppsAuthClient)
 
   const courtRegisterService = new CourtRegisterService(hmppsAuthClient)
 
@@ -69,7 +66,6 @@ export const services = () => {
     prisonService,
     documentManagementService,
     courtDataIngestionService,
-    courtDataIngestionUnmatchedDocumentService,
     courtRegisterService,
     manageOffencesService,
     immigrationDetentionService,

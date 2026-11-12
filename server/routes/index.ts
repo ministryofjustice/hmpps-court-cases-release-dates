@@ -26,7 +26,7 @@ export default function routes(services: Services): Router {
     '/unmatched-documents',
     unmatchedDocumentRoutes(
       services.documentManagementService,
-      services.courtDataIngestionUnmatchedDocumentService,
+      services.courtDataIngestionService,
       services.courtRegisterService,
     ),
   )

@@ -5,11 +5,11 @@ import asyncMiddleware from '../../middleware/asyncMiddleware'
 import CourtRegisterService from '../../services/courtRegisterService'
 import requireRole from '../../middleware/requireRole'
 import { Role, Roles } from '../../@types/roles'
-import CourtDataIngestionUnmatchedDocumentService from '../../services/courtDataIngestionUnmatchedDocumentService'
+import CourtDataIngestionService from '../../services/courtDataIngestionService'
 
 export default function Index(
   documentManagementService: DocumentManagementService,
-  unmatchedDocumentService: CourtDataIngestionUnmatchedDocumentService,
+  courtDataIngestionService: CourtDataIngestionService,
   courtRegisterService: CourtRegisterService,
 ): Router {
   const router = Router()
@@ -19,11 +19,11 @@ export default function Index(
 
   get(
     '/',
-    new UnmatchedDocumentRoutes(documentManagementService, unmatchedDocumentService, courtRegisterService).documents,
+    new UnmatchedDocumentRoutes(documentManagementService, courtDataIngestionService, courtRegisterService).documents,
   )
   get(
     ['/:documentId/download/:filename', '/:documentId/download'],
-    new UnmatchedDocumentRoutes(documentManagementService, unmatchedDocumentService, courtRegisterService).download,
+    new UnmatchedDocumentRoutes(documentManagementService, courtDataIngestionService, courtRegisterService).download,
   )
 
   return router

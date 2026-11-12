@@ -24,12 +24,12 @@ import {
   parseAddressedPrisonFacetForRendering,
   parseCourtCodeFacetForRendering,
 } from '../../data/unmatchedDocumentFilter'
-import CourtDataIngestionUnmatchedDocumentService from '../../services/courtDataIngestionUnmatchedDocumentService'
+import CourtDataIngestionService from '../../services/courtDataIngestionService'
 
 export default class UnmatchedDocumentRoutes {
   constructor(
     private readonly documentManagementService: DocumentManagementService,
-    private readonly unmatchedDocumentService: CourtDataIngestionUnmatchedDocumentService,
+    private readonly courtDataIngestionService: CourtDataIngestionService,
     private readonly courtRegisterService: CourtRegisterService,
   ) {}
 
@@ -40,7 +40,7 @@ export default class UnmatchedDocumentRoutes {
     const documentSearchRequest: DocumentSearchRequest = this.buildDocumentSearchRequest(filters)
 
     const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
-    const cpDocuments = await this.unmatchedDocumentService.getDocuments(
+    const cpDocuments = await this.courtDataIngestionService.getUnmatchedDocuments(
       DocumentManagementMapper.getCommonPlatformDocumentIds(documents.results),
       username,
     )
