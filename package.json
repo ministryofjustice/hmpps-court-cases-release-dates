@@ -36,7 +36,7 @@
     "generate-prison-register-api-types": "openapi-typescript https://prison-register-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonRegisterApi/index.d.ts"
   },
   "engines": {
-    "node": "^24",
+    "node": "^26",
     "npm": "^11"
   },
   "dependencies": {
