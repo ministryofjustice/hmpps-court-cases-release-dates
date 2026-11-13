@@ -5,15 +5,20 @@ import { appWithAllRoutes, user } from '../testutils/appSetup'
 import { Document, DocumentSearchResult, FileDownload } from '../../@types/documentManagementApi/types'
 import DocumentManagementService from '../../services/documentManagementService'
 import { Role, Roles } from '../../@types/roles'
+import CourtDataIngestionService from '../../services/courtDataIngestionService'
+import { CourtDocument } from '../../@types/courtDataIngestionApi/types'
 
 jest.mock('../../services/documentManagementService')
+jest.mock('../../services/courtDataIngestionService')
 
 const documentManagementService = new DocumentManagementService(null) as jest.Mocked<DocumentManagementService>
+const courtDataIngestionService = new CourtDataIngestionService(null) as jest.Mocked<CourtDataIngestionService>
 
 let app: Express
 
 const defaultServices = {
   documentManagementService,
+  courtDataIngestionService,
 }
 
 const defaultUser = {
@@ -62,6 +67,7 @@ describe('Route Handlers - Unmatched documents role check access control', () =>
     documentManagementService.searchDocument.mockResolvedValue(documents)
     documentManagementService.getDocument.mockResolvedValue(documents.results[0] as Document)
     documentManagementService.downloadDocument.mockReturnValue(fileDownload)
+    courtDataIngestionService.getUnmatchedDocuments.mockResolvedValue(cpDocuments)
   })
 
   it('the documents page redirects to the auth error page without the COURTCASE_RELEASEDATE_SUPPORT role', () => {
@@ -82,6 +88,7 @@ describe('Route Handlers - Unmatched documents role check access control', () =>
       expect(documentManagementService.searchDocument).not.toHaveBeenCalled()
       expect(documentManagementService.getDocument).not.toHaveBeenCalled()
       expect(documentManagementService.downloadDocument).not.toHaveBeenCalled()
+      expect(courtDataIngestionService.getUnmatchedDocuments).not.toHaveBeenCalled()
     },
   )
 
@@ -199,3 +206,39 @@ const fileDownload = {
     'content-type': 'text/plain',
   },
 } as unknown as Promise<FileDownload>
+
+const cpDocuments = [
+  {
+    caseReferences: ['CommonPlatformCase123', 'CommonPlatformCase456'],
+    prisonDocumentId: '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
+    isUnread: true,
+    documentType: 'PRISON_COURT_REGISTER',
+    courtHearing: {
+      courtName: 'Court 123',
+      hearingType: 'Sentencing',
+      hearingDate: '2024-01-01T12:34',
+    },
+  },
+  {
+    caseReferences: ['BC23456789B'],
+    prisonDocumentId: 'c43f547c-35e9-4c9a-b7dc-c166223056cb',
+    isUnread: true,
+    documentType: 'SENTENCING_WARRANT',
+    courtHearing: {
+      courtName: 'Court 345',
+      hearingType: 'First hearing',
+      hearingDate: '2026-01-01T12:34',
+    },
+  },
+  {
+    caseReferences: ['AB12345678A', 'BC23456789B', 'CD34567890C'],
+    prisonDocumentId: '80dffad6-ec63-47e5-9d79-cb96537081e7',
+    isUnread: true,
+    documentType: 'COMMON_PLATFORM_DOCUMENT',
+    courtHearing: {
+      courtName: 'Court 678',
+      hearingType: 'Remand',
+      hearingDate: '2025-01-01T12:34',
+    },
+  },
+] as CourtDocument[]
