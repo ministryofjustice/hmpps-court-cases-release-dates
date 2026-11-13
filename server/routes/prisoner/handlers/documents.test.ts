@@ -549,7 +549,7 @@ describe('Route Handlers - Mark Document As New', () => {
           expect(res.headers.location).toBe(expectedLocation)
           expect(courtDataIngestionService.markAsNew).toHaveBeenCalledWith(
             '4fd5f7b0-eebf-4b69-9489-0cc48550e03b',
-            { username: 'user1' },
+            { username: 'user1', type: 'DOCUMENT_VIEW' },
             'user1',
           )
         })
