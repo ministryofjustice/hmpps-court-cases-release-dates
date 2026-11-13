@@ -30,6 +30,12 @@
       "enabled": false
     },
     {
+      "description": "Keep js-yaml on 4.x because openapi-typescript ^7.13.0 (@redocly/openapi-core 1.x) is incompatible with js-yaml 5.x. Remove this rule once openapi-typescript supports js-yaml 5.x",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["js-yaml"],
+      "allowedVersions": "<5.0.0"
+    },
+    {
       "matchDatasources": ["docker"],
       "matchPackageNames": ["node"],
       "matchUpdateTypes": ["major"],
