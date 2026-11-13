@@ -146,7 +146,11 @@ export default class DocumentRoutes {
           logger.info(`Successfully streamed document ${documentId} to client.`)
           try {
             await this.sendAuditEvent(req)
-            await this.courtDataIngestionService.documentViewed(documentId, { username }, username)
+            await this.courtDataIngestionService.documentViewed(
+              documentId,
+              { username, type: 'DOCUMENT_VIEW' },
+              username,
+            )
           } catch (error: unknown) {
             // Allow 404 errors for documents not in CDIA
             if ((error as { status?: number })?.status !== constants.HTTP_STATUS_NOT_FOUND) {
@@ -192,7 +196,7 @@ export default class DocumentRoutes {
 
     try {
       await this.validateDocumentForDownload(documentId, prisonerNumber, username)
-      await this.courtDataIngestionService.markAsNew(documentId, { username }, username)
+      await this.courtDataIngestionService.markAsNew(documentId, { username, type: 'DOCUMENT_VIEW' }, username)
       await this.sendAuditEvent(req, 'MARK_DOCUMENT_AS_NEW')
     } catch (err) {
       if (err.cause === constants.HTTP_STATUS_FORBIDDEN) {
