@@ -63,6 +63,14 @@ export default class CourtDataIngestionService {
       : []
   }
 
+  public async getUnmatchedDocuments(documentIdsFromCp: string[], username: string): Promise<CourtDocument[]> {
+    return documentIdsFromCp.length > 0
+      ? new CourtDataIngestionApiClient(await this.getSystemClientToken(username)).getUnmatchedDocuments(
+          documentIdsFromCp,
+        )
+      : []
+  }
+
   /**
    * Backfill administration deliberately uses the signed in user's token rather than the
    * system client token. CDIA checks the support role on that token, so authorisation is

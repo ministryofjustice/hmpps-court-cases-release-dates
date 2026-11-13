@@ -42,6 +42,12 @@ export default class CourtDataIngestionApiClient {
     }) as Promise<CourtDocument[]>
   }
 
+  async getUnmatchedDocuments(documentIdsFromCp: string[]): Promise<CourtDocument[]> {
+    return this.restClient.get({
+      path: `/unmatched-document?prisonDocumentIds=${documentIdsFromCp.join(',')}`,
+    }) as Promise<CourtDocument[]>
+  }
+
   async listBackfills(): Promise<BackfillListResponse> {
     return this.restClient.get({ path: '/admin/backfill' }) as Promise<BackfillListResponse>
   }

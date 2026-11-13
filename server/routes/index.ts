@@ -24,7 +24,11 @@ export default function routes(services: Services): Router {
 
   router.use(
     '/unmatched-documents',
-    unmatchedDocumentRoutes(services.documentManagementService, services.courtRegisterService),
+    unmatchedDocumentRoutes(
+      services.documentManagementService,
+      services.courtDataIngestionService,
+      services.courtRegisterService,
+    ),
   )
   router.use('/backfills', backfillRoutes(services.courtDataIngestionService))
   router.use('/document-delivery', documentDeliveryRoutes(services.courtDataIngestionService))
