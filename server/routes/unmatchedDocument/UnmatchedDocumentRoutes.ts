@@ -24,10 +24,12 @@ import {
   parseAddressedPrisonFacetForRendering,
   parseCourtCodeFacetForRendering,
 } from '../../data/unmatchedDocumentFilter'
+import CourtDataIngestionService from '../../services/courtDataIngestionService'
 
 export default class UnmatchedDocumentRoutes {
   constructor(
     private readonly documentManagementService: DocumentManagementService,
+    private readonly courtDataIngestionService: CourtDataIngestionService,
     private readonly courtRegisterService: CourtRegisterService,
   ) {}
 
@@ -38,11 +40,15 @@ export default class UnmatchedDocumentRoutes {
     const documentSearchRequest: DocumentSearchRequest = this.buildDocumentSearchRequest(filters)
 
     const documents = await this.documentManagementService.searchDocument(documentSearchRequest, username)
-
+    const cpDocuments = await this.courtDataIngestionService.getUnmatchedDocuments(
+      DocumentManagementMapper.getCommonPlatformDocumentIds(documents.results),
+      username,
+    )
     await this.courtRegisterService.getCourtNames(DocumentManagementMapper.getCourtCodes(documents.results), username)
 
     const viewModelDocuments = await Promise.all(
       documents.results.map(async it => {
+        const cpDocument = cpDocuments.find(itCpDocument => itCpDocument.prisonDocumentId === it.documentUuid)
         return {
           documentUuid: it.documentUuid,
           createdTime: it.createdTime,
@@ -58,6 +64,9 @@ export default class UnmatchedDocumentRoutes {
           typeDescription: DocumentManagementMapper.getTypeDescription(it),
           courtCode: DocumentManagementMapper.getCourtCode(it),
           courtName: await this.courtRegisterService.getCourtName(DocumentManagementMapper.getCourtCode(it), username),
+
+          hearingType: cpDocument?.courtHearing?.hearingType,
+          hearingDate: cpDocument?.courtHearing?.hearingDate,
         } as UnmatchedDocumentViewModel
       }),
     )
@@ -200,4 +209,6 @@ type UnmatchedDocumentViewModel = {
   courtCode: string
   courtName: string
   addressedPrison: string
+  hearingType: string
+  hearingDate: string
 }
