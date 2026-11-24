@@ -161,7 +161,7 @@ const defaultCourtCasesPage: SearchCourtCasesPage = {
             offenceCode: 'CJ88001',
             offenceStartDate: '2024-01-12',
             outcome: { outcomeUuid: 'outcome-2', outcomeName: 'Remand in custody' },
-            legacyData: { offenceDescription: 'Theft' },
+            legacyData: { offenceDescription: 'Common assault' },
             createdAt: '2026-01-01T00:00:00',
             value: 80,
           },
