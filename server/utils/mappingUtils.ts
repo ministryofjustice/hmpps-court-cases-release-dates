@@ -40,6 +40,7 @@ export const pagedChargeToOffence = (pagedCharge: PagedCharge, createChargeOrder
     outcomeUuid: pagedCharge.outcome?.outcomeUuid,
     aggravatingFactors: pagedCharge.aggravatingFactors,
     createChargeOrder,
+    offenceValue: pagedCharge.value,
     ...(pagedCharge.offenceStartDate && { offenceStartDate: dayjs(pagedCharge.offenceStartDate).toDate() }),
     ...(pagedCharge.offenceEndDate && { offenceEndDate: dayjs(pagedCharge.offenceEndDate).toDate() }),
     ...(pagedCharge.legacyData && { legacyData: { ...pagedCharge.legacyData } }),

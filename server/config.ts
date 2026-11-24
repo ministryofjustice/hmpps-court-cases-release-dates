@@ -242,6 +242,9 @@ export default {
   appInsightsConnectionString: get('APPLICATIONINSIGHTS_CONNECTION_STRING', '', requiredInProduction),
   maintenanceMode: get('MAINTENANCE_MODE', 'false') === 'true',
   courtCasesPageSize: Number(get('COURT_CASES_PAGE_SIZE', null)),
+  featureToggles: {
+    chargeValue: get('FEATURES_CHARGE_VALUE', false, requiredInProduction) === 'true',
+  },
   readonlyOverviewAllowedPrisonIds: get('READONLY_OVERVIEW_ALLOWED_PRISON_IDS', 'HLI')
     .split(',')
     .map(id => id.trim())

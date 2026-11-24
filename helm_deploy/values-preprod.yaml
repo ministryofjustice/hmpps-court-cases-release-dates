@@ -35,6 +35,7 @@ generic-service:
     COURT_DATA_INGESTION_API_URL: "https://court-data-ingestion-api-preprod.hmpps.service.justice.gov.uk"
     MANAGE_OFFENCES_API_URL: "https://manage-offences-api-preprod.hmpps.service.justice.gov.uk"
     COURT_DOCUMENTS_OPEN_TO_PRISONS: "true"
+    FEATURES_CHARGE_VALUE: "true"
 
   allowlist:
     ark-dom1-farnborough: 194.33.192.0/24

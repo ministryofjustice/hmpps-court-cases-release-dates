@@ -1,4 +1,4 @@
-import { convertToTitleCase, initialiseName } from './utils'
+import { convertToTitleCase, formatDecimal, initialiseName } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -26,5 +26,22 @@ describe('initialise name', () => {
     ['Double barrelled', 'Robert-John Smith-Jones-Wilson', 'R. Smith-Jones-Wilson'],
   ])('%s initialiseName(%s, %s)', (_: string, a: string, expected: string) => {
     expect(initialiseName(a)).toEqual(expected)
+  })
+})
+
+describe('formatDecimal', () => {
+  it.each([
+    [undefined, undefined],
+    [null, undefined],
+    ['', undefined],
+    ['not-a-number', undefined],
+    [100, '100'],
+    [100.0, '100'],
+    [100.5, '100.50'],
+    [100.55, '100.55'],
+    ['250.5', '250.50'],
+    ['250', '250'],
+  ])('formats %s as %s', (input, expected) => {
+    expect(formatDecimal(input)).toEqual(expected)
   })
 })

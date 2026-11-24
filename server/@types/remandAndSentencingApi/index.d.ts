@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/sentence/confirm-consecutive-to-sentence-fix": {
+    '/sentence/confirm-consecutive-to-sentence-fix': {
         parameters: {
             query?: never;
             header?: never;
@@ -16,7 +16,7 @@ export interface paths {
          * Confirm consecutive to sentence fixes
          * @description This endpoint will mark unconfirmed consecutive to sentence fixes to confirmed
          */
-        put: operations["confirmConsecutiveToSentenceFixes"];
+        put: operations['confirmConsecutiveToSentenceFixes'];
         post?: never;
         delete?: never;
         options?: never;
@@ -24,7 +24,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence-type/{sentenceTypeUuid}": {
+    '/sentence-type/{sentenceTypeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -35,12 +35,12 @@ export interface paths {
          * Get Sentence type by UUID
          * @description This endpoint will retrieve sentence type by UUID
          */
-        get: operations["getSentenceTypeByUuid"];
+        get: operations['getSentenceTypeByUuid'];
         /**
          * Update sentence type
          * @description This endpoint will update an existing sentence type and migrate any sentence data over that needs to be mapped to the newly updated sentence type
          */
-        put: operations["updateSentenceType"];
+        put: operations['updateSentenceType'];
         post?: never;
         delete?: never;
         options?: never;
@@ -48,7 +48,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/recall/{recallUuid}": {
+    '/recall/{recallUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -57,26 +57,26 @@ export interface paths {
         };
         /**
          * Retrieve a recall
-         * @description This endpoint will retrieve the details of a recall
+         * @description This endpoint will retrieve the details of a recall. Pass groupNomisRecalls=true to group NOMIS recalls
          */
-        get: operations["getRecall"];
+        get: operations['getRecall'];
         /**
          * Update a recall (or create one with the passed in details)
          * @description This endpoint will update a recall (or create one with the passed in details)
          */
-        put: operations["updateRecall"];
+        put: operations['updateRecall'];
         post?: never;
         /**
          * Delete a recall
          * @description This endpoint will delete a recall
          */
-        delete: operations["deleteRecall"];
+        delete: operations['deleteRecall'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/queue-admin/retry-dlq/{dlqName}": {
+    '/queue-admin/retry-dlq/{dlqName}': {
         parameters: {
             query?: never;
             header?: never;
@@ -84,7 +84,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["retryDlq"];
+        put: operations['retryDlq'];
         post?: never;
         delete?: never;
         options?: never;
@@ -92,7 +92,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/queue-admin/retry-all-dlqs": {
+    '/queue-admin/retry-all-dlqs': {
         parameters: {
             query?: never;
             header?: never;
@@ -100,7 +100,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["retryAllDlqs"];
+        put: operations['retryAllDlqs'];
         post?: never;
         delete?: never;
         options?: never;
@@ -108,7 +108,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/queue-admin/purge-queue/{queueName}": {
+    '/queue-admin/purge-queue/{queueName}': {
         parameters: {
             query?: never;
             header?: never;
@@ -116,7 +116,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["purgeQueue"];
+        put: operations['purgeQueue'];
         post?: never;
         delete?: never;
         options?: never;
@@ -124,7 +124,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/fix-many-charges-to-sentence": {
+    '/person/{prisonerId}/fix-many-charges-to-sentence': {
         parameters: {
             query?: never;
             header?: never;
@@ -136,7 +136,7 @@ export interface paths {
          * Ensure many-charges-to-sentence fix is applied for a prisoner
          * @description Applies the many-charges-to-sentence fix and emits domain events if changes occur.
          */
-        put: operations["fixManyChargesToSentence"];
+        put: operations['fixManyChargesToSentence'];
         post?: never;
         delete?: never;
         options?: never;
@@ -144,7 +144,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/sentence/{lifetimeUuid}": {
+    '/legacy/sentence/{lifetimeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -155,24 +155,24 @@ export interface paths {
          * retrieve a sentence
          * @description This endpoint will retrieve sentence details.
          */
-        get: operations["get"];
+        get: operations['get'];
         /**
          * Update a sentence
          * @description Synchronise an update of sentence from NOMIS Offender sentences into remand and sentencing API.
          */
-        put: operations["update"];
+        put: operations['update'];
         post?: never;
         /**
          * Delete Sentence
          * @description Synchronise a deletion of sentence from NOMIS offender charges into remand and sentencing API.
          */
-        delete: operations["delete"];
+        delete: operations['delete'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/sentence/{lifetimeUuid}/booking-id": {
+    '/legacy/sentence/{lifetimeUuid}/booking-id': {
         parameters: {
             query?: never;
             header?: never;
@@ -184,7 +184,7 @@ export interface paths {
          * Update a sentence booking id
          * @description Synchronise an update of sentence booking id from NOMIS Offender sentences into remand and sentencing API.
          */
-        put: operations["updateBookingId"];
+        put: operations['updateBookingId'];
         post?: never;
         delete?: never;
         options?: never;
@@ -192,7 +192,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/period-length/{periodLengthUuid}": {
+    '/legacy/period-length/{periodLengthUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -203,24 +203,24 @@ export interface paths {
          * retrieve a period-length
          * @description This endpoint will retrieve period-length details.
          */
-        get: operations["get_1"];
+        get: operations['get_1'];
         /**
          * Updates one or more period lengths related to a period-length UUID
          * @description Updates one or more period lengths related to a period-length UUID
          */
-        put: operations["update_1"];
+        put: operations['update_1'];
         post?: never;
         /**
          * Delete Period Length
          * @description This endpoint will soft-delete a period-length from RAS.
          */
-        delete: operations["delete_1"];
+        delete: operations['delete_1'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case/{sourceCourtCaseUuid}/unlink/{targetCourtCaseUuid}": {
+    '/legacy/court-case/{sourceCourtCaseUuid}/unlink/{targetCourtCaseUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -232,7 +232,7 @@ export interface paths {
          * Unlinks a court case to another court case
          * @description Synchronise a unlink of a court case from NOMIS into remand and sentencing API.
          */
-        put: operations["unlinkCourtCase"];
+        put: operations['unlinkCourtCase'];
         post?: never;
         delete?: never;
         options?: never;
@@ -240,7 +240,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case/{sourceCourtCaseUuid}/link/{targetCourtCaseUuid}": {
+    '/legacy/court-case/{sourceCourtCaseUuid}/link/{targetCourtCaseUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -252,7 +252,7 @@ export interface paths {
          * Links a court case to another court case
          * @description Synchronise a link of a court case from NOMIS into remand and sentencing API.
          */
-        put: operations["linkCourtCase"];
+        put: operations['linkCourtCase'];
         post?: never;
         delete?: never;
         options?: never;
@@ -260,7 +260,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case/{courtCaseUuid}": {
+    '/legacy/court-case/{courtCaseUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -271,24 +271,24 @@ export interface paths {
          * Retrieve court case details
          * @description This endpoint will retrieve court case details
          */
-        get: operations["get_2"];
+        get: operations['get_2'];
         /**
          * Updates a court case
          * @description Synchronise an update of court case from NOMIS into remand and sentencing API.
          */
-        put: operations["update_2"];
+        put: operations['update_2'];
         post?: never;
         /**
          * Deletes a court case
          * @description Synchronise a deletion of court case from NOMIS into remand and sentencing API.
          */
-        delete: operations["delete_2"];
+        delete: operations['delete_2'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case/{courtCaseUuid}/case-references/refresh": {
+    '/legacy/court-case/{courtCaseUuid}/case-references/refresh': {
         parameters: {
             query?: never;
             header?: never;
@@ -300,7 +300,7 @@ export interface paths {
          * Refresh case references
          * @description This endpoint will refresh case references
          */
-        put: operations["refreshCaseReferences"];
+        put: operations['refreshCaseReferences'];
         post?: never;
         delete?: never;
         options?: never;
@@ -308,7 +308,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-appearance/{lifetimeUuid}": {
+    '/legacy/court-appearance/{lifetimeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -319,24 +319,24 @@ export interface paths {
          * Retrieve court appearance details
          * @description This endpoint will retrieve court appearance details
          */
-        get: operations["get_3"];
+        get: operations['get_3'];
         /**
          * Updates a court appearance
          * @description Synchronise an update of court appearance from NOMIS court events into remand and sentencing API.
          */
-        put: operations["update_3"];
+        put: operations['update_3'];
         post?: never;
         /**
          * Delete Appearance
          * @description Synchronise a deletion of court appearance from NOMIS court events into remand and sentencing API.
          */
-        delete: operations["delete_3"];
+        delete: operations['delete_3'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-appearance/{lifetimeUuid}/charge/{chargeLifetimeUuid}": {
+    '/legacy/court-appearance/{lifetimeUuid}/charge/{chargeLifetimeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -347,24 +347,24 @@ export interface paths {
          * Get latest charge at appearance
          * @description This endpoint will retrieve the latest charge at a court appearance
          */
-        get: operations["getChargeAtAppearance"];
+        get: operations['getChargeAtAppearance'];
         /**
          * link Appearance with Charge
          * @description Synchronise a link between court appearance and charge from NOMIS into remand and sentencing API.
          */
-        put: operations["linkAppearanceWithCharge"];
+        put: operations['linkAppearanceWithCharge'];
         post?: never;
         /**
          * Delete Appearance Charge link
          * @description Synchronise a deletion of link between court appearance and charge from NOMIS into remand and sentencing API.
          */
-        delete: operations["unlinkAppearanceWithCharge"];
+        delete: operations['unlinkAppearanceWithCharge'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-appearance/{courtAppearanceUuid}/charge/{chargeUuid}/link": {
+    '/legacy/court-appearance/{courtAppearanceUuid}/charge/{chargeUuid}/link': {
         parameters: {
             query?: never;
             header?: never;
@@ -376,7 +376,7 @@ export interface paths {
          * link a charge with a case
          * @description Synchronise a link between charge and court case from NOMIS into remand and sentencing API.
          */
-        put: operations["linkChargeToCaseInAppearance"];
+        put: operations['linkChargeToCaseInAppearance'];
         post?: never;
         delete?: never;
         options?: never;
@@ -384,7 +384,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/charge/{lifetimeUuid}": {
+    '/legacy/charge/{lifetimeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -395,12 +395,12 @@ export interface paths {
          * retrieve a charge
          * @description This endpoint will retrieve charge details.
          */
-        get: operations["get_4"];
+        get: operations['get_4'];
         /**
          * Update a charge in all appearances
          * @description Synchronise an update of charge in all appearances from NOMIS Offender charges into remand and sentencing API.
          */
-        put: operations["update_4"];
+        put: operations['update_4'];
         post?: never;
         delete?: never;
         options?: never;
@@ -408,7 +408,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/charge/{lifetimeUuid}/appearance/{appearanceLifetimeUuid}": {
+    '/legacy/charge/{lifetimeUuid}/appearance/{appearanceLifetimeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -420,7 +420,7 @@ export interface paths {
          * Update a charge in an appearance
          * @description Synchronise an update of charge within an appearance from NOMIS Offender charges into remand and sentencing API.
          */
-        put: operations["updateInAppearance"];
+        put: operations['updateInAppearance'];
         post?: never;
         delete?: never;
         options?: never;
@@ -428,7 +428,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/immigration-detention/{immigrationDetentionUuid}": {
+    '/immigration-detention/{immigrationDetentionUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -439,24 +439,24 @@ export interface paths {
          * Retrieve an immigration detention record
          * @description This endpoint will retrieve the details of an immigration detention record
          */
-        get: operations["getImmigrationDetention"];
+        get: operations['getImmigrationDetention'];
         /**
          * Update an immigration detention record (or create one with the passed in details)
          * @description This endpoint will update an immigration detention record (or create one with the passed in details)
          */
-        put: operations["updateImmigrationDetention"];
+        put: operations['updateImmigrationDetention'];
         post?: never;
         /**
          * Delete an immigration detention record
          * @description This endpoint will delete an immigration detention record
          */
-        delete: operations["deleteImmigrationDetention"];
+        delete: operations['deleteImmigrationDetention'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/hmcts-result-code/{hmctsResultCodeUuid}": {
+    '/hmcts-result-code/{hmctsResultCodeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -468,7 +468,7 @@ export interface paths {
          * Update hmcts result code
          * @description This endpoint will update hmcts result code that will be used to map court data to charge outcome
          */
-        put: operations["updateHmctsResultCode"];
+        put: operations['updateHmctsResultCode'];
         post?: never;
         delete?: never;
         options?: never;
@@ -476,7 +476,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}": {
+    '/court-case/{courtCaseUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -487,12 +487,12 @@ export interface paths {
          * Retrieve court case details
          * @description This endpoint will retrieve court case details
          */
-        get: operations["getCourtCaseDetails"];
+        get: operations['getCourtCaseDetails'];
         /**
          * Create Court case
          * @description This endpoint will create a court case
          */
-        put: operations["putCourtCase"];
+        put: operations['putCourtCase'];
         post?: never;
         delete?: never;
         options?: never;
@@ -500,7 +500,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}/status": {
+    '/court-case/{courtCaseUuid}/status': {
         parameters: {
             query?: never;
             header?: never;
@@ -512,7 +512,7 @@ export interface paths {
          * Update court case status
          * @description This endpoint marks a court case as active or inactive
          */
-        put: operations["updateCourtCaseStatus"];
+        put: operations['updateCourtCaseStatus'];
         post?: never;
         delete?: never;
         options?: never;
@@ -520,7 +520,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}/case-references/refresh": {
+    '/court-case/{courtCaseUuid}/case-references/refresh': {
         parameters: {
             query?: never;
             header?: never;
@@ -532,7 +532,7 @@ export interface paths {
          * Refresh case references
          * @description This endpoint will refresh case references
          */
-        put: operations["refreshCaseReferences_1"];
+        put: operations['refreshCaseReferences_1'];
         post?: never;
         delete?: never;
         options?: never;
@@ -540,7 +540,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-appearance/{appearanceUuid}": {
+    '/court-appearance/{appearanceUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -551,24 +551,24 @@ export interface paths {
          * Retrieve court appearance details
          * @description This endpoint will retrieve court appearance details
          */
-        get: operations["getCourtAppearanceDetails"];
+        get: operations['getCourtAppearanceDetails'];
         /**
          * Update Court appearance
          * @description This endpoint will update a court appearance in a given court case
          */
-        put: operations["updateCourtAppearance"];
+        put: operations['updateCourtAppearance'];
         post?: never;
         /**
          * Delete Court appearance
          * @description This endpoint will delete a court appearance in a given court case
          */
-        delete: operations["deleteCourtAppearance"];
+        delete: operations['deleteCourtAppearance'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/court-appearance-schedule/{appearanceUuid}": {
+    '/court-appearance-schedule/{appearanceUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -580,7 +580,7 @@ export interface paths {
          * Update court appearance schedule by appearance uuid
          * @description This endpoint will update court appearance schedule by appearance uuid
          */
-        put: operations["updateCourtAppearanceSchedule"];
+        put: operations['updateCourtAppearanceSchedule'];
         post?: never;
         delete?: never;
         options?: never;
@@ -588,7 +588,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/charge/{chargeUuid}": {
+    '/charge/{chargeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -599,12 +599,12 @@ export interface paths {
          * Retrieve charge details
          * @description This endpoint will retrieve charge details
          */
-        get: operations["getChargeDetails"];
+        get: operations['getChargeDetails'];
         /**
          * Create/ Update Charge
          * @description This endpoint will create/ update a charge in a given court appearance
          */
-        put: operations["updateCharge"];
+        put: operations['updateCharge'];
         post?: never;
         delete?: never;
         options?: never;
@@ -612,7 +612,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/charge-outcome/{chargeOutcomeUuid}": {
+    '/charge-outcome/{chargeOutcomeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -624,7 +624,7 @@ export interface paths {
          * Update charge outcome
          * @description This endpoint will update an existing charge outcome and migrate any charge data over that needs to be mapped to the newly updated charge outcome
          */
-        put: operations["updateChargeOutcome"];
+        put: operations['updateChargeOutcome'];
         post?: never;
         delete?: never;
         options?: never;
@@ -632,7 +632,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/appearance-outcome/{appearanceOutcomeUuid}": {
+    '/appearance-outcome/{appearanceOutcomeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -644,7 +644,7 @@ export interface paths {
          * Update appearance outcome
          * @description This endpoint will update an existing appearance outcome and migrate any appearance data over that needs to be mapped to the newly updated appearance outcome
          */
-        put: operations["updateAppearanceOutcome"];
+        put: operations['updateAppearanceOutcome'];
         post?: never;
         delete?: never;
         options?: never;
@@ -652,7 +652,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/uploaded-documents": {
+    '/uploaded-documents': {
         parameters: {
             query?: never;
             header?: never;
@@ -665,14 +665,14 @@ export interface paths {
          * Creates an uploaded document entry
          * @description Creates an uploaded document entry
          */
-        post: operations["create"];
+        post: operations['create'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/sentence/consecutive-chain/has-a-loop": {
+    '/sentence/consecutive-chain/has-a-loop': {
         parameters: {
             query?: never;
             header?: never;
@@ -685,14 +685,14 @@ export interface paths {
          * Check whether a target sentence is already in a consecutive chain from a source sentence
          * @description Returns true if the target sentence already appears in any consecutive chain (i.e. a would cause a loop)
          */
-        post: operations["hasLoopInChain"];
+        post: operations['hasLoopInChain'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/sentence-type": {
+    '/sentence-type': {
         parameters: {
             query?: never;
             header?: never;
@@ -705,14 +705,14 @@ export interface paths {
          * Create sentence type
          * @description This endpoint will create a new sentence type and migrate any sentence data over that needs to be mapped to the newly created sentence type
          */
-        post: operations["createSentenceType"];
+        post: operations['createSentenceType'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/search/court-appearance-schedules": {
+    '/search/court-appearance-schedules': {
         parameters: {
             query?: never;
             header?: never;
@@ -725,14 +725,14 @@ export interface paths {
          * Search court appearance schedules
          * @description This endpoint will search for court appearance in the schedules format for supplied UUIDs
          */
-        post: operations["searchCourtAppearanceSchedules"];
+        post: operations['searchCourtAppearanceSchedules'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/recall": {
+    '/recall': {
         parameters: {
             query?: never;
             header?: never;
@@ -745,14 +745,14 @@ export interface paths {
          * Create a recall
          * @description This endpoint will create a recall
          */
-        post: operations["createRecall"];
+        post: operations['createRecall'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/recall/is-possible": {
+    '/recall/is-possible': {
         parameters: {
             query?: never;
             header?: never;
@@ -765,14 +765,34 @@ export interface paths {
          * Check if recall is possible
          * @description check if recall is possible for given sentneces and recall type
          */
-        post: operations["isRecallPossible"];
+        post: operations['isRecallPossible'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/person-admin/fix-many-charges-to-sentence": {
+    '/person/statuses': {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retrieve person status indicators for a list of people
+         * @description PeopleStatus contains a map of statuses linked to a person
+         */
+        post: operations['getPeopleStatus'];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    '/person-admin/fix-many-charges-to-sentence': {
         parameters: {
             query?: never;
             header?: never;
@@ -785,14 +805,14 @@ export interface paths {
          * Fixes the single sentence to many charges issue for prisoner ids
          * @description Fix all single sentence to many charges for prisoner ids
          */
-        post: operations["cleanupManyChargesToSentence"];
+        post: operations['cleanupManyChargesToSentence'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/next-court-appearance-admin/link-latest-court-appearances": {
+    '/next-court-appearance-admin/link-latest-court-appearances': {
         parameters: {
             query?: never;
             header?: never;
@@ -801,14 +821,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["linkLatestCourtAppearances"];
+        post: operations['linkLatestCourtAppearances'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/sentence": {
+    '/legacy/sentence': {
         parameters: {
             query?: never;
             header?: never;
@@ -821,14 +841,14 @@ export interface paths {
          * Create a sentence
          * @description Synchronise a creation of sentence from NOMIS Offender sentences into remand and sentencing API.
          */
-        post: operations["create_1"];
+        post: operations['create_1'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/sentence/search": {
+    '/legacy/sentence/search': {
         parameters: {
             query?: never;
             header?: never;
@@ -841,14 +861,14 @@ export interface paths {
          * Search for multiple sentences
          * @description This endpoint will retrieve multiple sentences by search parameters.
          */
-        post: operations["search"];
+        post: operations['search'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/period-length": {
+    '/legacy/period-length': {
         parameters: {
             query?: never;
             header?: never;
@@ -861,14 +881,14 @@ export interface paths {
          * Creates one or more period lengths for a single sentence
          * @description Creates one or more period lengths for a single sentence
          */
-        post: operations["create_2"];
+        post: operations['create_2'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case": {
+    '/legacy/court-case': {
         parameters: {
             query?: never;
             header?: never;
@@ -881,14 +901,14 @@ export interface paths {
          * Create a court case
          * @description Synchronise a creation of court case from NOMIS into remand and sentencing API.
          */
-        post: operations["create_3"];
+        post: operations['create_3'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case/migration": {
+    '/legacy/court-case/migration': {
         parameters: {
             query?: never;
             header?: never;
@@ -901,14 +921,14 @@ export interface paths {
          * Migrates court cases
          * @description Migrates a court case, court appearance and charge from NOMIS into remand and sentencing API.
          */
-        post: operations["create_4"];
+        post: operations['create_4'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case/merge/person/{retainedPrisonerNumber}": {
+    '/legacy/court-case/merge/person/{retainedPrisonerNumber}': {
         parameters: {
             query?: never;
             header?: never;
@@ -921,14 +941,14 @@ export interface paths {
          * Merge prisoner
          * @description Merges all records between two prisoner numbers
          */
-        post: operations["process"];
+        post: operations['process'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case/booking": {
+    '/legacy/court-case/booking': {
         parameters: {
             query?: never;
             header?: never;
@@ -941,14 +961,14 @@ export interface paths {
          * Creates court cases for specific booking
          * @description Creates all entities for specific bookings. This is when something is created on an old booking and the record is copied over to the latest booking so duplicate records need creating.
          */
-        post: operations["create_5"];
+        post: operations['create_5'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-appearance": {
+    '/legacy/court-appearance': {
         parameters: {
             query?: never;
             header?: never;
@@ -961,14 +981,14 @@ export interface paths {
          * Create a court appearance
          * @description Synchronise a creation of court appearance from NOMIS court events into remand and sentencing API.
          */
-        post: operations["create_6"];
+        post: operations['create_6'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/legacy/charge": {
+    '/legacy/charge': {
         parameters: {
             query?: never;
             header?: never;
@@ -981,14 +1001,14 @@ export interface paths {
          * Create a charge
          * @description Synchronise a creation of charge from NOMIS Offender charges into remand and sentencing API.
          */
-        post: operations["create_7"];
+        post: operations['create_7'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/immigration-detention": {
+    '/immigration-detention': {
         parameters: {
             query?: never;
             header?: never;
@@ -1001,14 +1021,14 @@ export interface paths {
          * Create an immigration detention record
          * @description This endpoint will create a record for managing immigration detention
          */
-        post: operations["createImmigrationDetention"];
+        post: operations['createImmigrationDetention'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/hmcts-result-code": {
+    '/hmcts-result-code': {
         parameters: {
             query?: never;
             header?: never;
@@ -1021,14 +1041,14 @@ export interface paths {
          * Create hmcts result code
          * @description This endpoint will create a new hmcts result code that will be used to map court data to charge outcome
          */
-        post: operations["createHmctsResultCode"];
+        post: operations['createHmctsResultCode'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/hmcts-court-data/hearing-autopopulate-eligibility": {
+    '/hmcts-court-data/hearing-autopopulate-eligibility': {
         parameters: {
             query?: never;
             header?: never;
@@ -1041,14 +1061,14 @@ export interface paths {
          * Is the hearing eligible for autopopulation
          * @description This endpoint will retrieve hmcts hearing and check if its eligible for the autopopulate journey
          */
-        post: operations["areHmctsHearingsEligibleForAutopopulate"];
+        post: operations['areHmctsHearingsEligibleForAutopopulate'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/event-admin/republish": {
+    '/event-admin/republish': {
         parameters: {
             query?: never;
             header?: never;
@@ -1057,14 +1077,14 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["republishEvents"];
+        post: operations['republishEvents'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/document-generator/f986/person/{prisonerId}": {
+    '/document-generator/f986/person/{prisonerId}': {
         parameters: {
             query?: never;
             header?: never;
@@ -1077,14 +1097,14 @@ export interface paths {
          * Create F986 Document
          * @description This endpoint will create an F986 document
          */
-        post: operations["createF986Document"];
+        post: operations['createF986Document'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/court-case": {
+    '/court-case': {
         parameters: {
             query?: never;
             header?: never;
@@ -1097,14 +1117,14 @@ export interface paths {
          * Create Court case
          * @description This endpoint will create a court case
          */
-        post: operations["createCourtCase"];
+        post: operations['createCourtCase'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}/sentences/update-types": {
+    '/court-case/{courtCaseUuid}/sentences/update-types': {
         parameters: {
             query?: never;
             header?: never;
@@ -1117,14 +1137,14 @@ export interface paths {
          * Update sentence types for unknown pre-recall sentences
          * @description This endpoint updates the sentence types for sentences that are currently marked as 'unknown pre-recall sentence'. All updates are performed atomically - if any update fails, all changes are rolled back.
          */
-        post: operations["updateSentenceTypes"];
+        post: operations['updateSentenceTypes'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/court-case-admin/cleanup-many-charges-to-sentence": {
+    '/court-case-admin/cleanup-many-charges-to-sentence': {
         parameters: {
             query?: never;
             header?: never;
@@ -1139,14 +1159,14 @@ export interface paths {
          *           linked to multiple charges. This endpoint identifies all court cases with this issue and creates
          *           new sentences for each charge, ensuring that each sentence is correctly linked to its respective charge.
          */
-        post: operations["cleanupManyChargesToSentence_1"];
+        post: operations['cleanupManyChargesToSentence_1'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/court-appearance": {
+    '/court-appearance': {
         parameters: {
             query?: never;
             header?: never;
@@ -1159,14 +1179,14 @@ export interface paths {
          * Create Court appearance
          * @description This endpoint will create a court appearance in a given court case
          */
-        post: operations["createCourtAppearance"];
+        post: operations['createCourtAppearance'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/charge-outcome": {
+    '/charge-outcome': {
         parameters: {
             query?: never;
             header?: never;
@@ -1179,14 +1199,14 @@ export interface paths {
          * Create charge outcome
          * @description This endpoint will create a new charge outcome and migrate any charge data over that needs to be mapped to the newly created charge outcome
          */
-        post: operations["createChargeOutcome"];
+        post: operations['createChargeOutcome'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/appearance-outcome": {
+    '/appearance-outcome': {
         parameters: {
             query?: never;
             header?: never;
@@ -1199,14 +1219,14 @@ export interface paths {
          * Create appearance outcome
          * @description This endpoint will create a new appearance outcome and migrate any appearance data over that needs to be mapped to the newly created appearance outcome
          */
-        post: operations["createAppearanceOutcome"];
+        post: operations['createAppearanceOutcome'];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/things-to-do/prisoner/{prisonerId}": {
+    '/things-to-do/prisoner/{prisonerId}': {
         parameters: {
             query?: never;
             header?: never;
@@ -1217,7 +1237,7 @@ export interface paths {
          * Retrieve things-to-do for a prisoner
          * @description Provides a list of things-to-do for a specified prisoner based on their ID.
          */
-        get: operations["getThingsToDo"];
+        get: operations['getThingsToDo'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1226,7 +1246,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/subject-access-request": {
+    '/subject-access-request': {
         parameters: {
             query?: never;
             header?: never;
@@ -1237,7 +1257,7 @@ export interface paths {
          * Provides content for a prisoner to satisfy the needs of a subject access request on their behalf
          * @description Requires role SAR_DATA_ACCESS or additional role as specified by hmpps.sar.additionalAccessRole configuration.
          */
-        get: operations["getSarContentByReference"];
+        get: operations['getSarContentByReference'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1246,14 +1266,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/subject-access-request/template": {
+    '/subject-access-request/template': {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getServiceTemplate"];
+        get: operations['getServiceTemplate'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1262,7 +1282,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/{sentenceUuid}": {
+    '/sentence/{sentenceUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -1273,7 +1293,7 @@ export interface paths {
          * Retrieve sentence information
          * @description This endpoint will retrieve sentence information
          */
-        get: operations["getSentence"];
+        get: operations['getSentence'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1282,14 +1302,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/{sentenceUuid}/details": {
+    '/sentence/{sentenceUuid}/details': {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getSentenceDetails"];
+        get: operations['getSentenceDetails'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1298,7 +1318,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/{sentenceUuid}/delete-status": {
+    '/sentence/{sentenceUuid}/delete-status': {
         parameters: {
             query?: never;
             header?: never;
@@ -1309,7 +1329,7 @@ export interface paths {
          * Delete sentence status
          * @description This endpoint will return details of whether a sentence can be deleted or not and the reason for not deleting
          */
-        get: operations["deleteSentenceStatus"];
+        get: operations['deleteSentenceStatus'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1318,7 +1338,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/unknown-recall-type": {
+    '/sentence/unknown-recall-type': {
         parameters: {
             query?: never;
             header?: never;
@@ -1329,7 +1349,7 @@ export interface paths {
          * Returns a list of sentences with the unknown recall type grouped by appearance
          * @description Returns a list of sentences with the unknown recall type grouped by appearance
          */
-        get: operations["getSentencesWithUnknownRecallType"];
+        get: operations['getSentencesWithUnknownRecallType'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1338,7 +1358,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/sentences-after-on-other-court-appearance-details": {
+    '/sentence/sentences-after-on-other-court-appearance-details': {
         parameters: {
             query?: never;
             header?: never;
@@ -1349,7 +1369,7 @@ export interface paths {
          * Sentences after on other court appearance details
          * @description This endpoint will return details of the court appearances of sentences after this sentence
          */
-        get: operations["sentencesAfterOnOtherCourtAppearanceDetails"];
+        get: operations['sentencesAfterOnOtherCourtAppearanceDetails'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1358,7 +1378,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/has-sentences/{prisonerId}": {
+    '/sentence/has-sentences/{prisonerId}': {
         parameters: {
             query?: never;
             header?: never;
@@ -1369,7 +1389,7 @@ export interface paths {
          * Check if prisoner has any sentences (non-deleted)
          * @description Returns true if the prisoner has at least one sentence, could be on any Court Case
          */
-        get: operations["hasSentences"];
+        get: operations['hasSentences'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1378,7 +1398,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/has-sentences-after-on-other-court-appearance": {
+    '/sentence/has-sentences-after-on-other-court-appearance': {
         parameters: {
             query?: never;
             header?: never;
@@ -1389,7 +1409,7 @@ export interface paths {
          * Any sentences after on another appearance
          * @description This endpoint will return true if any other sentence has a consecutive to link to the sentence at sentenceUuid that is on a different court appearance
          */
-        get: operations["hasSentencesAfterOnOtherCase"];
+        get: operations['hasSentencesAfterOnOtherCase'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1398,7 +1418,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/has-active-sentences-after-on-other-court-appearance": {
+    '/sentence/has-active-sentences-after-on-other-court-appearance': {
         parameters: {
             query?: never;
             header?: never;
@@ -1409,7 +1429,7 @@ export interface paths {
          * Sentences that have an active sentence consecutive to them outside of the given selection
          * @description Given a set of sentence uuids, returns the uuids of those sentences that have another active sentence consecutive to them which is not part of the given selection. An empty list means none of the selection is blocked.
          */
-        get: operations["hasActiveSentencesAfterOnOtherCourtAppearance"];
+        get: operations['hasActiveSentencesAfterOnOtherCourtAppearance'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1418,7 +1438,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence/consecutive-to-details": {
+    '/sentence/consecutive-to-details': {
         parameters: {
             query?: never;
             header?: never;
@@ -1429,7 +1449,7 @@ export interface paths {
          * Retrieve sentence consecutive to details
          * @description This endpoint will retrieve consecutive to sentence details
          */
-        get: operations["getConsecutiveToSentenceDetails"];
+        get: operations['getConsecutiveToSentenceDetails'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1438,7 +1458,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence-type/{sentenceTypeUuid}/is-still-valid": {
+    '/sentence-type/{sentenceTypeUuid}/is-still-valid': {
         parameters: {
             query?: never;
             header?: never;
@@ -1449,7 +1469,7 @@ export interface paths {
          * Check the sentence type is still valid
          * @description This endpoint will determine if the sentence type is still valid with the age, conviction date, statuses, offence date parameters
          */
-        get: operations["sentenceTypeStillValid"];
+        get: operations['sentenceTypeStillValid'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1458,7 +1478,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence-type/{sentenceTypeUuid}/details": {
+    '/sentence-type/{sentenceTypeUuid}/details': {
         parameters: {
             query?: never;
             header?: never;
@@ -1469,7 +1489,7 @@ export interface paths {
          * Get Sentence type details by UUID
          * @description This endpoint will retrieve sentence type details by UUID
          */
-        get: operations["getSentenceTypeDetailsByUuid"];
+        get: operations['getSentenceTypeDetailsByUuid'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1478,7 +1498,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence-type/uuid/multiple": {
+    '/sentence-type/uuid/multiple': {
         parameters: {
             query?: never;
             header?: never;
@@ -1489,7 +1509,7 @@ export interface paths {
          * get all sentence types by uuids
          * @description This endpoint will get all sentence types by uuids
          */
-        get: operations["getSentenceTypesByIds"];
+        get: operations['getSentenceTypesByIds'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1498,7 +1518,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence-type/search": {
+    '/sentence-type/search': {
         parameters: {
             query?: never;
             header?: never;
@@ -1509,7 +1529,7 @@ export interface paths {
          * Search all sentence types
          * @description This endpoint will search all sentence types
          */
-        get: operations["searchSentenceTypes"];
+        get: operations['searchSentenceTypes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1518,7 +1538,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence-type/charge-outcome/all": {
+    '/sentence-type/charge-outcome/all': {
         parameters: {
             query?: never;
             header?: never;
@@ -1529,7 +1549,7 @@ export interface paths {
          * Get all charge outcomes associated to sentence types
          * @description This endpoint will retrieve all charge outcomes which have an association to at least one sentence type
          */
-        get: operations["getAllChargeOutcomes"];
+        get: operations['getAllChargeOutcomes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1538,7 +1558,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/sentence-type/all": {
+    '/sentence-type/all': {
         parameters: {
             query?: never;
             header?: never;
@@ -1549,7 +1569,7 @@ export interface paths {
          * Search all sentence types
          * @description This endpoint will search all sentence types
          */
-        get: operations["getAllSentenceTypes"];
+        get: operations['getAllSentenceTypes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1558,7 +1578,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/recall/person/{prisonerId}/search": {
+    '/recall/person/{prisonerId}/search': {
         parameters: {
             query?: never;
             header?: never;
@@ -1569,7 +1589,7 @@ export interface paths {
          * Search recalls for a person by period of custody
          * @description Filter by bookingId (current period of custody) unless includeAllPeriods is true, when all recalls are returned with the current period listed first. NOMIS recalls are grouped.
          */
-        get: operations["searchRecallsByPrisonerId"];
+        get: operations['searchRecallsByPrisonerId'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1578,14 +1598,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/queue-admin/get-dlq-messages/{dlqName}": {
+    '/queue-admin/get-dlq-messages/{dlqName}': {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["getDlqMessages"];
+        get: operations['getDlqMessages'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1594,7 +1614,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}": {
+    '/person/{prisonerId}': {
         parameters: {
             query?: never;
             header?: never;
@@ -1605,7 +1625,7 @@ export interface paths {
          * Retrieve person details
          * @description This endpoint will retrieve person details
          */
-        get: operations["getPersonDetails"];
+        get: operations['getPersonDetails'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1614,7 +1634,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/unconfirmed-sentence-fix-court-cases": {
+    '/person/{prisonerId}/unconfirmed-sentence-fix-court-cases': {
         parameters: {
             query?: never;
             header?: never;
@@ -1625,7 +1645,7 @@ export interface paths {
          * retrieve unconfirmed sentence fix court cases for person
          * @description This endpoint will retrieve unconfirmed sentence fix court cases for person
          */
-        get: operations["unconfirmedSentenceFixCourtCases"];
+        get: operations['unconfirmedSentenceFixCourtCases'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1634,7 +1654,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/status": {
+    '/person/{prisonerId}/status': {
         parameters: {
             query?: never;
             header?: never;
@@ -1645,7 +1665,7 @@ export interface paths {
          * Retrieve person status indicators
          * @description isOnRemand is true when an active court case has a latest appearance outcome of type REMAND
          */
-        get: operations["getPersonStatus"];
+        get: operations['getPersonStatus'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1654,7 +1674,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/sentences-to-chain-to": {
+    '/person/{prisonerId}/sentences-to-chain-to': {
         parameters: {
             query?: never;
             header?: never;
@@ -1665,7 +1685,7 @@ export interface paths {
          * retrieve all sentences to chain to
          * @description This endpoint will retrieve all sentences which can be used in a consecutive to chain
          */
-        get: operations["sentencesToChainTo"];
+        get: operations['sentencesToChainTo'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1674,7 +1694,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/sentenced-court-cases": {
+    '/person/{prisonerId}/sentenced-court-cases': {
         parameters: {
             query?: never;
             header?: never;
@@ -1685,7 +1705,7 @@ export interface paths {
          * Retrieve all sentenced court cases for prisoner
          * @description This endpoint will retrieve all sentenced court cases for prisoner
          */
-        get: operations["getSentencedCourtCases"];
+        get: operations['getSentencedCourtCases'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1694,14 +1714,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/sentence-envelopes": {
+    '/person/{prisonerId}/sentence-envelopes': {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["allSentenceEnvelopes"];
+        get: operations['allSentenceEnvelopes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1710,7 +1730,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/next-court-appearance": {
+    '/person/{prisonerId}/next-court-appearance': {
         parameters: {
             query?: never;
             header?: never;
@@ -1721,7 +1741,7 @@ export interface paths {
          * retrieve the first next court appearance
          * @description This endpoint will retrieve the first next court appearance for the future
          */
-        get: operations["firstNextCourtAppearance"];
+        get: operations['firstNextCourtAppearance'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1730,7 +1750,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/has-sentence-to-chain-to": {
+    '/person/{prisonerId}/has-sentence-to-chain-to': {
         parameters: {
             query?: never;
             header?: never;
@@ -1741,7 +1761,7 @@ export interface paths {
          * Determine if there can be a sentence to chain to
          * @description This endpoint will determine whether there can be a sentence which can be selected for a consecutive to chain
          */
-        get: operations["hasSentenceToChainTo"];
+        get: operations['hasSentenceToChainTo'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1750,14 +1770,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/documents": {
+    '/person/{prisonerId}/documents': {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["allDocuments"];
+        get: operations['allDocuments'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1766,7 +1786,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/court-appearance-schedules": {
+    '/person/{prisonerId}/court-appearance-schedules': {
         parameters: {
             query?: never;
             header?: never;
@@ -1777,7 +1797,7 @@ export interface paths {
          * Get court appearance schedules by prisoner id
          * @description This endpoint will get court appearance in the schedules format for prisoner id
          */
-        get: operations["getCourtAppearanceSchedulesByPrisonerId"];
+        get: operations['getCourtAppearanceSchedulesByPrisonerId'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1786,7 +1806,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/charges": {
+    '/person/{prisonerId}/charges': {
         parameters: {
             query?: never;
             header?: never;
@@ -1797,7 +1817,7 @@ export interface paths {
          * retrieve charges for person
          * @description This endpoint will retrieve charges for person
          */
-        get: operations["charges"];
+        get: operations['charges'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1806,7 +1826,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/person/{prisonerId}/booking-court-case-count": {
+    '/person/{prisonerId}/booking-court-case-count': {
         parameters: {
             query?: never;
             header?: never;
@@ -1817,7 +1837,7 @@ export interface paths {
          * retrieve court case count for person
          * @description This endpoint will retrieve the court case count for a person by booking id
          */
-        get: operations["courtCaseCount"];
+        get: operations['courtCaseCount'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1826,7 +1846,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/sentence-type/summary": {
+    '/legacy/sentence-type/summary': {
         parameters: {
             query?: never;
             header?: never;
@@ -1837,7 +1857,7 @@ export interface paths {
          * Get historic NOMIS sentence type by nomis sentence type reference
          * @description Returns historic NOMIS sentence type information for the specified type in a summary format
          */
-        get: operations["getLegacySentenceTypeSummary"];
+        get: operations['getLegacySentenceTypeSummary'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1846,7 +1866,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/sentence-type/all": {
+    '/legacy/sentence-type/all': {
         parameters: {
             query?: never;
             header?: never;
@@ -1857,7 +1877,7 @@ export interface paths {
          * Get all historic NOMIS sentence types
          * @description Returns a set of historic NOMIS sentence type information in a detailed format
          */
-        get: operations["getLegacyAllSentenceTypes"];
+        get: operations['getLegacyAllSentenceTypes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1866,7 +1886,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/sentence-type/all/summary": {
+    '/legacy/sentence-type/all/summary': {
         parameters: {
             query?: never;
             header?: never;
@@ -1877,7 +1897,7 @@ export interface paths {
          * Get summary of all historic NOMIS sentence types
          * @description Returns a set of historic NOMIS sentence type information in a summary format
          */
-        get: operations["getLegacyAllSentenceTypesSummaries"];
+        get: operations['getLegacyAllSentenceTypesSummaries'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1886,7 +1906,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/sentence-type/": {
+    '/legacy/sentence-type/': {
         parameters: {
             query?: never;
             header?: never;
@@ -1897,7 +1917,7 @@ export interface paths {
          * Get historic NOMIS sentence type by nomis sentence type reference
          * @description Returns historic NOMIS sentence type information for the specified type in a detailed format
          */
-        get: operations["getLegacySentenceType"];
+        get: operations['getLegacySentenceType'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1906,7 +1926,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/recall/{uuid}": {
+    '/legacy/recall/{uuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -1917,7 +1937,7 @@ export interface paths {
          * retrieve a recall
          * @description This endpoint will retrieve legacy recall details.
          */
-        get: operations["get_5"];
+        get: operations['get_5'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1926,7 +1946,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/prisoner/{prisonerId}/court-case-uuids": {
+    '/legacy/prisoner/{prisonerId}/court-case-uuids': {
         parameters: {
             query?: never;
             header?: never;
@@ -1937,7 +1957,7 @@ export interface paths {
          * retrieve all court case uuids
          * @description This endpoint will retrieve all court case uuids
          */
-        get: operations["getCourtCaseUuids"];
+        get: operations['getCourtCaseUuids'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1946,7 +1966,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/court-case/{courtCaseUuid}/reconciliation": {
+    '/legacy/court-case/{courtCaseUuid}/reconciliation': {
         parameters: {
             query?: never;
             header?: never;
@@ -1957,7 +1977,7 @@ export interface paths {
          * Retrieve court case details for reconciliation
          * @description This endpoint will retrieve court case details for reconciliation
          */
-        get: operations["getReconciliation"];
+        get: operations['getReconciliation'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1966,7 +1986,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/immigration-detention/person/{prisonerId}": {
+    '/immigration-detention/person/{prisonerId}': {
         parameters: {
             query?: never;
             header?: never;
@@ -1977,7 +1997,7 @@ export interface paths {
          * Retrieve active immigration detention records for a person. optionally filtered by dates
          * @description This endpoint will retrieve active immigration detention records for a person, optional startDate and endDate filter on record date
          */
-        get: operations["getImmigrationDetentionByPrisonerId"];
+        get: operations['getImmigrationDetentionByPrisonerId'];
         put?: never;
         post?: never;
         delete?: never;
@@ -1986,7 +2006,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/immigration-detention/person/{prisonerId}/latest": {
+    '/immigration-detention/person/{prisonerId}/latest': {
         parameters: {
             query?: never;
             header?: never;
@@ -1997,7 +2017,7 @@ export interface paths {
          * Retrieve the last active record for the prisoner, sorted by created date descending
          * @description This endpoint will retrieve the last active immigration detention record for the prisoner, sorted by created date descending
          */
-        get: operations["getLatestImmigrationDetentionByPrisonerId"];
+        get: operations['getLatestImmigrationDetentionByPrisonerId'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2006,7 +2026,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/immigration-detention/person/{prisonerId}/exists": {
+    '/immigration-detention/person/{prisonerId}/exists': {
         parameters: {
             query?: never;
             header?: never;
@@ -2017,7 +2037,7 @@ export interface paths {
          * Check if this is an immigration detention prisoner
          * @description Returns true if the prisoner has an immigration detention record or nomis flagged immigration detention record
          */
-        get: operations["isImmigrationDetentionPrisoner"];
+        get: operations['isImmigrationDetentionPrisoner'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2026,7 +2046,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/immigration-detention/court-appearance/{courtAppearanceUuid}": {
+    '/immigration-detention/court-appearance/{courtAppearanceUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -2037,7 +2057,7 @@ export interface paths {
          * Retrieve immigration record by court appearance uuid
          * @description This endpoint will retrieve the court appearance and map it to the immigration detention dto
          */
-        get: operations["getImmigrationDetentionByCourtAppearanceUuid"];
+        get: operations['getImmigrationDetentionByCourtAppearanceUuid'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2046,7 +2066,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/hmcts-result-code/{outcomeUuid}": {
+    '/hmcts-result-code/{outcomeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -2057,7 +2077,7 @@ export interface paths {
          * Get hmcts result code by UUID
          * @description This endpoint will retrieve hmcts result code by UUID
          */
-        get: operations["getHmctsResultCodeByUuid"];
+        get: operations['getHmctsResultCodeByUuid'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2066,7 +2086,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/hmcts-result-code/uuid/multiple": {
+    '/hmcts-result-code/uuid/multiple': {
         parameters: {
             query?: never;
             header?: never;
@@ -2077,7 +2097,7 @@ export interface paths {
          * get all hmcts result codes by uuids
          * @description This endpoint will get all hmcts result codes by uuids
          */
-        get: operations["getHmctsResultCodesByIds"];
+        get: operations['getHmctsResultCodesByIds'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2086,7 +2106,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/hmcts-result-code/status": {
+    '/hmcts-result-code/status': {
         parameters: {
             query?: never;
             header?: never;
@@ -2097,7 +2117,7 @@ export interface paths {
          * Get all hmcts result codes by statuses
          * @description This endpoint will get all hmcts result codes by statuses
          */
-        get: operations["getAllHmctsResultCodes"];
+        get: operations['getAllHmctsResultCodes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2106,7 +2126,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/hmcts-court-data/{courtHearingId}/prisoner/{prisonerNumber}/appearance": {
+    '/hmcts-court-data/{courtHearingId}/prisoner/{prisonerNumber}/appearance': {
         parameters: {
             query?: never;
             header?: never;
@@ -2117,7 +2137,7 @@ export interface paths {
          * Retrieve court case details
          * @description This endpoint will retrieve court case details
          */
-        get: operations["getCourtAppearanceFromHmctsHearingId"];
+        get: operations['getCourtAppearanceFromHmctsHearingId'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2126,7 +2146,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/document-generator/f986/person/{prisonerId}/eligible-appearances": {
+    '/document-generator/f986/person/{prisonerId}/eligible-appearances': {
         parameters: {
             query?: never;
             header?: never;
@@ -2137,7 +2157,7 @@ export interface paths {
          * Get F986 eligible appearances
          * @description Returns the active court appearances for a prisoner that have FINE sentence type, most recent first
          */
-        get: operations["getF986EligibleCourtAppearances"];
+        get: operations['getF986EligibleCourtAppearances'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2146,7 +2166,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/document-generator/f986/person/{prisonerId}/eligible-appearances/exists": {
+    '/document-generator/f986/person/{prisonerId}/eligible-appearances/exists': {
         parameters: {
             query?: never;
             header?: never;
@@ -2157,7 +2177,7 @@ export interface paths {
          * Check F986 eligible appearances exist
          * @description Counts the active court appearances for a prisoner that have FINE sentence type
          */
-        get: operations["hasF986EligibleCourtAppearances"];
+        get: operations['hasF986EligibleCourtAppearances'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2166,7 +2186,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{prisonerId}/recallable-court-cases": {
+    '/court-case/{prisonerId}/recallable-court-cases': {
         parameters: {
             query?: never;
             header?: never;
@@ -2175,9 +2195,9 @@ export interface paths {
         };
         /**
          * Retrieve recallable court cases for a prisoner
-         * @description This endpoint returns filtered court cases optimised for recall processing workflows. Only includes ACTIVE cases with SENTENCING warrant type that have sentences.
+         * @description This endpoint returns filtered court cases optimised for recall processing workflows. Only includes ACTIVE cases that have at least one sentence on an active appearance.
          */
-        get: operations["getRecallableCourtCases"];
+        get: operations['getRecallableCourtCases'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2186,7 +2206,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}/validation-dates": {
+    '/court-case/{courtCaseUuid}/validation-dates': {
         parameters: {
             query?: never;
             header?: never;
@@ -2199,7 +2219,7 @@ export interface paths {
          *           This endpoint also returns the latest remand appearance date for a given court case.
          *           Optionally, the result can exclude offences tied to a specific court appearance, used when editing a court appearance in the UI (the latest version of the offence dates are in the UI session).
          */
-        get: operations["getValidationDates"];
+        get: operations['getValidationDates'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2208,7 +2228,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}/sentenced-charges": {
+    '/court-case/{courtCaseUuid}/sentenced-charges': {
         parameters: {
             query?: never;
             header?: never;
@@ -2219,7 +2239,7 @@ export interface paths {
          * Retrieve all sentenced charges
          * @description This endpoint returns all active sentenced charges
          */
-        get: operations["getSentencedCharges"];
+        get: operations['getSentencedCharges'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2228,7 +2248,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}/latest-offence-date": {
+    '/court-case/{courtCaseUuid}/latest-offence-date': {
         parameters: {
             query?: never;
             header?: never;
@@ -2240,7 +2260,7 @@ export interface paths {
          * @description This endpoint returns the most recent offence start or end date across all appearances and charges for a given court case.
          *           Optionally, the result can exclude offences tied to a specific court appearance, used when editing a court appearance in the UI (the latest version of the offence dates are in the UI session).
          */
-        get: operations["getLatestOffenceDate"];
+        get: operations['getLatestOffenceDate'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2249,7 +2269,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}/latest-appearance": {
+    '/court-case/{courtCaseUuid}/latest-appearance': {
         parameters: {
             query?: never;
             header?: never;
@@ -2260,7 +2280,7 @@ export interface paths {
          * Retrieve latest court appearance of court case
          * @description This endpoint will retrieve latest court appearance of court case
          */
-        get: operations["getLatestAppearanceDetails"];
+        get: operations['getLatestAppearanceDetails'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2269,7 +2289,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/{courtCaseUuid}/count-numbers": {
+    '/court-case/{courtCaseUuid}/count-numbers': {
         parameters: {
             query?: never;
             header?: never;
@@ -2280,7 +2300,7 @@ export interface paths {
          * Retrieve count numbers for case
          * @description This endpoint will retrieve all unique count numbers for a case
          */
-        get: operations["getAllCountNumbers"];
+        get: operations['getAllCountNumbers'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2289,7 +2309,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/paged/search": {
+    '/court-case/paged/search': {
         parameters: {
             query?: never;
             header?: never;
@@ -2300,7 +2320,7 @@ export interface paths {
          * Retrieve all court cases for person (where each court case has at least one appearance in the past)
          * @description This endpoint will retrieve all court cases for a person (where each court case has at least one appearance in the past - i.e. there exists a latest court appearance)
          */
-        get: operations["pagedSearchCourtCases"];
+        get: operations['pagedSearchCourtCases'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2309,7 +2329,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-case/multiple/unconfirmed-sentence-fix-court-cases": {
+    '/court-case/multiple/unconfirmed-sentence-fix-court-cases': {
         parameters: {
             query?: never;
             header?: never;
@@ -2320,7 +2340,7 @@ export interface paths {
          * retrieve unconfirmed sentence fix court cases for court case UUIDS
          * @description This endpoint will retrieve unconfirmed sentence fix court cases for court case UUIDs
          */
-        get: operations["getUnconfirmedSentenceFixCourtCasesByUuids"];
+        get: operations['getUnconfirmedSentenceFixCourtCasesByUuids'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2329,7 +2349,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-appearance-subtype/{courtAppearanceSubtypeUuid}": {
+    '/court-appearance-subtype/{courtAppearanceSubtypeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -2340,7 +2360,7 @@ export interface paths {
          * Get court appearance subtype by uuid
          * @description This endpoint will get court appearance subtype by uuid
          */
-        get: operations["getCourtAppearanceSubtypeById"];
+        get: operations['getCourtAppearanceSubtypeById'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2349,7 +2369,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-appearance-subtype/status": {
+    '/court-appearance-subtype/status': {
         parameters: {
             query?: never;
             header?: never;
@@ -2360,7 +2380,7 @@ export interface paths {
          * Get all court appearance subtypes by statuses
          * @description This endpoint will get all court appearance subtypes by statuses
          */
-        get: operations["getAllCourtAppearanceSubtypes"];
+        get: operations['getAllCourtAppearanceSubtypes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2369,7 +2389,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/court-appearance-schedule/{appearanceUuid}/delete-status": {
+    '/court-appearance-schedule/{appearanceUuid}/delete-status': {
         parameters: {
             query?: never;
             header?: never;
@@ -2380,7 +2400,7 @@ export interface paths {
          * Delete court appearance schedule status
          * @description This endpoint will return whether a court appearance schedule can be deleted
          */
-        get: operations["deleteCourtAppearanceScheduleStatus"];
+        get: operations['deleteCourtAppearanceScheduleStatus'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2389,7 +2409,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/charge-outcome/{outcomeUuid}": {
+    '/charge-outcome/{outcomeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -2400,7 +2420,7 @@ export interface paths {
          * Get charge outcome by UUID
          * @description This endpoint will retrieve charge outcome by UUID
          */
-        get: operations["getChargeOutcomeByUuid"];
+        get: operations['getChargeOutcomeByUuid'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2409,7 +2429,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/charge-outcome/uuid/multiple": {
+    '/charge-outcome/uuid/multiple': {
         parameters: {
             query?: never;
             header?: never;
@@ -2420,7 +2440,7 @@ export interface paths {
          * get all charge outcomes by uuids
          * @description This endpoint will get all charge outcomes by uuids
          */
-        get: operations["getChargeOutcomesByIds"];
+        get: operations['getChargeOutcomesByIds'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2429,7 +2449,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/charge-outcome/status": {
+    '/charge-outcome/status': {
         parameters: {
             query?: never;
             header?: never;
@@ -2440,7 +2460,7 @@ export interface paths {
          * Get all charge outcomes by statuses
          * @description This endpoint will get all charge outcomes by statuses
          */
-        get: operations["getAllChargeOutcomes_1"];
+        get: operations['getAllChargeOutcomes_1'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2449,7 +2469,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/appearance-type/{appearanceTypeUuid}": {
+    '/appearance-type/{appearanceTypeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -2460,7 +2480,7 @@ export interface paths {
          * Get appearance type by uuid
          * @description This endpoint will get appearance type by uuid
          */
-        get: operations["getAppearanceTypeById"];
+        get: operations['getAppearanceTypeById'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2469,7 +2489,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/appearance-type/status": {
+    '/appearance-type/status': {
         parameters: {
             query?: never;
             header?: never;
@@ -2480,7 +2500,7 @@ export interface paths {
          * Get all appearance types by statuses
          * @description This endpoint will get all appearance types by statuses
          */
-        get: operations["getAllAppearanceTypes"];
+        get: operations['getAllAppearanceTypes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2489,7 +2509,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/appearance-outcome/{outcomeUuid}": {
+    '/appearance-outcome/{outcomeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -2500,7 +2520,7 @@ export interface paths {
          * Get appearance outcome by UUID
          * @description This endpoint will retrieve appearance outcome by UUID
          */
-        get: operations["getAppearanceOutcomeByUuid"];
+        get: operations['getAppearanceOutcomeByUuid'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2509,7 +2529,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/appearance-outcome/status": {
+    '/appearance-outcome/status': {
         parameters: {
             query?: never;
             header?: never;
@@ -2520,7 +2540,7 @@ export interface paths {
          * Get all appearance outcomes by status
          * @description This endpoint will get all appearance outcomes by status
          */
-        get: operations["getAllAppearanceOutcomes"];
+        get: operations['getAllAppearanceOutcomes'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2529,7 +2549,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/aggravating-factors/status": {
+    '/aggravating-factors/status': {
         parameters: {
             query?: never;
             header?: never;
@@ -2540,7 +2560,7 @@ export interface paths {
          * Get all aggravating factors by status
          * @description This endpoint will get all aggravating factors by status
          */
-        get: operations["getAllAggravatingFactors"];
+        get: operations['getAllAggravatingFactors'];
         put?: never;
         post?: never;
         delete?: never;
@@ -2549,7 +2569,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/legacy/charge/{chargeUuid}": {
+    '/legacy/charge/{chargeUuid}': {
         parameters: {
             query?: never;
             header?: never;
@@ -2563,13 +2583,13 @@ export interface paths {
          * Delete Charge
          * @description Synchronise a deletion of charge from NOMIS offender charges into remand and sentencing API.
          */
-        delete: operations["delete_4"];
+        delete: operations['delete_4'];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/document-admin/cleanup": {
+    '/document-admin/cleanup': {
         parameters: {
             query?: never;
             header?: never;
@@ -2583,7 +2603,7 @@ export interface paths {
          * Deletes uploaded documents without an appearance ID
          * @description Deletes all uploaded documents where the appearance ID is null
          */
-        delete: operations["cleanupDocument"];
+        delete: operations['cleanupDocument'];
         options?: never;
         head?: never;
         patch?: never;
@@ -2613,14 +2633,14 @@ export interface components {
             /** Format: date */
             maxOffenceDateExclusive?: string | null;
             /** @enum {string|null} */
-            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN" | null;
+            classification: 'STANDARD' | 'EXTENDED' | 'SOPC' | 'INDETERMINATE' | 'BOTUS' | 'CIVIL' | 'DTO' | 'FINE' | 'LEGACY' | 'NON_CUSTODIAL' | 'LEGACY_RECALL' | 'UNKNOWN' | null;
             hintText?: string | null;
             nomisCjaCode: string | null;
             nomisSentenceCalcType: string | null;
             /** Format: int32 */
             displayOrder: number | null;
             /** @enum {string|null} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY" | null;
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY' | null;
             isRecallable: boolean | null;
         };
         FieldError: {
@@ -2634,7 +2654,7 @@ export interface components {
             userMessage?: string | null;
             developerMessage?: string | null;
             moreInfo?: string | null;
-            fieldErrors?: components["schemas"]["FieldError"][] | null;
+            fieldErrors?: components['schemas']['FieldError'][] | null;
         };
         SentenceTypeDetails: {
             /** Format: uuid */
@@ -2653,14 +2673,14 @@ export interface components {
             /** Format: date */
             maxOffenceDateExclusive?: string | null;
             /** @enum {string} */
-            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+            classification: 'STANDARD' | 'EXTENDED' | 'SOPC' | 'INDETERMINATE' | 'BOTUS' | 'CIVIL' | 'DTO' | 'FINE' | 'LEGACY' | 'NON_CUSTODIAL' | 'LEGACY_RECALL' | 'UNKNOWN';
             hintText?: string | null;
             nomisCjaCode: string;
             nomisSentenceCalcType: string;
             /** Format: int32 */
             displayOrder: number;
             /** @enum {string} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY";
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY';
             isRecallable: boolean;
         };
         CreateRecall: {
@@ -2671,7 +2691,7 @@ export interface components {
             returnToCustodyDate?: string | null;
             inPrisonOnRevocationDate?: boolean | null;
             /** @enum {string} */
-            recallTypeCode: "LR" | "FTR_14" | "FTR_28" | "FTR_56" | "FTR_HDC_14" | "FTR_HDC_28" | "CUR_HDC" | "IN_HDC";
+            recallTypeCode: 'LR' | 'FTR_14' | 'FTR_28' | 'FTR_56' | 'FTR_HDC_14' | 'FTR_HDC_28' | 'CUR_HDC' | 'IN_HDC';
             createdByUsername: string;
             createdByPrison: string;
             sentenceIds?: string[] | null;
@@ -2700,11 +2720,11 @@ export interface components {
             chargeUuids: string[];
             /** Format: uuid */
             appearanceUuid: string;
-            fine?: components["schemas"]["LegacyCreateFine"] | null;
+            fine?: components['schemas']['LegacyCreateFine'] | null;
             /** Format: uuid */
             consecutiveToLifetimeUuid?: string | null;
             active: boolean;
-            legacyData: components["schemas"]["SentenceLegacyData"];
+            legacyData: components['schemas']['SentenceLegacyData'];
             /** Format: date */
             returnToCustodyDate?: string | null;
             performedByUser?: string | null;
@@ -2736,7 +2756,7 @@ export interface components {
             periodWeeks?: number | null;
             /** Format: int32 */
             periodDays?: number | null;
-            legacyData: components["schemas"]["PeriodLengthLegacyData"];
+            legacyData: components['schemas']['PeriodLengthLegacyData'];
             performedByUser?: string | null;
         };
         PeriodLengthLegacyData: {
@@ -2755,14 +2775,14 @@ export interface components {
             sentenceId?: string | null;
             recallId?: string | null;
             /** @enum {string} */
-            eventType: "COURT_CASE_INSERTED" | "COURT_CASE_UPDATED" | "CHARGE_INSERTED" | "CHARGE_UPDATED" | "COURT_APPEARANCE_INSERTED" | "COURT_APPEARANCE_UPDATED" | "SENTENCE_INSERTED" | "SENTENCE_FIX_SINGLE_CHARGE_INSERTED" | "SENTENCE_UPDATED" | "LEGACY_COURT_CASE_REFERENCES_UPDATED" | "RECALL_INSERTED" | "RECALL_UPDATED" | "PERIOD_LENGTH_INSERTED" | "PERIOD_LENGTH_UPDATED" | "PERIOD_LENGTH_DELETED" | "RECALL_DELETED" | "SENTENCE_DELETED" | "CHARGE_DELETED" | "COURT_APPEARANCE_DELETED" | "COURT_CASE_DELETED" | "BREACH_INSERTED" | "METADATA_ONLY";
+            eventType: 'COURT_CASE_INSERTED' | 'COURT_CASE_UPDATED' | 'CHARGE_INSERTED' | 'CHARGE_UPDATED' | 'COURT_APPEARANCE_INSERTED' | 'COURT_APPEARANCE_UPDATED' | 'SENTENCE_INSERTED' | 'SENTENCE_FIX_SINGLE_CHARGE_INSERTED' | 'SENTENCE_UPDATED' | 'LEGACY_COURT_CASE_REFERENCES_UPDATED' | 'RECALL_INSERTED' | 'RECALL_UPDATED' | 'PERIOD_LENGTH_INSERTED' | 'PERIOD_LENGTH_UPDATED' | 'PERIOD_LENGTH_DELETED' | 'RECALL_DELETED' | 'SENTENCE_DELETED' | 'CHARGE_DELETED' | 'COURT_APPEARANCE_DELETED' | 'COURT_CASE_DELETED' | 'BREACH_INSERTED' | 'METADATA_ONLY';
             periodLengthId?: string | null;
             sentenceIds?: string[] | null;
             previousRecallId?: string | null;
             previousSentenceIds?: string[] | null;
             originalSentenceId?: string | null;
             isOnFutureAppearance?: boolean | null;
-            isBreach?: boolean | null;
+            isBreach: boolean | null;
             courtAppearanceIds?: string[] | null;
             chargeIds?: string[] | null;
             periodLengthIds?: string[] | null;
@@ -2780,23 +2800,23 @@ export interface components {
             /** Format: date-time */
             updatedDate: string;
             /** @enum {string|null} */
-            source?: "NOMIS" | "DPS" | null;
+            source?: 'NOMIS' | 'DPS' | null;
         };
         CourtCaseLegacyData: {
-            caseReferences: components["schemas"]["CaseReferenceLegacyData"][];
+            caseReferences: components['schemas']['CaseReferenceLegacyData'][];
             /** Format: int64 */
             bookingId?: number | null;
         };
         LegacyCreateCourtCase: {
             prisonerId: string;
             active: boolean;
-            legacyData: components["schemas"]["CourtCaseLegacyData"];
+            legacyData: components['schemas']['CourtCaseLegacyData'];
             /** Format: int64 */
             bookingId?: number | null;
             performedByUser?: string | null;
         };
         RefreshCaseReferences: {
-            caseReferences: components["schemas"]["CaseReferenceLegacyData"][];
+            caseReferences: components['schemas']['CaseReferenceLegacyData'][];
             performedByUser?: string | null;
         };
         CourtAppearanceLegacyData: {
@@ -2805,7 +2825,7 @@ export interface components {
             outcomeDescription?: string | null;
             /** Format: date-time */
             nextEventDateTime?: string | null;
-            /** @example 13:26:29.546940582 */
+            /** @example 13:52:49.521789056 */
             appearanceTime?: string | null;
             outcomeDispositionCode?: string | null;
             outcomeConvictionFlag?: boolean | null;
@@ -2817,7 +2837,7 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            legacyData: components["schemas"]["CourtAppearanceLegacyData"];
+            legacyData: components['schemas']['CourtAppearanceLegacyData'];
             performedByUser?: string | null;
             /** Format: date-time */
             appearanceDateTime: string;
@@ -2835,7 +2855,7 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            legacyData: components["schemas"]["ChargeLegacyData"];
+            legacyData: components['schemas']['ChargeLegacyData'];
             performedByUser?: string | null;
             offenceCode?: string | null;
             value?: number | null;
@@ -2855,12 +2875,12 @@ export interface components {
             /** Format: uuid */
             appearanceOutcomeUuid: string;
             /** @enum {string} */
-            immigrationDetentionRecordType: "IS91" | "DEPORTATION_ORDER" | "NO_LONGER_OF_INTEREST" | "IMMIGRATION_BAIL" | "UNKNOWN";
+            immigrationDetentionRecordType: 'IS91' | 'DEPORTATION_ORDER' | 'NO_LONGER_OF_INTEREST' | 'IMMIGRATION_BAIL' | 'UNKNOWN';
             /** Format: date */
             recordDate: string;
             homeOfficeReferenceNumber?: string | null;
             /** @enum {string|null} */
-            noLongerOfInterestReason?: "BRITISH_CITIZEN" | "RIGHT_TO_REMAIN" | "OTHER_REASON" | null;
+            noLongerOfInterestReason?: 'BRITISH_CITIZEN' | 'RIGHT_TO_REMAIN' | 'OTHER_REASON' | null;
             noLongerOfInterestComment?: string | null;
             createdByUsername: string;
             createdByPrison: string;
@@ -2881,7 +2901,7 @@ export interface components {
             /** Format: uuid */
             outcomeUuid: string;
             /** @enum {string} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY";
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY';
         };
         ChargeOutcome: {
             /** Format: uuid */
@@ -2893,16 +2913,16 @@ export interface components {
             displayOrder: number;
             dispositionCode: string;
             /** @enum {string} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY";
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY';
         };
         HmctsResultCode: {
             /** Format: uuid */
             resultUuid: string;
             resultName: string;
             resultCode: string;
-            outcome: components["schemas"]["ChargeOutcome"];
+            outcome: components['schemas']['ChargeOutcome'];
             /** @enum {string} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY";
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY';
         };
         AggravatingFactor: {
             code: string;
@@ -2924,8 +2944,8 @@ export interface components {
             /** Format: uuid */
             outcomeUuid?: string | null;
             findingOfDomesticAbuse?: boolean | null;
-            sentence?: components["schemas"]["CreateSentence"] | null;
-            legacyData?: components["schemas"]["ChargeLegacyData"] | null;
+            sentence?: components['schemas']['CreateSentence'] | null;
+            legacyData?: components['schemas']['ChargeLegacyData'] | null;
             prisonId: string;
             /** Format: uuid */
             replacingChargeUuid?: string | null;
@@ -2933,7 +2953,7 @@ export interface components {
             createChargeOrder?: number | null;
             /** Format: uuid */
             hmctsChargeId?: string | null;
-            aggravatingFactors?: components["schemas"]["AggravatingFactor"][];
+            aggravatingFactors?: components['schemas']['AggravatingFactor'][];
             value?: number | null;
         };
         CreateCourtAppearance: {
@@ -2948,22 +2968,22 @@ export interface components {
             /** Format: date */
             appearanceDate: string;
             warrantType: string;
-            nextCourtAppearance?: components["schemas"]["CreateNextCourtAppearance"] | null;
-            charges: components["schemas"]["CreateCharge"][];
+            nextCourtAppearance?: components['schemas']['CreateNextCourtAppearance'] | null;
+            charges: components['schemas']['CreateCharge'][];
             /** Format: date */
             overallConvictionDate?: string | null;
-            legacyData?: components["schemas"]["CourtAppearanceLegacyData"] | null;
+            legacyData?: components['schemas']['CourtAppearanceLegacyData'] | null;
             prisonId: string;
-            documents?: components["schemas"]["UploadedDocument"][] | null;
-            periodLengths?: components["schemas"]["CreatePeriodLength"][] | null;
+            documents?: components['schemas']['UploadedDocument'][] | null;
+            periodLengths?: components['schemas']['CreatePeriodLength'][] | null;
             /** Format: uuid */
             hmctsCourtHearingId?: string | null;
         };
         CreateCourtCase: {
             prisonerId: string;
             prisonId: string;
-            appearances: components["schemas"]["CreateCourtAppearance"][];
-            legacyData?: components["schemas"]["CourtCaseLegacyData"] | null;
+            appearances: components['schemas']['CreateCourtAppearance'][];
+            legacyData?: components['schemas']['CourtCaseLegacyData'] | null;
         };
         CreateFineAmount: {
             fineAmount: number;
@@ -2971,7 +2991,7 @@ export interface components {
         CreateNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 13:26:29.546940582 */
+            /** @example 13:52:49.521789056 */
             appearanceTime?: string | null;
             courtCode: string;
             /** Format: uuid */
@@ -2995,15 +3015,15 @@ export interface components {
             days?: number | null;
             periodOrder: string;
             /** @enum {string} */
-            type: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "BREACH_OF_SUPERVISION_REQUIREMENTS" | "BREACH_OF_IMPRISONABLE_OFFENCE" | "UNSUPPORTED";
+            type: 'SENTENCE_LENGTH' | 'CUSTODIAL_TERM' | 'LICENCE_PERIOD' | 'TARIFF_LENGTH' | 'TERM_LENGTH' | 'OVERALL_SENTENCE_LENGTH' | 'BREACH_OF_SUPERVISION_REQUIREMENTS' | 'BREACH_OF_IMPRISONABLE_OFFENCE' | 'UNSUPPORTED';
             prisonId: string;
-            legacyData?: components["schemas"]["PeriodLengthLegacyData"] | null;
+            legacyData?: components['schemas']['PeriodLengthLegacyData'] | null;
         };
         CreateSentence: {
             /** Format: uuid */
             sentenceUuid: string;
             chargeNumber?: string | null;
-            periodLengths: components["schemas"]["CreatePeriodLength"][];
+            periodLengths: components['schemas']['CreatePeriodLength'][];
             sentenceServeType: string;
             /** Format: uuid */
             consecutiveToSentenceUuid?: string | null;
@@ -3011,10 +3031,10 @@ export interface components {
             sentenceTypeId?: string | null;
             /** Format: date */
             convictionDate?: string | null;
-            fineAmount?: components["schemas"]["CreateFineAmount"] | null;
+            fineAmount?: components['schemas']['CreateFineAmount'] | null;
             prisonId?: string | null;
             /** @enum {string|null} */
-            status?: "ACTIVE" | "DUPLICATE" | "DELETED" | "MANY_CHARGES_DATA_FIX" | "INACTIVE" | null;
+            status?: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MANY_CHARGES_DATA_FIX' | 'INACTIVE' | null;
             reason?: string | null;
         };
         UploadedDocument: {
@@ -3034,12 +3054,12 @@ export interface components {
         };
         CreateCourtCaseResponse: {
             courtCaseUuid: string;
-            appearances: components["schemas"]["CreateCourtAppearanceResponse"][];
-            charges: components["schemas"]["CreateChargeResponse"][];
+            appearances: components['schemas']['CreateCourtAppearanceResponse'][];
+            charges: components['schemas']['CreateChargeResponse'][];
         };
         UpdateCourtCaseStatus: {
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MERGED" | "INACTIVE";
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MERGED' | 'INACTIVE';
             reason?: string | null;
         };
         UpdateCourtAppearanceSchedule: {
@@ -3065,7 +3085,7 @@ export interface components {
              */
             hmctsCode?: string | null;
             /** @enum {string} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY";
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY';
         };
         CreateAppearanceOutcome: {
             /** Format: uuid */
@@ -3081,7 +3101,7 @@ export interface components {
             isSubList: boolean;
             dispositionCode: string;
             /** @enum {string} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY";
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY';
         };
         CourtAppearanceOutcome: {
             /** Format: uuid */
@@ -3096,13 +3116,13 @@ export interface components {
             isSubList: boolean;
             dispositionCode: string;
             /** @enum {string} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY";
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY';
             warrantType: string;
         };
         CreateUploadedDocument: {
             /** Format: uuid */
             appearanceUUID?: string | null;
-            documents: components["schemas"]["UploadedDocument"][];
+            documents: components['schemas']['UploadedDocument'][];
         };
         /** @description This contains the details used to validate loops in consecutive chains */
         ConsecutiveChainValidationRequest: {
@@ -3114,7 +3134,7 @@ export interface components {
             /** Format: uuid */
             targetSentenceUuid: string;
             /** @description The UI sentences for the appearance in the UI session */
-            sentences: components["schemas"]["SentenceDetailsForConsecValidation"][];
+            sentences: components['schemas']['SentenceDetailsForConsecValidation'][];
         };
         /** @description Shows consec relationship of a sentence */
         SentenceDetailsForConsecValidation: {
@@ -3134,24 +3154,39 @@ export interface components {
             id: string;
             personIdentifier: string;
             courtCode: string;
-            reason: components["schemas"]["AppearanceScheduleReason"];
+            reason: components['schemas']['AppearanceScheduleReason'];
             /** Format: date-time */
             start: string;
             isDuplicate: boolean;
             comments?: string | null;
         };
         CourtAppearanceSchedulesResponse: {
-            courtAppearances: components["schemas"]["CourtAppearanceSchedule"][];
+            courtAppearances: components['schemas']['CourtAppearanceSchedule'][];
         };
         IsRecallPossibleRequest: {
             sentenceIds: string[];
             /** @enum {string} */
-            recallType: "LR" | "FTR_14" | "FTR_28" | "FTR_56" | "FTR_HDC_14" | "FTR_HDC_28" | "CUR_HDC" | "IN_HDC";
+            recallType: 'LR' | 'FTR_14' | 'FTR_28' | 'FTR_56' | 'FTR_HDC_14' | 'FTR_HDC_28' | 'CUR_HDC' | 'IN_HDC';
         };
         IsRecallPossibleResponse: {
             /** @enum {string} */
-            isRecallPossible: "YES" | "UNKNOWN_PRE_RECALL_MAPPING" | "RECALL_TYPE_AND_SENTENCE_MAPPING_NOT_POSSIBLE";
+            isRecallPossible: 'YES' | 'UNKNOWN_PRE_RECALL_MAPPING' | 'RECALL_TYPE_AND_SENTENCE_MAPPING_NOT_POSSIBLE';
             sentenceIds: string[];
+        };
+        /** @description Status indicators for a list of people */
+        PeopleStatusRequest: {
+            personIds: string[];
+        };
+        /** @description Status indicators for a map of people and their status */
+        PeopleStatus: {
+            peopleStatus: {
+                [key: string]: components['schemas']['PersonStatus'];
+            };
+        };
+        /** @description Status indicators for a person */
+        PersonStatus: {
+            isOnRemand: boolean;
+            isCurrentlyOnRecall: boolean;
         };
         FixSingleSentenceMultipleChargesPeople: {
             prisonerIds: string[];
@@ -3213,12 +3248,13 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            legacyData: components["schemas"]["ChargeLegacyData"];
-            sentence?: components["schemas"]["MigrationCreateSentence"] | null;
+            legacyData: components['schemas']['ChargeLegacyData'];
+            sentence?: components['schemas']['MigrationCreateSentence'] | null;
             /** Format: int64 */
             mergedFromCaseId?: number | null;
             /** Format: date */
             mergedFromDate?: string | null;
+            value?: number | null;
         };
         MigrationCreateCourtAppearance: {
             /** Format: int64 */
@@ -3226,26 +3262,26 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            legacyData: components["schemas"]["CourtAppearanceLegacyData"];
-            charges: components["schemas"]["MigrationCreateCharge"][];
+            legacyData: components['schemas']['CourtAppearanceLegacyData'];
+            charges: components['schemas']['MigrationCreateCharge'][];
         };
         MigrationCreateCourtCase: {
             /** Format: int64 */
             caseId: number;
             active: boolean;
-            courtCaseLegacyData: components["schemas"]["CourtCaseLegacyData"];
-            appearances: components["schemas"]["MigrationCreateCourtAppearance"][];
+            courtCaseLegacyData: components['schemas']['CourtCaseLegacyData'];
+            appearances: components['schemas']['MigrationCreateCourtAppearance'][];
             merged?: boolean;
         };
         MigrationCreateCourtCases: {
             prisonerId: string;
-            courtCases: components["schemas"]["MigrationCreateCourtCase"][];
+            courtCases: components['schemas']['MigrationCreateCourtCase'][];
         };
         MigrationCreateFine: {
             fineAmount: number;
         };
         MigrationCreatePeriodLength: {
-            periodLengthId: components["schemas"]["NomisPeriodLengthId"];
+            periodLengthId: components['schemas']['NomisPeriodLengthId'];
             /** Format: int32 */
             periodYears?: number | null;
             /** Format: int32 */
@@ -3254,15 +3290,15 @@ export interface components {
             periodWeeks?: number | null;
             /** Format: int32 */
             periodDays?: number | null;
-            legacyData: components["schemas"]["PeriodLengthLegacyData"];
+            legacyData: components['schemas']['PeriodLengthLegacyData'];
         };
         MigrationCreateSentence: {
-            sentenceId: components["schemas"]["MigrationSentenceId"];
-            fine?: components["schemas"]["MigrationCreateFine"] | null;
+            sentenceId: components['schemas']['MigrationSentenceId'];
+            fine?: components['schemas']['MigrationCreateFine'] | null;
             active: boolean;
-            legacyData: components["schemas"]["SentenceLegacyData"];
-            consecutiveToSentenceId?: components["schemas"]["MigrationSentenceId"] | null;
-            periodLengths: components["schemas"]["MigrationCreatePeriodLength"][];
+            legacyData: components['schemas']['SentenceLegacyData'];
+            consecutiveToSentenceId?: components['schemas']['MigrationSentenceId'] | null;
+            periodLengths: components['schemas']['MigrationCreatePeriodLength'][];
             /** Format: date */
             returnToCustodyDate?: string | null;
         };
@@ -3298,21 +3334,21 @@ export interface components {
             caseId: number;
         };
         MigrationCreateCourtCasesResponse: {
-            courtCases: components["schemas"]["MigrationCreateCourtCaseResponse"][];
-            appearances: components["schemas"]["MigrationCreateCourtAppearanceResponse"][];
-            charges: components["schemas"]["MigrationCreateChargeResponse"][];
-            sentences: components["schemas"]["MigrationCreateSentenceResponse"][];
-            sentenceTerms: components["schemas"]["MigrationCreatePeriodLengthResponse"][];
+            courtCases: components['schemas']['MigrationCreateCourtCaseResponse'][];
+            appearances: components['schemas']['MigrationCreateCourtAppearanceResponse'][];
+            charges: components['schemas']['MigrationCreateChargeResponse'][];
+            sentences: components['schemas']['MigrationCreateSentenceResponse'][];
+            sentenceTerms: components['schemas']['MigrationCreatePeriodLengthResponse'][];
         };
         MigrationCreatePeriodLengthResponse: {
             /** Format: uuid */
             periodLengthUuid: string;
-            sentenceTermNOMISId: components["schemas"]["NomisPeriodLengthId"];
+            sentenceTermNOMISId: components['schemas']['NomisPeriodLengthId'];
         };
         MigrationCreateSentenceResponse: {
             /** Format: uuid */
             sentenceUuid: string;
-            sentenceNOMISId: components["schemas"]["MigrationSentenceId"];
+            sentenceNOMISId: components['schemas']['MigrationSentenceId'];
         };
         DeactivatedCourtCase: {
             dpsCourtCaseUuid: string;
@@ -3331,12 +3367,13 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            legacyData: components["schemas"]["ChargeLegacyData"];
-            sentence?: components["schemas"]["MergeCreateSentence"] | null;
+            legacyData: components['schemas']['ChargeLegacyData'];
+            sentence?: components['schemas']['MergeCreateSentence'] | null;
             /** Format: int64 */
             mergedFromCaseId?: number | null;
             /** Format: date */
             mergedFromDate?: string | null;
+            value?: number | null;
         };
         MergeCreateCourtAppearance: {
             /** Format: int64 */
@@ -3344,22 +3381,22 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            legacyData: components["schemas"]["CourtAppearanceLegacyData"];
-            charges: components["schemas"]["MergeCreateCharge"][];
+            legacyData: components['schemas']['CourtAppearanceLegacyData'];
+            charges: components['schemas']['MergeCreateCharge'][];
         };
         MergeCreateCourtCase: {
             /** Format: int64 */
             caseId: number;
             active: boolean;
-            courtCaseLegacyData: components["schemas"]["CourtCaseLegacyData"];
-            appearances: components["schemas"]["MergeCreateCourtAppearance"][];
+            courtCaseLegacyData: components['schemas']['CourtCaseLegacyData'];
+            appearances: components['schemas']['MergeCreateCourtAppearance'][];
             merged?: boolean;
         };
         MergeCreateFine: {
             fineAmount: number;
         };
         MergeCreatePeriodLength: {
-            periodLengthId: components["schemas"]["NomisPeriodLengthId"];
+            periodLengthId: components['schemas']['NomisPeriodLengthId'];
             /** Format: int32 */
             periodYears?: number | null;
             /** Format: int32 */
@@ -3368,24 +3405,24 @@ export interface components {
             periodWeeks?: number | null;
             /** Format: int32 */
             periodDays?: number | null;
-            legacyData: components["schemas"]["PeriodLengthLegacyData"];
+            legacyData: components['schemas']['PeriodLengthLegacyData'];
         };
         MergeCreateSentence: {
-            sentenceId: components["schemas"]["MergeSentenceId"];
-            fine?: components["schemas"]["MergeCreateFine"] | null;
+            sentenceId: components['schemas']['MergeSentenceId'];
+            fine?: components['schemas']['MergeCreateFine'] | null;
             active: boolean;
-            legacyData: components["schemas"]["SentenceLegacyData"];
-            consecutiveToSentenceId?: components["schemas"]["MergeSentenceId"] | null;
-            periodLengths: components["schemas"]["MergeCreatePeriodLength"][];
+            legacyData: components['schemas']['SentenceLegacyData'];
+            consecutiveToSentenceId?: components['schemas']['MergeSentenceId'] | null;
+            periodLengths: components['schemas']['MergeCreatePeriodLength'][];
             /** Format: date */
             returnToCustodyDate?: string | null;
         };
         MergePerson: {
             removedPrisonerNumber: string;
             performedByUser?: string | null;
-            casesCreated: components["schemas"]["MergeCreateCourtCase"][];
-            casesDeactivated: components["schemas"]["DeactivatedCourtCase"][];
-            sentencesDeactivated: components["schemas"]["DeactivatedSentence"][];
+            casesCreated: components['schemas']['MergeCreateCourtCase'][];
+            casesDeactivated: components['schemas']['DeactivatedCourtCase'][];
+            sentencesDeactivated: components['schemas']['DeactivatedSentence'][];
         };
         MergeSentenceId: {
             /** Format: int64 */
@@ -3411,21 +3448,21 @@ export interface components {
             caseId: number;
         };
         MergeCreateCourtCasesResponse: {
-            courtCases: components["schemas"]["MergeCreateCourtCaseResponse"][];
-            appearances: components["schemas"]["MergeCreateCourtAppearanceResponse"][];
-            charges: components["schemas"]["MergeCreateChargeResponse"][];
-            sentences: components["schemas"]["MergeCreateSentenceResponse"][];
-            sentenceTerms: components["schemas"]["MergeCreatePeriodLengthResponse"][];
+            courtCases: components['schemas']['MergeCreateCourtCaseResponse'][];
+            appearances: components['schemas']['MergeCreateCourtAppearanceResponse'][];
+            charges: components['schemas']['MergeCreateChargeResponse'][];
+            sentences: components['schemas']['MergeCreateSentenceResponse'][];
+            sentenceTerms: components['schemas']['MergeCreatePeriodLengthResponse'][];
         };
         MergeCreatePeriodLengthResponse: {
             /** Format: uuid */
             periodLengthUuid: string;
-            sentenceTermNOMISId: components["schemas"]["NomisPeriodLengthId"];
+            sentenceTermNOMISId: components['schemas']['NomisPeriodLengthId'];
         };
         MergeCreateSentenceResponse: {
             /** Format: uuid */
             sentenceUuid: string;
-            sentenceNOMISId: components["schemas"]["MergeSentenceId"];
+            sentenceNOMISId: components['schemas']['MergeSentenceId'];
         };
         BookingCreateCharge: {
             /** Format: int64 */
@@ -3435,12 +3472,13 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            legacyData: components["schemas"]["ChargeLegacyData"];
-            sentence?: components["schemas"]["BookingCreateSentence"] | null;
+            legacyData: components['schemas']['ChargeLegacyData'];
+            sentence?: components['schemas']['BookingCreateSentence'] | null;
             /** Format: int64 */
             mergedFromCaseId?: number | null;
             /** Format: date */
             mergedFromDate?: string | null;
+            value?: number | null;
         };
         BookingCreateCourtAppearance: {
             /** Format: int64 */
@@ -3448,26 +3486,26 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            legacyData: components["schemas"]["CourtAppearanceLegacyData"];
-            charges: components["schemas"]["BookingCreateCharge"][];
+            legacyData: components['schemas']['CourtAppearanceLegacyData'];
+            charges: components['schemas']['BookingCreateCharge'][];
         };
         BookingCreateCourtCase: {
             /** Format: int64 */
             caseId: number;
             active: boolean;
-            courtCaseLegacyData: components["schemas"]["CourtCaseLegacyData"];
-            appearances: components["schemas"]["BookingCreateCourtAppearance"][];
+            courtCaseLegacyData: components['schemas']['CourtCaseLegacyData'];
+            appearances: components['schemas']['BookingCreateCourtAppearance'][];
             merged?: boolean;
         };
         BookingCreateCourtCases: {
             prisonerId: string;
-            courtCases: components["schemas"]["BookingCreateCourtCase"][];
+            courtCases: components['schemas']['BookingCreateCourtCase'][];
         };
         BookingCreateFine: {
             fineAmount: number;
         };
         BookingCreatePeriodLength: {
-            periodLengthId: components["schemas"]["NomisPeriodLengthId"];
+            periodLengthId: components['schemas']['NomisPeriodLengthId'];
             /** Format: int32 */
             periodYears?: number | null;
             /** Format: int32 */
@@ -3476,15 +3514,15 @@ export interface components {
             periodWeeks?: number | null;
             /** Format: int32 */
             periodDays?: number | null;
-            legacyData: components["schemas"]["PeriodLengthLegacyData"];
+            legacyData: components['schemas']['PeriodLengthLegacyData'];
         };
         BookingCreateSentence: {
-            sentenceId: components["schemas"]["BookingSentenceId"];
-            fine?: components["schemas"]["BookingCreateFine"] | null;
+            sentenceId: components['schemas']['BookingSentenceId'];
+            fine?: components['schemas']['BookingCreateFine'] | null;
             active: boolean;
-            legacyData: components["schemas"]["SentenceLegacyData"];
-            consecutiveToSentenceId?: components["schemas"]["BookingSentenceId"] | null;
-            periodLengths: components["schemas"]["BookingCreatePeriodLength"][];
+            legacyData: components['schemas']['SentenceLegacyData'];
+            consecutiveToSentenceId?: components['schemas']['BookingSentenceId'] | null;
+            periodLengths: components['schemas']['BookingCreatePeriodLength'][];
             /** Format: date */
             returnToCustodyDate?: string | null;
         };
@@ -3512,21 +3550,21 @@ export interface components {
             caseId: number;
         };
         BookingCreateCourtCasesResponse: {
-            courtCases: components["schemas"]["BookingCreateCourtCaseResponse"][];
-            appearances: components["schemas"]["BookingCreateCourtAppearanceResponse"][];
-            charges: components["schemas"]["BookingCreateChargeResponse"][];
-            sentences: components["schemas"]["BookingCreateSentenceResponse"][];
-            sentenceTerms: components["schemas"]["BookingCreatePeriodLengthResponse"][];
+            courtCases: components['schemas']['BookingCreateCourtCaseResponse'][];
+            appearances: components['schemas']['BookingCreateCourtAppearanceResponse'][];
+            charges: components['schemas']['BookingCreateChargeResponse'][];
+            sentences: components['schemas']['BookingCreateSentenceResponse'][];
+            sentenceTerms: components['schemas']['BookingCreatePeriodLengthResponse'][];
         };
         BookingCreatePeriodLengthResponse: {
             /** Format: uuid */
             periodLengthUuid: string;
-            sentenceTermNOMISId: components["schemas"]["NomisPeriodLengthId"];
+            sentenceTermNOMISId: components['schemas']['NomisPeriodLengthId'];
         };
         BookingCreateSentenceResponse: {
             /** Format: uuid */
             sentenceUuid: string;
-            sentenceNOMISId: components["schemas"]["BookingSentenceId"];
+            sentenceNOMISId: components['schemas']['BookingSentenceId'];
         };
         LegacyCourtAppearanceCreatedResponse: {
             /** Format: uuid */
@@ -3542,7 +3580,7 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            legacyData: components["schemas"]["ChargeLegacyData"];
+            legacyData: components['schemas']['ChargeLegacyData'];
             performedByUser?: string | null;
             value?: number | null;
         };
@@ -3563,20 +3601,20 @@ export interface components {
         };
         HmctsAutopopulateFeature: {
             /** @enum {string} */
-            type: "MULTIPLE_CASE_REFERENCES" | "REMAND_WARRANT" | "SENTENCING_WARRANT" | "NEW_REMAND_APPEARANCE_ON_EXISTING_CASE" | "NEW_SENTENCING_APPEARANCE_ON_EXISTING_CASE";
+            type: 'MULTIPLE_CASE_REFERENCES' | 'REMAND_WARRANT' | 'SENTENCING_WARRANT' | 'NEW_REMAND_APPEARANCE_ON_EXISTING_CASE' | 'NEW_SENTENCING_APPEARANCE_ON_EXISTING_CASE';
             enabled: boolean;
         };
         HmctsHearingAutopopulateEligibility: {
             prisonerNumber: string;
             /** Format: uuid */
             hearingId: string;
-            cases: components["schemas"]["ExistingCaseReferenceAndId"][];
-            features: components["schemas"]["HmctsAutopopulateFeature"][];
+            cases: components['schemas']['ExistingCaseReferenceAndId'][];
+            features: components['schemas']['HmctsAutopopulateFeature'][];
             hasBeenCompleted: boolean;
             hasWarrantAndPcr: boolean;
         };
         RepublishEvents: {
-            eventsMetadata: components["schemas"]["EventMetadata"][];
+            eventsMetadata: components['schemas']['EventMetadata'][];
         };
         CreateF986: {
             /** Format: uuid */
@@ -3595,7 +3633,7 @@ export interface components {
             sentenceTypeId: string;
         };
         UpdateSentenceTypeRequest: {
-            updates: components["schemas"]["SentenceTypeUpdate"][];
+            updates: components['schemas']['SentenceTypeUpdate'][];
         };
         UpdateSentenceTypeResponse: {
             updatedSentenceUuids: string[];
@@ -3619,18 +3657,18 @@ export interface components {
              * @description The type of the hearing for this thing to do
              * @enum {string}
              */
-            warrantType: "REMAND" | "SENTENCING";
+            warrantType: 'REMAND' | 'SENTENCING';
             /** @description The ID of the existing court case for this warrant */
             courtCaseUuid?: string | null;
         };
         ThingToDo: {
             /** @enum {string} */
-            type: "NEW_WARRANT";
-            hearingThingsToDoData: components["schemas"]["HearingThingsToDoData"];
+            type: 'NEW_WARRANT';
+            hearingThingsToDoData: components['schemas']['HearingThingsToDoData'];
         };
         ThingsToDo: {
             prisonerId: string;
-            thingsToDo: components["schemas"]["ThingToDo"][];
+            thingsToDo: components['schemas']['ThingToDo'][];
         };
         Attachment: {
             /**
@@ -3652,7 +3690,7 @@ export interface components {
             /** @description The filename of attachment file */
             filename: string;
             /** @description The additional headers to use when calling the url for fetching this attachment */
-            headers?: components["schemas"]["AttachmentHeader"][] | null;
+            headers?: components['schemas']['AttachmentHeader'][] | null;
         };
         AttachmentHeader: {
             /** @description The name of the header */
@@ -3664,7 +3702,7 @@ export interface components {
             /** @description The content of the subject access request response */
             content: unknown;
             /** @description The details of any attachments for the subject access request response */
-            attachments?: components["schemas"]["Attachment"][] | null;
+            attachments?: components['schemas']['Attachment'][] | null;
         };
         ErrorResponse: {
             /** Format: int32 */
@@ -3688,8 +3726,8 @@ export interface components {
             days?: number | null;
             periodOrder: string;
             /** @enum {string} */
-            periodLengthType: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "BREACH_OF_SUPERVISION_REQUIREMENTS" | "BREACH_OF_IMPRISONABLE_OFFENCE" | "UNSUPPORTED";
-            legacyData?: components["schemas"]["PeriodLengthLegacyData"] | null;
+            periodLengthType: 'SENTENCE_LENGTH' | 'CUSTODIAL_TERM' | 'LICENCE_PERIOD' | 'TARIFF_LENGTH' | 'TERM_LENGTH' | 'OVERALL_SENTENCE_LENGTH' | 'BREACH_OF_SUPERVISION_REQUIREMENTS' | 'BREACH_OF_IMPRISONABLE_OFFENCE' | 'UNSUPPORTED';
+            legacyData?: components['schemas']['PeriodLengthLegacyData'] | null;
             /** Format: uuid */
             periodLengthUuid: string;
         };
@@ -3697,25 +3735,25 @@ export interface components {
             /** Format: uuid */
             sentenceUuid: string;
             chargeNumber?: string | null;
-            periodLengths: components["schemas"]["PeriodLength"][];
+            periodLengths: components['schemas']['PeriodLength'][];
             sentenceServeType: string;
-            sentenceType?: components["schemas"]["SentenceType"] | null;
+            sentenceType?: components['schemas']['SentenceType'] | null;
             /** Format: date */
             convictionDate?: string | null;
-            fineAmount?: components["schemas"]["FineAmount"] | null;
-            legacyData?: components["schemas"]["SentenceLegacyData"] | null;
+            fineAmount?: components['schemas']['FineAmount'] | null;
+            legacyData?: components['schemas']['SentenceLegacyData'] | null;
             /** Format: uuid */
             consecutiveToSentenceUuid?: string | null;
             hasRecall: boolean;
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MANY_CHARGES_DATA_FIX" | "INACTIVE";
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MANY_CHARGES_DATA_FIX' | 'INACTIVE';
         };
         SentenceType: {
             /** Format: uuid */
             sentenceTypeUuid: string;
             description: string;
             /** @enum {string} */
-            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+            classification: 'STANDARD' | 'EXTENDED' | 'SOPC' | 'INDETERMINATE' | 'BOTUS' | 'CIVIL' | 'DTO' | 'FINE' | 'LEGACY' | 'NON_CUSTODIAL' | 'LEGACY_RECALL' | 'UNKNOWN';
             hintText?: string | null;
             /** Format: int32 */
             displayOrder: number;
@@ -3732,19 +3770,19 @@ export interface components {
             /** Format: uuid */
             sentenceUuid: string;
             chargeNumber?: string | null;
-            periodLengths: components["schemas"]["PeriodLength"][];
+            periodLengths: components['schemas']['PeriodLength'][];
             sentenceServeType: string;
-            sentenceType?: components["schemas"]["SentenceType"] | null;
+            sentenceType?: components['schemas']['SentenceType'] | null;
             /** Format: date */
             convictionDate?: string | null;
-            fineAmount?: components["schemas"]["FineAmount"] | null;
-            legacyData?: components["schemas"]["SentenceLegacyData"] | null;
+            fineAmount?: components['schemas']['FineAmount'] | null;
+            legacyData?: components['schemas']['SentenceLegacyData'] | null;
             /** Format: uuid */
             consecutiveToSentenceUuid?: string | null;
             hasRecall: boolean;
-            charge: components["schemas"]["SentenceDetailsCharge"];
+            charge: components['schemas']['SentenceDetailsCharge'];
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MANY_CHARGES_DATA_FIX" | "INACTIVE";
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MANY_CHARGES_DATA_FIX' | 'INACTIVE';
         };
         SentenceDetailsCharge: {
             /** Format: uuid */
@@ -3754,18 +3792,18 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            outcome?: components["schemas"]["ChargeOutcome"] | null;
-            legacyData?: components["schemas"]["ChargeLegacyData"] | null;
-            mergedFromCase?: components["schemas"]["MergedFromCase"] | null;
+            outcome?: components['schemas']['ChargeOutcome'] | null;
+            legacyData?: components['schemas']['ChargeLegacyData'] | null;
+            mergedFromCase?: components['schemas']['MergedFromCase'] | null;
         };
         DeleteSentenceStatusDetails: {
             /** @enum {string} */
-            status: "SUPPORTED" | "NOT_SUPPORTED";
-            reasons: components["schemas"]["DeleteSentenceStatusReasonDetails"][];
+            status: 'SUPPORTED' | 'NOT_SUPPORTED';
+            reasons: components['schemas']['DeleteSentenceStatusReasonDetails'][];
         };
         DeleteSentenceStatusReasonDetails: {
             /** @enum {string} */
-            reason: "HAS_SENTENCES_AFTER_ON_OTHER_COURT_APPEARANCE" | "HAS_APPEARANCE_PERIOD_LENGTH";
+            reason: 'HAS_SENTENCES_AFTER_ON_OTHER_COURT_APPEARANCE' | 'HAS_APPEARANCE_PERIOD_LENGTH';
             metadata: {
                 [key: string]: unknown;
             };
@@ -3776,7 +3814,7 @@ export interface components {
             courtCaseReference?: string | null;
             /** Format: date */
             appearanceDate: string;
-            sentences: components["schemas"]["SentenceCardDetails"][];
+            sentences: components['schemas']['SentenceCardDetails'][];
         };
         SentenceCardDetails: {
             offenceCode: string;
@@ -3788,7 +3826,7 @@ export interface components {
             chargeUuid: string;
             countNumber?: string | null;
             sentenceType: string;
-            periodLengths: components["schemas"]["PeriodLength"][];
+            periodLengths: components['schemas']['PeriodLength'][];
             sentenceServeType: string;
             /** Format: date */
             convictedDate?: string | null;
@@ -3802,7 +3840,7 @@ export interface components {
             courtCode: string;
         };
         SentencesAfterOnOtherCourtAppearanceDetailsResponse: {
-            appearances: components["schemas"]["CourtAppearanceAfterSentence"][];
+            appearances: components['schemas']['CourtAppearanceAfterSentence'][];
         };
         HasSentenceAfterOnOtherCourtAppearanceResponse: {
             hasSentenceAfterOnOtherCourtAppearance: boolean;
@@ -3823,21 +3861,21 @@ export interface components {
             /** Format: uuid */
             sentenceUuid: string;
             countNumber?: string | null;
-            chargeLegacyData?: components["schemas"]["ChargeLegacyData"] | null;
+            chargeLegacyData?: components['schemas']['ChargeLegacyData'] | null;
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MANY_CHARGES_DATA_FIX" | "INACTIVE";
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MANY_CHARGES_DATA_FIX' | 'INACTIVE';
         };
         SentenceConsecutiveToDetailsResponse: {
-            sentences: components["schemas"]["SentenceConsecutiveToDetails"][];
+            sentences: components['schemas']['SentenceConsecutiveToDetails'][];
         };
         SentenceTypeIsValid: {
             isStillValid: boolean;
         };
         SentenceTypeChargeOutcomes: {
-            chargeOutcomes: components["schemas"]["ChargeOutcome"][];
+            chargeOutcomes: components['schemas']['ChargeOutcome'][];
         };
         AllSentenceTypes: {
-            sentenceTypes: components["schemas"]["SentenceTypeDetails"][];
+            sentenceTypes: components['schemas']['SentenceTypeDetails'][];
         };
         Recall: {
             /** Format: uuid */
@@ -3849,16 +3887,16 @@ export interface components {
             returnToCustodyDate?: string | null;
             inPrisonOnRevocationDate?: boolean | null;
             /** @enum {string} */
-            recallType: "LR" | "FTR_14" | "FTR_28" | "FTR_56" | "FTR_HDC_14" | "FTR_HDC_28" | "CUR_HDC" | "IN_HDC";
+            recallType: 'LR' | 'FTR_14' | 'FTR_28' | 'FTR_56' | 'FTR_HDC_14' | 'FTR_HDC_28' | 'CUR_HDC' | 'IN_HDC';
             /** Format: date-time */
             createdAt: string;
             createdByUsername: string;
             createdByPrison?: string | null;
             /** @enum {string} */
-            source: "NOMIS" | "DPS";
+            source: 'NOMIS' | 'DPS';
             postedDate?: string | null;
-            courtCases: components["schemas"]["RecallCourtCaseDetails"][];
-            ual?: components["schemas"]["RecallUALAdjustment"] | null;
+            courtCases: components['schemas']['RecallCourtCaseDetails'][];
+            ual?: components['schemas']['RecallUALAdjustment'] | null;
             /** Format: int32 */
             calculationRequestId?: number | null;
             /** @description True if the recall was created manually (i.e. calculationRequestId is null) */
@@ -3875,7 +3913,7 @@ export interface components {
              * @description NOMIS booking id from court_case.legacy_data, used to determine period of custody
              */
             bookingId?: number | null;
-            sentences: components["schemas"]["RecalledSentence"][];
+            sentences: components['schemas']['RecalledSentence'][];
         };
         RecallUALAdjustment: {
             id: string;
@@ -3894,16 +3932,17 @@ export interface components {
             sentenceDate?: string | null;
             lineNumber?: string | null;
             countNumber?: string | null;
-            periodLengths: components["schemas"]["PeriodLength"][];
+            periodLengths: components['schemas']['PeriodLength'][];
             sentenceServeType: string;
             sentenceTypeDescription?: string | null;
             /** Format: uuid */
             consecutiveToSentenceUuid?: string | null;
-            aggravatingFactors: components["schemas"]["AggravatingFactor"][];
+            aggravatingFactors: components['schemas']['AggravatingFactor'][];
             findingOfDomesticAbuse?: boolean | null;
+            value?: number | null;
         };
         PrisonerRecallsResponse: {
-            recalls: components["schemas"]["Recall"][];
+            recalls: components['schemas']['Recall'][];
             /**
              * Format: int32
              * @description Total number of recalls for the prisoner after NOMIS grouping
@@ -3921,7 +3960,7 @@ export interface components {
             messagesFoundCount: number;
             /** Format: int32 */
             messagesReturnedCount: number;
-            messages: components["schemas"]["DlqMessage"][];
+            messages: components['schemas']['DlqMessage'][];
         };
         PersonDetails: {
             personId: string;
@@ -3940,10 +3979,10 @@ export interface components {
             courtCode: string;
             /** Format: date */
             sentencingHearingDate: string;
-            sentences: components["schemas"]["UnconfirmedSentence"][];
+            sentences: components['schemas']['UnconfirmedSentence'][];
         };
         UnconfirmedCourtCases: {
-            courtCases: components["schemas"]["UnconfirmedCourtCase"][];
+            courtCases: components['schemas']['UnconfirmedCourtCase'][];
         };
         UnconfirmedSentence: {
             /** Format: uuid */
@@ -3952,10 +3991,6 @@ export interface components {
             chargeLegacyOffenceDescription?: string | null;
             sentenceServeType: string;
         };
-        /** @description Status indicators for a person */
-        PersonStatus: {
-            isOnRemand: boolean;
-        };
         AppearanceToChainTo: {
             courtCode: string;
             courtCaseReference?: string | null;
@@ -3963,7 +3998,7 @@ export interface components {
             appearanceDate: string;
             /** Format: uuid */
             appearanceUuid: string;
-            sentences: components["schemas"]["SentenceToChainTo"][];
+            sentences: components['schemas']['SentenceToChainTo'][];
         };
         SentenceToChainTo: {
             offenceCode: string;
@@ -3976,10 +4011,12 @@ export interface components {
             /** Format: uuid */
             sentenceUuid: string;
             countNumber?: string | null;
-            chargeLegacyData?: components["schemas"]["ChargeLegacyData"] | null;
+            chargeLegacyData?: components['schemas']['ChargeLegacyData'] | null;
+            value?: number | null;
+            periodLengths: components['schemas']['PeriodLength'][];
         };
         SentencesToChainToResponse: {
-            appearances: components["schemas"]["AppearanceToChainTo"][];
+            appearances: components['schemas']['AppearanceToChainTo'][];
         };
         AppearanceType: {
             /** Format: uuid */
@@ -3997,11 +4034,11 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            outcome?: components["schemas"]["ChargeOutcome"] | null;
-            aggravatingFactors: components["schemas"]["AggravatingFactor"][];
-            sentence?: components["schemas"]["Sentence"] | null;
-            legacyData?: components["schemas"]["ChargeLegacyData"] | null;
-            mergedFromCase?: components["schemas"]["MergedFromCase"] | null;
+            outcome?: components['schemas']['ChargeOutcome'] | null;
+            aggravatingFactors: components['schemas']['AggravatingFactor'][];
+            sentence?: components['schemas']['Sentence'] | null;
+            legacyData?: components['schemas']['ChargeLegacyData'] | null;
+            mergedFromCase?: components['schemas']['MergedFromCase'] | null;
             /** Format: date-time */
             createdAt: string;
             findingOfDomesticAbuse?: boolean | null;
@@ -4012,24 +4049,24 @@ export interface components {
         CourtAppearance: {
             /** Format: uuid */
             appearanceUuid: string;
-            outcome?: components["schemas"]["CourtAppearanceOutcome"] | null;
+            outcome?: components['schemas']['CourtAppearanceOutcome'] | null;
             courtCode: string;
             courtCaseReference?: string | null;
             criminalAppealOfficeReference?: string | null;
             /** Format: date */
             appearanceDate: string;
             warrantType: string;
-            nextCourtAppearance?: components["schemas"]["NextCourtAppearance"] | null;
-            charges: components["schemas"]["Charge"][];
+            nextCourtAppearance?: components['schemas']['NextCourtAppearance'] | null;
+            charges: components['schemas']['Charge'][];
             /** Format: date */
             overallConvictionDate?: string | null;
-            legacyData?: components["schemas"]["CourtAppearanceLegacyData"] | null;
-            documents: components["schemas"]["UploadedDocument"][];
+            legacyData?: components['schemas']['CourtAppearanceLegacyData'] | null;
+            documents: components['schemas']['UploadedDocument'][];
             /** @enum {string} */
-            source: "NOMIS" | "DPS";
+            source: 'NOMIS' | 'DPS';
             /** @enum {string} */
-            deleteStatus: "SUPPORTED" | "NOT_SUPPORTED";
-            periodLengths: components["schemas"]["PeriodLength"][];
+            deleteStatus: 'SUPPORTED' | 'NOT_SUPPORTED';
+            periodLengths: components['schemas']['PeriodLength'][];
             /** Format: uuid */
             hmctsCourtHearingId?: string | null;
         };
@@ -4046,14 +4083,14 @@ export interface components {
             prisonerId: string;
             courtCaseUuid: string;
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MERGED" | "INACTIVE";
-            latestAppearance?: components["schemas"]["CourtAppearance"] | null;
-            appearances: components["schemas"]["CourtAppearance"][];
-            legacyData?: components["schemas"]["CourtCaseLegacyData"] | null;
-            mergedToCaseDetails?: components["schemas"]["MergedToCaseDetails"] | null;
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MERGED' | 'INACTIVE';
+            latestAppearance?: components['schemas']['CourtAppearance'] | null;
+            appearances: components['schemas']['CourtAppearance'][];
+            legacyData?: components['schemas']['CourtCaseLegacyData'] | null;
+            mergedToCaseDetails?: components['schemas']['MergedToCaseDetails'] | null;
         };
         CourtCases: {
-            courtCases: components["schemas"]["CourtCase"][];
+            courtCases: components['schemas']['CourtCase'][];
         };
         MergedToCaseDetails: {
             /** Format: date */
@@ -4066,20 +4103,20 @@ export interface components {
         NextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 13:26:29.546940582 */
+            /** @example 13:52:49.521789056 */
             appearanceTime?: string | null;
             courtCode: string;
-            appearanceType: components["schemas"]["AppearanceType"];
+            appearanceType: components['schemas']['AppearanceType'];
             /** Format: uuid */
-            futureSkeletonAppearanceUuid: string;
-            courtAppearanceSubType?: components["schemas"]["CourtAppearanceSubtype"] | null;
+            futureSkeletonAppearanceUuid?: string | null;
+            courtAppearanceSubType?: components['schemas']['CourtAppearanceSubtype'] | null;
             /** Format: uuid */
             hmctsCourtHearingId?: string | null;
         };
         PrisonerSentenceEnvelope: {
             /** Format: date */
             envelopeStartDate: string;
-            sentences: components["schemas"]["PrisonerSentenceEnvelopeSentence"][];
+            sentences: components['schemas']['PrisonerSentenceEnvelopeSentence'][];
         };
         PrisonerSentenceEnvelopePeriodLength: {
             /** Format: int32 */
@@ -4092,8 +4129,8 @@ export interface components {
             days?: number | null;
             periodOrder: string[];
             /** @enum {string} */
-            periodLengthType: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "BREACH_OF_SUPERVISION_REQUIREMENTS" | "BREACH_OF_IMPRISONABLE_OFFENCE" | "UNSUPPORTED";
-            legacyData?: components["schemas"]["PeriodLengthLegacyData"] | null;
+            periodLengthType: 'SENTENCE_LENGTH' | 'CUSTODIAL_TERM' | 'LICENCE_PERIOD' | 'TARIFF_LENGTH' | 'TERM_LENGTH' | 'OVERALL_SENTENCE_LENGTH' | 'BREACH_OF_SUPERVISION_REQUIREMENTS' | 'BREACH_OF_IMPRISONABLE_OFFENCE' | 'UNSUPPORTED';
+            legacyData?: components['schemas']['PeriodLengthLegacyData'] | null;
             /** Format: uuid */
             periodLengthUuid: string;
         };
@@ -4111,7 +4148,7 @@ export interface components {
             lineNumber?: string | null;
             /** Format: date */
             convictionDate?: string | null;
-            periodLengths: components["schemas"]["PrisonerSentenceEnvelopePeriodLength"][];
+            periodLengths: components['schemas']['PrisonerSentenceEnvelopePeriodLength'][];
             sentenceServeType: string;
             /** Format: uuid */
             consecutiveToSentenceUuid?: string | null;
@@ -4121,18 +4158,18 @@ export interface components {
             /** Format: date */
             appearanceDate: string;
             sentenceTypeDescription?: string | null;
-            mergedFromCase?: components["schemas"]["MergedFromCase"] | null;
+            mergedFromCase?: components['schemas']['MergedFromCase'] | null;
             /** Format: int32 */
             orderInChain: number;
         };
         PrisonerSentenceEnvelopes: {
-            sentenceEnvelopes: components["schemas"]["PrisonerSentenceEnvelope"][];
+            sentenceEnvelopes: components['schemas']['PrisonerSentenceEnvelope'][];
         };
         PersonNextCourtAppearance: {
             caseReference?: string | null;
             courtCode: string;
-            appearanceType: components["schemas"]["AppearanceType"];
-            courtAppearanceSubType?: components["schemas"]["CourtAppearanceSubtype"] | null;
+            appearanceType: components['schemas']['AppearanceType'];
+            courtAppearanceSubType?: components['schemas']['CourtAppearanceSubtype'] | null;
             /** Format: date-time */
             dateTime: string;
         };
@@ -4157,13 +4194,13 @@ export interface components {
         };
         CourtCaseDocuments: {
             courtCaseUuid: string;
-            latestAppearance?: components["schemas"]["CourtAppearance"] | null;
+            latestAppearance?: components['schemas']['CourtAppearance'] | null;
             appearanceDocumentsByType: {
-                [key: string]: components["schemas"]["AppearanceDocument"][];
+                [key: string]: components['schemas']['AppearanceDocument'][];
             };
         };
         PrisonerDocuments: {
-            courtCaseDocuments: components["schemas"]["CourtCaseDocuments"][];
+            courtCaseDocuments: components['schemas']['CourtCaseDocuments'][];
         };
         PersonCharge: {
             /** Format: uuid */
@@ -4173,14 +4210,18 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            outcome?: components["schemas"]["ChargeOutcome"] | null;
-            aggravatingFactors: components["schemas"]["AggravatingFactor"][];
-            legacyData?: components["schemas"]["ChargeLegacyData"] | null;
+            outcome?: components['schemas']['ChargeOutcome'] | null;
+            aggravatingFactors: components['schemas']['AggravatingFactor'][];
+            legacyData?: components['schemas']['ChargeLegacyData'] | null;
             findingOfDomesticAbuse?: boolean | null;
-            sentence?: components["schemas"]["PersonSentence"] | null;
+            sentence?: components['schemas']['PersonSentence'] | null;
+            /** Format: date */
+            appearanceDate: string;
+            /** Format: date-time */
+            appearanceCreatedAt: string;
         };
         PersonCharges: {
-            charges: components["schemas"]["PersonCharge"][];
+            charges: components['schemas']['PersonCharge'][];
         };
         PersonPeriodLength: {
             /** Format: int32 */
@@ -4193,8 +4234,8 @@ export interface components {
             days?: number | null;
             periodOrder: string;
             /** @enum {string} */
-            periodLengthType: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "BREACH_OF_SUPERVISION_REQUIREMENTS" | "BREACH_OF_IMPRISONABLE_OFFENCE" | "UNSUPPORTED";
-            legacyData?: components["schemas"]["PeriodLengthLegacyData"] | null;
+            periodLengthType: 'SENTENCE_LENGTH' | 'CUSTODIAL_TERM' | 'LICENCE_PERIOD' | 'TARIFF_LENGTH' | 'TERM_LENGTH' | 'OVERALL_SENTENCE_LENGTH' | 'BREACH_OF_SUPERVISION_REQUIREMENTS' | 'BREACH_OF_IMPRISONABLE_OFFENCE' | 'UNSUPPORTED';
+            legacyData?: components['schemas']['PeriodLengthLegacyData'] | null;
             /** Format: uuid */
             periodLengthUuid: string;
         };
@@ -4203,19 +4244,19 @@ export interface components {
             sentenceUuid: string;
             chargeNumber?: string | null;
             sentenceServeType: string;
-            sentenceType?: components["schemas"]["SentenceType"] | null;
+            sentenceType?: components['schemas']['SentenceType'] | null;
             /** Format: date */
             convictionDate?: string | null;
-            fineAmount?: components["schemas"]["FineAmount"] | null;
-            legacyData?: components["schemas"]["SentenceLegacyData"] | null;
+            fineAmount?: components['schemas']['FineAmount'] | null;
+            legacyData?: components['schemas']['SentenceLegacyData'] | null;
             /** Format: uuid */
             consecutiveToSentenceUuid?: string | null;
             hasRecall: boolean;
             /** @enum {string|null} */
-            latestRecallType?: "LR" | "FTR_14" | "FTR_28" | "FTR_56" | "FTR_HDC_14" | "FTR_HDC_28" | "CUR_HDC" | "IN_HDC" | null;
+            latestRecallType?: 'LR' | 'FTR_14' | 'FTR_28' | 'FTR_56' | 'FTR_HDC_14' | 'FTR_HDC_28' | 'CUR_HDC' | 'IN_HDC' | null;
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MANY_CHARGES_DATA_FIX" | "INACTIVE";
-            periodLengths: components["schemas"]["PersonPeriodLength"][];
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MANY_CHARGES_DATA_FIX' | 'INACTIVE';
+            periodLengths: components['schemas']['PersonPeriodLength'][];
         };
         PersonCourtCaseCount: {
             /** Format: int64 */
@@ -4227,7 +4268,7 @@ export interface components {
             nomisSentenceTypeReference: string;
             nomisDescription: string;
             isIndeterminate: boolean;
-            recall: components["schemas"]["RecallType"];
+            recall: components['schemas']['RecallType'];
             nomisActive: boolean;
             /** Format: date */
             nomisExpiryDate?: string | null;
@@ -4242,13 +4283,13 @@ export interface components {
         LegacySentenceType: {
             nomisSentenceTypeReference: string;
             /** @enum {string} */
-            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
-            classificationPeriodDefinition?: components["schemas"]["SentenceTypePeriodDefinitions"] | null;
+            classification: 'STANDARD' | 'EXTENDED' | 'SOPC' | 'INDETERMINATE' | 'BOTUS' | 'CIVIL' | 'DTO' | 'FINE' | 'LEGACY' | 'NON_CUSTODIAL' | 'LEGACY_RECALL' | 'UNKNOWN';
+            classificationPeriodDefinition?: components['schemas']['SentenceTypePeriodDefinitions'] | null;
             /** Format: int32 */
             sentencingAct: number;
-            eligibility?: components["schemas"]["SentenceEligibility"] | null;
-            recallType: components["schemas"]["RecallType"];
-            inputSentenceType?: components["schemas"]["SentenceTypeDetail"] | null;
+            eligibility?: components['schemas']['SentenceEligibility'] | null;
+            recallType: components['schemas']['RecallType'];
+            inputSentenceType?: components['schemas']['SentenceTypeDetail'] | null;
             nomisActive: boolean;
             nomisDescription: string;
             /** Format: date */
@@ -4259,22 +4300,22 @@ export interface components {
         };
         Period: {
             /** @enum {string} */
-            type: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "BREACH_OF_SUPERVISION_REQUIREMENTS" | "BREACH_OF_IMPRISONABLE_OFFENCE" | "UNSUPPORTED";
+            type: 'SENTENCE_LENGTH' | 'CUSTODIAL_TERM' | 'LICENCE_PERIOD' | 'TARIFF_LENGTH' | 'TERM_LENGTH' | 'OVERALL_SENTENCE_LENGTH' | 'BREACH_OF_SUPERVISION_REQUIREMENTS' | 'BREACH_OF_IMPRISONABLE_OFFENCE' | 'UNSUPPORTED';
             auto: boolean;
-            periodLength?: components["schemas"]["PeriodLengthDetail"] | null;
+            periodLength?: components['schemas']['PeriodLengthDetail'] | null;
         };
         PeriodLengthDetail: {
             years: string;
             periodOrder: string[];
             /** @enum {string} */
-            periodLengthType: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "BREACH_OF_SUPERVISION_REQUIREMENTS" | "BREACH_OF_IMPRISONABLE_OFFENCE" | "UNSUPPORTED";
+            periodLengthType: 'SENTENCE_LENGTH' | 'CUSTODIAL_TERM' | 'LICENCE_PERIOD' | 'TARIFF_LENGTH' | 'TERM_LENGTH' | 'OVERALL_SENTENCE_LENGTH' | 'BREACH_OF_SUPERVISION_REQUIREMENTS' | 'BREACH_OF_IMPRISONABLE_OFFENCE' | 'UNSUPPORTED';
             description: string;
         };
         SentenceEligibility: {
             /** @enum {string|null} */
-            toreraEligibilityType?: "NONE" | "SOPC" | "SDS" | null;
+            toreraEligibilityType?: 'NONE' | 'SOPC' | 'SDS' | null;
             /** @enum {string|null} */
-            sdsPlusEligibilityType?: "NONE" | "SECTION250" | "SDS" | null;
+            sdsPlusEligibilityType?: 'NONE' | 'SECTION250' | 'SDS' | null;
         };
         SentenceTypeDetail: {
             /** Format: uuid */
@@ -4293,17 +4334,17 @@ export interface components {
             /** Format: date */
             maxOffenceDateExclusive?: string | null;
             /** @enum {string} */
-            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+            classification: 'STANDARD' | 'EXTENDED' | 'SOPC' | 'INDETERMINATE' | 'BOTUS' | 'CIVIL' | 'DTO' | 'FINE' | 'LEGACY' | 'NON_CUSTODIAL' | 'LEGACY_RECALL' | 'UNKNOWN';
             hintText?: string | null;
             nomisCjaCode: string;
             nomisSentenceCalcType: string;
             /** Format: int32 */
             displayOrder: number;
             /** @enum {string} */
-            status: "ACTIVE" | "INACTIVE" | "LEGACY";
+            status: 'ACTIVE' | 'INACTIVE' | 'LEGACY';
         };
         SentenceTypePeriodDefinitions: {
-            periodDefinitions: components["schemas"]["Period"][];
+            periodDefinitions: components['schemas']['Period'][];
         };
         LegacyRecall: {
             /** Format: uuid */
@@ -4315,7 +4356,7 @@ export interface components {
             revocationDate?: string | null;
             sentenceIds: string[];
             /** @enum {string} */
-            recallType: "LR" | "FTR_14" | "FTR_28" | "FTR_56" | "FTR_HDC_14" | "FTR_HDC_28" | "CUR_HDC" | "IN_HDC";
+            recallType: 'LR' | 'FTR_14' | 'FTR_28' | 'FTR_56' | 'FTR_HDC_14' | 'FTR_HDC_28' | 'CUR_HDC' | 'IN_HDC';
             recallBy: string;
         };
         LegacyCourtCaseUuids: {
@@ -4351,7 +4392,7 @@ export interface components {
             startDate?: string | null;
             courtId?: string | null;
             caseReference?: string | null;
-            caseReferences: components["schemas"]["CaseReferenceLegacyData"][];
+            caseReferences: components['schemas']['CaseReferenceLegacyData'][];
         };
         ReconciliationCharge: {
             /** Format: uuid */
@@ -4362,8 +4403,9 @@ export interface components {
             /** Format: date */
             offenceEndDate?: string | null;
             nomisOutcomeCode?: string | null;
-            legacyData?: components["schemas"]["ChargeLegacyData"] | null;
-            sentence?: components["schemas"]["ReconciliationSentence"] | null;
+            legacyData?: components['schemas']['ChargeLegacyData'] | null;
+            sentence?: components['schemas']['ReconciliationSentence'] | null;
+            value?: number | null;
         };
         ReconciliationCourtAppearance: {
             /** Format: uuid */
@@ -4371,15 +4413,15 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            /** @example 13:26:29.546940582 */
+            /** @example 13:52:49.521789056 */
             appearanceTime: string;
             nomisOutcomeCode?: string | null;
-            legacyData?: components["schemas"]["CourtAppearanceLegacyData"] | null;
-            nextCourtAppearance?: components["schemas"]["ReconciliationNextCourtAppearance"] | null;
+            legacyData?: components['schemas']['CourtAppearanceLegacyData'] | null;
+            nextCourtAppearance?: components['schemas']['ReconciliationNextCourtAppearance'] | null;
             /** Format: uuid */
             appearanceTypeUuid?: string | null;
             nomisAppearanceTypeCode: string;
-            charges: components["schemas"]["ReconciliationCharge"][];
+            charges: components['schemas']['ReconciliationCharge'][];
         };
         ReconciliationCourtCase: {
             courtCaseUuid: string;
@@ -4387,14 +4429,14 @@ export interface components {
             active: boolean;
             merged: boolean;
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MERGED" | "INACTIVE";
-            courtCaseLegacyData?: components["schemas"]["CourtCaseLegacyData"] | null;
-            appearances: components["schemas"]["ReconciliationCourtAppearance"][];
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MERGED' | 'INACTIVE';
+            courtCaseLegacyData?: components['schemas']['CourtCaseLegacyData'] | null;
+            appearances: components['schemas']['ReconciliationCourtAppearance'][];
         };
         ReconciliationNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 13:26:29.546940582 */
+            /** @example 13:52:49.521789056 */
             appearanceTime?: string | null;
             courtId: string;
         };
@@ -4411,7 +4453,7 @@ export interface components {
             periodDays?: number | null;
             lifeSentence?: boolean | null;
             sentenceTermCode: string;
-            legacyData?: components["schemas"]["PeriodLengthLegacyData"] | null;
+            legacyData?: components['schemas']['PeriodLengthLegacyData'] | null;
         };
         ReconciliationSentence: {
             /** Format: uuid */
@@ -4422,10 +4464,10 @@ export interface components {
             active: boolean;
             /** Format: date */
             sentenceStartDate: string;
-            legacyData?: components["schemas"]["SentenceLegacyData"] | null;
+            legacyData?: components['schemas']['SentenceLegacyData'] | null;
             /** Format: uuid */
             consecutiveToSentenceUuid?: string | null;
-            periodLengths: components["schemas"]["ReconciliationPeriodLength"][];
+            periodLengths: components['schemas']['ReconciliationPeriodLength'][];
         };
         LegacyCharge: {
             prisonerId: string;
@@ -4438,7 +4480,7 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            legacyData?: components["schemas"]["ChargeLegacyData"] | null;
+            legacyData?: components['schemas']['ChargeLegacyData'] | null;
             value?: number | null;
         };
         LegacyCourtAppearance: {
@@ -4450,10 +4492,10 @@ export interface components {
             courtCode: string;
             /** Format: date */
             appearanceDate: string;
-            /** @example 13:26:29.546940582 */
+            /** @example 13:52:49.521789056 */
             appearanceTime: string;
-            charges: components["schemas"]["LegacyCharge"][];
-            nextCourtAppearance?: components["schemas"]["LegacyNextCourtAppearance"] | null;
+            charges: components['schemas']['LegacyCharge'][];
+            nextCourtAppearance?: components['schemas']['LegacyNextCourtAppearance'] | null;
             /** Format: uuid */
             appearanceTypeUuid?: string | null;
             nomisAppearanceTypeCode: string;
@@ -4462,7 +4504,7 @@ export interface components {
         LegacyNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 13:26:29.546940582 */
+            /** @example 13:52:49.521789056 */
             appearanceTime?: string | null;
             courtId: string;
         };
@@ -4473,17 +4515,17 @@ export interface components {
             courtAppearanceUuid: string;
             prisonerId: string;
             /** @enum {string} */
-            immigrationDetentionRecordType: "IS91" | "DEPORTATION_ORDER" | "NO_LONGER_OF_INTEREST" | "IMMIGRATION_BAIL" | "UNKNOWN";
+            immigrationDetentionRecordType: 'IS91' | 'DEPORTATION_ORDER' | 'NO_LONGER_OF_INTEREST' | 'IMMIGRATION_BAIL' | 'UNKNOWN';
             /** Format: date */
             recordDate: string;
             homeOfficeReferenceNumber?: string | null;
             /** @enum {string|null} */
-            noLongerOfInterestReason?: "BRITISH_CITIZEN" | "RIGHT_TO_REMAIN" | "OTHER_REASON" | null;
+            noLongerOfInterestReason?: 'BRITISH_CITIZEN' | 'RIGHT_TO_REMAIN' | 'OTHER_REASON' | null;
             noLongerOfInterestComment?: string | null;
             /** Format: date-time */
             createdAt: string;
             /** @enum {string} */
-            source: "NOMIS" | "DPS";
+            source: 'NOMIS' | 'DPS';
         };
         F986EligibleCourtAppearance: {
             /** Format: uuid */
@@ -4492,7 +4534,7 @@ export interface components {
             warrantDate: string;
             courtCode: string;
             caseReference?: string | null;
-            offences: components["schemas"]["F986EligibleCourtAppearanceOffence"][];
+            offences: components['schemas']['F986EligibleCourtAppearanceOffence'][];
         };
         F986EligibleCourtAppearanceOffence: {
             offenceCode: string;
@@ -4506,9 +4548,9 @@ export interface components {
             reference: string;
             courtCode: string;
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MERGED" | "INACTIVE";
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MERGED' | 'INACTIVE';
             isSentenced: boolean;
-            sentences: components["schemas"]["RecallableCourtCaseSentence"][];
+            sentences: components['schemas']['RecallableCourtCaseSentence'][];
             /** Format: date */
             appearanceDate: string;
             /** Format: date */
@@ -4525,17 +4567,17 @@ export interface components {
             outcome?: string | null;
             sentenceType?: string | null;
             /** @enum {string|null} */
-            classification?: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN" | null;
+            classification?: 'STANDARD' | 'EXTENDED' | 'SOPC' | 'INDETERMINATE' | 'BOTUS' | 'CIVIL' | 'DTO' | 'FINE' | 'LEGACY' | 'NON_CUSTODIAL' | 'LEGACY_RECALL' | 'UNKNOWN' | null;
             systemOfRecord: string;
             fineAmount?: number | null;
-            periodLengths: components["schemas"]["PeriodLength"][];
+            periodLengths: components['schemas']['PeriodLength'][];
             /** Format: date */
             convictionDate?: string | null;
-            chargeLegacyData?: components["schemas"]["ChargeLegacyData"] | null;
+            chargeLegacyData?: components['schemas']['ChargeLegacyData'] | null;
             countNumber?: string | null;
             lineNumber?: string | null;
             sentenceServeType?: string | null;
-            sentenceLegacyData?: components["schemas"]["SentenceLegacyData"] | null;
+            sentenceLegacyData?: components['schemas']['SentenceLegacyData'] | null;
             outcomeDescription?: string | null;
             isRecallable: boolean;
             sentenceTypeUuid: string;
@@ -4545,11 +4587,12 @@ export interface components {
             consecutiveToSentenceUuid?: string | null;
             /** Format: date-time */
             createdAt: string;
-            aggravatingFactors: components["schemas"]["AggravatingFactor"][];
+            aggravatingFactors: components['schemas']['AggravatingFactor'][];
             findingOfDomesticAbuse?: boolean | null;
+            value?: number | null;
         };
         RecallableCourtCasesResponse: {
-            cases: components["schemas"]["RecallableCourtCase"][];
+            cases: components['schemas']['RecallableCourtCase'][];
         };
         CourtCaseValidationDate: {
             /** Format: date */
@@ -4560,7 +4603,7 @@ export interface components {
             latestSentenceAppearanceDate?: string | null;
         };
         SentencedCharges: {
-            charges: components["schemas"]["Charge"][];
+            charges: components['schemas']['Charge'][];
         };
         LatestOffenceDate: {
             /** Format: date */
@@ -4570,7 +4613,7 @@ export interface components {
             countNumber: string;
         };
         CourtCaseCountNumbers: {
-            countNumbers: components["schemas"]["CourtCaseCountNumber"][];
+            countNumbers: components['schemas']['CourtCaseCountNumber'][];
         };
         Pageable: {
             /** Format: int32 */
@@ -4587,7 +4630,7 @@ export interface components {
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            sort?: components["schemas"]["SortObject"];
+            sort?: components['schemas']['SortObject'];
             unpaged?: boolean;
         };
         PagedAppearancePeriodLength: {
@@ -4603,7 +4646,7 @@ export interface components {
             days?: number | null;
             order: string;
             /** @enum {string} */
-            type: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "BREACH_OF_SUPERVISION_REQUIREMENTS" | "BREACH_OF_IMPRISONABLE_OFFENCE" | "UNSUPPORTED";
+            type: 'SENTENCE_LENGTH' | 'CUSTODIAL_TERM' | 'LICENCE_PERIOD' | 'TARIFF_LENGTH' | 'TERM_LENGTH' | 'OVERALL_SENTENCE_LENGTH' | 'BREACH_OF_SUPERVISION_REQUIREMENTS' | 'BREACH_OF_IMPRISONABLE_OFFENCE' | 'UNSUPPORTED';
         };
         PagedCharge: {
             /** Format: uuid */
@@ -4613,11 +4656,11 @@ export interface components {
             offenceStartDate?: string | null;
             /** Format: date */
             offenceEndDate?: string | null;
-            aggravatingFactors?: components["schemas"]["AggravatingFactor"][] | null;
-            outcome?: components["schemas"]["PagedChargeOutcome"] | null;
-            legacyData?: components["schemas"]["ChargeLegacyData"] | null;
-            sentence?: components["schemas"]["PagedSentence"] | null;
-            mergedFromCase?: components["schemas"]["PagedMergedFromCase"] | null;
+            aggravatingFactors?: components['schemas']['AggravatingFactor'][] | null;
+            outcome?: components['schemas']['PagedChargeOutcome'] | null;
+            legacyData?: components['schemas']['ChargeLegacyData'] | null;
+            sentence?: components['schemas']['PagedSentence'] | null;
+            mergedFromCase?: components['schemas']['PagedMergedFromCase'] | null;
             /** Format: date-time */
             createdAt: string;
             findingOfDomesticAbuse?: boolean | null;
@@ -4632,17 +4675,17 @@ export interface components {
             prisonerId: string;
             courtCaseUuid: string;
             /** @enum {string} */
-            courtCaseStatus: "ACTIVE" | "DUPLICATE" | "DELETED" | "MERGED" | "INACTIVE";
-            legacyData?: components["schemas"]["CourtCaseLegacyData"] | null;
+            courtCaseStatus: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MERGED' | 'INACTIVE';
+            legacyData?: components['schemas']['CourtCaseLegacyData'] | null;
             /** Format: int64 */
             appearanceCount: number;
             caseReferences: string[];
             /** Format: date */
             firstDayInCustody: string;
-            latestCourtAppearance: components["schemas"]["PagedLatestCourtAppearance"];
-            mergedFromCases: components["schemas"]["PagedMergedFromCase"][];
+            latestCourtAppearance: components['schemas']['PagedLatestCourtAppearance'];
+            mergedFromCases: components['schemas']['PagedMergedFromCase'][];
             allAppearancesHaveRecall: boolean;
-            mergedToCase?: components["schemas"]["PagedMergedToCase"] | null;
+            mergedToCase?: components['schemas']['PagedMergedToCase'] | null;
             firstDayInCustodyWarrantType: string;
             canAppeal: boolean;
             canBreach: boolean;
@@ -4662,10 +4705,10 @@ export interface components {
             outcome?: string | null;
             /** Format: date */
             convictionDate?: string | null;
-            legacyData?: components["schemas"]["CourtAppearanceLegacyData"] | null;
-            nextCourtAppearance?: components["schemas"]["PagedNextCourtAppearance"] | null;
-            charges: components["schemas"]["PagedCharge"][];
-            periodLengths: components["schemas"]["PagedAppearancePeriodLength"][];
+            legacyData?: components['schemas']['CourtAppearanceLegacyData'] | null;
+            nextCourtAppearance?: components['schemas']['PagedNextCourtAppearance'] | null;
+            charges: components['schemas']['PagedCharge'][];
+            periodLengths: components['schemas']['PagedAppearancePeriodLength'][];
         };
         PagedMergedFromCase: {
             /** Format: uuid */
@@ -4690,13 +4733,13 @@ export interface components {
         PagedNextCourtAppearance: {
             /** Format: date */
             appearanceDate: string;
-            /** @example 13:26:29.546940582 */
+            /** @example 13:52:49.521789056 */
             appearanceTime?: string | null;
             courtCode?: string | null;
             appearanceTypeDescription: string;
             appearanceSubtypeDescription?: string | null;
             /** Format: uuid */
-            futureSkeletonAppearanceUuid: string;
+            futureSkeletonAppearanceUuid?: string | null;
         };
         PagedSentence: {
             /** Format: uuid */
@@ -4707,13 +4750,13 @@ export interface components {
             consecutiveToSentenceUuid?: string | null;
             /** Format: date */
             convictionDate?: string | null;
-            sentenceType?: components["schemas"]["PagedSentenceType"] | null;
-            legacyData?: components["schemas"]["SentenceLegacyData"] | null;
+            sentenceType?: components['schemas']['PagedSentenceType'] | null;
+            legacyData?: components['schemas']['SentenceLegacyData'] | null;
             fineAmount?: number | null;
-            periodLengths: components["schemas"]["PagedSentencePeriodLength"][];
+            periodLengths: components['schemas']['PagedSentencePeriodLength'][];
             hasRecall: boolean;
             /** @enum {string} */
-            status: "ACTIVE" | "DUPLICATE" | "DELETED" | "MANY_CHARGES_DATA_FIX" | "INACTIVE";
+            status: 'ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MANY_CHARGES_DATA_FIX' | 'INACTIVE';
         };
         PagedSentencePeriodLength: {
             /** Format: uuid */
@@ -4728,19 +4771,19 @@ export interface components {
             days?: number | null;
             order: string;
             /** @enum {string|null} */
-            type?: "SENTENCE_LENGTH" | "CUSTODIAL_TERM" | "LICENCE_PERIOD" | "TARIFF_LENGTH" | "TERM_LENGTH" | "OVERALL_SENTENCE_LENGTH" | "BREACH_OF_SUPERVISION_REQUIREMENTS" | "BREACH_OF_IMPRISONABLE_OFFENCE" | "UNSUPPORTED" | null;
-            legacyData?: components["schemas"]["PeriodLengthLegacyData"] | null;
+            type?: 'SENTENCE_LENGTH' | 'CUSTODIAL_TERM' | 'LICENCE_PERIOD' | 'TARIFF_LENGTH' | 'TERM_LENGTH' | 'OVERALL_SENTENCE_LENGTH' | 'BREACH_OF_SUPERVISION_REQUIREMENTS' | 'BREACH_OF_IMPRISONABLE_OFFENCE' | 'UNSUPPORTED' | null;
+            legacyData?: components['schemas']['PeriodLengthLegacyData'] | null;
         };
         PagedSentenceType: {
             /** Format: uuid */
             sentenceTypeUuid: string;
             description: string;
             /** @enum {string} */
-            classification: "STANDARD" | "EXTENDED" | "SOPC" | "INDETERMINATE" | "BOTUS" | "CIVIL" | "DTO" | "FINE" | "LEGACY" | "NON_CUSTODIAL" | "LEGACY_RECALL" | "UNKNOWN";
+            classification: 'STANDARD' | 'EXTENDED' | 'SOPC' | 'INDETERMINATE' | 'BOTUS' | 'CIVIL' | 'DTO' | 'FINE' | 'LEGACY' | 'NON_CUSTODIAL' | 'LEGACY_RECALL' | 'UNKNOWN';
         };
         SearchCourtCasesPage: {
-            content?: components["schemas"]["PagedCourtCase"][];
-            pageable?: components["schemas"]["PageableObject"];
+            content?: components['schemas']['PagedCourtCase'][];
+            pageable?: components['schemas']['PageableObject'];
             /** Format: int64 */
             total?: number;
             /** Format: int64 */
@@ -4755,8 +4798,8 @@ export interface components {
             size?: number;
             /** Format: int32 */
             number?: number;
+            sort?: components['schemas']['SortObject'];
             first?: boolean;
-            sort?: components["schemas"]["SortObject"];
             /** Format: int32 */
             numberOfElements?: number;
             empty?: boolean;
@@ -4768,7 +4811,7 @@ export interface components {
         };
         DeleteCourtAppearanceScheduleStatus: {
             /** @enum {string} */
-            status: "SUPPORTED" | "NOT_SUPPORTED";
+            status: 'SUPPORTED' | 'NOT_SUPPORTED';
         };
         DeleteRecallResponse: {
             /** Format: uuid */
@@ -4796,7 +4839,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ConfirmConsecutiveToSentenceFixes"];
+                'application/json': components['schemas']['ConfirmConsecutiveToSentenceFixes'];
             };
         };
         responses: {
@@ -4840,7 +4883,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceType"];
+                    'application/json': components['schemas']['SentenceType'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -4849,7 +4892,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceType"];
+                    'application/json': components['schemas']['SentenceType'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -4858,7 +4901,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceType"];
+                    'application/json': components['schemas']['SentenceType'];
                 };
             };
             /** @description Not found if no sentence type at uuid */
@@ -4867,7 +4910,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceType"];
+                    'application/json': components['schemas']['SentenceType'];
                 };
             };
         };
@@ -4883,7 +4926,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateSentenceType"];
+                'application/json': components['schemas']['CreateSentenceType'];
             };
         };
         responses: {
@@ -4893,7 +4936,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
             /** @description Bad request */
@@ -4902,7 +4945,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FieldErrorErrorResponse"];
+                    'application/json': components['schemas']['FieldErrorErrorResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -4911,7 +4954,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -4920,14 +4963,16 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
         };
     };
     getRecall: {
         parameters: {
-            query?: never;
+            query?: {
+                groupNomisRecalls?: boolean;
+            };
             header?: never;
             path: {
                 recallUuid: string;
@@ -4942,7 +4987,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Recall"];
+                    'application/json': components['schemas']['Recall'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -4951,7 +4996,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Recall"];
+                    'application/json': components['schemas']['Recall'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -4960,7 +5005,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Recall"];
+                    'application/json': components['schemas']['Recall'];
                 };
             };
             /** @description Not found if no recall uuid */
@@ -4969,7 +5014,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Recall"];
+                    'application/json': components['schemas']['Recall'];
                 };
             };
         };
@@ -4985,7 +5030,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateRecall"];
+                'application/json': components['schemas']['CreateRecall'];
             };
         };
         responses: {
@@ -4995,7 +5040,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveRecallResponse"];
+                    'application/json': components['schemas']['SaveRecallResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5004,7 +5049,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveRecallResponse"];
+                    'application/json': components['schemas']['SaveRecallResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5013,7 +5058,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveRecallResponse"];
+                    'application/json': components['schemas']['SaveRecallResponse'];
                 };
             };
         };
@@ -5035,7 +5080,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeleteRecallResponse"];
+                    'application/json': components['schemas']['DeleteRecallResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5044,7 +5089,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeleteRecallResponse"];
+                    'application/json': components['schemas']['DeleteRecallResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5053,7 +5098,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeleteRecallResponse"];
+                    'application/json': components['schemas']['DeleteRecallResponse'];
                 };
             };
         };
@@ -5075,7 +5120,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["RetryDlqResult"];
+                    '*/*': components['schemas']['RetryDlqResult'];
                 };
             };
         };
@@ -5095,7 +5140,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["RetryDlqResult"][];
+                    '*/*': components['schemas']['RetryDlqResult'][];
                 };
             };
         };
@@ -5117,7 +5162,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["PurgeQueueResult"];
+                    '*/*': components['schemas']['PurgeQueueResult'];
                 };
             };
         };
@@ -5139,7 +5184,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonFixManyChargesToSentence"];
+                    'application/json': components['schemas']['PersonFixManyChargesToSentence'];
                 };
             };
             /** @description Unauthorised */
@@ -5148,7 +5193,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonFixManyChargesToSentence"];
+                    'application/json': components['schemas']['PersonFixManyChargesToSentence'];
                 };
             };
             /** @description Forbidden */
@@ -5157,7 +5202,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonFixManyChargesToSentence"];
+                    'application/json': components['schemas']['PersonFixManyChargesToSentence'];
                 };
             };
         };
@@ -5179,7 +5224,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentence"];
+                    'application/json': components['schemas']['LegacySentence'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5188,7 +5233,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentence"];
+                    'application/json': components['schemas']['LegacySentence'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5197,7 +5242,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentence"];
+                    'application/json': components['schemas']['LegacySentence'];
                 };
             };
         };
@@ -5213,7 +5258,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreateSentence"];
+                'application/json': components['schemas']['LegacyCreateSentence'];
             };
         };
         responses: {
@@ -5287,7 +5332,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyUpdateSentenceBookingId"];
+                'application/json': components['schemas']['LegacyUpdateSentenceBookingId'];
             };
         };
         responses: {
@@ -5338,7 +5383,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyPeriodLength"];
+                    'application/json': components['schemas']['LegacyPeriodLength'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5347,7 +5392,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyPeriodLength"];
+                    'application/json': components['schemas']['LegacyPeriodLength'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5356,7 +5401,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyPeriodLength"];
+                    'application/json': components['schemas']['LegacyPeriodLength'];
                 };
             };
             /** @description Not found: Period length either doesn't exist, has no sentence, or is deleted */
@@ -5365,7 +5410,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyPeriodLength"];
+                    'application/json': components['schemas']['LegacyPeriodLength'];
                 };
             };
         };
@@ -5381,7 +5426,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreatePeriodLength"];
+                'application/json': components['schemas']['LegacyCreatePeriodLength'];
             };
         };
         responses: {
@@ -5463,7 +5508,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["LegacyUnlinkCase"];
+                'application/json': components['schemas']['LegacyUnlinkCase'];
             };
         };
         responses: {
@@ -5473,7 +5518,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5482,7 +5527,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5491,7 +5536,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
         };
@@ -5508,7 +5553,7 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["LegacyLinkCase"];
+                'application/json': components['schemas']['LegacyLinkCase'];
             };
         };
         responses: {
@@ -5518,7 +5563,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5527,7 +5572,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5536,7 +5581,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
         };
@@ -5558,7 +5603,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCase"];
+                    'application/json': components['schemas']['LegacyCourtCase'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5567,7 +5612,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCase"];
+                    'application/json': components['schemas']['LegacyCourtCase'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5576,7 +5621,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCase"];
+                    'application/json': components['schemas']['LegacyCourtCase'];
                 };
             };
             /** @description Not found if no court case at uuid */
@@ -5585,7 +5630,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCase"];
+                    'application/json': components['schemas']['LegacyCourtCase'];
                 };
             };
         };
@@ -5601,7 +5646,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreateCourtCase"];
+                'application/json': components['schemas']['LegacyCreateCourtCase'];
             };
         };
         responses: {
@@ -5675,7 +5720,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RefreshCaseReferences"];
+                'application/json': components['schemas']['RefreshCaseReferences'];
             };
         };
         responses: {
@@ -5719,7 +5764,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtAppearance"];
+                    'application/json': components['schemas']['LegacyCourtAppearance'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5728,7 +5773,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtAppearance"];
+                    'application/json': components['schemas']['LegacyCourtAppearance'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5737,7 +5782,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtAppearance"];
+                    'application/json': components['schemas']['LegacyCourtAppearance'];
                 };
             };
             /** @description Not found if no court appearance at uuid */
@@ -5746,7 +5791,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtAppearance"];
+                    'application/json': components['schemas']['LegacyCourtAppearance'];
                 };
             };
         };
@@ -5762,7 +5807,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreateCourtAppearance"];
+                'application/json': components['schemas']['LegacyCreateCourtAppearance'];
             };
         };
         responses: {
@@ -5843,7 +5888,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCharge"];
+                    'application/json': components['schemas']['LegacyCharge'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5852,7 +5897,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCharge"];
+                    'application/json': components['schemas']['LegacyCharge'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5861,7 +5906,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCharge"];
+                    'application/json': components['schemas']['LegacyCharge'];
                 };
             };
         };
@@ -5878,7 +5923,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyUpdateCharge"];
+                'application/json': components['schemas']['LegacyUpdateCharge'];
             };
         };
         responses: {
@@ -5954,7 +5999,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyLinkChargeToCase"];
+                'application/json': components['schemas']['LegacyLinkChargeToCase'];
             };
         };
         responses: {
@@ -5964,7 +6009,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -5973,7 +6018,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -5982,7 +6027,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventMetadata"][];
+                    'application/json': components['schemas']['EventMetadata'][];
                 };
             };
         };
@@ -6004,7 +6049,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCharge"];
+                    'application/json': components['schemas']['LegacyCharge'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6013,7 +6058,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCharge"];
+                    'application/json': components['schemas']['LegacyCharge'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6022,7 +6067,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCharge"];
+                    'application/json': components['schemas']['LegacyCharge'];
                 };
             };
         };
@@ -6038,7 +6083,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyUpdateWholeCharge"];
+                'application/json': components['schemas']['LegacyUpdateWholeCharge'];
             };
         };
         responses: {
@@ -6077,7 +6122,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyUpdateCharge"];
+                'application/json': components['schemas']['LegacyUpdateCharge'];
             };
         };
         responses: {
@@ -6121,7 +6166,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"];
+                    'application/json': components['schemas']['ImmigrationDetention'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6130,7 +6175,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"];
+                    'application/json': components['schemas']['ImmigrationDetention'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6139,7 +6184,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"];
+                    'application/json': components['schemas']['ImmigrationDetention'];
                 };
             };
             /** @description Not found if no immigration detention uuid */
@@ -6148,7 +6193,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"];
+                    'application/json': components['schemas']['ImmigrationDetention'];
                 };
             };
         };
@@ -6164,7 +6209,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateImmigrationDetention"];
+                'application/json': components['schemas']['CreateImmigrationDetention'];
             };
         };
         responses: {
@@ -6174,7 +6219,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['SaveImmigrationDetentionResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6183,7 +6228,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['SaveImmigrationDetentionResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6192,7 +6237,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['SaveImmigrationDetentionResponse'];
                 };
             };
         };
@@ -6214,7 +6259,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeleteImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['DeleteImmigrationDetentionResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6223,7 +6268,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeleteImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['DeleteImmigrationDetentionResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6232,7 +6277,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeleteImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['DeleteImmigrationDetentionResponse'];
                 };
             };
             /** @description Immigration Detention not found */
@@ -6241,7 +6286,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DeleteImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['DeleteImmigrationDetentionResponse'];
                 };
             };
         };
@@ -6257,7 +6302,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateHmctsResultCode"];
+                'application/json': components['schemas']['CreateHmctsResultCode'];
             };
         };
         responses: {
@@ -6267,7 +6312,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
             /** @description Bad request */
@@ -6276,7 +6321,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FieldErrorErrorResponse"];
+                    'application/json': components['schemas']['FieldErrorErrorResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6285,7 +6330,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6294,7 +6339,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
         };
@@ -6316,7 +6361,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCase"];
+                    'application/json': components['schemas']['CourtCase'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6325,7 +6370,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCase"];
+                    'application/json': components['schemas']['CourtCase'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6334,7 +6379,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCase"];
+                    'application/json': components['schemas']['CourtCase'];
                 };
             };
             /** @description Not found if no court case at uuid */
@@ -6343,7 +6388,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCase"];
+                    'application/json': components['schemas']['CourtCase'];
                 };
             };
         };
@@ -6359,7 +6404,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateCourtCase"];
+                'application/json': components['schemas']['CreateCourtCase'];
             };
         };
         responses: {
@@ -6369,7 +6414,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                    'application/json': components['schemas']['CreateCourtCaseResponse'];
                 };
             };
             /** @description Returns court case UUID */
@@ -6378,7 +6423,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                    'application/json': components['schemas']['CreateCourtCaseResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6387,7 +6432,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                    'application/json': components['schemas']['CreateCourtCaseResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6396,7 +6441,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                    'application/json': components['schemas']['CreateCourtCaseResponse'];
                 };
             };
         };
@@ -6412,7 +6457,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateCourtCaseStatus"];
+                'application/json': components['schemas']['UpdateCourtCaseStatus'];
             };
         };
         responses: {
@@ -6464,7 +6509,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CourtCaseLegacyData"];
+                'application/json': components['schemas']['CourtCaseLegacyData'];
             };
         };
         responses: {
@@ -6508,7 +6553,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearance"];
+                    '*/*': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6517,7 +6562,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearance"];
+                    '*/*': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6526,7 +6571,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearance"];
+                    '*/*': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Not found if no court appearance at uuid */
@@ -6535,7 +6580,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearance"];
+                    '*/*': components['schemas']['CourtAppearance'];
                 };
             };
         };
@@ -6551,7 +6596,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateCourtAppearance"];
+                'application/json': components['schemas']['CreateCourtAppearance'];
             };
         };
         responses: {
@@ -6561,7 +6606,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                    '*/*': components['schemas']['CreateCourtAppearanceResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6570,7 +6615,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                    '*/*': components['schemas']['CreateCourtAppearanceResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6579,7 +6624,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                    '*/*': components['schemas']['CreateCourtAppearanceResponse'];
                 };
             };
         };
@@ -6636,7 +6681,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateCourtAppearanceSchedule"];
+                'application/json': components['schemas']['UpdateCourtAppearanceSchedule'];
             };
         };
         responses: {
@@ -6694,7 +6739,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Charge"];
+                    '*/*': components['schemas']['Charge'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6703,7 +6748,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Charge"];
+                    '*/*': components['schemas']['Charge'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6712,7 +6757,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Charge"];
+                    '*/*': components['schemas']['Charge'];
                 };
             };
             /** @description Not found if no charge at uuid */
@@ -6721,7 +6766,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Charge"];
+                    '*/*': components['schemas']['Charge'];
                 };
             };
         };
@@ -6737,7 +6782,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateCharge"];
+                'application/json': components['schemas']['CreateCharge'];
             };
         };
         responses: {
@@ -6747,7 +6792,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateChargeResponse"];
+                    '*/*': components['schemas']['CreateChargeResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6756,7 +6801,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateChargeResponse"];
+                    '*/*': components['schemas']['CreateChargeResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6765,7 +6810,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateChargeResponse"];
+                    '*/*': components['schemas']['CreateChargeResponse'];
                 };
             };
         };
@@ -6781,7 +6826,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateChargeOutcome"];
+                'application/json': components['schemas']['CreateChargeOutcome'];
             };
         };
         responses: {
@@ -6791,7 +6836,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
             /** @description Bad request */
@@ -6800,7 +6845,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FieldErrorErrorResponse"];
+                    'application/json': components['schemas']['FieldErrorErrorResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6809,7 +6854,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6818,7 +6863,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
         };
@@ -6834,7 +6879,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateAppearanceOutcome"];
+                'application/json': components['schemas']['CreateAppearanceOutcome'];
             };
         };
         responses: {
@@ -6844,7 +6889,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
             /** @description Bad request */
@@ -6853,7 +6898,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FieldErrorErrorResponse"];
+                    'application/json': components['schemas']['FieldErrorErrorResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -6862,7 +6907,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -6871,7 +6916,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
         };
@@ -6885,7 +6930,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateUploadedDocument"];
+                'application/json': components['schemas']['CreateUploadedDocument'];
             };
         };
         responses: {
@@ -6921,7 +6966,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["ConsecutiveChainValidationRequest"];
+                'application/json': components['schemas']['ConsecutiveChainValidationRequest'];
             };
         };
         responses: {
@@ -6931,7 +6976,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": boolean;
+                    '*/*': boolean;
                 };
             };
             /** @description Invalid input */
@@ -6940,7 +6985,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": boolean;
+                    '*/*': boolean;
                 };
             };
             /** @description Unauthorized */
@@ -6949,7 +6994,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": boolean;
+                    '*/*': boolean;
                 };
             };
             /** @description Forbidden */
@@ -6958,7 +7003,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": boolean;
+                    '*/*': boolean;
                 };
             };
         };
@@ -6972,7 +7017,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateSentenceType"];
+                'application/json': components['schemas']['CreateSentenceType'];
             };
         };
         responses: {
@@ -6982,7 +7027,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
             /** @description Bad request */
@@ -6991,7 +7036,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FieldErrorErrorResponse"];
+                    'application/json': components['schemas']['FieldErrorErrorResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7000,7 +7045,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7009,7 +7054,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
         };
@@ -7023,7 +7068,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SearchCourtAppearanceSchedulesRequest"];
+                'application/json': components['schemas']['SearchCourtAppearanceSchedulesRequest'];
             };
         };
         responses: {
@@ -7033,7 +7078,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearanceSchedulesResponse"];
+                    '*/*': components['schemas']['CourtAppearanceSchedulesResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7042,7 +7087,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearanceSchedulesResponse"];
+                    '*/*': components['schemas']['CourtAppearanceSchedulesResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7051,7 +7096,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearanceSchedulesResponse"];
+                    '*/*': components['schemas']['CourtAppearanceSchedulesResponse'];
                 };
             };
         };
@@ -7065,7 +7110,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateRecall"];
+                'application/json': components['schemas']['CreateRecall'];
             };
         };
         responses: {
@@ -7075,7 +7120,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveRecallResponse"];
+                    'application/json': components['schemas']['SaveRecallResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7084,7 +7129,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveRecallResponse"];
+                    'application/json': components['schemas']['SaveRecallResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7093,7 +7138,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveRecallResponse"];
+                    'application/json': components['schemas']['SaveRecallResponse'];
                 };
             };
         };
@@ -7107,7 +7152,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["IsRecallPossibleRequest"];
+                'application/json': components['schemas']['IsRecallPossibleRequest'];
             };
         };
         responses: {
@@ -7117,7 +7162,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["IsRecallPossibleResponse"];
+                    'application/json': components['schemas']['IsRecallPossibleResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7126,7 +7171,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["IsRecallPossibleResponse"];
+                    'application/json': components['schemas']['IsRecallPossibleResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7135,7 +7180,58 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["IsRecallPossibleResponse"];
+                    'application/json': components['schemas']['IsRecallPossibleResponse'];
+                };
+            };
+        };
+    };
+    getPeopleStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                'application/json': components['schemas']['PeopleStatusRequest'];
+            };
+        };
+        responses: {
+            /** @description Returns person status indicators for a list of people */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    'application/json': components['schemas']['PeopleStatus'];
+                };
+            };
+            /** @description Malformed request such as empty personIds */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    'application/json': components['schemas']['PeopleStatus'];
+                };
+            };
+            /** @description Unauthorised, requires a valid Oauth2 token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    'application/json': components['schemas']['PeopleStatus'];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    'application/json': components['schemas']['PeopleStatus'];
                 };
             };
         };
@@ -7149,7 +7245,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["FixSingleSentenceMultipleChargesPeople"];
+                'application/json': components['schemas']['FixSingleSentenceMultipleChargesPeople'];
             };
         };
         responses: {
@@ -7189,7 +7285,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreateSentence"];
+                'application/json': components['schemas']['LegacyCreateSentence'];
             };
         };
         responses: {
@@ -7199,7 +7295,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceCreatedResponse"];
+                    'application/json': components['schemas']['LegacySentenceCreatedResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7208,7 +7304,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceCreatedResponse"];
+                    'application/json': components['schemas']['LegacySentenceCreatedResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7217,7 +7313,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceCreatedResponse"];
+                    'application/json': components['schemas']['LegacySentenceCreatedResponse'];
                 };
             };
             /** @description Unprocessable entity, charge must not be already sentenced */
@@ -7226,7 +7322,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceCreatedResponse"];
+                    'application/json': components['schemas']['LegacySentenceCreatedResponse'];
                 };
             };
         };
@@ -7240,7 +7336,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacySearchSentence"];
+                'application/json': components['schemas']['LegacySearchSentence'];
             };
         };
         responses: {
@@ -7250,7 +7346,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentence"][];
+                    'application/json': components['schemas']['LegacySentence'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7259,7 +7355,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentence"][];
+                    'application/json': components['schemas']['LegacySentence'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7268,7 +7364,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentence"][];
+                    'application/json': components['schemas']['LegacySentence'][];
                 };
             };
         };
@@ -7282,7 +7378,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreatePeriodLength"];
+                'application/json': components['schemas']['LegacyCreatePeriodLength'];
             };
         };
         responses: {
@@ -7292,7 +7388,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyPeriodLengthCreatedResponse"];
+                    'application/json': components['schemas']['LegacyPeriodLengthCreatedResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7301,7 +7397,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyPeriodLengthCreatedResponse"];
+                    'application/json': components['schemas']['LegacyPeriodLengthCreatedResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7310,7 +7406,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyPeriodLengthCreatedResponse"];
+                    'application/json': components['schemas']['LegacyPeriodLengthCreatedResponse'];
                 };
             };
         };
@@ -7324,7 +7420,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreateCourtCase"];
+                'application/json': components['schemas']['LegacyCreateCourtCase'];
             };
         };
         responses: {
@@ -7334,7 +7430,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCaseCreatedResponse"];
+                    'application/json': components['schemas']['LegacyCourtCaseCreatedResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7343,7 +7439,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCaseCreatedResponse"];
+                    'application/json': components['schemas']['LegacyCourtCaseCreatedResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7352,7 +7448,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCaseCreatedResponse"];
+                    'application/json': components['schemas']['LegacyCourtCaseCreatedResponse'];
                 };
             };
         };
@@ -7368,7 +7464,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["MigrationCreateCourtCases"];
+                'application/json': components['schemas']['MigrationCreateCourtCases'];
             };
         };
         responses: {
@@ -7378,7 +7474,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MigrationCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['MigrationCreateCourtCasesResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7387,7 +7483,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MigrationCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['MigrationCreateCourtCasesResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7396,7 +7492,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MigrationCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['MigrationCreateCourtCasesResponse'];
                 };
             };
         };
@@ -7412,7 +7508,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["MergePerson"];
+                'application/json': components['schemas']['MergePerson'];
             };
         };
         responses: {
@@ -7422,7 +7518,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MergeCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['MergeCreateCourtCasesResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7431,7 +7527,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MergeCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['MergeCreateCourtCasesResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7440,7 +7536,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MergeCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['MergeCreateCourtCasesResponse'];
                 };
             };
         };
@@ -7454,7 +7550,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["BookingCreateCourtCases"];
+                'application/json': components['schemas']['BookingCreateCourtCases'];
             };
         };
         responses: {
@@ -7464,7 +7560,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BookingCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['BookingCreateCourtCasesResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7473,7 +7569,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BookingCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['BookingCreateCourtCasesResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7482,7 +7578,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BookingCreateCourtCasesResponse"];
+                    'application/json': components['schemas']['BookingCreateCourtCasesResponse'];
                 };
             };
         };
@@ -7496,7 +7592,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreateCourtAppearance"];
+                'application/json': components['schemas']['LegacyCreateCourtAppearance'];
             };
         };
         responses: {
@@ -7506,7 +7602,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtAppearanceCreatedResponse"];
+                    'application/json': components['schemas']['LegacyCourtAppearanceCreatedResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7515,7 +7611,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtAppearanceCreatedResponse"];
+                    'application/json': components['schemas']['LegacyCourtAppearanceCreatedResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7524,7 +7620,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtAppearanceCreatedResponse"];
+                    'application/json': components['schemas']['LegacyCourtAppearanceCreatedResponse'];
                 };
             };
         };
@@ -7538,7 +7634,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["LegacyCreateCharge"];
+                'application/json': components['schemas']['LegacyCreateCharge'];
             };
         };
         responses: {
@@ -7548,7 +7644,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyChargeCreatedResponse"];
+                    'application/json': components['schemas']['LegacyChargeCreatedResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7557,7 +7653,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyChargeCreatedResponse"];
+                    'application/json': components['schemas']['LegacyChargeCreatedResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7566,7 +7662,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyChargeCreatedResponse"];
+                    'application/json': components['schemas']['LegacyChargeCreatedResponse'];
                 };
             };
         };
@@ -7580,7 +7676,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateImmigrationDetention"];
+                'application/json': components['schemas']['CreateImmigrationDetention'];
             };
         };
         responses: {
@@ -7590,7 +7686,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['SaveImmigrationDetentionResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7599,7 +7695,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['SaveImmigrationDetentionResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7608,7 +7704,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SaveImmigrationDetentionResponse"];
+                    'application/json': components['schemas']['SaveImmigrationDetentionResponse'];
                 };
             };
         };
@@ -7622,7 +7718,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateHmctsResultCode"];
+                'application/json': components['schemas']['CreateHmctsResultCode'];
             };
         };
         responses: {
@@ -7632,7 +7728,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
             /** @description Bad request */
@@ -7641,7 +7737,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FieldErrorErrorResponse"];
+                    'application/json': components['schemas']['FieldErrorErrorResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7650,7 +7746,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7659,7 +7755,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
         };
@@ -7673,7 +7769,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["HmctsHearingIdPair"][];
+                'application/json': components['schemas']['HmctsHearingIdPair'][];
             };
         };
         responses: {
@@ -7683,7 +7779,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsHearingAutopopulateEligibility"][];
+                    'application/json': components['schemas']['HmctsHearingAutopopulateEligibility'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7692,7 +7788,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsHearingAutopopulateEligibility"][];
+                    'application/json': components['schemas']['HmctsHearingAutopopulateEligibility'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7701,7 +7797,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsHearingAutopopulateEligibility"][];
+                    'application/json': components['schemas']['HmctsHearingAutopopulateEligibility'][];
                 };
             };
             /** @description Not found if no court case at uuid */
@@ -7710,7 +7806,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsHearingAutopopulateEligibility"][];
+                    'application/json': components['schemas']['HmctsHearingAutopopulateEligibility'][];
                 };
             };
         };
@@ -7724,7 +7820,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RepublishEvents"];
+                'application/json': components['schemas']['RepublishEvents'];
             };
         };
         responses: {
@@ -7748,7 +7844,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateF986"];
+                'application/json': components['schemas']['CreateF986'];
             };
         };
         responses: {
@@ -7758,7 +7854,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/pdf": string;
+                    'application/pdf': string;
                 };
             };
             /** @description Bad request - no results found based on courtAppearanceUuid */
@@ -7767,7 +7863,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/pdf": string;
+                    'application/pdf': string;
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7776,7 +7872,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/pdf": string;
+                    'application/pdf': string;
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7785,7 +7881,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/pdf": string;
+                    'application/pdf': string;
                 };
             };
         };
@@ -7799,7 +7895,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateCourtCase"];
+                'application/json': components['schemas']['CreateCourtCase'];
             };
         };
         responses: {
@@ -7809,7 +7905,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                    'application/json': components['schemas']['CreateCourtCaseResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7818,7 +7914,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                    'application/json': components['schemas']['CreateCourtCaseResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7827,7 +7923,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CreateCourtCaseResponse"];
+                    'application/json': components['schemas']['CreateCourtCaseResponse'];
                 };
             };
         };
@@ -7843,7 +7939,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateSentenceTypeRequest"];
+                'application/json': components['schemas']['UpdateSentenceTypeRequest'];
             };
         };
         responses: {
@@ -7853,7 +7949,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                    'application/json': components['schemas']['UpdateSentenceTypeResponse'];
                 };
             };
             /** @description Invalid request (invalid sentence type, missing fields) */
@@ -7862,7 +7958,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                    'application/json': components['schemas']['UpdateSentenceTypeResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7871,7 +7967,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                    'application/json': components['schemas']['UpdateSentenceTypeResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7880,7 +7976,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                    'application/json': components['schemas']['UpdateSentenceTypeResponse'];
                 };
             };
             /** @description Court case or sentence not found */
@@ -7889,7 +7985,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                    'application/json': components['schemas']['UpdateSentenceTypeResponse'];
                 };
             };
             /** @description Business rule violation (e.g., sentence not in 'unknown pre-recall sentence' state) */
@@ -7898,7 +7994,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UpdateSentenceTypeResponse"];
+                    'application/json': components['schemas']['UpdateSentenceTypeResponse'];
                 };
             };
         };
@@ -7930,7 +8026,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateCourtAppearance"];
+                'application/json': components['schemas']['CreateCourtAppearance'];
             };
         };
         responses: {
@@ -7940,7 +8036,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                    '*/*': components['schemas']['CreateCourtAppearanceResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -7949,7 +8045,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                    '*/*': components['schemas']['CreateCourtAppearanceResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -7958,7 +8054,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CreateCourtAppearanceResponse"];
+                    '*/*': components['schemas']['CreateCourtAppearanceResponse'];
                 };
             };
         };
@@ -7972,7 +8068,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateChargeOutcome"];
+                'application/json': components['schemas']['CreateChargeOutcome'];
             };
         };
         responses: {
@@ -7982,7 +8078,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
             /** @description Bad request */
@@ -7991,7 +8087,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FieldErrorErrorResponse"];
+                    'application/json': components['schemas']['FieldErrorErrorResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8000,7 +8096,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8009,7 +8105,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
         };
@@ -8023,7 +8119,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateAppearanceOutcome"];
+                'application/json': components['schemas']['CreateAppearanceOutcome'];
             };
         };
         responses: {
@@ -8033,7 +8129,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
             /** @description Bad request */
@@ -8042,7 +8138,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FieldErrorErrorResponse"];
+                    'application/json': components['schemas']['FieldErrorErrorResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8051,7 +8147,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8060,7 +8156,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
         };
@@ -8086,7 +8182,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ThingsToDo"];
+                    'application/json': components['schemas']['ThingsToDo'];
                 };
             };
             /** @description Unauthorized - valid Oauth2 token required */
@@ -8095,7 +8191,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ThingsToDo"];
+                    'application/json': components['schemas']['ThingsToDo'];
                 };
             };
             /** @description Forbidden - requires appropriate role */
@@ -8104,7 +8200,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ThingsToDo"];
+                    'application/json': components['schemas']['ThingsToDo'];
                 };
             };
         };
@@ -8133,7 +8229,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmppsSubjectAccessRequestContent"];
+                    'application/json': components['schemas']['HmppsSubjectAccessRequestContent'];
                 };
             };
             /** @description Request successfully processed - no content found */
@@ -8142,7 +8238,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    'application/json': Record<string, never>;
                 };
             };
             /** @description Subject Identifier is not recognised by this service */
@@ -8151,7 +8247,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    'application/json': Record<string, never>;
                 };
             };
             /** @description The client does not have authorisation to make this request */
@@ -8160,7 +8256,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
+                    'application/json': components['schemas']['ErrorResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8169,7 +8265,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
+                    'application/json': components['schemas']['ErrorResponse'];
                 };
             };
             /** @description Unexpected error occurred */
@@ -8178,7 +8274,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
+                    'application/json': components['schemas']['ErrorResponse'];
                 };
             };
         };
@@ -8198,7 +8294,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "plain/text": string;
+                    'plain/text': string;
                 };
             };
             /** @description The client does not have authorisation to make this request */
@@ -8207,7 +8303,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
+                    'application/json': components['schemas']['ErrorResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8216,7 +8312,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
+                    'application/json': components['schemas']['ErrorResponse'];
                 };
             };
             /** @description Unexpected error occurred */
@@ -8225,7 +8321,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
+                    'application/json': components['schemas']['ErrorResponse'];
                 };
             };
         };
@@ -8247,7 +8343,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Sentence"];
+                    '*/*': components['schemas']['Sentence'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8256,7 +8352,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Sentence"];
+                    '*/*': components['schemas']['Sentence'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8265,7 +8361,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Sentence"];
+                    '*/*': components['schemas']['Sentence'];
                 };
             };
             /** @description Not found if no sentence at uuid */
@@ -8274,7 +8370,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Sentence"];
+                    '*/*': components['schemas']['Sentence'];
                 };
             };
         };
@@ -8296,7 +8392,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentenceDetails"];
+                    '*/*': components['schemas']['SentenceDetails'];
                 };
             };
         };
@@ -8320,7 +8416,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DeleteSentenceStatusDetails"];
+                    '*/*': components['schemas']['DeleteSentenceStatusDetails'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8329,7 +8425,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DeleteSentenceStatusDetails"];
+                    '*/*': components['schemas']['DeleteSentenceStatusDetails'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8338,7 +8434,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DeleteSentenceStatusDetails"];
+                    '*/*': components['schemas']['DeleteSentenceStatusDetails'];
                 };
             };
         };
@@ -8360,7 +8456,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["MissingSentenceAppearance"][];
+                    '*/*': components['schemas']['MissingSentenceAppearance'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8369,7 +8465,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["MissingSentenceAppearance"][];
+                    '*/*': components['schemas']['MissingSentenceAppearance'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8378,7 +8474,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["MissingSentenceAppearance"][];
+                    '*/*': components['schemas']['MissingSentenceAppearance'][];
                 };
             };
         };
@@ -8400,7 +8496,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentencesAfterOnOtherCourtAppearanceDetailsResponse"];
+                    '*/*': components['schemas']['SentencesAfterOnOtherCourtAppearanceDetailsResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8409,7 +8505,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentencesAfterOnOtherCourtAppearanceDetailsResponse"];
+                    '*/*': components['schemas']['SentencesAfterOnOtherCourtAppearanceDetailsResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8418,7 +8514,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentencesAfterOnOtherCourtAppearanceDetailsResponse"];
+                    '*/*': components['schemas']['SentencesAfterOnOtherCourtAppearanceDetailsResponse'];
                 };
             };
         };
@@ -8440,7 +8536,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": boolean;
+                    '*/*': boolean;
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8449,7 +8545,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": boolean;
+                    '*/*': boolean;
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8458,7 +8554,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": boolean;
+                    '*/*': boolean;
                 };
             };
         };
@@ -8480,7 +8576,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["HasSentenceAfterOnOtherCourtAppearanceResponse"];
+                    '*/*': components['schemas']['HasSentenceAfterOnOtherCourtAppearanceResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8489,7 +8585,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["HasSentenceAfterOnOtherCourtAppearanceResponse"];
+                    '*/*': components['schemas']['HasSentenceAfterOnOtherCourtAppearanceResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8498,7 +8594,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["HasSentenceAfterOnOtherCourtAppearanceResponse"];
+                    '*/*': components['schemas']['HasSentenceAfterOnOtherCourtAppearanceResponse'];
                 };
             };
         };
@@ -8520,7 +8616,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentenceUuidsWithActiveSentencesAfterResponse"];
+                    '*/*': components['schemas']['SentenceUuidsWithActiveSentencesAfterResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8529,7 +8625,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentenceUuidsWithActiveSentencesAfterResponse"];
+                    '*/*': components['schemas']['SentenceUuidsWithActiveSentencesAfterResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8538,7 +8634,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentenceUuidsWithActiveSentencesAfterResponse"];
+                    '*/*': components['schemas']['SentenceUuidsWithActiveSentencesAfterResponse'];
                 };
             };
         };
@@ -8561,7 +8657,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentenceConsecutiveToDetailsResponse"];
+                    '*/*': components['schemas']['SentenceConsecutiveToDetailsResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8570,7 +8666,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentenceConsecutiveToDetailsResponse"];
+                    '*/*': components['schemas']['SentenceConsecutiveToDetailsResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8579,7 +8675,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SentenceConsecutiveToDetailsResponse"];
+                    '*/*': components['schemas']['SentenceConsecutiveToDetailsResponse'];
                 };
             };
         };
@@ -8589,7 +8685,7 @@ export interface operations {
             query: {
                 age: number;
                 convictionDate: string;
-                statuses?: ("ACTIVE" | "INACTIVE" | "LEGACY")[];
+                statuses?: ('ACTIVE' | 'INACTIVE' | 'LEGACY')[];
                 offenceDate: string;
             };
             header?: never;
@@ -8606,7 +8702,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeIsValid"];
+                    'application/json': components['schemas']['SentenceTypeIsValid'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8615,7 +8711,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeIsValid"];
+                    'application/json': components['schemas']['SentenceTypeIsValid'];
                 };
             };
         };
@@ -8637,7 +8733,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8646,7 +8742,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8655,7 +8751,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
             /** @description Not found if no sentence type at uuid */
@@ -8664,7 +8760,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"];
+                    'application/json': components['schemas']['SentenceTypeDetails'];
                 };
             };
         };
@@ -8686,7 +8782,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceType"][];
+                    'application/json': components['schemas']['SentenceType'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8695,7 +8791,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceType"][];
+                    'application/json': components['schemas']['SentenceType'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8704,7 +8800,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceType"][];
+                    'application/json': components['schemas']['SentenceType'][];
                 };
             };
         };
@@ -8714,7 +8810,7 @@ export interface operations {
             query: {
                 age: number;
                 convictionDate: string;
-                statuses?: ("ACTIVE" | "INACTIVE" | "LEGACY")[];
+                statuses?: ('ACTIVE' | 'INACTIVE' | 'LEGACY')[];
                 offenceDate: string;
                 chargeOutcomeUuid?: string;
             };
@@ -8730,7 +8826,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"][];
+                    'application/json': components['schemas']['SentenceTypeDetails'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8739,7 +8835,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"][];
+                    'application/json': components['schemas']['SentenceTypeDetails'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8748,7 +8844,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeDetails"][];
+                    'application/json': components['schemas']['SentenceTypeDetails'][];
                 };
             };
         };
@@ -8768,7 +8864,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeChargeOutcomes"];
+                    'application/json': components['schemas']['SentenceTypeChargeOutcomes'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8777,7 +8873,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentenceTypeChargeOutcomes"];
+                    'application/json': components['schemas']['SentenceTypeChargeOutcomes'];
                 };
             };
         };
@@ -8797,7 +8893,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AllSentenceTypes"];
+                    'application/json': components['schemas']['AllSentenceTypes'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8806,7 +8902,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AllSentenceTypes"];
+                    'application/json': components['schemas']['AllSentenceTypes'];
                 };
             };
         };
@@ -8831,7 +8927,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PrisonerRecallsResponse"];
+                    'application/json': components['schemas']['PrisonerRecallsResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8840,7 +8936,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PrisonerRecallsResponse"];
+                    'application/json': components['schemas']['PrisonerRecallsResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8849,7 +8945,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PrisonerRecallsResponse"];
+                    'application/json': components['schemas']['PrisonerRecallsResponse'];
                 };
             };
         };
@@ -8873,7 +8969,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["GetDlqResult"];
+                    '*/*': components['schemas']['GetDlqResult'];
                 };
             };
         };
@@ -8895,7 +8991,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonDetails"];
+                    'application/json': components['schemas']['PersonDetails'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8904,7 +9000,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonDetails"];
+                    'application/json': components['schemas']['PersonDetails'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8913,7 +9009,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonDetails"];
+                    'application/json': components['schemas']['PersonDetails'];
                 };
             };
         };
@@ -8935,7 +9031,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UnconfirmedCourtCases"];
+                    'application/json': components['schemas']['UnconfirmedCourtCases'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8944,7 +9040,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UnconfirmedCourtCases"];
+                    'application/json': components['schemas']['UnconfirmedCourtCases'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8953,7 +9049,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UnconfirmedCourtCases"];
+                    'application/json': components['schemas']['UnconfirmedCourtCases'];
                 };
             };
         };
@@ -8975,7 +9071,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonStatus"];
+                    'application/json': components['schemas']['PersonStatus'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -8984,7 +9080,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonStatus"];
+                    'application/json': components['schemas']['PersonStatus'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -8993,7 +9089,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonStatus"];
+                    'application/json': components['schemas']['PersonStatus'];
                 };
             };
         };
@@ -9018,7 +9114,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentencesToChainToResponse"];
+                    'application/json': components['schemas']['SentencesToChainToResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9027,7 +9123,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentencesToChainToResponse"];
+                    'application/json': components['schemas']['SentencesToChainToResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9036,7 +9132,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentencesToChainToResponse"];
+                    'application/json': components['schemas']['SentencesToChainToResponse'];
                 };
             };
         };
@@ -9058,7 +9154,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCases"];
+                    'application/json': components['schemas']['CourtCases'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9067,7 +9163,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCases"];
+                    'application/json': components['schemas']['CourtCases'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9076,7 +9172,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCases"];
+                    'application/json': components['schemas']['CourtCases'];
                 };
             };
         };
@@ -9098,7 +9194,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PrisonerSentenceEnvelopes"];
+                    'application/json': components['schemas']['PrisonerSentenceEnvelopes'];
                 };
             };
         };
@@ -9120,7 +9216,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonNextCourtAppearance"];
+                    'application/json': components['schemas']['PersonNextCourtAppearance'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9129,7 +9225,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonNextCourtAppearance"];
+                    'application/json': components['schemas']['PersonNextCourtAppearance'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9138,7 +9234,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonNextCourtAppearance"];
+                    'application/json': components['schemas']['PersonNextCourtAppearance'];
                 };
             };
             /** @description No next court appearance */
@@ -9147,7 +9243,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonNextCourtAppearance"];
+                    'application/json': components['schemas']['PersonNextCourtAppearance'];
                 };
             };
         };
@@ -9172,7 +9268,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HasSentenceToChainToResponse"];
+                    'application/json': components['schemas']['HasSentenceToChainToResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9181,7 +9277,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HasSentenceToChainToResponse"];
+                    'application/json': components['schemas']['HasSentenceToChainToResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9190,7 +9286,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HasSentenceToChainToResponse"];
+                    'application/json': components['schemas']['HasSentenceToChainToResponse'];
                 };
             };
         };
@@ -9198,7 +9294,7 @@ export interface operations {
     allDocuments: {
         parameters: {
             query: {
-                searchDocuments: components["schemas"]["SearchDocuments"];
+                searchDocuments: components['schemas']['SearchDocuments'];
             };
             header?: never;
             path: {
@@ -9214,7 +9310,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PrisonerDocuments"];
+                    'application/json': components['schemas']['PrisonerDocuments'];
                 };
             };
         };
@@ -9236,7 +9332,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearanceSchedulesResponse"];
+                    '*/*': components['schemas']['CourtAppearanceSchedulesResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9245,7 +9341,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearanceSchedulesResponse"];
+                    '*/*': components['schemas']['CourtAppearanceSchedulesResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9254,7 +9350,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["CourtAppearanceSchedulesResponse"];
+                    '*/*': components['schemas']['CourtAppearanceSchedulesResponse'];
                 };
             };
         };
@@ -9262,7 +9358,7 @@ export interface operations {
     charges: {
         parameters: {
             query?: {
-                statuses?: ("ACTIVE" | "INACTIVE")[];
+                statuses?: ('ACTIVE' | 'INACTIVE')[];
                 fromDate?: string;
                 toDate?: string;
             };
@@ -9280,7 +9376,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonCharges"];
+                    'application/json': components['schemas']['PersonCharges'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9289,7 +9385,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonCharges"];
+                    'application/json': components['schemas']['PersonCharges'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9298,7 +9394,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonCharges"];
+                    'application/json': components['schemas']['PersonCharges'];
                 };
             };
         };
@@ -9322,7 +9418,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonCourtCaseCount"];
+                    'application/json': components['schemas']['PersonCourtCaseCount'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9331,7 +9427,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonCourtCaseCount"];
+                    'application/json': components['schemas']['PersonCourtCaseCount'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9340,7 +9436,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PersonCourtCaseCount"];
+                    'application/json': components['schemas']['PersonCourtCaseCount'];
                 };
             };
         };
@@ -9362,7 +9458,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"];
+                    'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'];
                 };
             };
             /** @description Unauthorised, requires a valid OAuth2 token */
@@ -9371,7 +9467,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"];
+                    'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9380,7 +9476,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"];
+                    'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'];
                 };
             };
             /** @description Not found if no sentence type at given NOMIS type */
@@ -9389,7 +9485,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"];
+                    'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'];
                 };
             };
         };
@@ -9409,7 +9505,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceType"][];
+                    'application/json': components['schemas']['LegacySentenceType'][];
                 };
             };
             /** @description Unauthorised, requires a valid OAuth2 token */
@@ -9418,7 +9514,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceType"][];
+                    'application/json': components['schemas']['LegacySentenceType'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9427,7 +9523,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceType"][];
+                    'application/json': components['schemas']['LegacySentenceType'][];
                 };
             };
             /** @description Not found if no sentence type at given NOMIS type */
@@ -9436,7 +9532,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceType"][];
+                    'application/json': components['schemas']['LegacySentenceType'][];
                 };
             };
         };
@@ -9456,7 +9552,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"][];
+                    'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'][];
                 };
             };
             /** @description Unauthorised, requires a valid OAuth2 token */
@@ -9465,7 +9561,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"][];
+                    'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9474,7 +9570,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"][];
+                    'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'][];
                 };
             };
             /** @description Not found if no sentence type at given NOMIS type */
@@ -9483,7 +9579,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceTypeGroupingSummary"][];
+                    'application/json': components['schemas']['LegacySentenceTypeGroupingSummary'][];
                 };
             };
         };
@@ -9505,7 +9601,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceType"][];
+                    'application/json': components['schemas']['LegacySentenceType'][];
                 };
             };
             /** @description Unauthorised, requires a valid OAuth2 token */
@@ -9514,7 +9610,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceType"][];
+                    'application/json': components['schemas']['LegacySentenceType'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9523,7 +9619,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceType"][];
+                    'application/json': components['schemas']['LegacySentenceType'][];
                 };
             };
             /** @description Not found if no sentence type at given NOMIS type */
@@ -9532,7 +9628,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacySentenceType"][];
+                    'application/json': components['schemas']['LegacySentenceType'][];
                 };
             };
         };
@@ -9554,7 +9650,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyRecall"];
+                    'application/json': components['schemas']['LegacyRecall'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9563,7 +9659,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyRecall"];
+                    'application/json': components['schemas']['LegacyRecall'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9572,7 +9668,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyRecall"];
+                    'application/json': components['schemas']['LegacyRecall'];
                 };
             };
         };
@@ -9594,7 +9690,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCaseUuids"];
+                    'application/json': components['schemas']['LegacyCourtCaseUuids'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9603,7 +9699,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCaseUuids"];
+                    'application/json': components['schemas']['LegacyCourtCaseUuids'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9612,7 +9708,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LegacyCourtCaseUuids"];
+                    'application/json': components['schemas']['LegacyCourtCaseUuids'];
                 };
             };
         };
@@ -9634,7 +9730,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ReconciliationCourtCase"];
+                    'application/json': components['schemas']['ReconciliationCourtCase'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9643,7 +9739,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ReconciliationCourtCase"];
+                    'application/json': components['schemas']['ReconciliationCourtCase'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9652,7 +9748,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ReconciliationCourtCase"];
+                    'application/json': components['schemas']['ReconciliationCourtCase'];
                 };
             };
             /** @description Not found if no court case at uuid */
@@ -9661,7 +9757,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ReconciliationCourtCase"];
+                    'application/json': components['schemas']['ReconciliationCourtCase'];
                 };
             };
         };
@@ -9686,7 +9782,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"][];
+                    'application/json': components['schemas']['ImmigrationDetention'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9695,7 +9791,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"][];
+                    'application/json': components['schemas']['ImmigrationDetention'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9704,7 +9800,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"][];
+                    'application/json': components['schemas']['ImmigrationDetention'][];
                 };
             };
         };
@@ -9726,7 +9822,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    'application/json': Record<string, never>;
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9735,7 +9831,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    'application/json': Record<string, never>;
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9744,7 +9840,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    'application/json': Record<string, never>;
                 };
             };
             /** @description No active records found for this person */
@@ -9753,7 +9849,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    'application/json': Record<string, never>;
                 };
             };
         };
@@ -9775,7 +9871,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": boolean;
+                    'application/json': boolean;
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9784,7 +9880,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": boolean;
+                    'application/json': boolean;
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9793,7 +9889,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": boolean;
+                    'application/json': boolean;
                 };
             };
         };
@@ -9815,7 +9911,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"];
+                    'application/json': components['schemas']['ImmigrationDetention'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9824,7 +9920,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"];
+                    'application/json': components['schemas']['ImmigrationDetention'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9833,7 +9929,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"];
+                    'application/json': components['schemas']['ImmigrationDetention'];
                 };
             };
             /** @description No active records found for this person */
@@ -9842,7 +9938,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ImmigrationDetention"];
+                    'application/json': components['schemas']['ImmigrationDetention'];
                 };
             };
         };
@@ -9864,7 +9960,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9873,7 +9969,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9882,7 +9978,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
             /** @description Not found if no hmcts result code at uuid */
@@ -9891,7 +9987,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"];
+                    'application/json': components['schemas']['HmctsResultCode'];
                 };
             };
         };
@@ -9913,7 +10009,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"][];
+                    'application/json': components['schemas']['HmctsResultCode'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9922,7 +10018,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"][];
+                    'application/json': components['schemas']['HmctsResultCode'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9931,7 +10027,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"][];
+                    'application/json': components['schemas']['HmctsResultCode'][];
                 };
             };
         };
@@ -9939,7 +10035,7 @@ export interface operations {
     getAllHmctsResultCodes: {
         parameters: {
             query: {
-                statuses: ("ACTIVE" | "INACTIVE" | "LEGACY")[];
+                statuses: ('ACTIVE' | 'INACTIVE' | 'LEGACY')[];
             };
             header?: never;
             path?: never;
@@ -9953,7 +10049,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"][];
+                    'application/json': components['schemas']['HmctsResultCode'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -9962,7 +10058,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"][];
+                    'application/json': components['schemas']['HmctsResultCode'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -9971,7 +10067,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HmctsResultCode"][];
+                    'application/json': components['schemas']['HmctsResultCode'][];
                 };
             };
         };
@@ -9994,7 +10090,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearance"];
+                    'application/json': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10003,7 +10099,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearance"];
+                    'application/json': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10012,7 +10108,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearance"];
+                    'application/json': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Not found if no court case at uuid */
@@ -10021,7 +10117,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearance"];
+                    'application/json': components['schemas']['CourtAppearance'];
                 };
             };
         };
@@ -10043,7 +10139,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["F986EligibleCourtAppearance"][];
+                    'application/json': components['schemas']['F986EligibleCourtAppearance'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10052,7 +10148,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["F986EligibleCourtAppearance"][];
+                    'application/json': components['schemas']['F986EligibleCourtAppearance'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10061,7 +10157,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["F986EligibleCourtAppearance"][];
+                    'application/json': components['schemas']['F986EligibleCourtAppearance'][];
                 };
             };
         };
@@ -10083,7 +10179,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": boolean;
+                    'application/json': boolean;
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10092,7 +10188,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": boolean;
+                    'application/json': boolean;
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10101,7 +10197,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": boolean;
+                    'application/json': boolean;
                 };
             };
         };
@@ -10125,7 +10221,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                    'application/json': components['schemas']['RecallableCourtCasesResponse'];
                 };
             };
             /** @description Bad request - invalid prisoner ID format or query parameters */
@@ -10134,7 +10230,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                    'application/json': components['schemas']['RecallableCourtCasesResponse'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10143,7 +10239,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                    'application/json': components['schemas']['RecallableCourtCasesResponse'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10152,7 +10248,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                    'application/json': components['schemas']['RecallableCourtCasesResponse'];
                 };
             };
             /** @description Prisoner not found in system */
@@ -10161,7 +10257,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RecallableCourtCasesResponse"];
+                    'application/json': components['schemas']['RecallableCourtCasesResponse'];
                 };
             };
         };
@@ -10185,7 +10281,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCaseValidationDate"];
+                    'application/json': components['schemas']['CourtCaseValidationDate'];
                 };
             };
         };
@@ -10193,7 +10289,7 @@ export interface operations {
     getSentencedCharges: {
         parameters: {
             query?: {
-                sentenceStatuses?: ("ACTIVE" | "DUPLICATE" | "DELETED" | "MANY_CHARGES_DATA_FIX" | "INACTIVE")[];
+                sentenceStatuses?: ('ACTIVE' | 'DUPLICATE' | 'DELETED' | 'MANY_CHARGES_DATA_FIX' | 'INACTIVE')[];
             };
             header?: never;
             path: {
@@ -10209,7 +10305,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SentencedCharges"];
+                    'application/json': components['schemas']['SentencedCharges'];
                 };
             };
         };
@@ -10233,7 +10329,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LatestOffenceDate"];
+                    'application/json': components['schemas']['LatestOffenceDate'];
                 };
             };
             /** @description No offence dates found */
@@ -10242,7 +10338,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LatestOffenceDate"];
+                    'application/json': components['schemas']['LatestOffenceDate'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10251,7 +10347,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LatestOffenceDate"];
+                    'application/json': components['schemas']['LatestOffenceDate'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10260,7 +10356,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LatestOffenceDate"];
+                    'application/json': components['schemas']['LatestOffenceDate'];
                 };
             };
         };
@@ -10282,7 +10378,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearance"];
+                    'application/json': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10291,7 +10387,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearance"];
+                    'application/json': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10300,7 +10396,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearance"];
+                    'application/json': components['schemas']['CourtAppearance'];
                 };
             };
             /** @description Not found if no court case at uuid */
@@ -10309,7 +10405,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearance"];
+                    'application/json': components['schemas']['CourtAppearance'];
                 };
             };
         };
@@ -10331,7 +10427,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCaseCountNumbers"];
+                    'application/json': components['schemas']['CourtCaseCountNumbers'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10340,7 +10436,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCaseCountNumbers"];
+                    'application/json': components['schemas']['CourtCaseCountNumbers'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10349,7 +10445,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtCaseCountNumbers"];
+                    'application/json': components['schemas']['CourtCaseCountNumbers'];
                 };
             };
         };
@@ -10358,8 +10454,8 @@ export interface operations {
         parameters: {
             query: {
                 prisonerId: string;
-                pageable: components["schemas"]["Pageable"];
-                pagedCourtCaseOrderBy?: "STATUS_APPEARANCE_DATE_DESC" | "APPEARANCE_DATE_ASC" | "APPEARANCE_DATE_DESC";
+                pageable: components['schemas']['Pageable'];
+                pagedCourtCaseOrderBy?: 'STATUS_APPEARANCE_DATE_DESC' | 'APPEARANCE_DATE_ASC' | 'APPEARANCE_DATE_DESC';
                 appearanceDateFrom?: string;
                 appearanceDateTo?: string;
                 bookingId?: string;
@@ -10377,7 +10473,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SearchCourtCasesPage"];
+                    'application/json': components['schemas']['SearchCourtCasesPage'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10386,7 +10482,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SearchCourtCasesPage"];
+                    'application/json': components['schemas']['SearchCourtCasesPage'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10395,7 +10491,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SearchCourtCasesPage"];
+                    'application/json': components['schemas']['SearchCourtCasesPage'];
                 };
             };
         };
@@ -10417,7 +10513,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UnconfirmedCourtCases"];
+                    'application/json': components['schemas']['UnconfirmedCourtCases'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10426,7 +10522,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UnconfirmedCourtCases"];
+                    'application/json': components['schemas']['UnconfirmedCourtCases'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10435,7 +10531,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["UnconfirmedCourtCases"];
+                    'application/json': components['schemas']['UnconfirmedCourtCases'];
                 };
             };
         };
@@ -10457,7 +10553,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceSubtype"];
+                    'application/json': components['schemas']['CourtAppearanceSubtype'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10466,7 +10562,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceSubtype"];
+                    'application/json': components['schemas']['CourtAppearanceSubtype'];
                 };
             };
             /** @description Appearance type not found */
@@ -10475,7 +10571,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceSubtype"];
+                    'application/json': components['schemas']['CourtAppearanceSubtype'];
                 };
             };
         };
@@ -10483,7 +10579,7 @@ export interface operations {
     getAllCourtAppearanceSubtypes: {
         parameters: {
             query: {
-                statuses: ("ACTIVE" | "INACTIVE" | "LEGACY")[];
+                statuses: ('ACTIVE' | 'INACTIVE' | 'LEGACY')[];
             };
             header?: never;
             path?: never;
@@ -10497,7 +10593,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceSubtype"][];
+                    'application/json': components['schemas']['CourtAppearanceSubtype'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10506,7 +10602,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceSubtype"][];
+                    'application/json': components['schemas']['CourtAppearanceSubtype'][];
                 };
             };
         };
@@ -10528,7 +10624,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DeleteCourtAppearanceScheduleStatus"];
+                    '*/*': components['schemas']['DeleteCourtAppearanceScheduleStatus'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10537,7 +10633,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DeleteCourtAppearanceScheduleStatus"];
+                    '*/*': components['schemas']['DeleteCourtAppearanceScheduleStatus'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10546,7 +10642,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DeleteCourtAppearanceScheduleStatus"];
+                    '*/*': components['schemas']['DeleteCourtAppearanceScheduleStatus'];
                 };
             };
             /** @description No court appearance schedule found */
@@ -10555,7 +10651,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DeleteCourtAppearanceScheduleStatus"];
+                    '*/*': components['schemas']['DeleteCourtAppearanceScheduleStatus'];
                 };
             };
         };
@@ -10577,7 +10673,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10586,7 +10682,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10595,7 +10691,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
             /** @description Not found if no charge outcome at uuid */
@@ -10604,7 +10700,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"];
+                    'application/json': components['schemas']['ChargeOutcome'];
                 };
             };
         };
@@ -10626,7 +10722,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"][];
+                    'application/json': components['schemas']['ChargeOutcome'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10635,7 +10731,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"][];
+                    'application/json': components['schemas']['ChargeOutcome'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10644,7 +10740,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"][];
+                    'application/json': components['schemas']['ChargeOutcome'][];
                 };
             };
         };
@@ -10652,7 +10748,7 @@ export interface operations {
     getAllChargeOutcomes_1: {
         parameters: {
             query: {
-                statuses: ("ACTIVE" | "INACTIVE" | "LEGACY")[];
+                statuses: ('ACTIVE' | 'INACTIVE' | 'LEGACY')[];
             };
             header?: never;
             path?: never;
@@ -10666,7 +10762,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"][];
+                    'application/json': components['schemas']['ChargeOutcome'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10675,7 +10771,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"][];
+                    'application/json': components['schemas']['ChargeOutcome'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10684,7 +10780,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ChargeOutcome"][];
+                    'application/json': components['schemas']['ChargeOutcome'][];
                 };
             };
         };
@@ -10706,7 +10802,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AppearanceType"];
+                    'application/json': components['schemas']['AppearanceType'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10715,7 +10811,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AppearanceType"];
+                    'application/json': components['schemas']['AppearanceType'];
                 };
             };
             /** @description Appearance type not found */
@@ -10724,7 +10820,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AppearanceType"];
+                    'application/json': components['schemas']['AppearanceType'];
                 };
             };
         };
@@ -10732,7 +10828,7 @@ export interface operations {
     getAllAppearanceTypes: {
         parameters: {
             query: {
-                statuses: ("ACTIVE" | "INACTIVE" | "LEGACY")[];
+                statuses: ('ACTIVE' | 'INACTIVE' | 'LEGACY')[];
             };
             header?: never;
             path?: never;
@@ -10746,7 +10842,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AppearanceType"][];
+                    'application/json': components['schemas']['AppearanceType'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10755,7 +10851,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AppearanceType"][];
+                    'application/json': components['schemas']['AppearanceType'][];
                 };
             };
         };
@@ -10777,7 +10873,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10786,7 +10882,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10795,7 +10891,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
             /** @description Not found if no appearance outcome at uuid */
@@ -10804,7 +10900,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'];
                 };
             };
         };
@@ -10812,7 +10908,7 @@ export interface operations {
     getAllAppearanceOutcomes: {
         parameters: {
             query: {
-                statuses: ("ACTIVE" | "INACTIVE" | "LEGACY")[];
+                statuses: ('ACTIVE' | 'INACTIVE' | 'LEGACY')[];
             };
             header?: never;
             path?: never;
@@ -10826,7 +10922,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"][];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10835,7 +10931,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"][];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10844,7 +10940,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CourtAppearanceOutcome"][];
+                    'application/json': components['schemas']['CourtAppearanceOutcome'][];
                 };
             };
         };
@@ -10852,7 +10948,7 @@ export interface operations {
     getAllAggravatingFactors: {
         parameters: {
             query: {
-                statuses: ("ACTIVE" | "INACTIVE")[];
+                statuses: ('ACTIVE' | 'INACTIVE')[];
             };
             header?: never;
             path?: never;
@@ -10866,7 +10962,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AggravatingFactor"][];
+                    '*/*': components['schemas']['AggravatingFactor'][];
                 };
             };
             /** @description Unauthorised, requires a valid Oauth2 token */
@@ -10875,7 +10971,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AggravatingFactor"][];
+                    '*/*': components['schemas']['AggravatingFactor'][];
                 };
             };
             /** @description Forbidden, requires an appropriate role */
@@ -10884,7 +10980,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["AggravatingFactor"][];
+                    '*/*': components['schemas']['AggravatingFactor'][];
                 };
             };
         };
