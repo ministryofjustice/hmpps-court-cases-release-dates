@@ -147,6 +147,24 @@ const defaultCourtCasesPage: SearchCourtCasesPage = {
               warrantDate: '2024-03-02',
             },
           },
+          {
+            chargeUuid: 'charge-uuid-3',
+            offenceCode: 'TH68010',
+            offenceStartDate: '2024-01-12',
+            outcome: { outcomeUuid: 'outcome-2', outcomeName: 'Remand in custody' },
+            legacyData: { offenceDescription: 'Theft' },
+            createdAt: '2026-01-01T00:00:00',
+            value: 50,
+          },
+          {
+            chargeUuid: 'charge-uuid-4',
+            offenceCode: 'CJ88001',
+            offenceStartDate: '2024-01-12',
+            outcome: { outcomeUuid: 'outcome-2', outcomeName: 'Remand in custody' },
+            legacyData: { offenceDescription: 'Common assault' },
+            createdAt: '2026-01-01T00:00:00',
+            value: 80,
+          },
         ],
         periodLengths: [
           {
@@ -206,6 +224,7 @@ beforeEach(() => {
   manageOffencesService.getOffenceMap.mockResolvedValue({
     CJ88001: 'CJ88001 Common assault',
     CJ88117: 'CJ88117 Possess knife blade or sharp pointed article',
+    TH68010: 'TH68010 Theft from a shop',
   } as { [p: string]: string })
   immigrationDetentionService.getImmigrationDetentionMessage.mockReturnValue(
     'There are no immigration documents recorded.',
@@ -600,6 +619,26 @@ describe('Route Handlers - Readonly Overview', () => {
       expect(res.text).toContain('Offence Aggravated by Terrorist Connection')
       expect(res.text).toContain('Sentence date')
       expect(res.text).toContain('23/05/2026')
+      expect(res.text).not.toContain('Value')
+    })
+
+    it('should only show value on monetary value offences', async () => {
+      config.featureToggles.chargeValue = true
+      prisonerSearchService.getByPrisonerNumber.mockResolvedValue({
+        prisonerNumber: 'A12345B',
+        prisonId: 'HLI',
+      } as Prisoner)
+      prisonerService.hasActiveSentencesAsSystem.mockResolvedValue(false)
+      app = appWithAllRoutes({
+        services: defaultServices,
+        userSupplier: () => userWithImmigrationDetentionAccess,
+      })
+
+      const res = await request(app).get('/prisoner/A12345B/readonly-overview').expect(200)
+      expect(res.text).toContain('Value')
+      expect(res.text).toContain('£50')
+      expect(res.text).not.toContain('£80')
+      config.featureToggles.chargeValue = false
     })
 
     it('should handle an empty court cases page and still render', async () => {

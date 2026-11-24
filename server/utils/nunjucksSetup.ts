@@ -16,12 +16,14 @@ import {
   sentenceStatusTagText,
   formatMergedFromCase,
   consecutiveToDetailsToDescription,
+  isMonetaryValueOffence,
 } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/utils/utils'
 import dayjs from 'dayjs'
 import fs from 'fs'
 import { ConsecutiveToDetails } from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/@types'
 import {
   formatDate,
+  formatDecimal,
   getAggravatingFactors,
   initialiseName,
   outcomeValueOrLegacy,
@@ -49,6 +51,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.buildNumber = config.buildNumber
   app.locals.calculateReleaseDatesUiUrl = config.applications.calculateReleaseDates.url
   app.locals.immigrationDetentionEnabled = config.applications.immigrationDetention.enabled
+  app.locals.chargeValueEnabled = config.featureToggles.chargeValue
 
   if (config.environmentName === 'LOCAL') {
     app.locals.environment = 'local'
@@ -153,4 +156,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('sentenceStatusTagText', sentenceStatusTagText)
   njkEnv.addFilter('formatMergedFromCase', formatMergedFromCase)
   njkEnv.addFilter('consecutiveToDetailsToDescription', consecutiveToDetailsToDescription)
+  njkEnv.addFilter('formatDecimal', formatDecimal)
+  njkEnv.addFilter('isMonetaryValueOffence', isMonetaryValueOffence)
 }

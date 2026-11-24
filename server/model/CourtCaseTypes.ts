@@ -22,6 +22,7 @@ export interface Offence {
   replicatedFromUuid?: string
   offenceDateIsSame?: string
   findingOfDomesticAbuse?: boolean
+  offenceValue?: number
 }
 
 export interface Sentence {

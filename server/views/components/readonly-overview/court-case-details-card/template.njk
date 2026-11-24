@@ -56,7 +56,8 @@
                             detailsClasses: 'govuk-!-padding-4',
                             mergedFromCase: offence.mergedFromCase,
                             courtDetails: courtMap,
-                            findingOfDomesticAbuse: offence.findingOfDomesticAbuse
+                            findingOfDomesticAbuse: offence.findingOfDomesticAbuse,
+                            value: (offence.offenceValue | formatDecimal) if chargeValueEnabled
                         })
                         }}
                     {% endfor %}

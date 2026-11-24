@@ -168,3 +168,13 @@ export function consecutiveToSentenceDetailsToOffenceDescriptions(
     ),
   )
 }
+
+export const formatDecimal = (value?: number | string | null): string | undefined => {
+  if (value === undefined || value === null || value === '') return undefined
+  const num = Number(value)
+  if (Number.isNaN(num)) return undefined
+  if (num % 1 === 0) {
+    return num.toString()
+  }
+  return num.toFixed(2)
+}
