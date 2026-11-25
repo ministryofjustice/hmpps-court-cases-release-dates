@@ -46,6 +46,10 @@ describe('Prisoner service tests', () => {
     prisonApi = nock(config.apis.prisonApi.url)
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     nock.cleanAll()
   })

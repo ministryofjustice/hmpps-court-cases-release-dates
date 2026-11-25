@@ -8,6 +8,10 @@ import {
 } from './restClientMetricsMiddleware'
 
 describe('restClientMetricsMiddleware', () => {
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     jest.clearAllMocks()
   })

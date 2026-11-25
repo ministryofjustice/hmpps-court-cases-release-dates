@@ -20,6 +20,10 @@ describe('hmppsAuthClient', () => {
     hmppsAuthClient = new HmppsAuthClient(tokenStore)
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     jest.resetAllMocks()
     nock.cleanAll()

@@ -25,6 +25,10 @@ describe('remandAndSentencingApiClient', () => {
     client = new RemandAndSentencingApiClient('test-system-token')
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     nock.cleanAll()
   })

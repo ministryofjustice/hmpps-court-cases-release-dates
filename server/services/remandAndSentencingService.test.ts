@@ -26,6 +26,10 @@ describe('Remand and sentencing service', () => {
     remandAndSentencingService = new RemandAndSentencingService(hmppsAuthClient)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue('token')
   })
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     nock.cleanAll()
   })
