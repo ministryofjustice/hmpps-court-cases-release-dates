@@ -16,6 +16,10 @@ describe('manageUsersApiClient', () => {
     manageUsersApiClient = new ManageUsersApiClient()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     jest.resetAllMocks()
     nock.cleanAll()

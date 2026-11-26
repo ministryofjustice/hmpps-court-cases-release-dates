@@ -16,6 +16,10 @@ describe('Calculate release dates service', () => {
     const hmppsAuthClient = {} as jest.Mocked<HmppsAuthClient>
     calculateReleaseDatesService = new CalculateReleaseDatesService(hmppsAuthClient)
   })
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     nock.cleanAll()
   })

@@ -18,6 +18,10 @@ describe('Adjustments service', () => {
     adjustmentService = new AdjustmentsService(hmppsAuthClient)
     hmppsAuthClient.getSystemClientToken.mockResolvedValue('token')
   })
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     nock.cleanAll()
   })

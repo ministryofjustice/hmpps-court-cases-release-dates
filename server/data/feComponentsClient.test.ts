@@ -14,6 +14,10 @@ describe('feComponentsClient', () => {
     componentsClient = new FeComponentsClient()
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     jest.resetAllMocks()
     nock.cleanAll()

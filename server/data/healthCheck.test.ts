@@ -14,6 +14,10 @@ describe('Service healthcheck', () => {
     fakeServiceApi = nock('http://test-service.com')
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     nock.abortPendingRequests()
     nock.cleanAll()
@@ -77,7 +81,7 @@ describe('Service healthcheck', () => {
         .delay(10000)
         .reply(200, { failure: 'three' })
 
-      await expect(healthcheck()).rejects.toThrow('Response timeout of 100ms exceeded')
+      await expect(healthcheck()).rejects.toThrow('Timeout of 150ms exceeded')
     })
   })
 })

@@ -11,6 +11,10 @@ describe('token verification api tests', () => {
     fakeApi = nock(config.apis.tokenVerification.url)
   })
 
+  afterAll(() => {
+    nock.restore()
+  })
+
   afterEach(() => {
     nock.cleanAll()
   })

@@ -16,6 +16,10 @@ const restClient = new RestClient(
   'token-1',
 )
 
+afterAll(() => {
+  nock.restore()
+})
+
 describe.each(['get', 'patch', 'post', 'put', 'delete'] as const)('Method: %s', method => {
   it('should return response body', async () => {
     nock('http://localhost:8080', {
