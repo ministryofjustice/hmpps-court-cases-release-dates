@@ -25,6 +25,7 @@ import {
   parseCourtCodeFacetForRendering,
 } from '../../data/unmatchedDocumentFilter'
 import CourtDataIngestionService from '../../services/courtDataIngestionService'
+import commonPlatformDocumentTypes from '../../@types/courtDataIngestionApi/commonPlatformDocumentTypes'
 
 export default class UnmatchedDocumentRoutes {
   constructor(
@@ -60,8 +61,10 @@ export default class UnmatchedDocumentRoutes {
           isNew: DocumentManagementMapper.getIsNew(it),
 
           source: DocumentManagementMapper.getSource(it),
-          type: it.documentType,
-          typeDescription: DocumentManagementMapper.getTypeDescription(it),
+          type: cpDocument ? cpDocument.documentType : it.documentType,
+          typeDescription: cpDocument
+            ? commonPlatformDocumentTypes[cpDocument.documentType]?.name
+            : DocumentManagementMapper.getTypeDescription(it),
           courtCode: DocumentManagementMapper.getCourtCode(it),
           courtName: await this.courtRegisterService.getCourtName(DocumentManagementMapper.getCourtCode(it), username),
 
