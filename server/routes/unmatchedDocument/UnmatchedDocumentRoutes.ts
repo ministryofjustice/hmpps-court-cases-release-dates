@@ -61,7 +61,7 @@ export default class UnmatchedDocumentRoutes {
           isNew: DocumentManagementMapper.getIsNew(it),
 
           source: DocumentManagementMapper.getSource(it),
-          type: cpDocument ? cpDocument.documentType : it.documentType,
+          type: cpDocument?.documentType ?? it.documentType,
           typeDescription: cpDocument
             ? commonPlatformDocumentTypes[cpDocument.documentType]?.name
             : DocumentManagementMapper.getTypeDescription(it),
